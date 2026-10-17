@@ -1,6 +1,6 @@
-# tomochi3 Portfolio
+# tomochi Portfolio
 
-tomochi3 のポートフォリオサイトです。ビルド不要の静的サイト（HTML / CSS）で、GitHub Pages で公開しています。
+tomochi のポートフォリオサイトです。ビルド不要の静的サイト（HTML / CSS）で、GitHub Pages で公開しています。
 
 https://tomochi3.github.io/tomo/
 

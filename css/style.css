@@ -109,18 +109,25 @@ img { display: block; max-width: 100%; height: auto; }
 }
 
 /* ---------- works ---------- */
+/* 4列の格子に、通常カードは2列ぶん・小カードは1列ぶん・先頭の注目作品は全幅で置く */
 .works {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 40px 28px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px 16px;
 }
-@media (min-width: 720px) { .works { grid-template-columns: repeat(2, 1fr); gap: 56px 32px; } }
-
-.card { display: block; }
-
-/* 先頭の1件は2列ぶんの横長カードにして、残りを2列で揃える */
+.works > li { grid-column: span 2; }
+.works > li.is-small { grid-column: span 1; }
 @media (min-width: 720px) {
-  .is-featured { grid-column: 1 / -1; }
+  .works { grid-template-columns: repeat(4, 1fr); gap: 56px 24px; }
+  .works > li.is-featured { grid-column: 1 / -1; }
+}
+
+/* 同じ段のカードはリンクの位置を下端で揃える */
+.card { display: flex; flex-direction: column; height: 100%; }
+.card__body { display: flex; flex-direction: column; flex: 1; }
+.card__meta { margin-top: auto; padding-top: 12px; }
+
+@media (min-width: 720px) {
   .is-featured .card {
     display: grid;
     grid-template-columns: 3fr 2fr;
@@ -130,8 +137,17 @@ img { display: block; max-width: 100%; height: auto; }
   .is-featured .card__body { padding: 0; }
   .is-featured .card__title { font-size: clamp(24px, 3vw, 32px); }
   .is-featured .card__desc { margin-top: 12px; font-size: 16px; }
-  .is-featured .card__meta { justify-content: flex-start; gap: 20px; margin-top: 24px; }
+  .is-featured .card__meta { justify-content: flex-start; gap: 20px; margin-top: 0; padding-top: 24px; }
 }
+
+/* 小カードは文字も一段小さくする */
+.is-small .card__img { border-radius: 12px; }
+.is-small .card__body { padding-top: 12px; }
+.is-small .card__title { font-size: 15px; line-height: 1.45; }
+.is-small .card__desc { font-size: 13px; line-height: 1.6; }
+.is-small .card__meta { padding-top: 8px; font-size: 12px; }
+.is-small .card__kind { display: none; }
+
 .card__img {
   width: 100%;
   aspect-ratio: 16 / 10;
@@ -161,7 +177,6 @@ img { display: block; max-width: 100%; height: auto; }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 12px;
   font-size: 13px;
   color: var(--ink-soft);
 }

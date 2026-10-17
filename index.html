@@ -1,0 +1,364 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tomochi3 — Portfolio</title>
+  <meta name="description" content="tomochi3 のポートフォリオ。卓球の戦績記録アプリ、パワーリフティング団体地図、ブラウザ拡張、Webゲームなど、日常の「ちょっと不便」を解決する作品を紹介します。">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="tomochi3 — Portfolio">
+  <meta property="og:description" content="日常の「ちょっと不便」を、手づくりのWebで片づける。tomochi3 の作品集。">
+  <meta name="theme-color" content="#f5f2ea" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#14161a" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=JetBrains+Mono:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script>
+    // 初回描画前にテーマを決めてチラつきを防ぐ
+    (function () {
+      try {
+        var t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch (e) {}
+      document.documentElement.classList.add('js');
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip" href="#main">本文へスキップ</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="logo" href="#top" aria-label="tomochi3 トップへ">
+        <span class="logo__ball" aria-hidden="true"></span>tomochi3
+      </a>
+      <nav class="nav" aria-label="メイン">
+        <a href="#works">Works</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="ダークモードを切り替え">
+        <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M20 14.5A8.5 8.5 0 1 1 9.5 4a7 7 0 0 0 10.5 10.5Z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- ===== Hero ===== -->
+    <section class="hero" id="top">
+      <div class="container hero__inner">
+        <div class="hero__text">
+          <p class="eyebrow">PORTFOLIO / 2024 — 2026</p>
+          <h1 class="hero__title">
+            <span class="phrase">毎日の</span><span class="phrase"><span class="mark">「ちょっと不便」</span>を、</span><br>
+            <span class="phrase">手づくりの</span><span class="phrase">Webで</span><span class="phrase">片づける。</span>
+          </h1>
+          <p class="hero__lead">卓球の戦績記録、パワーリフティングの団体図解、日程調整の時短ツール、ブラウザで遊べるゲーム。自分や身近な人が実際に使うものを、小さく作って育てています。</p>
+          <div class="hero__cta">
+            <a class="btn btn--primary" href="#works">作ったものを見る</a>
+            <a class="btn btn--ghost" href="https://github.com/tomochi3" target="_blank" rel="noopener">
+              <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.52-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>
+              GitHub
+            </a>
+          </div>
+        </div>
+
+        <figure class="scoreboard" aria-label="公開作品 10、好きなスポーツ 3">
+          <div class="scoreboard__head">
+            <span>MATCH</span><span class="scoreboard__live">● LIVE</span>
+          </div>
+          <div class="scoreboard__panels">
+            <div class="panel">
+              <span class="panel__label">WORKS</span>
+              <span class="panel__digits" data-count="10">10</span>
+              <span class="panel__sub">公開作品</span>
+            </div>
+            <span class="scoreboard__colon" aria-hidden="true">:</span>
+            <div class="panel">
+              <span class="panel__label">SPORTS</span>
+              <span class="panel__digits" data-count="3">03</span>
+              <span class="panel__sub">卓球・PL・ボルダー</span>
+            </div>
+          </div>
+          <div class="table" aria-hidden="true">
+            <span class="table__ball"></span>
+            <span class="table__net"></span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ===== Featured ===== -->
+    <section class="section featured" aria-labelledby="featured-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow">FEATURED</p>
+          <h2 class="section__title" id="featured-title">いちばん育てている作品</h2>
+        </div>
+
+        <article class="feature reveal">
+          <div class="feature__text">
+            <p class="kind">Webアプリ / PWA</p>
+            <h3 class="feature__title">卓球戦績メモ</h3>
+            <p>卓球の試合結果を記録するWebアプリ。セット数だけのクイック記録から、1点ごとのスコアボードまで。ビルド不要の静的サイトで、データは端末のブラウザに保存されます。</p>
+            <ul class="checklist">
+              <li>11点先取・ジュース・サーブ権の交代を自動判定する<b>1点ごと入力モード</b></li>
+              <li>台の横に置いて両者に見せる<b>得点板表示</b>（チェンジエンドで左右も自動入れ替え）</li>
+              <li>QRコードで<b>友だち連携</b>。端末ごとの鍵で暗号化して、試合結果が相手にも自動で届く</li>
+              <li>相手ごとの勝率・連勝記録、「何勝で1奢り」を数える<b>奢りメモ</b></li>
+            </ul>
+            <ul class="tags">
+              <li>HTML / CSS / JavaScript</li><li>PWA</li><li>localStorage</li><li>ntfy.sh</li><li>OpenTimestamps</li><li>node:test</li>
+            </ul>
+            <div class="links">
+              <a class="btn btn--primary" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">アプリを開く ↗</a>
+              <a class="btn btn--ghost" href="https://github.com/tomochi3/tt_record" target="_blank" rel="noopener">GitHub</a>
+            </div>
+          </div>
+
+          <div class="phone" aria-hidden="true">
+            <div class="phone__screen">
+              <div class="phone__bar"><span>vs. やまだ</span><span>GAME 4</span></div>
+              <div class="phone__games"><span>2</span><small>GAMES</small><span>1</span></div>
+              <div class="phone__score">
+                <div class="side side--serve"><span class="side__name">あなた</span><span class="side__pts">10</span></div>
+                <div class="side"><span class="side__name">やまだ</span><span class="side__pts">8</span></div>
+              </div>
+              <p class="phone__badge">MATCH POINT</p>
+              <div class="phone__buttons"><span>＋1</span><span>＋1</span></div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ===== Works ===== -->
+    <section class="section" id="works" aria-labelledby="works-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow">WORKS</p>
+          <h2 class="section__title" id="works-title">作ったもの</h2>
+          <p class="section__desc">GitHub で公開しているプロジェクトから。カテゴリで絞り込めます。</p>
+        </div>
+
+        <div class="filters" role="group" aria-label="カテゴリで絞り込み" hidden>
+          <button type="button" class="chip is-active" data-filter="all" aria-pressed="true">すべて <span class="chip__n"></span></button>
+          <button type="button" class="chip" data-filter="app" aria-pressed="false">Webアプリ・ツール <span class="chip__n"></span></button>
+          <button type="button" class="chip" data-filter="site" aria-pressed="false">サイト <span class="chip__n"></span></button>
+          <button type="button" class="chip" data-filter="game" aria-pressed="false">ゲーム <span class="chip__n"></span></button>
+          <button type="button" class="chip" data-filter="ext" aria-pressed="false">ブラウザ拡張 <span class="chip__n"></span></button>
+        </div>
+
+        <div class="works">
+          <article class="work reveal" data-cat="app">
+            <div class="work__cover" style="--cover: var(--c-app)"><span class="work__glyph" aria-hidden="true">🏓</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">Webアプリ</p>
+              <h3 class="work__title">卓球戦績メモ</h3>
+              <p class="work__desc">試合結果を数タップで記録。1点ごとのスコアボード、友だちとの結果共有、相手ごとの成績分析まで。</p>
+              <ul class="tags"><li>JavaScript</li><li>PWA</li><li>ntfy.sh</li></ul>
+              <div class="work__links">
+                <a href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">デモ ↗</a>
+                <a href="https://github.com/tomochi3/tt_record" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="site">
+            <div class="work__cover" style="--cover: var(--c-site)"><span class="work__glyph" aria-hidden="true">🗾</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">情報サイト</p>
+              <h3 class="work__title">日本のパワーリフティング団体地図</h3>
+              <p class="work__desc">IPF・JPA から都道府県協会まで、団体と大会のつながりを図解。自分の立場を選ぶと、登録から世界大会までのルートが光ります。都道府県別の記録データ付き。</p>
+              <ul class="tags"><li>JavaScript</li><li>SVG</li><li>データ可視化</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/PL" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="app ext">
+            <div class="work__cover" style="--cover: var(--c-app)"><span class="work__glyph" aria-hidden="true">🧰</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">ツール集 + Chrome拡張</p>
+              <h3 class="work__title">べんりツールズ</h3>
+              <p class="work__desc">RM換算表、「調整さん」の日程候補をワンタップで作るジェネレーター、Googleカレンダーの空きから出欠を自動入力するChrome拡張など。</p>
+              <ul class="tags"><li>JavaScript</li><li>Manifest V3</li><li>Google Calendar API</li><li>Userscript</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/benri" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="game">
+            <div class="work__cover" style="--cover: var(--c-game)"><span class="work__glyph" aria-hidden="true">🕹️</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">Webゲーム</p>
+              <h3 class="work__title">Classic Ping Pong</h3>
+              <p class="work__desc">昔ながらのピンポンに、加速・溜めショット・スピン・カーブを追加。同じWi-Fiの端末同士でリアルタイム対戦もできます。</p>
+              <ul class="tags"><li>Canvas</li><li>WebSocket</li><li>Node.js</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/pingpong2" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="ext">
+            <div class="work__cover" style="--cover: var(--c-ext)"><span class="work__glyph" aria-hidden="true">📅</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">Safari拡張</p>
+              <h3 class="work__title">Event to Google Calendar</h3>
+              <p class="work__desc">開いているページから schema.org/Event や日本語の日時表記を読み取り、Googleカレンダーの予定作成画面を入力済みで開く Safari Web Extension。</p>
+              <ul class="tags"><li>Safari Web Extension</li><li>Swift</li><li>Xcode</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/to_Gchal" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="site">
+            <div class="work__cover" style="--cover: var(--c-site)"><span class="work__glyph" aria-hidden="true">🧗</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">イベントサイト</p>
+              <h3 class="work__title">5Grip ボルダリング交流会</h3>
+              <p class="work__desc">ボルダリング部「5Grip」が開くチーム制交流会の告知サイト。開催回ごとのページに加えて、スコアシートやチラシも制作しました。</p>
+              <ul class="tags"><li>HTML / CSS</li><li>JavaScript</li><li>デザイン</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/5Grip" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="game">
+            <div class="work__cover" style="--cover: var(--c-game)"><span class="work__glyph" aria-hidden="true">🎾</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">Webゲーム</p>
+              <h3 class="work__title">モダンレトロテニス</h3>
+              <p class="work__desc">1台のキーボードで2人対戦するレトロ風テニス。長押しでパドルが加速します。おまけの郵便番号検索ページ付き。</p>
+              <ul class="tags"><li>Canvas</li><li>JavaScript</li><li>効果音</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/pingpong" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="game">
+            <div class="work__cover" style="--cover: var(--c-game)"><span class="work__glyph" aria-hidden="true">🕯️</span><span class="work__year">2026</span></div>
+            <div class="work__body">
+              <p class="kind">ゲーム企画 / チーム開発</p>
+              <h3 class="work__title">ともしびと</h3>
+              <p class="work__desc">暗闇の建物で、手元のライターだけを頼りにすべてのランプを灯す脱出ゲーム。火力を上げると視界は広がるがオイルが減る――リソース管理が鍵。</p>
+              <ul class="tags"><li>Unreal Engine 5</li><li>ゲームデザイン</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/UE5team/Tomosibito" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="ext">
+            <div class="work__cover" style="--cover: var(--c-ext)"><span class="work__glyph" aria-hidden="true">🙈</span><span class="work__year">2025</span></div>
+            <div class="work__body">
+              <p class="kind">ブラウザ拡張</p>
+              <h3 class="work__title">YouTube Comment Hider</h3>
+              <p class="work__desc">YouTube の視聴ページでコメント欄を自動で非表示にするシンプルな拡張。Chrome / Edge / Firefox 対応。</p>
+              <ul class="tags"><li>Manifest V3</li><li>Content Script</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/youtube-hide-comments-extension" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+
+          <article class="work reveal" data-cat="site">
+            <div class="work__cover" style="--cover: var(--c-note)"><span class="work__glyph" aria-hidden="true">📊</span><span class="work__year">2024</span></div>
+            <div class="work__body">
+              <p class="kind">学習ノート</p>
+              <h3 class="work__title">Kaggleのメモ</h3>
+              <p class="work__desc">Kaggle コンペの進め方を、欠損値の補完から順にまとめた自分用のノート。</p>
+              <ul class="tags"><li>機械学習</li><li>Python</li></ul>
+              <div class="work__links">
+                <a href="https://github.com/tomochi3/blog" target="_blank" rel="noopener">GitHub ↗</a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== About ===== -->
+    <section class="section about" id="about" aria-labelledby="about-title">
+      <div class="container about__inner">
+        <div class="section__head reveal">
+          <p class="eyebrow">ABOUT</p>
+          <h2 class="section__title" id="about-title"><span class="phrase">tomochi3</span> <span class="phrase">について</span></h2>
+        </div>
+        <div class="about__body reveal">
+          <p>自分が実際に困ったことを、Webアプリやブラウザ拡張にして解決するのが好きです。作ったものはまず自分で使い倒し、使ってくれる人の声を聞きながら少しずつ育てています。</p>
+          <p>スポーツが好きで、卓球の試合記録、パワーリフティングの RM 換算や団体図解、ボルダリング交流会のサイトなど、趣味から生まれた作品が多めです。ゲームづくりも好きで、Canvas のミニゲームから UE5 でのチーム開発まで手を出しています。</p>
+          <ul class="likes" aria-label="好きなこと">
+            <li><span aria-hidden="true">🏓</span>卓球</li>
+            <li><span aria-hidden="true">🏋️</span>パワーリフティング</li>
+            <li><span aria-hidden="true">🧗</span>ボルダリング</li>
+            <li><span aria-hidden="true">🎮</span>ゲーム制作</li>
+            <li><span aria-hidden="true">📈</span>データ分析</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Skills ===== -->
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="container">
+        <div class="section__head reveal">
+          <p class="eyebrow">SKILLS</p>
+          <h2 class="section__title" id="skills-title">つかっている道具</h2>
+        </div>
+        <div class="skills">
+          <div class="skill reveal">
+            <h3>フロントエンド</h3>
+            <ul class="tags"><li>HTML</li><li>CSS</li><li>JavaScript</li><li>PWA</li><li>Canvas</li><li>SVG</li><li>React / TypeScript</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3>サーバー・通信</h3>
+            <ul class="tags"><li>Node.js</li><li>WebSocket</li><li>ntfy.sh</li><li>Google Calendar API</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3>ブラウザ拡張・アプリ</h3>
+            <ul class="tags"><li>Chrome 拡張 (MV3)</li><li>Safari Web Extension</li><li>Swift</li><li>Xcode</li><li>Userscript</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3>ゲーム・データ</h3>
+            <ul class="tags"><li>Unreal Engine 5</li><li>Python</li><li>Kaggle</li></ul>
+          </div>
+          <div class="skill reveal">
+            <h3>開発の進め方</h3>
+            <ul class="tags"><li>Git / GitHub</li><li>GitHub Pages</li><li>node:test</li><li>ビルド不要の静的サイト</li></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Contact ===== -->
+    <section class="section contact" id="contact" aria-labelledby="contact-title">
+      <div class="container contact__inner reveal">
+        <p class="eyebrow">CONTACT</p>
+        <h2 class="contact__title" id="contact-title">一緒につくりましょう。</h2>
+        <p class="contact__desc">感想・ご相談・バグ報告は GitHub からどうぞ。</p>
+        <a class="btn btn--primary btn--lg" href="https://github.com/tomochi3" target="_blank" rel="noopener">github.com/tomochi3 ↗</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <span>© <span id="year">2026</span> tomochi3</span>
+      <a href="#top">ページの先頭へ ↑</a>
+    </div>
+  </footer>
+
+  <script src="js/main.js" defer></script>
+</body>
+</html>

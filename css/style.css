@@ -141,30 +141,6 @@ img { display: block; max-width: 100%; height: auto; }
   box-shadow: 0 0 0 1px var(--line);
   transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .35s;
 }
-/* 縦横比が分からない外部画像は、色付きの枠の中央に収める */
-.card__frame {
-  position: relative;
-  display: block;
-  width: 100%;
-  aspect-ratio: 16 / 10;
-  border-radius: 16px;
-  background: #e9eef6;
-  box-shadow: 0 0 0 1px var(--line);
-  transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .35s;
-}
-.card__frame img {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  max-width: 82%;
-  max-height: 80%;
-  transform: translate(-50%, -50%);
-  border-radius: 10px;
-  box-shadow: 0 14px 30px -14px rgba(25, 30, 50, .45);
-  color: var(--ink-soft);
-  font-size: 13px;
-}
-.card:hover .card__frame,
 .card:hover .card__img {
   transform: translateY(-4px);
   box-shadow: 0 0 0 1px var(--line), 0 18px 40px -18px rgba(0, 0, 0, .35);

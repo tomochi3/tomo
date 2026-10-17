@@ -22,8 +22,8 @@ python3 -m http.server 8000
 
 `index.html` の `<div class="works">` の中に `<article class="work">` を1つ追加します。
 
-- `data-cat` … 絞り込みのカテゴリ。`app`（Webアプリ・ツール）/ `site`（サイト）/ `game`（ゲーム）/ `ext`（ブラウザ拡張）。スペース区切りで複数指定できます
-- `--cover` … カバーの色。`var(--c-app)` / `var(--c-site)` / `var(--c-game)` / `var(--c-ext)` / `var(--c-note)`
+- `data-cat` … 絞り込みのカテゴリ。`app`（アプリ・ツール）/ `site`（サイト）/ `game`（ゲーム）/ `ext`（ブラウザ拡張）/ `community`（コミュニティ）。スペース区切りで複数指定できます
+- `--cover` … カバーの色。`var(--c-app)` / `var(--c-site)` / `var(--c-game)` / `var(--c-ext)` / `var(--c-note)` / `var(--c-mobile)` / `var(--c-community)`
 - `.work__glyph` … カバーに表示する絵文字
 
 ## 公開（GitHub Pages）

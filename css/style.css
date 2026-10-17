@@ -21,6 +21,8 @@
   --c-game: #d8d6f7;
   --c-ext: #fbe6a6;
   --c-note: #dde4ee;
+  --c-mobile: #f6d6e6;
+  --c-community: #d4ecf7;
   --shadow: 0 1px 0 rgba(29, 30, 34, .06), 0 12px 32px -16px rgba(29, 30, 34, .28);
   --radius: 18px;
   --font-body: "Zen Kaku Gothic New", system-ui, -apple-system, "Hiragino Sans", "Noto Sans JP", sans-serif;
@@ -48,6 +50,8 @@
     --c-game: #322f57;
     --c-ext: #4a3f1a;
     --c-note: #2a3340;
+    --c-mobile: #4a2440;
+    --c-community: #1d3a4a;
     --shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 12px 32px -16px rgba(0, 0, 0, .7);
     color-scheme: dark;
   }
@@ -71,6 +75,8 @@
   --c-game: #322f57;
   --c-ext: #4a3f1a;
   --c-note: #2a3340;
+  --c-mobile: #4a2440;
+  --c-community: #1d3a4a;
   --shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 12px 32px -16px rgba(0, 0, 0, .7);
   color-scheme: dark;
 }
@@ -745,6 +751,18 @@ ul { padding: 0; list-style: none; }
   line-height: 1.35;
 }
 .contact__desc { color: color-mix(in srgb, var(--bg) 70%, transparent); margin-bottom: 14px; }
+.contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+.contact .btn--outline {
+  background: transparent;
+  color: var(--bg);
+  border-color: color-mix(in srgb, var(--bg) 55%, transparent);
+}
+.contact .btn--outline:hover { border-color: var(--bg); }
 .contact .btn--primary {
   background: var(--bg);
   color: var(--ink);
@@ -765,6 +783,7 @@ ul { padding: 0; list-style: none; }
   gap: 16px;
   flex-wrap: wrap;
 }
+.site-footer__links { display: flex; gap: 18px; }
 .site-footer a { text-decoration: none; }
 .site-footer a:hover { color: var(--ink); }
 

@@ -210,6 +210,31 @@ img { display: block; max-width: 100%; height: auto; }
   transition: transform .2s;
 }
 
+/* ---------- about ---------- */
+.about {
+  display: grid;
+  gap: 16px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+@media (min-width: 720px) {
+  .about { grid-template-columns: 1fr 2fr; gap: 32px; }
+}
+.about__name {
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+.about__kana {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--ink-soft);
+}
+.about__text { display: grid; gap: 6px; color: var(--ink-soft); text-wrap: pretty; }
+
 /* ---------- 404 ---------- */
 .not-found { min-height: 70vh; }
 .not-found__back {

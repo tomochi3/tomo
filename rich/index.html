@@ -204,6 +204,10 @@
     .fact { padding-top: 14px; border-top: 1px solid #d2d2d7; }
     .fact__big { font-size: clamp(22px, 2.8vw, 32px); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
     .fact__cap { margin-top: 6px; font-size: 14px; color: var(--ink-soft); line-height: 1.5; }
+    .facts--labeled { grid-template-columns: repeat(2, 1fr); margin: 40px 0 0; }
+    .facts--labeled dd { margin: 0; }
+    .fact__label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+    .facts--labeled .fact__big { margin-top: 4px; }
 
     /* ---------- pumpkin ---------- */
     .bg-warm { background: linear-gradient(180deg, #fff7f0, #ffeede); }
@@ -380,11 +384,10 @@
           <div class="actions">
             <a class="btn" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">App Storeで見る</a>
           </div>
-          <div class="facts">
-            <div class="fact"><p class="fact__big">iOS</p><p class="fact__cap">App Storeで公開中</p></div>
-            <div class="fact"><p class="fact__big">Android</p><p class="fact__cap">対応版を開発中</p></div>
-            <div class="fact"><p class="fact__big">Expo</p><p class="fact__cap">React Nativeで開発</p></div>
-          </div>
+          <dl class="facts facts--labeled">
+            <div class="fact"><dt class="fact__label">プラットフォーム</dt><dd class="fact__big">iOS・Android</dd><dd class="fact__cap">iOS版はApp Storeで公開中。Android版も開発中です。</dd></div>
+            <div class="fact"><dt class="fact__label">技術</dt><dd class="fact__big">React Native</dd><dd class="fact__cap">Expoを使って開発しています。</dd></div>
+          </dl>
         </div>
       </div>
     </section>

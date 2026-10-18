@@ -130,7 +130,8 @@ img { display: block; max-width: 100%; height: auto; }
 .card__body { display: flex; flex-direction: column; flex: 1; }
 .card__meta { margin-top: auto; padding-top: 12px; }
 
-@media (min-width: 720px) {
+/* 横並びはPC幅から。タブレットでは文章の欄が細くなりすぎるので縦に積む */
+@media (min-width: 960px) {
   .is-featured .card {
     display: grid;
     grid-template-columns: 3fr 2fr;

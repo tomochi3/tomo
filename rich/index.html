@@ -54,7 +54,7 @@
     :focus-visible { outline: 2px solid var(--blue-dark); outline-offset: 3px; border-radius: 8px; }
     .phrase { display: inline-block; }
     .wrap { width: 100%; max-width: 1080px; margin: 0 auto; padding: 0 20px; }
-    .skip { position: absolute; left: 12px; top: -60px; z-index: 100; padding: 10px 16px; border-radius: 10px; background: #fff; color: var(--ink); font-size: 14px; }
+    .skip { position: absolute; left: 12px; top: -60px; z-index: 100; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 10px; background: #fff; color: var(--ink); font-size: 14px; }
     .skip:focus { top: 8px; }
     main:focus { outline: none; }
 
@@ -215,6 +215,7 @@
     .facts--labeled dd { margin: 0; }
     .fact__label { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
     .facts--labeled .fact__big { margin-top: 4px; }
+    @media (max-width: 859px) { .pumpkin .facts--labeled { text-align: center; } }
 
     /* ---------- pumpkin ---------- */
     .bg-warm { background: linear-gradient(180deg, #fff7f0, #ffeede); }
@@ -222,6 +223,7 @@
     @media (min-width: 860px) { .pumpkin { grid-template-columns: 1fr 1fr; text-align: left; gap: 64px; } .pumpkin .actions { justify-content: flex-start; } }
     .pumpkin .lead { margin-top: 20px; }
     .pumpkin .fact { border-top-color: rgba(120, 60, 0, .18); }
+    .bg-warm .soft, .bg-warm .fact__label, .bg-warm .fact__cap { color: #56565b; }
     .pumpkin__art { position: relative; display: flex; justify-content: center; padding: clamp(24px, 6vw, 80px) 0; }
     .pumpkin__art::before { content: ""; position: absolute; inset: 0; background: radial-gradient(closest-side, rgba(255, 140, 30, .45), transparent); filter: blur(30px); }
     .pumpkin__art img { position: relative; width: min(420px, 66vw); border-radius: 22.5%; box-shadow: 0 50px 90px -30px rgba(220, 100, 0, .55), 0 0 0 1px rgba(0, 0, 0, .04); }
@@ -392,7 +394,7 @@
             <a class="btn" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">App Storeで見る</a>
           </div>
           <dl class="facts facts--labeled">
-            <div class="fact"><dt class="fact__label">プラットフォーム</dt><dd class="fact__big">iOS・Android</dd><dd class="fact__cap">iOS版はApp Storeで公開中。Android版も開発中です。</dd></div>
+            <div class="fact"><dt class="fact__label">プラットフォーム</dt><dd class="fact__big">iOS・Android</dd><dd class="fact__cap">App Storeで公開中・Androidも開発中</dd></div>
           </dl>
         </div>
       </div>

@@ -61,7 +61,10 @@ img { display: block; max-width: 100%; height: auto; }
   left: 12px;
   top: -60px;
   z-index: 100;
-  padding: 10px 16px;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 16px;
   border-radius: 10px;
   background: var(--ink);
   color: var(--bg);

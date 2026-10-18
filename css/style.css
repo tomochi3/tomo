@@ -161,14 +161,24 @@ img { display: block; max-width: 100%; height: auto; }
   box-shadow: 0 0 0 1px var(--line);
   transition: transform .35s cubic-bezier(.2, .7, .2, 1), box-shadow .35s;
 }
-.card:hover .card__img {
-  transform: translateY(-4px);
-  box-shadow: 0 0 0 1px var(--line), 0 18px 40px -18px rgba(0, 0, 0, .35);
+@media (hover: hover) {
+  .card:hover .card__img {
+    transform: translateY(-4px);
+    box-shadow: 0 0 0 1px var(--line), 0 18px 40px -18px rgba(0, 0, 0, .35);
+  }
+  .card:hover .card__go::after { transform: translate(2px, -2px); }
 }
+/* タップした瞬間に少し縮めて、押した手応えを出す */
+.card { -webkit-tap-highlight-color: transparent; }
+.card:active .card__img {
+  transform: scale(.97);
+  transition-duration: .08s;
+}
+.card:active .card__body { opacity: .6; }
 @media (prefers-color-scheme: dark) {
   .card__img { filter: brightness(.86); }
 }
-.card__body { padding: 18px 4px 0; }
+.card__body { padding: 18px 4px 0; transition: opacity .15s; }
 .card__title {
   font-size: 18px;
   font-weight: 700;
@@ -197,7 +207,18 @@ img { display: block; max-width: 100%; height: auto; }
   margin-left: 4px;
   transition: transform .2s;
 }
-.card:hover .card__go::after { transform: translate(2px, -2px); }
+
+/* ---------- 404 ---------- */
+.not-found { min-height: 70vh; }
+.not-found__back {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 32px;
+  font-weight: 600;
+  color: var(--accent);
+}
+.not-found__back::before { content: "←"; margin-right: 6px; }
 
 /* ---------- footer ---------- */
 .footer {

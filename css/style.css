@@ -8,8 +8,8 @@
   --ink: #111113;
   --ink-soft: #6e6e73;
   --line: #e5e5ea;
-  --accent: #2f6bff;
-  --font: "Inter", "Noto Sans JP", system-ui, -apple-system, "Hiragino Sans", sans-serif;
+  --accent: #1f5ad6;
+  --font: "Inter", "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic UI", Meiryo, system-ui, sans-serif;
   color-scheme: light;
 }
 
@@ -64,6 +64,9 @@ img { display: block; max-width: 100%; height: auto; }
   height: 72px;
 }
 .logo {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-weight: 700;
   font-size: 17px;
   letter-spacing: -.01em;
@@ -72,8 +75,8 @@ img { display: block; max-width: 100%; height: auto; }
 .social a {
   display: grid;
   place-items: center;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   color: var(--ink-soft);
   transition: color .2s, background-color .2s;
@@ -161,6 +164,9 @@ img { display: block; max-width: 100%; height: auto; }
   transform: translateY(-4px);
   box-shadow: 0 0 0 1px var(--line), 0 18px 40px -18px rgba(0, 0, 0, .35);
 }
+@media (prefers-color-scheme: dark) {
+  .card__img { filter: brightness(.86); }
+}
 .card__body { padding: 18px 4px 0; }
 .card__title {
   font-size: 18px;
@@ -196,12 +202,21 @@ img { display: block; max-width: 100%; height: auto; }
 .footer {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding-top: 32px;
   padding-bottom: 48px;
   font-size: 13px;
   color: var(--ink-soft);
 }
-.footer__links { display: flex; gap: 20px; }
+.footer__links { display: flex; gap: 4px; margin-right: -12px; }
+.footer__links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 12px;
+}
 .footer a:hover { color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {

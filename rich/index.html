@@ -69,17 +69,17 @@
     .nav__inner { display: flex; align-items: center; gap: 4px; height: 48px; }
     .nav__logo { font-weight: 700; font-size: 15px; margin-right: auto; padding: 12px 0; }
     .nav__links { display: none; gap: 4px; }
-    .nav a.nav__link { padding: 14px 10px; opacity: .8; transition: opacity .2s; }
+    .nav a.nav__link { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0 10px; opacity: .8; transition: opacity .2s; }
     .nav a.nav__link:hover { opacity: 1; }
-    .nav__simple {
+    .nav__simple { display: inline-flex; align-items: center; min-height: 44px; }
+    .nav__simple span {
       padding: 6px 12px;
       border-radius: 999px;
       background: rgba(255, 255, 255, .12);
       font-size: 12px;
-      min-height: 32px;
-      display: inline-flex;
-      align-items: center;
+      transition: background-color .2s;
     }
+    .nav__simple:hover span { background: rgba(255, 255, 255, .2); }
     @media (min-width: 720px) { .nav__links { display: flex; } .nav__simple { margin-left: 12px; } }
 
     /* ---------- shared ---------- */
@@ -121,14 +121,14 @@
     }
     .more::after { content: "›"; margin-left: 6px; font-size: 1.25em; line-height: 1; transition: transform .2s; }
     .more:hover::after { transform: translateX(3px); }
-    .dark .more { color: var(--blue-dark); }
+    .section--black .more, .section--night .more { color: var(--blue-dark); }
 
     .section { padding: clamp(88px, 12vw, 140px) 0; text-align: center; overflow: hidden; }
     .section--gray { background: var(--gray); }
     .section--white { background: var(--white); }
     .section--black { background: var(--black); color: #f5f5f7; }
     .section--night { background: var(--night); color: #f5f5f7; }
-    .dark .soft, .section--black .soft, .section--night .soft { color: var(--ink-dark-soft); }
+    .hero .soft, .section--black .soft, .section--night .soft { color: var(--ink-dark-soft); }
     .soft { color: var(--ink-soft); }
 
     /* scroll reveal (only when JS runs) */
@@ -181,17 +181,27 @@
       height: clamp(420px, 70vw, 640px);
       margin-top: clamp(48px, 7vw, 80px);
     }
-    .hero__phones {
+    .collage {
       position: absolute;
-      inset: 0;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: clamp(16px, 4vw, 48px);
-      will-change: transform;
+      left: 50%;
+      top: clamp(28px, 5vw, 64px);
+      width: max(108%, 760px);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(12px, 1.8vw, 24px);
+      transform: translateX(-50%) rotate(-8deg);
+      transform-origin: top center;
     }
-    .hero__phones .phone { width: min(280px, 42vw); }
-    .hero__phones .phone:nth-child(2) { margin-top: clamp(40px, 7vw, 80px); }
+    .collage__col { display: grid; gap: clamp(12px, 1.8vw, 24px); align-content: start; will-change: transform; }
+    .collage__col:nth-child(1) { margin-top: 10%; }
+    .collage__col:nth-child(3) { margin-top: 5%; }
+    .collage img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      border-radius: clamp(10px, 1.4vw, 18px);
+      box-shadow: 0 20px 50px -20px rgba(0, 0, 0, .8), 0 0 0 1px rgba(255, 255, 255, .06);
+    }
     .hero__glow {
       position: absolute;
       left: 50%;
@@ -215,7 +225,7 @@
       margin-top: clamp(56px, 8vw, 96px);
       text-align: left;
     }
-    @media (min-width: 760px) { .tiles { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
+    @media (min-width: 960px) { .tiles { grid-template-columns: repeat(3, 1fr); gap: 20px; } }
     .tile {
       padding: 32px 28px 34px;
       border-radius: 28px;
@@ -354,10 +364,10 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(0, 0, 0, .05) 30%, rgba(0, 0, 0, .78));
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0) 15%, rgba(0, 0, 0, .55) 50%, rgba(0, 0, 0, .88) 100%);
     }
-    .community__text { position: relative; z-index: 1; padding-bottom: clamp(48px, 8vw, 88px); }
-    .community .lead { margin-top: 16px; max-width: 34em; color: rgba(255, 255, 255, .86); }
+    .community__text { position: relative; z-index: 1; padding-bottom: clamp(48px, 8vw, 88px); text-shadow: 0 1px 12px rgba(0, 0, 0, .45); }
+    .community .lead { margin-top: 16px; max-width: 34em; color: rgba(255, 255, 255, .92); }
     .community .links { justify-content: flex-start; }
     .community .more { color: #fff; }
 
@@ -365,7 +375,7 @@
     .footer { background: var(--gray); color: var(--ink-soft); font-size: 12px; padding: 20px 0 32px; }
     .footer__inner { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 24px; border-top: 1px solid #d2d2d7; padding-top: 16px; }
     .footer__links { display: flex; gap: 4px; margin-right: -10px; }
-    .footer__links a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; }
+    .footer__links a { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0 10px; }
     .footer__links a:hover { color: var(--ink); }
 
     @media (prefers-reduced-motion: reduce) {
@@ -385,7 +395,7 @@
         <a class="nav__link" href="#book">本</a>
         <a class="nav__link" href="#community">コミュニティ</a>
       </div>
-      <a class="nav__simple" href="../">シンプル版</a>
+      <a class="nav__simple" href="../"><span>シンプル版</span></a>
     </div>
   </nav>
 
@@ -398,9 +408,22 @@
       </div>
       <div class="hero__stage" aria-hidden="true">
         <div class="hero__glow"></div>
-        <div class="hero__phones" data-hero-phones>
-          <div class="phone"><div class="phone__screen" style="--screen:#f5f7f9"><img src="img/tt_record-phone.webp" width="780" height="1688" alt=""></div></div>
-          <div class="phone"><div class="phone__screen" style="--screen:#fffdfc"><img src="img/warikan-phone.webp" width="780" height="1688" alt=""></div></div>
+        <div class="collage">
+          <div class="collage__col" data-speed="-1">
+            <img src="../img/benri-sm.webp" width="800" height="500" alt="">
+            <img src="img/c-tt_record.webp" width="720" height="450" alt="">
+            <img src="img/c-book.webp" width="720" height="450" alt="">
+          </div>
+          <div class="collage__col" data-speed=".6">
+            <img src="../img/pingpong2-sm.webp" width="800" height="500" alt="">
+            <img src="img/c-warikan.webp" width="720" height="450" alt="">
+            <img src="../img/gchal-sm.webp" width="800" height="500" alt="">
+          </div>
+          <div class="collage__col" data-speed="-.5">
+            <img src="../img/5grip-sm.webp" width="800" height="500" alt="">
+            <img src="img/c-pumpkin.webp" width="720" height="450" alt="">
+            <img src="img/c-mokumoku.webp" width="720" height="450" alt="">
+          </div>
         </div>
         <div class="hero__fade"></div>
       </div>
@@ -582,7 +605,7 @@
       if (reduce) return;
 
       // スクロールに合わせた動き
-      var phones = document.querySelector('[data-hero-phones]');
+      var cols = document.querySelectorAll('.collage__col');
       var book = document.querySelector('[data-book]');
       var bg = document.querySelector('[data-parallax]');
       var ticking = false;
@@ -594,10 +617,10 @@
       function update() {
         ticking = false;
         var y = window.scrollY;
-        if (phones) {
-          var p = clamp(y / (innerHeight * .9), 0, 1);
-          phones.style.transform = 'translateY(' + (-p * 90) + 'px) scale(' + (1 + p * .08) + ')';
-        }
+        var p = clamp(y / innerHeight, 0, 1);
+        cols.forEach(function (col) {
+          col.style.transform = 'translateY(' + (p * parseFloat(col.dataset.speed) * 140) + 'px)';
+        });
         if (book) {
           var b = progress(book);
           book.style.transform = 'rotateY(' + (-28 + b * 36) + 'deg) rotateX(' + (6 - b * 6) + 'deg)';

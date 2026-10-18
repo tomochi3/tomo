@@ -1,0 +1,29 @@
+name: Check site
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: HTML を検査
+        run: npx --yes html-validate@8 index.html rich/index.html 404.html
+
+      - name: ページ内リンクとファイル参照を確認
+        run: python3 tools/check_links.py
+
+      - name: ブラウザで開いてエラーがないか確認
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+          python3 -m http.server 8000 >/dev/null 2>&1 &
+          sleep 1
+          node tools/smoke.mjs

@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="utf-8">
@@ -23,10 +23,12 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png?v=2">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+  <a class="skip" href="#main">本文へスキップ</a>
   <header class="header">
     <div class="container header__inner">
       <a class="logo" href="./">tomochi</a>
@@ -41,7 +43,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="main" tabindex="-1">
     <section class="hero container">
       <h1 class="hero__title"><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで</span><span class="phrase">解決する。</span></h1>
       <p class="hero__lead"><span class="phrase">Webアプリ、スマホアプリ、</span><span class="phrase">ゲームを作っています。</span><br><span class="phrase">本の執筆や、</span><span class="phrase">もくもく会の主催もしています。</span></p>
@@ -151,13 +153,14 @@
   </main>
 
   <footer class="footer container">
-    <span>© 2026 tomochi</span>
+    <span>© <span data-year>2026</span> tomochi</span>
     <span class="footer__links">
       <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
     </span>
   </footer>
   <script>
+    document.querySelector('[data-year]').textContent = new Date().getFullYear();
     // タッチしている間だけカードに is-pressed を付ける（:active はスマホで効かないことがあるため）
     (function () {
       var pressed = null;

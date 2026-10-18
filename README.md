@@ -9,12 +9,27 @@ https://tomochi3.github.io/tomo/
 ```
 index.html      ページ本体（作品一覧はここに直接書いています）
 404.html        存在しないURLを開いたときのページ（中の参照は /tomo/ から始まる絶対パス）
-rich/           リッチ版（https://tomochi3.github.io/tomo/rich/）。index.html に CSS と JS を内包し、画像は rich/img/
+rich/           リッチ版（https://tomochi3.github.io/tomo/rich/）。index.html に CSS と JS を内包。画像は rich/img/ にまとめ、シンプル版の img/ には依存しない
 css/style.css   スタイル（ライト / ダークはOSの設定に追従）
 img/            作品のサムネイル（WebP。小カード用は 800×500 で名前が -sm）
 icon.svg        ファビコン（青地に白の T）。favicon.ico と icon-32.png は SVG 非対応のブラウザ向け
 apple-touch-icon.png  iPhone のホーム画面用アイコン
 img/og.jpg      XやLINEで共有したときのプレビュー画像（1200×630）
+```
+
+## 自動チェック
+
+push すると GitHub Actions（`.github/workflows/check.yml`）で次を確認します。結果は GitHub のコミット一覧に ✓ / ✗ で出ます。
+
+- HTML の検査（html-validate。設定は `.htmlvalidate.json`）
+- ページ内リンクと画像などのファイル参照の切れ（`tools/check_links.py`）
+- 3 ページをブラウザで開いて、JavaScript のエラー・読み込み失敗・横スクロールがないか（`tools/smoke.mjs`、スマホ幅と PC 幅）
+
+手元で試すとき:
+
+```sh
+python3 tools/check_links.py
+npx html-validate@8 index.html rich/index.html 404.html
 ```
 
 ## ローカルで見る

@@ -56,6 +56,20 @@ img { display: block; max-width: 100%; height: auto; }
 }
 @media (min-width: 720px) { .container { padding: 0 32px; } }
 
+.skip {
+  position: absolute;
+  left: 12px;
+  top: -60px;
+  z-index: 100;
+  padding: 10px 16px;
+  border-radius: 10px;
+  background: var(--ink);
+  color: var(--bg);
+  font-size: 14px;
+}
+.skip:focus { top: 8px; }
+main:focus { outline: none; }
+
 /* ---------- header ---------- */
 .header__inner {
   display: flex;

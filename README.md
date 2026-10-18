@@ -10,7 +10,9 @@ https://tomochi3.github.io/tomo/
 index.html      ページ本体（作品一覧はここに直接書いています）
 css/style.css   スタイル（ライト / ダークはOSの設定に追従）
 img/            作品のサムネイル（WebP。小カード用は 800×500 で名前が -sm）
-favicon.svg     ファビコン
+favicon.svg     ファビコン（ブラウザのダークモードでは白黒が反転）
+apple-touch-icon.png  iPhone のホーム画面用アイコン
+img/og.jpg      XやLINEで共有したときのプレビュー画像（1200×630）
 ```
 
 ## ローカルで見る

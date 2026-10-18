@@ -157,5 +157,21 @@
       <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
     </span>
   </footer>
+  <script>
+    // タッチしている間だけカードに is-pressed を付ける（:active はスマホで効かないことがあるため）
+    (function () {
+      var pressed = null;
+      function release() { if (pressed) { pressed.classList.remove('is-pressed'); pressed = null; } }
+      document.addEventListener('touchstart', function (e) {
+        release();
+        pressed = e.target.closest && e.target.closest('.card');
+        if (pressed) pressed.classList.add('is-pressed');
+      }, { passive: true });
+      ['touchend', 'touchcancel', 'touchmove'].forEach(function (type) {
+        document.addEventListener(type, release, { passive: true });
+      });
+      window.addEventListener('pagehide', release);
+    })();
+  </script>
 </body>
 </html>

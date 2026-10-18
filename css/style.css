@@ -170,11 +170,13 @@ img { display: block; max-width: 100%; height: auto; }
 }
 /* タップした瞬間に少し縮めて、押した手応えを出す */
 .card { -webkit-tap-highlight-color: transparent; }
-.card:active .card__img {
+.card:active .card__img,
+.card.is-pressed .card__img {
   transform: scale(.97);
   transition-duration: .08s;
 }
-.card:active .card__body { opacity: .6; }
+.card:active .card__body,
+.card.is-pressed .card__body { opacity: .6; }
 @media (prefers-color-scheme: dark) {
   .card__img { filter: brightness(.86); }
 }

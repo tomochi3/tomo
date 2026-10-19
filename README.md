@@ -12,6 +12,7 @@ index.html      ページ本体（作品一覧はここに直接書いていま�
 rich/           リッチ版（https://tomochi3.github.io/tomo/rich/）。index.html に CSS と JS を内包。画像は rich/img/ にまとめ、シンプル版の img/ には依存しない
 css/style.css   スタイル（ライト / ダークはOSの設定に追従）
 img/            作品のサムネイル（WebP。小カード用は 800×500 で名前が -sm）
+fonts/          Inter（英字用、可変ウェイト）。Google Fonts は使わず、ここから読み込む。ライセンスは LICENSE-Inter.txt（SIL OFL 1.1）
 icon.svg        ファビコン（青地に白の T）。favicon.ico と icon-32.png は SVG 非対応のブラウザ向け
 apple-touch-icon.png  iPhone のホーム画面用アイコン
 img/og.jpg      XやLINEで共有したときのプレビュー画像（1200×630）
@@ -29,7 +30,7 @@ push すると GitHub Actions（`.github/workflows/check.yml`）で次を確認�
 
 ```sh
 python3 tools/check_links.py
-npx html-validate@8 index.html rich/index.html 404.html
+npx html-validate@8.29.0 index.html rich/index.html 404.html
 ```
 
 ## ローカルで見る

@@ -4,18 +4,24 @@ on:
   push:
   pull_request:
 
+# このチェックはリポジトリを読むだけなので、権限は読み取りに限る
+permissions:
+  contents: read
+
 jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
 
       - name: HTML を検査
-        run: npx --yes html-validate@8 index.html rich/index.html 404.html
+        run: npx --yes html-validate@8.29.0 index.html rich/index.html 404.html
 
       - name: ページ内リンクとファイル参照を確認
         run: python3 tools/check_links.py

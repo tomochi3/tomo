@@ -31,6 +31,8 @@ for (const viewport of viewports) {
     if (errors.length) {
       failed++;
       console.log(`NG ${label}\n  ${errors.join('\n  ')}`);
+      // GitHub Actions では注釈としても出し、コミットの ✗ から内容が見えるようにする
+      if (process.env.GITHUB_ACTIONS) for (const e of errors) console.log(`::error title=${label}::${e}`);
     } else {
       console.log(`OK ${label}`);
     }

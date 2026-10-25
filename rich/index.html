@@ -272,8 +272,6 @@
     .houses svg { width: 100%; aspect-ratio: 1; fill: var(--blue); }
     .js .houses svg { opacity: 0; transform: translateY(10px) scale(.6); transition: opacity .3s, transform .45s var(--bounce); transition-delay: calc(var(--i) * 35ms + .2s); }
     .js .in .houses svg { opacity: 1; transform: none; }
-    .houses__hint { display: none; margin-top: 10px; font-family: var(--hand); font-size: 17px; color: var(--ink-soft); -webkit-text-stroke: .3px currentColor; }
-    .js .houses__hint { display: block; }
 
     /* 家から出てくる人たち（ページの上に重ねた層で動かす） */
     .actors { position: absolute; left: 0; top: 0; z-index: 79; width: 100%; overflow: hidden; pointer-events: none; }
@@ -503,6 +501,25 @@
     @keyframes bb-shin-l { 0%, 72% { rotate: 0deg; } 6% { rotate: -40deg; } 12% { rotate: 0deg; } 76%, 90% { rotate: -105deg; } 100% { rotate: 0deg; } }
     @media (max-width: 719px) { .bboy { width: 120px; } .mascot.is-bboy { left: 64px; } }
 
+    /* なぞの生き物ずかん */
+    html:not(.js) #zukan { display: none; }
+    .zk { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 26px 18px; }
+    @media (max-width: 559px) { .zk { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 10px; } }
+    .zk li { padding: 10px 8px 10px; border-radius: 16px; background: var(--photo); color: var(--fixed-ink); text-align: center; box-shadow: 0 14px 24px -14px rgba(40, 25, 10, .5); rotate: var(--r, -2deg); transition: rotate .3s var(--bounce); }
+    .zk li:nth-child(3n + 1) { --r: 2.5deg; }
+    .zk li:nth-child(4n) { --r: -3.5deg; }
+    .zk li:hover { rotate: 0deg; }
+    .zk svg { display: block; width: 100%; aspect-ratio: 1; overflow: visible; }
+    .zk li:hover svg { animation: m-bob .45s ease-in-out 2; }
+    .zk span { display: block; margin-top: 4px; font-family: var(--hand); font-size: 16px; line-height: 1.35; word-break: keep-all; -webkit-text-stroke: .3px currentColor; }
+    @media (max-width: 559px) { .zk span { font-size: 13px; } }
+    .js .zk li { opacity: 0; translate: 0 20px; transition: opacity .4s, translate .5s var(--bounce), rotate .3s var(--bounce); transition-delay: calc(var(--i) * 45ms); }
+    .js .zk.in li { opacity: 1; translate: 0 0; }
+    .z-body { stroke: #1c1915; stroke-width: 2.6; }
+    .z-ln { fill: none; stroke: #1c1915; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+    .z-ink { fill: #1c1915; }
+    .z-leaf { fill: #7fd39a; stroke: #1c1915; stroke-width: 2; }
+
     /* 都府県のハンコを動かしたときのご当地演出 */
     .pref { position: fixed; z-index: 81; left: 0; top: 0; font-size: 64px; line-height: 1; pointer-events: none; }
     .pref--big { font-size: 110px; }
@@ -601,7 +618,6 @@
             <p class="fact__num"><span data-count="32">32</span><small>人</small></p>
             <p class="fact__cap">泊めてくれた友人</p>
             <div class="houses" data-houses="32" aria-hidden="true"></div>
-            <p class="houses__hint" aria-hidden="true">↑ 家のそばに何か置いたり、家を動かしたりしてみてください</p>
           </div>
           <div class="fact fact--places rv">
             <p class="fact__num"><span data-count="11">11</span><small>都府県</small></p>
@@ -777,6 +793,16 @@
         </ul>
       </div>
     </section>
+
+    <!-- ===== 04 なぞの生き物ずかん（中身はスクリプトで描く） ===== -->
+    <section class="wrap chapter" id="zukan" aria-labelledby="zk-title">
+      <div class="chap-head">
+        <p class="chap-no" aria-hidden="true">04</p>
+        <h2 class="chap-title" id="zk-title"><span class="phrase">なぞの生き物</span><span class="phrase">ずかん</span></h2>
+        <p class="chap-sub"><span class="phrase">左下にいるあいつの、</span><span class="phrase">いろんな姿。</span></p>
+      </div>
+      <ul class="zk rv" data-zukan></ul>
+    </section>
   </main>
 
   <button class="tidy" type="button" hidden>↺ 片付ける</button>
@@ -859,6 +885,58 @@
         houses.appendChild(svg);
       }
       document.querySelectorAll('.stamps li').forEach(function (li, n) { li.style.setProperty('--i', n); });
+
+      // なぞの生き物ずかん：いつもの体に、帽子や持ち物を重ねて描く（座標は左下の生き物と同じ 0〜100）
+      var S = ' stroke="#1c1915" stroke-width="2.4"';
+      function critter(o) {
+        var c = o.color || '#ffc4d3';
+        var arms = { up: 'M17 56C10 46 8 34 10 24M83 56C90 46 92 34 90 24', down: 'M16 64C9 68 7 74 9 79M84 64C91 68 93 74 91 79', none: '' }[o.arms] || 'M17 60C9 56 6 48 8 41M83 60C91 56 94 48 92 41';
+        var eyes = {
+          sleep: '<path class="z-ln" d="M31 53h12M57 53h12"/>',
+          strain: '<path class="z-ln" d="M31 48l9 5-9 5M69 48l-9 5 9 5"/>',
+          dot: '<circle class="z-ink" cx="37" cy="53" r="3.2"/><circle class="z-ink" cx="63" cy="53" r="3.2"/>',
+          white: '<path d="M31 55l6-8 6 8M57 55l6-8 6 8" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>',
+          shades: '<path class="z-ink" d="M24 50h22l-2 10c-1 4-16 4-18 0ZM54 50h22l-2 10c-1 4-16 4-18 0ZM44 52h12v3H44Z"/>'
+        }[o.eyes] || '<path class="z-ln" d="M31 55l6-8 6 8M57 55l6-8 6 8"/>';
+        var mouth = { o: '<circle class="z-ink" cx="50" cy="68" r="3.5"/>', smile: '<path class="z-ln" d="M42 65q8 8 16 0"/>' }[o.mouth] || '<path class="z-ink" d="M41 63h18l-9 11z"/>';
+        return (o.back || '') +
+          (arms ? '<path class="z-ln" d="' + arms + '"/>' : '') +
+          (o.feet === false ? '' : '<ellipse class="z-body" cx="37" cy="91" rx="8" ry="4.5" fill="' + c + '"/><ellipse class="z-body" cx="63" cy="91" rx="8" ry="4.5" fill="' + c + '"/>') +
+          '<path class="z-body" d="' + (o.body || 'M50 24C75 24 87 42 87 61S72 91 50 91 13 80 13 61 25 24 50 24Z') + '" fill="' + c + '"/>' +
+          (o.sprout === false ? '' : '<path class="z-ln" d="M50 24C50 17 51 13 54 9"/><path class="z-leaf" d="M54 9C58 3 66 3 69 5 66 10 59 12 54 9Z"/>') +
+          (o.mid || '') +
+          (o.cheeks === false ? '' : '<ellipse cx="27" cy="64" rx="6" ry="3.5" fill="#ff8fab" opacity=".8"/><ellipse cx="73" cy="64" rx="6" ry="3.5" fill="#ff8fab" opacity=".8"/>') +
+          eyes + mouth + (o.front || '');
+      }
+      var ZUKAN = [
+        ['いつもの', {}],
+        ['ねむい', { eyes: 'sleep', mouth: 'o', sprout: false, front: '<path d="M22 36C26 16 52 6 74 18 84 24 92 34 96 46 86 36 74 30 62 28 48 26 34 30 22 36Z" fill="#7aa2ff"' + S + '/><circle cx="96" cy="48" r="6" fill="#fff"' + S + '/><text x="86" y="10" font-size="16" font-weight="700" fill="#2549d8">Z</text><text x="100" y="-2" font-size="11" font-weight="700" fill="#2549d8">z</text>' }],
+        ['筋トレ中', { eyes: 'strain', arms: 'up', front: '<path d="M-6 22H106" stroke="#1c1915" stroke-width="4" stroke-linecap="round"/><rect x="-11" y="9" width="9" height="26" rx="2" fill="#1c1915"/><rect x="102" y="9" width="9" height="26" rx="2" fill="#1c1915"/><path d="M16 46C32 37 68 37 84 46" fill="none" stroke="#e2412b" stroke-width="5"/><path d="M90 52c3 4 4 7 0 9-4-2-3-5 0-9Z" fill="#7cc6ff" stroke="#1c1915" stroke-width="1.5"/>' }],
+        ['卓球', { front: '<path d="M92 41 99 48" stroke="#8a5a2b" stroke-width="5" stroke-linecap="round"/><circle cx="104" cy="34" r="13" fill="#e2412b"' + S + '/><circle cx="70" cy="2" r="5" fill="#ff9a3c" stroke="#1c1915" stroke-width="1.5"/>' }],
+        ['ホームレス<wbr>大学院生', { back: '<rect x="58" y="26" width="42" height="58" rx="10" fill="#3f7a52"' + S + '/><rect x="66" y="52" width="26" height="16" rx="4" fill="#2f5e3e" stroke="#1c1915" stroke-width="2"/><rect x="62" y="15" width="32" height="14" rx="6" fill="#d9b36c" stroke="#1c1915" stroke-width="2"/>' }],
+        ['勉強中', { eyes: 'dot', mouth: 'smile', front: '<circle cx="37" cy="53" r="8" fill="none"' + S + '/><circle cx="63" cy="53" r="8" fill="none"' + S + '/><path d="M45 53h10"' + S + '/><path d="M26 76 50 82 74 76V98L50 104 26 98Z" fill="#fff"' + S + '/><path d="M50 82V104" stroke="#1c1915" stroke-width="2"/>' }],
+        ['忍者', { color: '#59647a', eyes: 'white', cheeks: false, mid: '<rect x="15" y="43" width="70" height="18" rx="9" fill="#1c1915"/><path d="M84 50 104 44M84 54 102 61" stroke="#1c1915" stroke-width="4" stroke-linecap="round"/>' }],
+        ['宇宙<wbr>飛行士', { front: '<circle cx="50" cy="58" r="47" fill="rgba(170,215,255,.28)"' + S + '/><path d="M24 34q10-12 24-14" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M50 11V-4"' + S + '/><circle cx="50" cy="-6" r="4" fill="#e2412b"' + S + '/>' }],
+        ['シェフ', { sprout: false, front: '<path d="M26 34C16 16 34 2 46 10 52 0 70 2 72 12 86 8 92 26 76 34Z" fill="#fff"' + S + '/><rect x="26" y="30" width="50" height="9" rx="2" fill="#fff"' + S + '/>' }],
+        ['みかん', { color: '#ff9a1f', mid: '<circle cx="30" cy="40" r="1.6" fill="#e07d0c"/><circle cx="70" cy="38" r="1.6" fill="#e07d0c"/><circle cx="78" cy="76" r="1.6" fill="#e07d0c"/><circle cx="22" cy="78" r="1.6" fill="#e07d0c"/>' }],
+        ['おばけ', { color: '#fbfbfb', feet: false, arms: 'up', body: 'M50 22C74 22 86 40 86 60V94L78 87 70 94 62 87 54 94 46 87 38 94 30 87 22 94 14 87V60C14 40 26 22 50 22Z' }],
+        ['王さま', { sprout: false, back: '<path d="M20 50C8 70 6 90 12 100H88C94 90 92 70 80 50Z" fill="#e2412b"' + S + '/>', front: '<path d="M30 30 34 10 42 22 50 6 58 22 66 10 70 30Z" fill="#ffd23f"' + S + '/>' }],
+        ['雪だるま', { color: '#fff', sprout: false, arms: 'none', mouth: 'smile', front: '<path d="M48 57 62 59 48 62Z" fill="#ff8a1f" stroke="#1c1915" stroke-width="1.6"/><path d="M16 76C34 86 66 86 84 76" fill="none" stroke="#e2412b" stroke-width="7"/><path d="M68 82 72 98" stroke="#e2412b" stroke-width="7" stroke-linecap="round"/><path d="M15 58 0 46M5 50 0 53M85 58 100 46M95 50 100 53" stroke="#7a4b23" stroke-width="2.6" stroke-linecap="round"/>' }],
+        ['サンタ', { sprout: false, mid: '<path d="M30 68C34 90 66 90 70 68 62 77 38 77 30 68Z" fill="#fff" stroke="#1c1915" stroke-width="2"/>', front: '<path d="M24 36C30 16 56 6 78 18L92 40 74 32C60 28 40 30 24 36Z" fill="#e2412b"' + S + '/><path d="M22 36C40 28 60 28 78 34" stroke="#fff" stroke-width="8" stroke-linecap="round" fill="none"/><circle cx="92" cy="42" r="6" fill="#fff" stroke="#1c1915" stroke-width="2"/>' }],
+        ['パンプキン', { color: '#ff8a1f', sprout: false, mid: '<path d="M38 27C30 50 30 74 38 90M62 27C70 50 70 74 62 90" fill="none" stroke="#d9650a" stroke-width="2.4"/>', front: '<path d="M47 26 46 12 55 10 54 25Z" fill="#3f7a52" stroke="#1c1915" stroke-width="2"/>' }],
+        ['天使', { color: '#fff3f6', sprout: false, back: '<path d="M16 54C-4 40-6 66 6 72-2 80 10 86 18 76Z" fill="#fff" stroke="#1c1915" stroke-width="2.2"/><path d="M84 54C104 40 106 66 94 72 102 80 90 86 82 76Z" fill="#fff" stroke="#1c1915" stroke-width="2.2"/>', front: '<ellipse cx="50" cy="10" rx="20" ry="5" fill="none" stroke="#ffd23f" stroke-width="4"/>' }],
+        ['悪魔', { color: '#cdb6ff', sprout: false, back: '<path d="M80 82C98 86 100 68 92 60" fill="none" stroke="#1c1915" stroke-width="2.6"/><path d="M92 60 85 53 99 53Z" fill="#e2412b" stroke="#1c1915" stroke-width="2"/>', front: '<path d="M30 32 26 13 41 28Z" fill="#e2412b" stroke="#1c1915" stroke-width="2"/><path d="M70 32 74 13 59 28Z" fill="#e2412b" stroke="#1c1915" stroke-width="2"/>' }],
+        ['ブレイク<wbr>ダンサー', { sprout: false, eyes: 'shades', front: '<path d="M18 40C24 22 76 22 82 40Z" fill="#e2412b" stroke="#1c1915" stroke-width="2"/><path d="M80 38C90 36 98 38 100 42L82 44Z" fill="#e2412b" stroke="#1c1915" stroke-width="2"/>' }],
+        ['3きょうだい', null, function () { return '<g transform="translate(-10 42) scale(.48)">' + critter({}) + '</g><g transform="translate(26 22) scale(.56)">' + critter({ color: '#c9e4ff' }) + '</g><g transform="translate(64 42) scale(.48)">' + critter({ color: '#fff1a8' }) + '</g>'; }],
+        ['とける（夏）', null, function () { return '<g transform="translate(-10 38) scale(1.2 .66)">' + critter({ eyes: 'sleep', arms: 'down' }) + '</g><path d="M86 40c3 4 4 7 0 9-4-2-3-5 0-9ZM14 34c3 4 4 7 0 9-4-2-3-5 0-9Z" fill="#7cc6ff" stroke="#1c1915" stroke-width="1.5"/><circle cx="92" cy="6" r="9" fill="#ffd23f" stroke="#1c1915" stroke-width="2"/>'; }]
+      ];
+      var zk = document.querySelector('[data-zukan]');
+      ZUKAN.forEach(function (z, n) {
+        var li = document.createElement('li');
+        li.style.setProperty('--i', n);
+        li.innerHTML = '<svg viewBox="-14 -14 128 128" aria-hidden="true">' + (z[2] ? z[2]() : critter(z[1])) + '</svg><span>' + z[0] + '</span>';
+        zk.appendChild(li);
+      });
 
       // ---------- 置いたときのごほうび ----------
       // 効果音は Web Audio でその場で鳴らす（音のファイルは読み込まない）。最初は音なしで、上のボタンで切り替える
@@ -1200,7 +1278,7 @@
       }
 
       // ほとんどの物はドラッグで動かせる。マウスはそのままつかみ、タッチは長押しで持ち上げる（ふつうのスワイプはスクロールのまま）
-      var DRAG = '.st, .cover, .cover__badge, .chap-no, .kicker, .fact__num, .houses svg, .stamps li, .ladder li, .notes li, .polaroid, .hanko, .loop svg, .phone, .receipt, .pumpkin, .chips li, .mini, .band';
+      var DRAG = '.st, .cover, .cover__badge, .chap-no, .kicker, .fact__num, .houses svg, .stamps li, .ladder li, .notes li, .polaroid, .hanko, .loop svg, .phone, .receipt, .pumpkin, .chips li, .mini, .band, .zk li';
       var tidy = document.querySelector('.tidy');
       var movedEls = new Set();
       var z = 30, drag = null, suppressClick = 0;

@@ -290,6 +290,8 @@
     .actor { position: absolute; left: 0; top: 0; color: var(--ink); }
     /* 片付けで物を運ぶ生き物（左下の生き物と同じ絵） */
     .helper { position: absolute; left: 0; top: 0; z-index: 2; width: 56px; margin: -56px 0 0 -28px; }
+    .helper .m-blob, .helper .m-foot { fill: var(--hc, #ffc4d3); }
+    .helper .hsay--call { font-size: 19px; }
     .helper svg { display: block; width: 100%; overflow: visible; }
     .helper.is-walk svg { animation: h-hop .2s ease-in-out infinite alternate; }
     .helper.is-carry svg { animation: h-hop .14s ease-in-out infinite alternate; }
@@ -1369,9 +1371,12 @@
 
       // 片付け：左下の生き物が出てきて、動かした物を1つずつ頭にのせて元の場所へ運ぶ。物が多いときは仲間（最大3匹）で手分けする
       function goHome(el) { el.style.translate = ''; }
-      function helperAt(x, y) {
+      // 仲間の色（1匹目はいつものピンク）
+      var CREW_COLORS = ['#ffc4d3', '#a3c8ff', '#fff1a8', '#b8ecc8', '#d9c6ff', '#ffd2a8', '#c6f0f5', '#f5c6e8'];
+      function helperAt(x, y, color) {
         var h = document.createElement('div');
         h.className = 'helper';
+        if (color) h.style.setProperty('--hc', color);
         h.appendChild(document.querySelector('.mascot__body svg').cloneNode(true));
         ensureActors().appendChild(h);
         h._x = x; h._y = y; h.style.translate = x + 'px ' + y + 'px';
@@ -1385,10 +1390,10 @@
         h._x = x; h._y = y;
         return { dur: dur, done: an.finished.then(function () { h.style.translate = x + 'px ' + y + 'px'; an.cancel(); }) };
       }
-      function hsay(h, text) {
-        var t = document.createElement('span'); t.className = 'hsay'; t.textContent = text;
+      function hsay(h, text, ms, cls) {
+        var t = document.createElement('span'); t.className = 'hsay' + (cls ? ' ' + cls : ''); t.textContent = text;
         if (h.style.scale) t.style.scale = '-1 1';
-        h.appendChild(t); setTimeout(function () { t.remove(); }, 700);
+        h.appendChild(t); setTimeout(function () { t.remove(); }, ms || 700);
       }
       function carryAll(h, items, speed) {
         return items.reduce(function (chain, el, k) {
@@ -1431,19 +1436,36 @@
         tidying = true;
         clearTimeout(danceTimer);
         mascot.className = 'mascot is-away';
-        // 近い順に運ぶ（画面の上から下へ）
+        // ページの上から順に並べ、3個ほどずつの持ち場に分ける。物が多いほど仲間を呼び（最大8匹）、走るのも速くする
         list.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
         var m = mascot.getBoundingClientRect(), sx = m.left + m.width / 2 + window.scrollX, sy = m.bottom + window.scrollY;
-        var crew = Math.min(3, Math.ceil(list.length / 5)), speed = 700 + list.length * 40, jobs = [];
+        var crew = Math.min(8, Math.max(1, Math.ceil(list.length / 3))), per = Math.ceil(list.length / crew);
+        var speed = 650 + per * 220 + crew * 40, jobs = [];
         for (var c = 0; c < crew; c++) {
-          var h = helperAt(sx + c * 30, sy);
-          jobs.push(carryAll(h, list.filter(function (_, i) { return i % crew === c; }), speed).then((function (h) {
+          var mine = list.slice(c * per, (c + 1) * per);
+          if (!mine.length) continue;
+          var h;
+          if (c === 0) {
+            h = helperAt(sx, sy);
+            if (crew > 1) { hsay(h, 'みんな〜！手伝って！', 1300, 'hsay--call'); tone(note(5), 0, .15, 'square', .05); tone(note(7), .15, .25, 'square', .05); }
+          } else {
+            // 仲間は、持ち場にいちばん近い画面の端から走ってくる
+            var r0 = mine[0].getBoundingClientRect(), fromLeft = r0.left + r0.width / 2 < innerWidth / 2;
+            h = helperAt(window.scrollX + (fromLeft ? -40 : innerWidth + 40), r0.bottom + window.scrollY + 40, CREW_COLORS[c % CREW_COLORS.length]);
+            hsay(h, ['はーい！', 'まかせて！', 'いくよ〜', 'おっけー！'][c % 4], 900);
+          }
+          jobs.push(new Promise(function (ok) { setTimeout(ok, c ? 250 + c * 90 : 0); }).then((function (h, mine, leader) {
             return function () {
-              // 仕事が終わったら左下の定位置へ帰る
-              var q = mascot.getBoundingClientRect();
-              return walk(h, q.left + q.width / 2 + window.scrollX, q.bottom + window.scrollY, speed).done.then(function () { h.remove(); });
+              return carryAll(h, mine, speed).then(function () {
+                // 終わったら、リーダーは左下の定位置へ、仲間は画面の端へ帰っていく
+                var q = mascot.getBoundingClientRect();
+                var tx = leader ? q.left + q.width / 2 + window.scrollX : window.scrollX + (h._x - window.scrollX < innerWidth / 2 ? -60 : innerWidth + 60);
+                var ty = leader ? q.bottom + window.scrollY : h._y;
+                if (!leader) hsay(h, 'またね〜', 700);
+                return walk(h, tx, ty, speed * 1.2).done.then(function () { h.remove(); });
+              });
             };
-          })(h)));
+          })(h, mine, c === 0)));
         }
         Promise.all(jobs).then(finish, function () { list.forEach(goHome); document.querySelectorAll('.helper').forEach(function (h) { h.remove(); }); finish(); });
       });

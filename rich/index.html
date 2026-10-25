@@ -294,9 +294,13 @@
     .loop { display: flex; align-items: center; gap: 22px; margin-top: 30px; }
     .loop svg { flex: none; width: clamp(130px, 16vw, 168px); overflow: visible; }
     .loop .track { fill: none; stroke: var(--line); stroke-width: 14; }
-    .loop .arc-a { fill: none; stroke: var(--blue); stroke-width: 14; stroke-linecap: round; }
-    .loop .arc-b { fill: none; stroke: var(--red); stroke-width: 14; stroke-linecap: round; }
-    .loop text { font-family: var(--display); font-size: 28px; fill: var(--ink); text-anchor: middle; }
+    /* 1周を65分として、勉強50分（青）と運動 約15分（赤）の割合で塗り分ける */
+    .loop .arc-a, .loop .arc-b { fill: none; stroke-width: 14; }
+    .loop .arc-a { stroke: var(--blue); stroke-dasharray: 49 16; stroke-dashoffset: -.5; }
+    .loop .arc-b { stroke: var(--red); stroke-dasharray: 14 51; stroke-dashoffset: -50.5; }
+    .loop text { font-family: var(--display); font-size: 21px; text-anchor: middle; }
+    .loop .t-a { fill: var(--blue); }
+    .loop .t-b { fill: var(--red-ink); }
     .loop .orbit { transform-origin: 100px 100px; animation: spin 7s linear infinite; }
     .loop .orbit circle { fill: var(--yellow); stroke: var(--fixed-ink); stroke-width: 2.5; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -509,13 +513,13 @@
           <div class="loop">
             <svg viewBox="0 0 200 200" aria-hidden="true">
               <circle class="track" cx="100" cy="100" r="80"/>
-              <path class="arc-a" d="M100 20a80 80 0 0 1 0 160"/>
-              <path class="arc-b" d="M100 180a80 80 0 0 1 0-160"/>
-              <text x="100" y="94">勉強</text>
-              <text x="100" y="130">運動</text>
+              <circle class="arc-a" cx="100" cy="100" r="80" pathLength="65" transform="rotate(-90 100 100)"/>
+              <circle class="arc-b" cx="100" cy="100" r="80" pathLength="65" transform="rotate(-90 100 100)"/>
+              <text class="t-a" x="100" y="94">勉強 50分</text>
+              <text class="t-b" x="100" y="126">運動 約15分</text>
               <g class="orbit"><circle cx="100" cy="20" r="11"/></g>
             </svg>
-            <p>勉強して、体を動かして、<br>また勉強する。<span>それを、みんなで。</span></p>
+            <p>50分勉強して、<br>約15分体を動かす。<span><span class="phrase">それを、</span><span class="phrase">みんなでくり返す。</span></span></p>
           </div>
           <div class="actions">
             <a class="btn" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a>

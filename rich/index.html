@@ -132,6 +132,18 @@
     .bar__in { display: flex; align-items: center; gap: 8px; height: 60px; }
     .logo { display: inline-flex; align-items: center; min-height: 44px; font-family: var(--display); font-size: 22px; letter-spacing: .01em; }
     .logo span { color: var(--red); }
+    /* ヘッダーの下の線の上を飛ぶ鳥（1周ごとに紙飛行機と入れ替わる）。動かした物にぶつかると旋回したりよけたりする */
+    .flier { position: absolute; left: 0; bottom: -3px; z-index: 2; width: 38px; height: 26px; pointer-events: none; will-change: transform; }
+    .flier__body { width: 100%; height: 100%; }
+    .flier svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+    .flier .plane { display: none; }
+    .flier.is-plane .bird { display: none; }
+    .flier.is-plane .plane { display: block; }
+    .flier .wing { transform-box: view-box; transform-origin: 19px 13px; animation: flap .2s ease-in-out infinite alternate; }
+    .flier.is-fast .wing { animation-duration: .1s; }
+    @keyframes flap { from { scale: 1 1; } to { scale: 1 -.7; } }
+    .flier__say { position: absolute; left: 50%; bottom: 100%; font-family: var(--hand); font-size: 15px; font-weight: 700; color: var(--red-ink); white-space: nowrap; translate: -50% -2px; }
+    html:not(.js) .flier { display: none; }
     .bar__progress { position: absolute; left: 0; right: 0; bottom: -2px; height: 3px; background: var(--red); transform-origin: left; transform: scaleX(var(--p, 0)); }
     .nav { display: flex; gap: 2px; margin-left: auto; }
     .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 14px; font-weight: 700; transition: background-color .2s, color .2s; }
@@ -513,6 +525,12 @@
       </a>
     </div>
     <div class="bar__progress"></div>
+    <div class="flier" aria-hidden="true">
+      <div class="flier__body">
+        <svg class="bird" viewBox="0 0 38 26"><path d="M30 11 37 12.5 30 14Z" fill="#ff9a1f" stroke="#1c1915" stroke-width="1.2" stroke-linejoin="round"/><path d="M3 9 9 13 3 17Z" fill="#2549d8" stroke="#1c1915" stroke-width="1.4" stroke-linejoin="round"/><ellipse cx="18" cy="14" rx="11" ry="7.5" fill="#6fa8ff" stroke="#1c1915" stroke-width="1.6"/><circle cx="27" cy="10.5" r="5" fill="#6fa8ff" stroke="#1c1915" stroke-width="1.6"/><circle cx="28.4" cy="9.6" r="1.3" fill="#1c1915"/><path class="wing" d="M13 13C15 3 23 2 24 8 22 12 18 14 13 13Z" fill="#fff" stroke="#1c1915" stroke-width="1.4" stroke-linejoin="round"/></svg>
+        <svg class="plane" viewBox="0 0 38 26"><path d="M2 13 36 4 16 16Z" fill="#fff" stroke="#1c1915" stroke-width="1.5" stroke-linejoin="round"/><path d="M16 16 36 4 20 22Z" fill="#dfe7f5" stroke="#1c1915" stroke-width="1.5" stroke-linejoin="round"/><path d="M16 16 14 23 20 22" fill="#c9d4ea" stroke="#1c1915" stroke-width="1.5" stroke-linejoin="round"/></svg>
+      </div>
+    </div>
   </header>
 
   <main id="main" tabindex="-1">
@@ -1429,6 +1447,67 @@
         }
         Promise.all(jobs).then(finish, function () { list.forEach(goHome); document.querySelectorAll('.helper').forEach(function (h) { h.remove(); }); finish(); });
       });
+
+      // ---------- ヘッダーの線を飛ぶ鳥 ----------
+      (function () {
+        var f = document.querySelector('.flier');
+        if (!f || reduce) { if (f) f.remove(); return; }
+        var body = f.querySelector('.flier__body');
+        var x = -40, dir = 1, speed = 1.4, boost = 0, busy = 0, last = 0, laps = 0;
+        var SAY = ['わっ！', 'あぶなっ', 'おっと', 'ひゃっ'];
+        function talk(t) {
+          var s = document.createElement('span'); s.className = 'flier__say'; s.textContent = t;
+          if (dir < 0) s.style.scale = '-1 1';
+          f.appendChild(s); setTimeout(function () { s.remove(); }, 800);
+        }
+        function react(el, r) {
+          busy = Date.now() + 1100;
+          var kind = Math.floor(Math.random() * 3);
+          var fr = f.getBoundingClientRect();
+          burst(fr.left + fr.width / 2, fr.top + fr.height / 2, 10);
+          el.animate([{ rotate: '0deg' }, { rotate: (dir > 0 ? 8 : -8) + 'deg' }, { rotate: '-4deg' }, { rotate: '0deg' }], { duration: 380 });
+          if (kind === 0) {
+            // くるっと宙返り
+            body.animate([{ transform: 'none' }, { transform: 'translateY(-26px) rotate(-180deg)', offset: .5 }, { transform: 'rotate(-360deg)' }], { duration: 900, easing: 'ease-in-out' });
+            tone(note(4), 0, .5, 'sine', .07, note(9));
+          } else if (kind === 1) {
+            // 引き返す
+            dir = -dir; x += dir * 18;
+            talk(SAY[Math.floor(Math.random() * SAY.length)]);
+            body.animate([{ transform: 'none' }, { transform: 'translateY(-10px) rotate(-20deg)' }, { transform: 'none' }], { duration: 400 });
+            tone(1100, 0, .12, 'square', .04, 700);
+          } else {
+            // 上によけて、速く飛び去る
+            body.animate([{ transform: 'none' }, { transform: 'translateY(-34px) rotate(-25deg)', offset: .35 }, { transform: 'translateY(-30px) rotate(10deg)', offset: .7 }, { transform: 'none' }], { duration: 1000, easing: 'ease-out' });
+            boost = 3.2; f.classList.add('is-fast');
+            tone(500, 0, .35, 'sine', .06, 1300);
+          }
+        }
+        function step(t) {
+          var k = last ? Math.min(3, (t - last) / 16.67) : 1; last = t;
+          var w = innerWidth;
+          boost = Math.max(0, boost - .03 * k);
+          if (!boost) f.classList.remove('is-fast');
+          x += dir * (speed + boost) * k;
+          if (x > w + 40 || x < -80) {
+            // 画面の外で向きを変え、1周ごとに鳥と紙飛行機を入れ替える
+            dir = -dir; x = dir > 0 ? -60 : w + 20;
+            if (++laps % 2 === 0) f.classList.toggle('is-plane');
+          }
+          f.style.transform = 'translateX(' + x.toFixed(1) + 'px)' + (dir < 0 ? ' scaleX(-1)' : '');
+          if (Date.now() > busy) {
+            var fr = f.getBoundingClientRect(), list = [];
+            movedEls.forEach(function (el) { list.push(el); });
+            if (drag && list.indexOf(drag.el) < 0) list.push(drag.el);
+            for (var i = 0; i < list.length; i++) {
+              var r = list[i].getBoundingClientRect();
+              if (r.right > fr.left + 6 && r.left < fr.right - 6 && r.bottom > fr.top + 6 && r.top < fr.bottom - 6) { react(list[i], r); break; }
+            }
+          }
+          requestAnimationFrame(step);
+        }
+        requestAnimationFrame(step);
+      })();
 
       // ---------- 卓球のボール ----------
       // カードの縁の上をぴょんぴょん跳ねる。動かした物（つかんでいる物も）は壁になり、ぶつかると跳ね返る

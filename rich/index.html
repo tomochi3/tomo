@@ -415,6 +415,7 @@
     @keyframes ring { to { scale: 6; opacity: 0; border-width: 1px; } }
     .pop { position: fixed; z-index: 81; padding: 2px 16px 4px; border: 2px solid var(--fixed-ink); border-radius: 999px; background: var(--yellow); color: var(--fixed-ink); font-family: var(--display); font-size: clamp(20px, 2.6vw, 28px); white-space: nowrap; box-shadow: 3px 3px 0 var(--fixed-ink); pointer-events: none; transform: translate(-50%, -50%) rotate(var(--r, -4deg)); animation: pop-up 1.1s var(--ease) forwards; }
     .pop--combo { background: var(--red); color: #fff; }
+    .pop--sing { background: #a3c8ff; animation-duration: 2.6s; }
     .pop--big { padding: 6px 24px 8px; background: var(--blue); color: #fff; font-size: clamp(28px, 4.4vw, 48px); animation-duration: 1.6s; }
     @keyframes pop-up { 0% { opacity: 0; scale: .3; } 14% { opacity: 1; scale: 1.18; } 26% { scale: 1; } 70% { opacity: 1; } 100% { opacity: 0; translate: 0 -80px; } }
     .tidy:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
@@ -454,50 +455,14 @@
     @media (max-width: 719px) { .mascot { --m: min(52px, 14vw); left: 6px; bottom: calc(12px + env(safe-area-inset-bottom)); } }
     html:not(.js) .mascot { display: none; }
 
-    /* 10コンボ以上で片付けると、手足が生えたピンクの人型に変身してブレイクダンスする */
-    /* 顔の大きさはいつもの姿と同じにする：ダンサーの頭は 0.34 倍で描いているので、全体を 100 / (140 × 0.34) 倍の幅にする */
-    .mascot .bboy { display: none; position: absolute; left: 50%; bottom: calc(var(--m) * -.1); width: calc(var(--m) * 4.118); translate: -50% 0; overflow: visible; }
-    .mascot.is-bboy { left: calc(var(--m) * 1.6); cursor: default; }
-    .mascot.is-bboy .mascot__body { display: none; }
-    .mascot.is-bboy .bboy { display: block; }
-    /* 手足は「黒い太線の上にピンクの細い線」で、ふちどりのある丸い棒にする */
-    .bboy .ln { fill: none; stroke: #1c1915; stroke-width: 7.2; stroke-linecap: round; }
-    .bboy .skin { fill: none; stroke: #ffc4d3; stroke-width: 5.4; stroke-linecap: round; }
-    .bboy .bb-arm-l .ln, .bboy .bb-arm-r .ln { stroke-width: 6; }
-    .bboy .bb-arm-l .skin, .bboy .bb-arm-r .skin { stroke-width: 4.3; }
-    .bboy .pink { fill: #ffc4d3; stroke: #1c1915; stroke-width: .9; }
-    .bboy .navel { fill: #e89aae; }
-    .bboy g { transform-box: view-box; }
-    .bb { transform-origin: 0 -10px; }
-    .bb-arm-l { transform-origin: -6.5px -16px; } .bb-fore-l { transform-origin: -8.5px -5px; }
-    .bb-arm-r { transform-origin: 6.5px -16px; } .bb-fore-r { transform-origin: 8.5px -5px; }
-    .bb-leg-l { transform-origin: -3.2px 0; } .bb-shin-l { transform-origin: -3.3px 11px; }
-    .bb-leg-r { transform-origin: 3.2px 0; } .bb-shin-r { transform-origin: 3.3px 11px; }
-    .is-bboy .bb { animation: bb-body 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-arm-l { animation: bb-grow .5s var(--bounce) backwards, bb-arm-l 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-arm-r { animation: bb-grow .5s var(--bounce) backwards, bb-arm-r 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-fore-r { animation: bb-fore-r 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-leg-l { animation: bb-grow .5s .1s var(--bounce) backwards, bb-leg-l 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-leg-r { animation: bb-grow .5s .1s var(--bounce) backwards, bb-leg-r 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-shin-l { animation: bb-shin-l 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-torso { animation: bb-grow .45s var(--bounce) backwards; transform-origin: 0 -18px; }
-    @keyframes bb-grow { from { scale: 0; } }
-    @keyframes bb-body {
-      0%, 12% { transform: none; } 6%, 18% { transform: translateY(-4px); }
-      24% { transform: translate(0, 22px) rotate(-90deg); }
-      44% { transform: translate(0, 22px) rotate(-810deg); }
-      50% { transform: translate(0, -9px) rotate(-900deg); }
-      54%, 62%, 70% { transform: translate(0, -9px) rotate(-900deg) scaleX(-1); }
-      58%, 66% { transform: translate(0, -9px) rotate(-900deg); }
-      76%, 90% { transform: translate(4px, -3px) rotate(-880deg); }
-      100% { transform: rotate(-1080deg); }
-    }
-    @keyframes bb-arm-l { 0%, 12% { rotate: -25deg; } 6%, 18% { rotate: 45deg; } 24%, 44% { rotate: 95deg; } 50%, 72% { rotate: 65deg; } 76%, 90% { rotate: 175deg; } 100% { rotate: 0deg; } }
-    @keyframes bb-arm-r { 0%, 12% { rotate: 25deg; } 6%, 18% { rotate: -45deg; } 24%, 44% { rotate: -95deg; } 50%, 72% { rotate: -65deg; } 76%, 90% { rotate: -120deg; } 100% { rotate: 0deg; } }
-    @keyframes bb-fore-r { 0%, 72% { rotate: 0deg; } 76%, 90% { rotate: -95deg; } 100% { rotate: 0deg; } }
-    @keyframes bb-leg-l { 0%, 12% { rotate: 0deg; } 6% { rotate: 28deg; } 18% { rotate: -12deg; } 24%, 44% { rotate: 40deg; } 50%, 72% { rotate: 58deg; } 76%, 90% { rotate: 30deg; } 100% { rotate: 0deg; } }
-    @keyframes bb-leg-r { 0%, 12% { rotate: 0deg; } 6% { rotate: 12deg; } 18% { rotate: -28deg; } 24%, 44% { rotate: -40deg; } 50%, 72% { rotate: -58deg; } 76%, 90% { rotate: -15deg; } 100% { rotate: 0deg; } }
-    @keyframes bb-shin-l { 0%, 72% { rotate: 0deg; } 6% { rotate: -40deg; } 12% { rotate: 0deg; } 76%, 90% { rotate: -105deg; } 100% { rotate: 0deg; } }
+    /* 10コンボ以上遊んで片付けると、青っぽくなって1節歌う（歌声：VOICEVOX:ずんだもん） */
+    .m-blob, .m-foot, .m-cheek { transition: fill .6s; }
+    .mascot.is-blue .m-blob, .mascot.is-blue .m-foot { fill: #a3c8ff; }
+    .mascot.is-blue .m-cheek { fill: #6f9cf2; }
+    .mascot.is-sing .mascot__body { animation: m-sing .62s ease-in-out infinite; }
+    .mascot.is-sing .m-mouth { transform-box: fill-box; transform-origin: 50% 0; animation: m-mouth .26s ease-in-out infinite alternate; }
+    @keyframes m-sing { 25% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: translateY(-4px) rotate(7deg); } }
+    @keyframes m-mouth { from { scale: 1 .45; } to { scale: 1.1 1.3; } }
 
     /* なぞの生き物ずかん */
     html:not(.js) #zukan { display: none; }
@@ -819,22 +784,6 @@
         <path class="m-mouth" d="M41 63h18l-9 11z"/>
       </svg>
     </div>
-    <svg class="bboy" viewBox="-70 -60 140 90">
-      <g class="bb">
-        <g class="bb-leg-r"><path class="ln" d="M3.2 0 3.4 22"/><path class="skin" d="M3.2 0 3.4 22"/><g class="bb-shin-r"><ellipse class="pink" cx="4.8" cy="23.4" rx="4.3" ry="2.6"/></g></g>
-        <g class="bb-leg-l"><path class="ln" d="M-3.2 0-3.4 22"/><path class="skin" d="M-3.2 0-3.4 22"/><g class="bb-shin-l"><ellipse class="pink" cx="-4.8" cy="23.4" rx="4.3" ry="2.6"/></g></g>
-        <g class="bb-torso"><path class="pink" d="M-7 -18C-8.4 -11-7.6-4-6.6 1-3 3 3 3 6.6 1 7.6-4 8.4-11 7-18 3-20.5-3-20.5-7-18Z"/><circle class="navel" cx="0" cy="-5" r=".8"/></g>
-        <g class="bb-arm-r"><path class="ln" d="M6.5 -16 8.5 -5"/><path class="skin" d="M6.5 -16 8.5 -5"/><g class="bb-fore-r"><path class="ln" d="M8.5 -5 9.4 5"/><path class="skin" d="M8.5 -5 9.4 5"/><circle class="pink" cx="9.6" cy="6.4" r="2.9"/></g></g>
-        <g class="bb-arm-l"><path class="ln" d="M-6.5 -16-8.5 -5"/><path class="skin" d="M-6.5 -16-8.5 -5"/><g class="bb-fore-l"><path class="ln" d="M-8.5 -5-9.4 5"/><path class="skin" d="M-8.5 -5-9.4 5"/><circle class="pink" cx="-9.6" cy="6.4" r="2.9"/></g></g>
-        <g transform="translate(-17 -49.5) scale(.34)">
-          <path class="m-blob" d="M50 24C75 24 87 42 87 61S72 91 50 91 13 80 13 61 25 24 50 24Z"/>
-          <g class="m-sprout"><path d="M50 24C50 17 51 13 54 9"/><path class="leaf" d="M54 9C58 3 66 3 69 5 66 10 59 12 54 9Z"/></g>
-          <ellipse class="m-cheek" cx="27" cy="64" rx="6" ry="3.5"/><ellipse class="m-cheek" cx="73" cy="64" rx="6" ry="3.5"/>
-          <path class="m-face" d="M31 55l6-8 6 8M57 55l6-8 6 8"/>
-          <path class="m-mouth" d="M41 63h18l-9 11z"/>
-        </g>
-      </g>
-    </svg>
   </div>
 
   <footer class="wrap foot">
@@ -844,6 +793,7 @@
       <a href="../">シンプル版</a>
       <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
+      <span>歌声：VOICEVOX:ずんだもん</span>
     </p>
   </footer>
 
@@ -1008,15 +958,6 @@
         glide: function () { tone(330, 0, .9, 'sine', .06, 1100); },
         bonk: function () { tone(1250, 0, .06, 'square', .05); tone(820, .02, .07, 'triangle', .08); },
         boing: function () { tone(300, 0, .25, 'sine', .1, 620); },
-        beat: function (ms) {
-          // ドン・パン・ドン・パン（ブレイクダンスの間）
-          for (var t = 0; t < ms / 1000; t += .25) {
-            var k = Math.round(t * 4) % 4;
-            if (k === 0 || k === 2) tone(140, t, .16, 'sine', .22, 45);
-            else tone(260, t, .08, 'square', .05, 180);
-            if (k === 3) tone(note(Math.floor(Math.random() * 5) + 2), t, .12, 'triangle', .06);
-          }
-        },
         grow: function () { tone(260, 0, .5, 'triangle', .1, 900); },
         rain: function () { for (var i = 0; i < 6; i++) tone(note(4 + Math.floor(Math.random() * 6)), i * .07, .1, 'sine', .07); },
         spray: function () { for (var i = 0; i < 8; i++) tone(500 + Math.random() * 700, i * .05, .06, 'sine', .06, 900 + Math.random() * 600); },
@@ -1075,18 +1016,20 @@
         el.className = 'pop' + (kind ? ' pop--' + kind : '');
         el.textContent = text;
         el.setAttribute('aria-hidden', 'true');
-        el.style.left = Math.max(70, Math.min(innerWidth - 70, x)) + 'px';
         el.style.top = Math.max(90, y) + 'px';
         el.style.setProperty('--r', (Math.random() * 10 - 5).toFixed(1) + 'deg');
         document.body.appendChild(el);
-        setTimeout(function () { el.remove(); }, kind === 'big' ? 1700 : 1200);
+        // 長い言葉でも画面の端で切れないよう、幅を測ってから横位置を決める
+        var half = el.offsetWidth * .62 + 12;  // 出てくるときに 1.2 倍まで膨らむぶんも見込む
+        el.style.left = Math.max(half, Math.min(innerWidth - half, x)) + 'px';
+        setTimeout(function () { el.remove(); }, kind === 'sing' ? 2700 : kind === 'big' ? 1700 : 1200);
       }
       var WORDS = ['ナイス！', 'いいね！', 'おみごと！', 'ぴったり！', 'さいこう！', 'すてき！', 'それっ！', 'わーい！'];
-      var combo = 0, lastDrop = 0, total = 0, maxCombo = 0, mascotTaps = 0, bboy = false;
+      var combo = 0, lastDrop = 0, total = 0, maxCombo = 0, mascotTaps = 0, singing = false;
       // 左下の生き物を踊らせる。level 1〜5（5は大回転）
       var mascot = document.querySelector('.mascot'), danceTimer = 0;
       function dance(level, ms) {
-        if (reduce || bboy) return;
+        if (reduce || singing) return;
         mascot.className = 'mascot lv' + level;
         clearTimeout(danceTimer);
         danceTimer = setTimeout(function () { mascot.className = 'mascot'; }, ms || 2600);
@@ -1103,7 +1046,7 @@
       }
       // 生き物はタップでもコンボになるが2回まで。ほかの場所で5コンボすると、また反応する
       mascot.addEventListener('click', function () {
-        if (bboy || mascotTaps >= 2) return;
+        if (singing || mascotTaps >= 2) return;
         mascotTaps++;
         var r = mascot.getBoundingClientRect();
         cheer(mascot, r.left + r.width / 2, r.top + r.height / 3, true);
@@ -1117,7 +1060,7 @@
         var big = total % 10 === 0;
         maxCombo = Math.max(maxCombo, combo);
         if (!fromMascot && combo >= 5) mascotTaps = 0;
-        if (!bboy) dance(big ? 5 : Math.min(combo, 5));
+        if (!singing) dance(big ? 5 : Math.min(combo, 5));
         if (!reduce) {
           el.animate([{ scale: '1.16 .86' }, { scale: '.92 1.1' }, { scale: '1.04 .97' }, { scale: '1' }], { duration: 520, easing: 'ease-out' });
           var ring = document.createElement('span'); ring.className = 'ring'; ring.style.left = x + 'px'; ring.style.top = y + 'px';
@@ -1230,22 +1173,30 @@
         }
       }
 
-      // ---------- ブレイクダンス ----------
-      function breakdance(ms) {
-        bboy = true;
+      // ---------- 青くなって歌う ----------
+      // 歌声は VOICEVOX:ずんだもん で作った音声（audio/zunda-song.mp3）。音なしのときは歌詞と音符だけ出す
+      var SONG_MS = 6400, LYRICS = [['かたづけ できたのだ♪', .06], ['ぴかぴか きれいなのだ〜♪', .46]], song = null;
+      function sing() {
+        singing = true;
         clearTimeout(danceTimer);
-        mascot.className = 'mascot is-bboy';
-        var r = mascot.getBoundingClientRect();
-        say('シャキーン！', r.left + 80, r.top - 40, 'combo');
-        sfx.beat(ms);
+        mascot.className = 'mascot is-blue is-sing';
+        var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 60, y = r.top - 30;
+        if (soundOn) {
+          if (!song) song = new Audio('audio/zunda-song.mp3');
+          song.currentTime = 0;
+          var pr = song.play(); if (pr && pr.catch) pr.catch(function () {});
+        } else {
+          setTimeout(function () { say('音ありにすると歌が聞けます', x + 20, y - 60, ''); }, SONG_MS * .8);
+        }
+        LYRICS.forEach(function (l) { setTimeout(function () { say(l[0], x + 30, y, 'sing'); }, l[1] * SONG_MS); });
+        var k = 0, notes = setInterval(function () { musicNote(k++); }, 380);
         setTimeout(function () {
+          clearInterval(notes);
           mascot.className = 'mascot';
-          bboy = false;
+          singing = false;
           var q = mascot.getBoundingClientRect();
-          burst(q.left + q.width / 2, q.top, 60);
-          say('キマった！', q.left + 70, q.top - 30, 'big');
-          sfx.big();
-        }, ms);
+          burst(q.left + q.width / 2, q.top, 50);
+        }, SONG_MS);
       }
 
       // ---------- 家の人たち ----------
@@ -1399,9 +1350,9 @@
       document.addEventListener('contextmenu', function (e) { if (Date.now() - lastTouch < 1500 && e.target.closest(DRAG)) e.preventDefault(); });
 
       tidy.addEventListener('click', function () {
-        // 10コンボ以上遊んだあとなら、生き物が踊っている間に1つずつ戻す
-        var list = Array.from(movedEls), party = maxCombo >= 10 && !reduce && !bboy;
-        var gap = party ? Math.min(220, 3200 / Math.max(1, list.length)) : 0;
+        // 10コンボ以上遊んだあとなら、生き物が歌っている間に1つずつ戻す
+        var list = Array.from(movedEls), party = maxCombo >= 10 && !singing;
+        var gap = party ? Math.min(220, (SONG_MS - 1200) / Math.max(1, list.length)) : 0;
         list.forEach(function (el, i) {
           setTimeout(function () {
             el.style.transition = 'translate .7s cubic-bezier(.34, 1.56, .64, 1)';
@@ -1411,7 +1362,7 @@
         });
         movedEls.clear();
         maxCombo = 0;
-        if (party) { breakdance(Math.max(4600, list.length * gap + 1000)); tidy.hidden = true; return; }
+        if (party) { sing(); tidy.hidden = true; return; }
         var r = tidy.getBoundingClientRect();
         burst(r.left + r.width / 2, r.top, 40);
         say('スッキリ！', r.left + r.width / 2 - 40, r.top - 30, '');

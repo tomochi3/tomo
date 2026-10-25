@@ -92,7 +92,8 @@
     /* 手書きフォントは線が細いので、少しだけ太らせる */
     .hero__hello, .chap-sub, .loop p span, .more__title span, .desk__hint, .foot__bye, .ins__word { -webkit-text-stroke: .35px currentColor; }
     .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
-    .sprite { display: none; }
+    /* display: none にするとパラシュートの縞模様が描けないので、大きさ 0 で置く */
+    .sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
     .skip { position: absolute; left: 12px; top: -60px; z-index: 100; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 10px; background: var(--ink); color: var(--paper); font-size: 14px; }
     .skip:focus { top: 8px; }
 
@@ -271,6 +272,25 @@
     .houses svg { width: 100%; aspect-ratio: 1; fill: var(--blue); }
     .js .houses svg { opacity: 0; transform: translateY(10px) scale(.6); transition: opacity .3s, transform .45s var(--bounce); transition-delay: calc(var(--i) * 35ms + .2s); }
     .js .in .houses svg { opacity: 1; transform: none; }
+    .houses__hint { display: none; margin-top: 10px; font-family: var(--hand); font-size: 17px; color: var(--ink-soft); -webkit-text-stroke: .3px currentColor; }
+    .js .houses__hint { display: block; }
+
+    /* 家から出てくる人たち（ページの上に重ねた層で動かす） */
+    .actors { position: absolute; left: 0; top: 0; z-index: 79; width: 100%; overflow: hidden; pointer-events: none; }
+    .actor { position: absolute; left: 0; top: 0; color: var(--ink); }
+    .actor svg { position: absolute; left: 0; bottom: 0; overflow: visible; translate: -50% 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .actor .head { fill: var(--paper); }
+    .actor .lg1, .actor .lg2 { transform-origin: 0 -7px; animation: legs .16s ease-in-out infinite alternate; }
+    .actor .lg2 { animation-direction: alternate-reverse; }
+    @keyframes legs { from { rotate: -32deg; } to { rotate: 32deg; } }
+    .actor--fly .lg1, .actor--fly .lg2 { animation: none; }
+    .actor .say { position: absolute; left: 0; bottom: 34px; translate: -50% 0; font-family: var(--hand); font-size: 17px; color: var(--red-ink); white-space: nowrap; -webkit-text-stroke: .3px currentColor; }
+    .actor--fly .say { bottom: 96px; }
+    .actor .chute, .actor .wing { transform-origin: 0 -40px; scale: 0; }
+    .actor .chute { stroke: var(--ink); stroke-width: 1.5; }
+    .actor .chute .canopy { fill: url(#stripes); }
+    .actor .wing { transform-origin: 0 -30px; }
+    .actor .wing path:first-child { fill: var(--blue); }
     .stamps { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
     .stamps li { display: grid; place-items: center; width: 66px; height: 66px; border: 3px solid var(--red-ink); border-radius: 50%; color: var(--red-ink); font-size: 15px; font-weight: 800; letter-spacing: -.02em; line-height: 1; transform: rotate(var(--r, -6deg)); }
     .stamps li:nth-child(3n) { --r: 8deg; }
@@ -414,7 +434,7 @@
 </head>
 <body>
   <a class="skip" href="#main">本文へスキップ</a>
-  <svg class="sprite" aria-hidden="true"><symbol id="house" viewBox="0 0 24 24"><path d="M12 2.5 1.5 11.2h3V21h5.2v-6.2h4.6V21h5.2v-9.8h3z"/></symbol></svg>
+  <svg class="sprite" aria-hidden="true"><defs><pattern id="stripes" width="12" height="10" patternUnits="userSpaceOnUse"><rect width="6" height="10" fill="#e2412b"/><rect x="6" width="6" height="10" fill="#ffd23f"/></pattern></defs><symbol id="house" viewBox="0 0 24 24"><path d="M12 2.5 1.5 11.2h3V21h5.2v-6.2h4.6V21h5.2v-9.8h3z"/></symbol></svg>
 
   <header class="bar">
     <div class="wrap bar__in">
@@ -498,6 +518,7 @@
             <p class="fact__num"><span data-count="32">32</span><small>人</small></p>
             <p class="fact__cap">泊めてくれた友人</p>
             <div class="houses" data-houses="32" aria-hidden="true"></div>
+            <p class="houses__hint" aria-hidden="true">↑ 家のそばに何か置いたり、家を動かしたりしてみてください</p>
           </div>
           <div class="fact fact--places rv">
             <p class="fact__num"><span data-count="11">11</span><small>都府県</small></p>
@@ -756,6 +777,9 @@
         drop: function (combo) { var b = Math.min(combo - 1, 8); [0, 1, 2].forEach(function (k) { tone(note(b + k), k * .06, .22, 'triangle', .15); }); },
         big: function () { [0, 2, 4, 5, 7].forEach(function (k, i) { tone(note(k), i * .08, i === 4 ? .6 : .2, 'square', .07); }); },
         tidy: function () { [7, 5, 3, 1, 0].forEach(function (k, i) { tone(note(k), i * .05, .18, 'sine', .12); }); tone(note(5), .3, .4, 'triangle', .14); },
+        flee: function () { tone(1200, 0, .28, 'sine', .07, 380); tone(1500, .12, .22, 'sine', .05, 500); },
+        chute: function () { tone(260, 0, .14, 'triangle', .13, 150); },
+        glide: function () { tone(330, 0, .9, 'sine', .06, 1100); },
         on: function () { tone(note(4), 0, .15, 'sine', .14); tone(note(7), .08, .3, 'sine', .14); }
       };
       soundBtn.addEventListener('click', function () {
@@ -825,6 +849,69 @@
         }
       }
 
+      // ---------- 家の人たち ----------
+      // 家のそばに物を置くと住人が飛び出して逃げる。家を動かすと住人が落ちて、パラシュートかハンググライダーで去る
+      var actors = null, actorCount = 0;
+      var PERSON = '<circle class="head" cx="0" cy="-21" r="4.5"/><path d="M0 -16.5V-7M-6 -14l6 3 6-3"/><path class="lg1" d="M0 -7l-3.5 7"/><path class="lg2" d="M0 -7l3.5 7"/>';
+      function actor(x, y, extra, text, cls) {
+        if (reduce || actorCount > 24) return null;
+        if (!actors) { actors = document.createElement('div'); actors.className = 'actors'; actors.setAttribute('aria-hidden', 'true'); document.body.appendChild(actors); }
+        actors.style.height = root.scrollHeight + 'px';
+        var el = document.createElement('div');
+        el.className = 'actor' + (cls ? ' ' + cls : '');
+        el.style.left = x + 'px'; el.style.top = y + 'px';
+        el.innerHTML = '<svg width="80" height="90" viewBox="-40 -80 80 90">' + (extra || '') + PERSON + '</svg>' + (text ? '<span class="say">' + text + '</span>' : '');
+        actors.appendChild(el);
+        actorCount++;
+        return el;
+      }
+      function retire(el, ms) { setTimeout(function () { el.remove(); actorCount--; }, ms); }
+      var SHOUTS = ['にげろ〜！', 'わーっ！', 'ひぃ〜！', 'たすけて〜！'];
+      function scare(el) {
+        if (reduce) return;
+        var r = el.getBoundingClientRect(), pad = 50, cx = r.left + r.width / 2, n = 0;
+        document.querySelectorAll('.houses svg').forEach(function (h) {
+          if (h === el || n >= 8) return;
+          var hr = h.getBoundingClientRect(), hx = hr.left + hr.width / 2, hy = hr.top + hr.height / 2;
+          if (hx < r.left - pad || hx > r.right + pad || hy < r.top - pad || hy > r.bottom + pad) return;
+          var dir = hx < cx ? -1 : 1, dist = 160 + Math.random() * 120, delay = n * 70;
+          var who = actor(hx + window.scrollX, hr.bottom + window.scrollY, '', n === 0 ? SHOUTS[Math.floor(Math.random() * SHOUTS.length)] : '！');
+          n++;
+          h.animate([{ rotate: '0deg' }, { rotate: '-12deg' }, { rotate: '10deg' }, { rotate: '0deg' }], { duration: 360, delay: delay });
+          if (!who) return;
+          var frames = [{ translate: '0 0', opacity: 0, offset: 0 }, { translate: '0 -18px', opacity: 1, offset: .12 }, { translate: '0 0', offset: .22 }];
+          for (var i = 1; i <= 5; i++) frames.push({ translate: (dir * dist * i / 5) + 'px ' + (i % 2 ? -12 : 0) + 'px', offset: .22 + .78 * i / 5 });
+          frames[frames.length - 1].opacity = 0;
+          frames[frames.length - 2].opacity = 1;
+          who.style.scale = dir < 0 ? '-1 1' : '';
+          var say = who.querySelector('.say'); if (say && dir < 0) say.style.scale = '-1 1';
+          who.animate(frames, { duration: 1500, delay: delay, easing: 'linear', fill: 'both' });
+          retire(who, 1600 + delay);
+        });
+        if (n) sfx.flee();
+      }
+      function bailOut(x, y) {
+        var glide = Math.random() < .35;
+        if (glide) {
+          var dir = Math.random() < .5 ? -1 : 1, dx = dir * (innerWidth * .9 + 100);
+          var g = actor(x, y, '<g class="wing"><path d="M-46 -30 0 -50 46 -30 0 -36Z"/><path d="M-16 -32-6-14M16 -32 6-14M-6-14h12"/></g>', 'ひゃっほ〜！', 'actor--fly');
+          if (!g) return;
+          if (dir < 0) { g.style.scale = '-1 1'; g.querySelector('.say').style.scale = '-1 1'; }
+          g.animate([{ translate: '0 0' }, { translate: '0 34px', offset: .1 }, { translate: (dx * .1) + 'px 44px', offset: .18 }, { translate: (dx * .35) + 'px 0px', offset: .45 }, { translate: (dx * .65) + 'px 36px', offset: .72 }, { translate: dx + 'px -40px' }], { duration: 4600, easing: 'ease-in-out', fill: 'both' });
+          g.querySelector('.wing').animate([{ scale: 0 }, { scale: 0, offset: .07 }, { scale: 1, offset: .13 }, { scale: 1 }], { duration: 4600, fill: 'both' });
+          retire(g, 4700);
+          sfx.glide();
+        } else {
+          var c = actor(x, y, '<g class="chute"><path class="canopy" d="M-28 -42Q0 -86 28 -42Q14 -48 0 -42Q-14 -48 -28 -42Z"/><path d="M-28 -42 -5 -15M28 -42 5 -15M0 -42V-16"/></g>', 'わぁ〜', 'actor--fly');
+          if (!c) return;
+          var drift = (Math.random() < .5 ? -1 : 1) * (20 + Math.random() * 40), fall = 220 + Math.random() * 60;
+          c.animate([{ translate: '0 0', opacity: 1 }, { translate: '0 60px', offset: .1 }, { translate: (drift * .3) + 'px ' + (fall * .4) + 'px', offset: .35 }, { translate: (-drift * .2) + 'px ' + (fall * .65) + 'px', offset: .6 }, { translate: drift + 'px ' + fall + 'px', offset: .85, opacity: 1 }, { translate: drift + 'px ' + fall + 'px', opacity: 0 }], { duration: 3600, easing: 'ease-in-out', fill: 'both' });
+          c.querySelector('.chute').animate([{ scale: 0 }, { scale: 0, offset: .1 }, { scale: '1.15 1', offset: .15 }, { scale: 1, offset: .2 }, { scale: 1, offset: .84 }, { scale: '1.2 .2', offset: .92 }, { scale: '1.2 .2' }], { duration: 3600, fill: 'both' });
+          setTimeout(function () { sfx.chute(); }, 360);
+          retire(c, 3700);
+        }
+      }
+
       // ほとんどの物はドラッグで動かせる。マウスはそのままつかみ、タッチは長押しで持ち上げる（ふつうのスワイプはスクロールのまま）
       var DRAG = '.st, .cover, .cover__badge, .chap-no, .kicker, .fact__num, .houses svg, .stamps li, .ladder li, .notes li, .polaroid, .hanko, .loop svg, .phone, .receipt, .pumpkin, .chips li, .mini, .band';
       var tidy = document.querySelector('.tidy');
@@ -845,13 +932,17 @@
         if (getComputedStyle(el).position === 'static') el.style.position = 'relative';
         el.style.zIndex = ++z;
         el.style.scale = '1.06';
+        if (el.matches('.houses svg')) drag.home = [r.left + r.width / 2 + window.scrollX, r.bottom + window.scrollY];
         el.classList.add('is-held');
       }
       function move(x, y) {
         var d = drag;
         var tx = Math.min(d.maxX, Math.max(d.minX, x - d.sx));
         var ty = Math.min(d.maxY, Math.max(d.minY, y - d.sy));
-        if (!d.moved && Math.abs(tx - d.t0[0]) + Math.abs(ty - d.t0[1]) > 4) d.moved = true;
+        if (!d.moved && Math.abs(tx - d.t0[0]) + Math.abs(ty - d.t0[1]) > 4) {
+          d.moved = true;
+          if (d.home) bailOut(d.home[0], d.home[1]);
+        }
         d.el.style.translate = tx + 'px ' + ty + 'px';
         d.px = x; d.py = y;
       }
@@ -860,7 +951,7 @@
         drag = null;
         d.el.style.scale = '';
         d.el.classList.remove('is-held');
-        if (d.moved) { movedEls.add(d.el); tidy.hidden = false; suppressClick = Date.now() + 400; cheer(d.el, d.px - window.scrollX, d.py - window.scrollY); }
+        if (d.moved) { movedEls.add(d.el); tidy.hidden = false; suppressClick = Date.now() + 400; cheer(d.el, d.px - window.scrollX, d.py - window.scrollY); scare(d.el); }
       }
       document.querySelectorAll(DRAG).forEach(function (el) {
         el.classList.add('dg');

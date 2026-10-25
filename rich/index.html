@@ -421,7 +421,7 @@
     @media (max-width: 719px) { .tidy { right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); min-height: 44px; padding: 0 16px; font-size: 14px; } }
 
     /* 左下のニコニコした謎の生き物。コンボが続くほど激しく踊る */
-    .mascot { position: fixed; left: 16px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 69; width: 76px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .mascot { --m: 76px; position: fixed; left: 16px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 69; width: var(--m); cursor: pointer; -webkit-tap-highlight-color: transparent; }
     .mascot svg { display: block; width: 100%; overflow: visible; }
     .mascot__body { transform-origin: 50% 92%; animation: m-idle 2.6s ease-in-out infinite; }
     .m-blob { fill: #ffc4d3; stroke: #1c1915; stroke-width: 2.6; }
@@ -451,12 +451,13 @@
     @keyframes m-wave { from { rotate: -35deg; } to { rotate: 30deg; } }
     .m-note { position: absolute; left: 50%; top: 0; font-family: var(--display); font-size: 20px; color: var(--red); pointer-events: none; }
     /* スマホでは下のメニューの左隣に収める */
-    @media (max-width: 719px) { .mascot { left: 6px; bottom: calc(12px + env(safe-area-inset-bottom)); width: min(52px, 14vw); } }
+    @media (max-width: 719px) { .mascot { --m: min(52px, 14vw); left: 6px; bottom: calc(12px + env(safe-area-inset-bottom)); } }
     html:not(.js) .mascot { display: none; }
 
     /* 10コンボ以上で片付けると、手足が生えて8頭身のブレイクダンサーになる */
-    .mascot .bboy { display: none; position: absolute; left: 50%; bottom: -8px; width: 160px; translate: -50% 0; overflow: visible; }
-    .mascot.is-bboy { left: 90px; cursor: default; }
+    /* 顔の大きさはいつもの姿と同じにする：ダンサーの頭は 0.34 倍で描いているので、全体を 100 / (140 × 0.34) 倍の幅にする */
+    .mascot .bboy { display: none; position: absolute; left: 50%; bottom: calc(var(--m) * -.1); width: calc(var(--m) * 4.118); translate: -50% 0; overflow: visible; }
+    .mascot.is-bboy { left: calc(var(--m) * 1.6); cursor: default; }
     .mascot.is-bboy .mascot__body { display: none; }
     .mascot.is-bboy .bboy { display: block; }
     .bboy .ln { fill: none; stroke: #1c1915; stroke-width: 10; stroke-linecap: round; }
@@ -499,7 +500,6 @@
     @keyframes bb-leg-l { 0%, 12% { rotate: 0deg; } 6% { rotate: 28deg; } 18% { rotate: -12deg; } 24%, 44% { rotate: 40deg; } 50%, 72% { rotate: 58deg; } 76%, 90% { rotate: 30deg; } 100% { rotate: 0deg; } }
     @keyframes bb-leg-r { 0%, 12% { rotate: 0deg; } 6% { rotate: 12deg; } 18% { rotate: -28deg; } 24%, 44% { rotate: -40deg; } 50%, 72% { rotate: -58deg; } 76%, 90% { rotate: -15deg; } 100% { rotate: 0deg; } }
     @keyframes bb-shin-l { 0%, 72% { rotate: 0deg; } 6% { rotate: -40deg; } 12% { rotate: 0deg; } 76%, 90% { rotate: -105deg; } 100% { rotate: 0deg; } }
-    @media (max-width: 719px) { .bboy { width: 120px; } .mascot.is-bboy { left: 64px; } }
 
     /* なぞの生き物ずかん */
     html:not(.js) #zukan { display: none; }

@@ -181,6 +181,8 @@
       /* 最初の画面では出さず、少しスクロールしてから出す */
       .js .nav { opacity: 0; transform: translate(-50%, 24px); pointer-events: none; }
       .js.show-dock .nav, .js .nav:focus-within { opacity: 1; transform: translateX(-50%); pointer-events: auto; }
+      /* スクロール中は薄くして、下を流れる文字を読めるようにする */
+      .js.show-dock.is-scrolling .nav:not(:focus-within) { opacity: .35; }
       .nav a { color: var(--paper); padding: 0 14px; font-size: 13px; white-space: nowrap; }
       .nav a:hover { background: transparent; }
       .nav a[aria-current] { background: var(--yellow); color: var(--fixed-ink); }
@@ -236,7 +238,7 @@
     .s6 { --x: 0%; --y: 66%; --w: 21%; --r: -12deg; --i: 5; display: grid; place-content: center; aspect-ratio: 1; border-radius: 50%; border: 2px solid var(--fixed-ink); background: var(--yellow); color: var(--fixed-ink); text-align: center; line-height: 1.1; }
     .s6 b { font-family: var(--display); font-weight: 400; font-size: clamp(15px, 2.3vw, 26px); white-space: nowrap; }
     .s6 small { font-size: clamp(9px, 1.2vw, 12px); font-weight: 700; white-space: nowrap; }
-    .desk__hint { position: absolute; right: 0; bottom: -6px; font-family: var(--hand); font-size: clamp(14px, 1.6vw, 17px); white-space: nowrap; color: var(--ink-soft); transform: rotate(-3deg); }
+    .desk__hint { position: absolute; right: 0; bottom: -10px; padding: 2px 12px 4px; border-radius: 999px; background: var(--yellow); color: var(--fixed-ink); font-family: var(--hand); font-size: clamp(15px, 1.7vw, 18px); white-space: nowrap; transform: rotate(-3deg); -webkit-text-stroke: .35px currentColor; box-shadow: 2px 2px 0 var(--ink); }
     .desk__hint span + span { display: none; }
     @media (hover: none), (pointer: coarse) { .desk__hint span { display: none; } .desk__hint span + span { display: inline; } }
     html:not(.js) .desk__hint { display: none; }
@@ -253,7 +255,8 @@
     @keyframes marquee { to { transform: translateX(-50%); } }
 
     /* ---------- chapters ---------- */
-    .chapter { padding-top: clamp(88px, 11vw, 150px); }
+    .chapter { padding-top: clamp(72px, 9vw, 120px); }
+    .tapes + .chapter { padding-top: clamp(48px, 6vw, 84px); }
     .chap-head { display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 4px 20px; padding-bottom: 18px; border-bottom: 2px solid var(--ink); margin-bottom: clamp(44px, 6vw, 80px); }
     .chap-no { grid-row: span 2; font-family: var(--display); font-size: clamp(76px, 13vw, 168px); line-height: .78; color: transparent; -webkit-text-stroke: 2px var(--ink); }
     /* スマホでは数字を上に置き、見出しと一言に横幅をまるごと使う */
@@ -421,9 +424,10 @@
     .mini__go::after { content: " →"; }
 
     /* ---------- footer ---------- */
-    .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 18px 24px; margin-top: clamp(110px, 14vw, 180px); padding-top: 36px; padding-bottom: 40px; border-top: 2px solid var(--ink); }
+    .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 18px 24px; margin-top: clamp(110px, 14vw, 180px); padding-top: 36px; padding-bottom: 104px; border-top: 2px solid var(--ink); }  /* 右下の「片付ける」と重ならないよう、下を空ける */
     .foot__bye { font-family: var(--hand); font-size: clamp(22px, 3vw, 30px); }
     .foot__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 13px; color: var(--ink-soft); }
+    .foot__credit { padding: 0 10px; font-weight: 700; color: var(--ink); }
     .foot__meta a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 10px; font-weight: 700; color: var(--ink); }
     .foot__meta a:hover { text-decoration: underline wavy var(--red) 1.5px; text-underline-offset: 6px; }
 
@@ -477,8 +481,15 @@
     @keyframes m-wave { from { rotate: -35deg; } to { rotate: 30deg; } }
     .m-note { position: absolute; left: 50%; top: 0; font-family: var(--display); font-size: 20px; color: var(--red); pointer-events: none; }
     /* スマホでは下のメニューの左隣に収める */
-    @media (max-width: 719px) { .mascot { --m: min(52px, 14vw); left: 6px; bottom: calc(12px + env(safe-area-inset-bottom)); } }
+    @media (max-width: 719px) {
+      .mascot { --m: min(44px, 12vw); left: 6px; bottom: calc(12px + env(safe-area-inset-bottom)); transition: translate .4s var(--ease); }
+      /* 最初の画面では机の物と重ならないよう、下に半分隠れておく */
+      .js:not(.show-dock) .mascot:not(.is-blue) { translate: 0 55%; }
+    }
     html:not(.js) .mascot { display: none; }
+    /* はじめて物を動かしたときだけ、生き物が片付けのことを教える */
+    .m-tip { position: absolute; left: calc(100% + 8px); bottom: 70%; width: max-content; white-space: nowrap; padding: 8px 14px 10px; border: 2px solid var(--ink); border-radius: 16px 16px 16px 4px; background: var(--card); color: var(--ink); font-family: var(--hand); font-size: 16px; line-height: 1.5; box-shadow: 3px 3px 0 var(--ink); -webkit-text-stroke: .3px currentColor; animation: drop .5s var(--bounce); pointer-events: none; }
+    @media (max-width: 719px) { .m-tip { white-space: normal; max-width: 64vw; } }
 
     /* 10コンボ以上遊んで片付けると、青っぽくなって1節歌う（歌声：VOICEVOX:ずんだもん） */
     .m-blob, .m-foot, .m-cheek { transition: fill .6s; }
@@ -545,9 +556,10 @@
           <span class="ln">ためになることを、</span>
           <span class="ln"><span class="circ">みんなで<svg viewBox="0 0 200 80" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M14 46C8 22 60 6 108 7c48 1 86 14 84 36-2 24-56 32-100 31C46 73 6 64 10 40 13 24 40 12 66 10"/></svg></span>やる。</span>
         </h1>
-        <p class="hero__lead"><span class="phrase">398日の家なし生活を本にし、</span><span class="phrase">運動不足解消もくもく会を主催。</span><br><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで解決しています。</span></p>
+        <p class="hero__lead"><span class="phrase">398日の家なし生活を本にし、</span><span class="phrase">運動×勉強会</span><span class="phrase">「運動不足解消もくもく会」を主催。</span><br><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで解決しています。</span></p>
         <div class="actions">
           <a class="btn" href="#book">本を見る</a>
+          <a class="link" href="#community">運動×勉強会</a>
           <a class="link" href="#works">作品を見る</a>
         </div>
       </div>
@@ -798,7 +810,7 @@
       <a href="../">シンプル版</a>
       <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
-      <span>歌声：VOICEVOX:ずんだもん</span>
+      <span class="foot__credit">歌声：VOICEVOX:ずんだもん</span>
     </p>
   </footer>
 
@@ -823,7 +835,13 @@
         bar.style.setProperty('--p', max > 0 ? Math.min(1, window.scrollY / max) : 0);
         root.classList.toggle('show-dock', window.scrollY > hero.offsetHeight * .6);
       }
-      window.addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(progress); } }, { passive: true });
+      var scrollIdle = 0;
+      window.addEventListener('scroll', function () {
+        if (!ticking) { ticking = true; requestAnimationFrame(progress); }
+        root.classList.add('is-scrolling');
+        clearTimeout(scrollIdle);
+        scrollIdle = setTimeout(function () { root.classList.remove('is-scrolling'); }, 450);
+      }, { passive: true });
       progress();
 
       // 泊めてくれた友人の数だけ家を並べる
@@ -1316,12 +1334,23 @@
         d.el.style.translate = tx + 'px ' + ty + 'px';
         d.px = x; d.py = y;
       }
+      var tipShown = false;
+      function firstTip() {
+        if (tipShown) return;
+        tipShown = true;
+        try { if (localStorage.getItem('tomochi-tip')) return; localStorage.setItem('tomochi-tip', '1'); } catch (e) {}
+        var t = document.createElement('span');
+        t.className = 'm-tip'; t.setAttribute('role', 'status');
+        t.textContent = '右下の「片付ける」で、ぼくが元に戻すよ！';
+        setTimeout(function () { mascot.appendChild(t); }, 900);
+        setTimeout(function () { t.remove(); }, 6500);
+      }
       function drop() {
         var d = drag;
         drag = null;
         d.el.style.scale = '';
         d.el.classList.remove('is-held');
-        if (d.moved) { movedEls.add(d.el); tidy.hidden = false; suppressClick = Date.now() + 400; var stamp = d.el.matches('.stamps li'); cheer(d.el, d.px - window.scrollX, d.py - window.scrollY, false, stamp); scare(d.el); if (stamp) prefFx(d.el); else { var g = d.el; setTimeout(function () { gather(g); }, 540); } }
+        if (d.moved) { firstTip(); movedEls.add(d.el); tidy.hidden = false; suppressClick = Date.now() + 400; var stamp = d.el.matches('.stamps li'); cheer(d.el, d.px - window.scrollX, d.py - window.scrollY, false, stamp); scare(d.el); if (stamp) prefFx(d.el); else { var g = d.el; setTimeout(function () { gather(g); }, 540); } }
       }
       document.querySelectorAll(DRAG).forEach(function (el) {
         el.classList.add('dg');

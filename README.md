@@ -10,6 +10,7 @@ https://tomochi3.github.io/tomo/
 index.html      ページ本体（作品一覧はここに直接書いています）
 404.html        存在しないURLを開いたときのページ（中の参照は /tomo/ から始まる絶対パス）
 rich/           リッチ版（https://tomochi3.github.io/tomo/rich/）。index.html に CSS と JS を内包。画像は rich/img/ にまとめ、シンプル版の img/ には依存しない
+rich/fonts/     リッチ版の見出し（Dela Gothic One）と手書き（Yomogi）。ページで使う文字だけに絞ったもの。ライセンスは OFL-*.txt（SIL OFL 1.1）
 css/style.css   スタイル（ライト / ダークはOSの設定に追従）
 img/            作品のサムネイル（WebP。小カード用は 800×500 で名前が -sm）
 fonts/          Inter（英字用、可変ウェイト）。Google Fonts は使わず、ここから読み込む。ライセンスは LICENSE-Inter.txt（SIL OFL 1.1）
@@ -57,3 +58,14 @@ python3 -m http.server 8000
 | `is-featured` | 全幅の横長カード（先頭の注目作品用） |
 
 段の端が揃うように、通常カードは2枚ずつ、小カードは4枚ずつ並べてください。
+
+## リッチ版の文章を変えたとき
+
+見出し・手書き用のフォントは、ページで使っている文字だけを入れています。`rich/index.html` に新しい文字を足したら、フォントを作り直してください（作り直さなくても、その文字だけ端末のフォントで表示されます）。
+
+```sh
+pip install fonttools brotli
+python3 tools/subset_fonts.py DelaGothicOne-Regular.ttf Yomogi-Regular.ttf
+```
+
+元のフォントの入手先は `tools/subset_fonts.py` の先頭に書いてあります。

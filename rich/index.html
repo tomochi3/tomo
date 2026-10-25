@@ -171,18 +171,23 @@
     .js .hl { background-size: 0 100%; transition: background-size .8s var(--ease) .2s; }
     .js.is-ready .hl { background-size: 100% 100%; }
     /* 挿入記号で書き足した「できれば」 */
-    .ins { position: relative; display: inline-block; width: 0; }
-    .ins::before { content: ""; position: absolute; left: -.1em; bottom: .12em; width: .3em; height: .3em; border-left: 3px solid var(--red); border-top: 3px solid var(--red); transform: rotate(45deg); }
-    .ins__word { position: absolute; left: -.55em; bottom: .62em; font-family: var(--hand); font-size: .5em; color: var(--red-ink); white-space: nowrap; transform: rotate(-7deg); transform-origin: left bottom; }
-    .js .ins::before, .js .ins__word { opacity: 0; transition: opacity .3s .75s; }
-    .js .ins__word { transform: rotate(-7deg) translateY(6px); transition: opacity .4s .85s, transform .6s var(--bounce) .85s; }
+    /* 校正の挿入記号：「、」のすぐ後ろに ∧ を入れ、引き出し線の上に書き足す */
+    .ins { position: relative; display: inline-block; width: 0; margin-left: .14em; }
+    .ins::before { content: ""; position: absolute; left: -.15em; bottom: -.24em; width: .3em; height: .3em; border-left: 3px solid var(--red); border-top: 3px solid var(--red); transform: rotate(45deg); }
+    .ins::after { content: ""; position: absolute; left: -1.5px; bottom: -.12em; width: 3px; height: 1.02em; border-radius: 2px; background: var(--red); transform-origin: bottom; }
+    /* 大きさは見出しの半分。left / bottom はこの要素の文字の大きさが基準 */
+    .ins__word { position: absolute; left: 0; bottom: 1.84em; font-family: var(--hand); font-size: .5em; color: var(--red-ink); white-space: nowrap; transform: translateX(-50%) rotate(-4deg); transform-origin: center bottom; }
+    .js .ins::before { opacity: 0; transition: opacity .25s .7s; }
+    .js .ins::after { transform: scaleY(0); transition: transform .35s var(--ease) .8s; }
+    .js .ins__word { opacity: 0; transform: translateX(-50%) rotate(-4deg) translateY(6px); transition: opacity .4s 1.05s, transform .6s var(--bounce) 1.05s; }
     .js.is-ready .ins::before, .js.is-ready .ins__word { opacity: 1; }
-    .js.is-ready .ins__word { transform: rotate(-7deg); }
+    .js.is-ready .ins::after { transform: none; }
+    .js.is-ready .ins__word { transform: translateX(-50%) rotate(-4deg); }
     /* 赤ペンの丸 */
     .circ { position: relative; display: inline-block; margin-right: .3em; }
     .circ svg { position: absolute; left: -11%; top: -18%; width: 124%; height: 136%; overflow: visible; fill: none; stroke: var(--red); stroke-width: 3.5; stroke-linecap: round; pointer-events: none; }
     .circ path { stroke-dasharray: 1; stroke-dashoffset: 0; }
-    .js .circ path { stroke-dashoffset: 1; transition: stroke-dashoffset .9s var(--ease) 1.15s; }
+    .js .circ path { stroke-dashoffset: 1; transition: stroke-dashoffset .9s var(--ease) 1.35s; }
     .js.is-ready .circ path { stroke-dashoffset: 0; }
     .hero__lead { margin-top: 26px; max-width: 32em; color: var(--ink-soft); font-size: clamp(16px, 1.8vw, 18px); line-height: 1.95; }
 

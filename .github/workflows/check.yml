@@ -1,12 +1,17 @@
-name: Check site
+name: Check and deploy site
 
 on:
   push:
   pull_request:
 
-# このチェックはリポジトリを読むだけなので、権限は読み取りに限る
+# 基本は読み取りだけ。公開に必要な権限は deploy ジョブにだけ渡す
 permissions:
   contents: read
+
+# 公開が重なったときは、あとから来たほうを待たせる（途中で止めない）
+concurrency:
+  group: pages
+  cancel-in-progress: false
 
 jobs:
   check:
@@ -33,3 +38,33 @@ jobs:
           python3 -m http.server 8000 >/dev/null 2>&1 &
           sleep 1
           node tools/smoke.mjs
+
+  # チェックに通ったときだけ、main への push を公開する
+  deploy:
+    needs: check
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          persist-credentials: false
+
+      # サイトに必要なファイルだけを集める（tools/ や README などは公開しない）
+      - name: 公開するファイルをまとめる
+        run: |
+          mkdir _site
+          cp -r index.html 404.html css fonts img rich icon.svg icon-32.png favicon.ico apple-touch-icon.png _site/
+
+      - uses: actions/upload-pages-artifact@7b1f4a764d45c48632c6b24a0339c27f5614fb0b # v4.0.0
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5

@@ -22,7 +22,7 @@ img/og.jpg      XやLINEで共有したときのプレビュー画像（1200×63
 
 ## 自動チェック
 
-push すると GitHub Actions（`.github/workflows/check.yml`）で次を確認します。結果は GitHub のコミット一覧に ✓ / ✗ で出ます。
+push すると GitHub Actions（`.github/workflows/check.yml`）で次を確認し、すべて通ったときだけ main を GitHub Pages に公開します。結果は GitHub のコミット一覧に ✓ / ✗ で出ます。公開されるのはサイトに必要なファイルだけで、`tools/` や README は含みません（公開先の設定は Settings → Pages → Source を「GitHub Actions」にしておく）。
 
 - HTML の検査（html-validate。設定は `.htmlvalidate.json`）
 - ページ内リンクと画像などのファイル参照の切れ（`tools/check_links.py`）

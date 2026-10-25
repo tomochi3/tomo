@@ -26,7 +26,7 @@ def main():
     for page in PAGES:
         html = open(page, encoding='utf-8').read()
         ids = set(re.findall(r'\bid="([^"]+)"', html))
-        for ref in re.findall(r'\b(?:src|href)="([^"]+)"', html):
+        for ref in re.findall(r'\b(?:src|href|srcset)="([^" ]+)', html):
             if ref.startswith(('http://', 'https://', 'mailto:', 'data:')):
                 continue
             if ref.startswith('#'):

@@ -42,7 +42,7 @@
 
   <main id="main" tabindex="-1">
     <section class="hero container">
-      <h1 class="hero__title"><span class="phrase">面白くて、</span><span class="phrase">できれば</span><span class="phrase">ためになることを、</span><span class="phrase">みんなでやる。</span></h1>
+      <h1 class="hero__title"><span class="phrase">面白くて、</span><span class="phrase">できれば</span><br><span class="phrase">ためになることを、</span><br><span class="phrase">みんなでやる。</span></h1>
       <p class="hero__lead"><span class="phrase">398日の家なし生活を本にし、</span><span class="phrase">運動不足解消もくもく会を主催。</span><br><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで解決しています。</span></p>
     </section>
 
@@ -51,7 +51,10 @@
       <ul class="works">
         <li>
           <a class="card" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">
-            <img class="card__img" src="img/book.webp" width="1600" height="1000" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy">
+            <picture>
+              <source srcset="img/book-dark.webp" media="(prefers-color-scheme: dark)">
+              <img class="card__img" src="img/book.webp" width="1600" height="1000" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy">
+            </picture>
             <div class="card__body">
               <h3 class="card__title">ホームレス大学院生</h3>
               <p class="card__desc">398日間家なしで生活した大学院生時代の体験記</p>
@@ -61,7 +64,10 @@
         </li>
         <li>
           <a class="card" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">
-            <img class="card__img" src="img/book2.webp" width="1600" height="1000" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
+            <picture>
+              <source srcset="img/book2-dark.webp" media="(prefers-color-scheme: dark)">
+              <img class="card__img" src="img/book2.webp" width="1600" height="1000" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
+            </picture>
             <div class="card__body">
               <h3 class="card__title">中の上の人生戦略</h3>
               <p class="card__desc">超一流じゃない「どこにでもいる人」のための人生戦略</p>
@@ -162,6 +168,7 @@
   <footer class="footer container">
     <span>© <span data-year>2026</span> tomochi</span>
     <span class="footer__links">
+      <a href="rich/">リッチ版</a>
       <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
     </span>

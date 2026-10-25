@@ -70,7 +70,7 @@
     .mt-s { margin-top: 10px; }
     .mt-m { margin-top: 20px; }
 
-    /* ---------- actions: filled = use it, text link = read / look ---------- */
+    /* ---------- actions: filled = the main thing to open, text link = a side route ---------- */
     .actions { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 12px 28px; margin-top: 24px; }
     .btn {
       display: inline-flex;
@@ -137,6 +137,8 @@
     /* ---------- sections ---------- */
     .section { padding: clamp(88px, 12vw, 140px) 0; text-align: center; overflow: hidden; }
     .bg-gray { background: var(--gray); }
+    .intro { padding: clamp(88px, 12vw, 140px) 0 0; text-align: center; }
+    .intro + .section { padding-top: clamp(64px, 9vw, 112px); }
     .bg-white { background: var(--white); }
     .bg-night { background: var(--night); }
 
@@ -266,27 +268,13 @@
     .stat__list { display: block; margin-top: 4px; font-size: 12px; line-height: 1.6; }
     .stat__list span { display: inline-block; }
 
-    .book2 {
-      display: grid;
-      grid-template-columns: clamp(96px, 22vw, 168px) 1fr;
-      gap: clamp(20px, 4vw, 40px);
-      align-items: center;
-      margin-top: clamp(64px, 9vw, 112px);
-      padding-top: clamp(40px, 6vw, 64px);
-      border-top: 1px solid rgba(255, 255, 255, .14);
-      text-align: left;
-      -webkit-tap-highlight-color: transparent;
-    }
-    .book2__cover { width: 100%; border-radius: 4px; box-shadow: 0 30px 60px -24px rgba(0, 0, 0, .9), 0 0 0 1px rgba(255, 255, 255, .06); transition: transform .4s var(--ease); }
-    @media (hover: hover) { .book2:hover .book2__cover { transform: translateY(-6px) rotate(-1.5deg); } }
-    .book2.is-pressed .book2__cover { transform: scale(.97); }
-    .book2__kind { font-size: 14px; font-weight: 600; color: var(--ink-dark-soft); }
-    .book2__title { margin-top: 6px; font-size: clamp(24px, 3.4vw, 36px); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
-    .book2__sub { margin-top: 4px; font-size: clamp(14px, 1.6vw, 16px); color: var(--ink-dark-soft); }
-    .book2__desc { margin-top: 14px; max-width: 36em; font-size: clamp(15px, 1.7vw, 17px); color: var(--ink-dark-soft); line-height: 1.7; }
-    .book2__go { display: inline-flex; align-items: center; min-height: 44px; margin-top: 6px; color: var(--blue-dark); font-size: 17px; }
-    .book2__go::after { content: "›"; margin-left: 6px; font-size: 1.25em; line-height: 1; }
-    @media (max-width: 559px) { .book2__desc { display: none; } }
+    .book--alt { margin-top: clamp(96px, 14vw, 160px); padding-top: clamp(72px, 10vw, 120px); border-top: 1px solid rgba(255, 255, 255, .14); }
+    @media (min-width: 860px) { .book--alt { grid-template-columns: 1fr 1.1fr; } }
+    .book--alt .book__cover-wrap::before { background: radial-gradient(closest-side, rgba(150, 196, 255, .3), transparent); }
+    .book--alt .book__cover { transform: rotateY(18deg) rotateX(4deg); }
+    .themes { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; margin-top: 28px; }
+    @media (min-width: 860px) { .themes { justify-content: flex-start; } }
+    .themes li { padding: 6px 14px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .2); font-size: 14px; color: #e8e8ed; }
 
     /* ---------- community ---------- */
     .community { position: relative; min-height: clamp(560px, 80vh, 820px); display: flex; align-items: flex-end; overflow: hidden; text-align: left; }
@@ -295,7 +283,6 @@
     .community__text { position: relative; z-index: 1; padding-bottom: clamp(48px, 8vw, 88px); text-shadow: 0 1px 12px rgba(0, 0, 0, .45); }
     .community .lead { margin-top: 16px; max-width: 34em; color: rgba(255, 255, 255, .92); }
     .community .actions { justify-content: flex-start; }
-    .community .link { color: #fff; }
 
     /* ---------- footer ---------- */
     .footer { background: var(--gray); color: var(--ink-soft); font-size: 12px; padding: 12px 0 28px; }
@@ -345,19 +332,19 @@
         <div class="hero__glow"></div>
         <div class="collage">
           <div class="collage__col" data-speed="-1">
-            <img src="img/benri-sm.webp" width="800" height="500" alt="">
+            <img src="img/c-mokumoku.webp" width="720" height="450" alt="">
             <img src="img/c-tt_record.webp" width="720" height="450" alt="">
-            <img src="img/c-book.webp" width="720" height="450" alt="">
+            <img src="img/benri-sm.webp" width="800" height="500" alt="">
           </div>
           <div class="collage__col" data-speed=".6">
-            <img src="img/pingpong2-sm.webp" width="800" height="500" alt="">
+            <img src="img/c-book.webp" width="720" height="450" alt="">
             <img src="img/c-warikan.webp" width="720" height="450" alt="">
-            <img src="img/gchal-sm.webp" width="800" height="500" alt="">
+            <img src="img/pingpong2-sm.webp" width="800" height="500" alt="">
           </div>
           <div class="collage__col" data-speed="-.5">
-            <img src="img/5grip-sm.webp" width="800" height="500" alt="">
+            <img src="img/c-book2.webp" width="720" height="450" alt="">
             <img src="img/c-pumpkin.webp" width="720" height="450" alt="">
-            <img src="img/c-mokumoku.webp" width="720" height="450" alt="">
+            <img src="img/5grip-sm.webp" width="800" height="500" alt="">
           </div>
         </div>
         <div class="hero__fade"></div>
@@ -377,24 +364,26 @@
             <div class="stat"><p class="stat__big">11</p><p class="stat__cap">暮らした都府県<span class="stat__list"><span>東京・</span><span>神奈川・</span><span>埼玉・</span><span>千葉・</span><span>愛知・</span><span>三重・</span><span>京都・</span><span>大阪・</span><span>兵庫・</span><span>愛媛・</span><span>福岡</span></span></p></div>
           </div>
           <div class="actions">
-            <a class="link" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">Amazonで見る</a>
+            <a class="btn" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">Amazonで見る</a>
           </div>
         </div>
         <div class="book__cover-wrap rise">
           <img class="book__cover" data-book src="img/book-cover.webp" width="560" height="801" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy">
         </div>
       </div>
-      <div class="wrap">
-        <a class="book2" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">
-          <img class="book2__cover" src="img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
-          <div class="book2__text">
-            <p class="book2__kind">もう1冊の著書</p>
-            <h3 class="book2__title">中の上の人生戦略</h3>
-            <p class="book2__sub"><span class="phrase">〜名もなき人は</span><span class="phrase">名もなき人を参考にせよ〜</span></p>
-            <p class="book2__desc">超一流じゃない、「どこにでもいる人」のための人生戦略です。人間関係・健康・仕事・習慣について、すぐに試せる行動をまとめました。</p>
-            <span class="book2__go">Amazonで見る</span>
+      <div class="wrap book book--alt">
+        <div class="book__cover-wrap rise">
+          <img class="book__cover" src="img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
+        </div>
+        <div>
+          <p class="eyebrow">中の上の人生戦略</p>
+          <h3 class="h-l mt-s"><span class="phrase">名もなき人は、</span><span class="phrase">名もなき人を</span><span class="phrase">参考にせよ。</span></h3>
+          <p class="lead soft"><span class="phrase">超一流じゃない、</span><span class="phrase">「どこにでもいる人」の</span><span class="phrase">ための人生戦略です。</span></p>
+          <ul class="themes"><li>人間関係</li><li>健康</li><li>仕事</li><li>習慣</li></ul>
+          <div class="actions">
+            <a class="btn" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">Amazonで見る</a>
           </div>
-        </a>
+        </div>
       </div>
     </section>
 
@@ -405,17 +394,25 @@
         <h2 class="h-l mt-s" id="cm-title"><span class="phrase">運動不足解消</span><span class="phrase">もくもく会</span></h2>
         <p class="lead">運動を挟むことによって、健康的かつ効率的に勉強を進めています。</p>
         <div class="actions">
-          <a class="link" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a>
+          <a class="btn" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a>
         </div>
       </div>
     </section>
 
     <!-- ===== 作品（明） ===== -->
-    <section class="section bg-gray" id="works" aria-labelledby="tt-title">
+    <section class="intro bg-gray" id="works" aria-labelledby="works-title">
+      <div class="wrap">
+        <p class="eyebrow">作品</p>
+        <h2 class="h-xl mt-s" id="works-title"><span class="phrase">身近な不便を、</span><br><span class="phrase">小さなアプリで。</span></h2>
+        <p class="lead soft mt-m"><span class="phrase">Webアプリ、スマホアプリ、</span><span class="phrase">ゲームを作っています。</span></p>
+      </div>
+    </section>
+
+    <section class="section bg-gray" id="tt" aria-labelledby="tt-title">
       <div class="wrap">
         <p class="eyebrow">卓球戦績メモ</p>
         <h2 class="h-l mt-s" id="tt-title"><span class="phrase">試合のすべてを、</span><span class="phrase">数タップで。</span></h2>
-        <p class="lead soft mt-m"><span class="phrase">結果を記録して、</span><span class="phrase">相手ごとの成績を振り返れる卓球アプリです。</span></p>
+        <p class="lead soft mt-m"><span class="phrase">結果を記録して、</span><span class="phrase">相手ごとの成績を</span><span class="phrase">振り返れる卓球アプリです。</span></p>
         <div class="actions">
           <a class="btn" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">サイトを開く</a>
         </div>
@@ -549,7 +546,7 @@
       function release() { if (pressed) { pressed.classList.remove('is-pressed'); pressed = null; } }
       document.addEventListener('touchstart', function (e) {
         release();
-        pressed = e.target.closest && e.target.closest('.mini, .book2');
+        pressed = e.target.closest && e.target.closest('.mini');
         if (pressed) pressed.classList.add('is-pressed');
       }, { passive: true });
       ['touchend', 'touchcancel', 'touchmove'].forEach(function (t) { document.addEventListener(t, release, { passive: true }); });

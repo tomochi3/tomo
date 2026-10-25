@@ -236,6 +236,8 @@
     .chapter { padding-top: clamp(88px, 11vw, 150px); }
     .chap-head { display: grid; grid-template-columns: auto 1fr; align-items: end; gap: 4px 20px; padding-bottom: 18px; border-bottom: 2px solid var(--ink); margin-bottom: clamp(44px, 6vw, 80px); }
     .chap-no { grid-row: span 2; font-family: var(--display); font-size: clamp(76px, 13vw, 168px); line-height: .78; color: transparent; -webkit-text-stroke: 2px var(--ink); }
+    /* スマホでは数字を上に置き、見出しと一言に横幅をまるごと使う */
+    @media (max-width: 559px) { .chap-head { grid-template-columns: 1fr; } .chap-no { grid-row: auto; margin-bottom: 10px; font-size: 72px; } }
     .chap-title { font-family: var(--display); font-weight: 400; font-size: clamp(32px, 5.6vw, 68px); line-height: 1.1; }
     .chap-sub { font-family: var(--hand); font-size: clamp(18px, 2.3vw, 24px); color: var(--red-ink); line-height: 1.45; }
     .kicker { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border: 2px solid var(--ink); border-radius: 999px; background: var(--card); font-size: 14px; font-weight: 700; }
@@ -404,7 +406,7 @@
       <a class="logo" href="#top">tomochi<span>.</span></a>
       <nav class="nav" aria-label="ページ内">
         <a href="#book">本</a>
-        <a href="#community">コミュニティ</a>
+        <a href="#community">運動×勉強会</a>
         <a href="#works">作品</a>
       </nav>
       <a class="bar__x" href="https://x.com/tamachika11" target="_blank" rel="noopener">
@@ -443,7 +445,7 @@
     </section>
 
     <div class="tapes" aria-hidden="true">
-      <div class="band band--b"><div class="band__track"><span>本を書く ✳ 人を集める ✳ アプリをつくる ✳ 本を書く ✳ 人を集める ✳ アプリをつくる ✳&nbsp;</span><span>本を書く ✳ 人を集める ✳ アプリをつくる ✳ 本を書く ✳ 人を集める ✳ アプリをつくる ✳&nbsp;</span></div></div>
+      <div class="band band--b"><div class="band__track"><span>本を書く ✳ 運動×勉強会をひらく ✳ アプリをつくる ✳ 本を書く ✳ 運動×勉強会をひらく ✳ アプリをつくる ✳&nbsp;</span><span>本を書く ✳ 運動×勉強会をひらく ✳ アプリをつくる ✳ 本を書く ✳ 運動×勉強会をひらく ✳ アプリをつくる ✳&nbsp;</span></div></div>
       <div class="band band--a"><div class="band__track"><span>面白くて ✳ できれば、ためになる ✳ みんなでやる ✳ 面白くて ✳ できれば、ためになる ✳ みんなでやる ✳&nbsp;</span><span>面白くて ✳ できれば、ためになる ✳ みんなでやる ✳ 面白くて ✳ できれば、ためになる ✳ みんなでやる ✳&nbsp;</span></div></div>
     </div>
 
@@ -518,12 +520,12 @@
       </div>
     </section>
 
-    <!-- ===== 02 コミュニティ ===== -->
+    <!-- ===== 02 運動×勉強会 ===== -->
     <section class="wrap chapter" id="community" aria-labelledby="cm-title">
       <div class="chap-head">
         <p class="chap-no" aria-hidden="true">02</p>
-        <h2 class="chap-title" id="cm-title">人を集める</h2>
-        <p class="chap-sub"><span class="phrase">もくもく会を</span><span class="phrase">主催しています。</span></p>
+        <h2 class="chap-title" id="cm-title"><span class="phrase">運動×勉強会を</span><span class="phrase">ひらく</span></h2>
+        <p class="chap-sub"><span class="phrase">運動不足を解消しながら、</span><span class="phrase">勉強時間も確保する会です。</span></p>
       </div>
       <div class="cm">
         <figure class="polaroid rv">

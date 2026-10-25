@@ -276,6 +276,17 @@
     /* 家から出てくる人たち（ページの上に重ねた層で動かす） */
     .actors { position: absolute; left: 0; top: 0; z-index: 79; width: 100%; overflow: hidden; pointer-events: none; }
     .actor { position: absolute; left: 0; top: 0; color: var(--ink); }
+    /* 片付けで物を運ぶ生き物（左下の生き物と同じ絵） */
+    .helper { position: absolute; left: 0; top: 0; z-index: 2; width: 56px; margin: -56px 0 0 -28px; }
+    .helper svg { display: block; width: 100%; overflow: visible; }
+    .helper.is-walk svg { animation: h-hop .2s ease-in-out infinite alternate; }
+    .helper.is-carry svg { animation: h-hop .14s ease-in-out infinite alternate; }
+    .helper .m-arm { transform-box: fill-box; }
+    .helper.is-carry .m-arm--l { transform-origin: 100% 100%; rotate: 70deg; }
+    .helper.is-carry .m-arm--r { transform-origin: 0 100%; rotate: -70deg; }
+    .helper .hsay { position: absolute; left: 50%; bottom: 100%; translate: -50% -4px; font-family: var(--hand); font-size: 16px; color: var(--red-ink); white-space: nowrap; -webkit-text-stroke: .3px currentColor; }
+    @keyframes h-hop { from { translate: 0 0; } to { translate: 0 -5px; } }
+    .mascot.is-away { opacity: 0; transition: opacity .2s; pointer-events: none; }
     .actor svg { position: absolute; left: 0; bottom: 0; overflow: visible; translate: -50% 0; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .actor .head { fill: var(--paper); }
     .actor .lg1, .actor .lg2 { transform-origin: 0 -7px; animation: legs .16s ease-in-out infinite alternate; }
@@ -1121,10 +1132,14 @@
       // 家のそばに物を置くと住人が飛び出して逃げる。家を動かすと住人が落ちて、パラシュートかハンググライダーで去る
       var actors = null, actorCount = 0;
       var PERSON = '<circle class="head" cx="0" cy="-21" r="4.5"/><path d="M0 -16.5V-7M-6 -14l6 3 6-3"/><path class="lg1" d="M0 -7l-3.5 7"/><path class="lg2" d="M0 -7l3.5 7"/>';
-      function actor(x, y, extra, text, cls) {
-        if (reduce || actorCount > 40) return null;
+      function ensureActors() {
         if (!actors) { actors = document.createElement('div'); actors.className = 'actors'; actors.setAttribute('aria-hidden', 'true'); document.body.appendChild(actors); }
         actors.style.height = root.scrollHeight + 'px';
+        return actors;
+      }
+      function actor(x, y, extra, text, cls) {
+        if (reduce || actorCount > 40) return null;
+        ensureActors();
         var el = document.createElement('div');
         el.className = 'actor' + (cls ? ' ' + cls : '');
         el.style.left = x + 'px'; el.style.top = y + 'px';
@@ -1252,6 +1267,7 @@
       var movedEls = new Set();
       var z = 30, drag = null, suppressClick = 0;
       function translateOf(el) { var t = (el.style.translate || '0px 0px').split(' '); return [parseFloat(t[0]) || 0, parseFloat(t[1]) || 0]; }
+      var tidying = false;
       function pick(el, x, y) {
         var t = translateOf(el), r = el.getBoundingClientRect();
         var left = r.left + window.scrollX - t[0], top = r.top + window.scrollY - t[1];
@@ -1295,7 +1311,7 @@
       document.addEventListener('click', function (e) { if (Date.now() < suppressClick) { e.preventDefault(); e.stopPropagation(); } }, true);
 
       document.addEventListener('pointerdown', function (e) {
-        if (e.pointerType === 'touch' || e.button !== 0) return;
+        if (e.pointerType === 'touch' || e.button !== 0 || tidying) return;
         var el = e.target.closest(DRAG);
         if (!el) return;
         e.preventDefault();
@@ -1316,7 +1332,7 @@
         lastTouch = Date.now();
         if (e.touches.length !== 1) return;
         var el = e.target.closest && e.target.closest(DRAG);
-        if (!el) return;
+        if (!el || tidying) return;
         var t = e.touches[0], x = t.pageX, y = t.pageY;
         hold = { x: t.clientX, y: t.clientY, timer: setTimeout(function () {
           hold = null;
@@ -1333,26 +1349,85 @@
       // 長押しで出るメニュー（画像の保存など）を出さない
       document.addEventListener('contextmenu', function (e) { if (Date.now() - lastTouch < 1500 && e.target.closest(DRAG)) e.preventDefault(); });
 
+      // 片付け：左下の生き物が出てきて、動かした物を1つずつ頭にのせて元の場所へ運ぶ。物が多いときは仲間（最大3匹）で手分けする
+      function goHome(el) { el.style.translate = ''; }
+      function helperAt(x, y) {
+        var h = document.createElement('div');
+        h.className = 'helper';
+        h.appendChild(document.querySelector('.mascot__body svg').cloneNode(true));
+        ensureActors().appendChild(h);
+        h._x = x; h._y = y; h.style.translate = x + 'px ' + y + 'px';
+        return h;
+      }
+      function walk(h, x, y, speed, carry) {
+        var d = Math.hypot(x - h._x, y - h._y), dur = Math.max(220, Math.min(1400, d / speed * 1000));
+        h.classList.toggle('is-carry', !!carry); h.classList.toggle('is-walk', !carry);
+        if (x < h._x - 2) h.style.scale = '-1 1'; else if (x > h._x + 2) h.style.scale = '';
+        var an = h.animate([{ translate: h._x + 'px ' + h._y + 'px' }, { translate: x + 'px ' + y + 'px' }], { duration: dur, easing: 'ease-in-out', fill: 'forwards' });
+        h._x = x; h._y = y;
+        return { dur: dur, done: an.finished.then(function () { h.style.translate = x + 'px ' + y + 'px'; an.cancel(); }) };
+      }
+      function hsay(h, text) {
+        var t = document.createElement('span'); t.className = 'hsay'; t.textContent = text;
+        if (h.style.scale) t.style.scale = '-1 1';
+        h.appendChild(t); setTimeout(function () { t.remove(); }, 700);
+      }
+      function carryAll(h, items, speed) {
+        return items.reduce(function (chain, el, k) {
+          return chain.then(function () {
+            if (!document.contains(el)) return;
+            var t = translateOf(el), r = el.getBoundingClientRect();
+            var cx = r.left + r.width / 2 + window.scrollX, by = r.bottom + window.scrollY;
+            // 物の下に行って、頭にのせる
+            return walk(h, cx, by + 50 - Math.min(40, r.height * .35), speed).done.then(function () {
+              if (k % 2 === 0) hsay(h, k ? 'せっせ' : 'よいしょ');
+              tone(note(2 + k % 5), 0, .08, 'triangle', .08);
+              var hx = cx - t[0], hy = by - t[1] + 50 - Math.min(40, r.height * .35);
+              var w = walk(h, hx, hy, speed * .85, true);
+              var an = el.animate([{ translate: t[0] + 'px ' + t[1] + 'px' }, { translate: '0px 0px' }], { duration: w.dur, easing: 'ease-in-out', fill: 'forwards' });
+              return w.done.then(function () {
+                goHome(el); an.cancel();
+                el.animate([{ scale: '1.12 .88' }, { scale: '.95 1.05' }, { scale: '1' }], { duration: 300, easing: 'ease-out' });
+                tone(note(4 + k % 5), 0, .1, 'sine', .08);
+              });
+            });
+          });
+        }, Promise.resolve());
+      }
       tidy.addEventListener('click', function () {
-        // 10コンボ以上遊んだあとなら、生き物が歌っている間に1つずつ戻す
         var list = Array.from(movedEls), party = maxCombo >= 10 && !singing;
-        var gap = party ? Math.min(220, (SONG_MS - 1200) / Math.max(1, list.length)) : 0;
-        list.forEach(function (el, i) {
-          setTimeout(function () {
-            el.style.transition = 'translate .7s cubic-bezier(.34, 1.56, .64, 1)';
-            el.style.translate = '0px 0px';
-            setTimeout(function () { el.style.transition = ''; el.style.translate = ''; }, 750);
-          }, i * gap);
-        });
         movedEls.clear();
         maxCombo = 0;
-        if (party) { sing(); tidy.hidden = true; return; }
-        var r = tidy.getBoundingClientRect();
-        burst(r.left + r.width / 2, r.top, 40);
-        say('スッキリ！', r.left + r.width / 2 - 40, r.top - 30, '');
-        sfx.tidy();
-        dance(3, 1600);
         tidy.hidden = true;
+        function finish() {
+          tidying = false;
+          mascot.classList.remove('is-away');
+          if (party) { sing(); return; }
+          var r = mascot.getBoundingClientRect();
+          burst(r.left + r.width / 2, r.top, 40);
+          say('スッキリ！', r.left + r.width / 2 + 40, r.top - 30, '');
+          sfx.tidy();
+          dance(3, 1600);
+        }
+        if (reduce || !list.length) { list.forEach(goHome); finish(); return; }
+        tidying = true;
+        clearTimeout(danceTimer);
+        mascot.className = 'mascot is-away';
+        // 近い順に運ぶ（画面の上から下へ）
+        list.sort(function (a, b) { return a.getBoundingClientRect().top - b.getBoundingClientRect().top; });
+        var m = mascot.getBoundingClientRect(), sx = m.left + m.width / 2 + window.scrollX, sy = m.bottom + window.scrollY;
+        var crew = Math.min(3, Math.ceil(list.length / 5)), speed = 700 + list.length * 40, jobs = [];
+        for (var c = 0; c < crew; c++) {
+          var h = helperAt(sx + c * 30, sy);
+          jobs.push(carryAll(h, list.filter(function (_, i) { return i % crew === c; }), speed).then((function (h) {
+            return function () {
+              // 仕事が終わったら左下の定位置へ帰る
+              var q = mascot.getBoundingClientRect();
+              return walk(h, q.left + q.width / 2 + window.scrollX, q.bottom + window.scrollY, speed).done.then(function () { h.remove(); });
+            };
+          })(h)));
+        }
+        Promise.all(jobs).then(finish, function () { list.forEach(goHome); document.querySelectorAll('.helper').forEach(function (h) { h.remove(); }); finish(); });
       });
 
       // ---------- 卓球のボール ----------

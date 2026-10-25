@@ -22,9 +22,11 @@ PAGE = ROOT / 'rich' / 'index.html'
 def page_text():
     src = PAGE.read_text(encoding='utf-8')
     body = src[src.index('<body'):]
+    # スクリプトの中で表示する言葉（「ナイス！」など）も入れる
+    shown = ''.join(re.findall(r"'([^'\n]*[^\x00-\x7f][^'\n]*)'", ''.join(re.findall(r'<script>(.*?)</script>', body, flags=re.S))))
     body = re.sub(r'<script.*?</script>', '', body, flags=re.S)
     body = re.sub(r'<!--.*?-->', '', body, flags=re.S)
-    text = html.unescape(re.sub(r'<[^>]+>', '', body))
+    text = html.unescape(re.sub(r'<[^>]+>', '', body)) + shown
     # CSS の content で出している文字も入れる
     text += ''.join(re.findall(r'content: "([^"]+)"', src))
     ascii_ = ''.join(chr(c) for c in range(0x20, 0x7f))

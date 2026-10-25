@@ -503,9 +503,12 @@
     .m-blob, .m-foot, .m-cheek { transition: fill .6s; }
     .mascot.is-blue .m-blob, .mascot.is-blue .m-foot { fill: #a3c8ff; }
     .mascot.is-blue .m-cheek { fill: #6f9cf2; }
-    .mascot.is-sing .mascot__body { animation: m-sing .62s ease-in-out infinite; }
+    /* 歌は 140 BPM。2拍（約0.86秒）で左右にゆれて跳ねる。リーダーと仲間で同じ動きにそろえる */
+    .mascot.is-sing .mascot__body, .helper.is-dance svg { animation: m-sing .857s ease-in-out infinite; }
+    .mascot.is-sing .m-arm, .helper.is-dance .m-arm { animation: m-wave .4286s ease-in-out infinite alternate; }
+    .helper.is-dance .m-mouth { transform-box: fill-box; transform-origin: 50% 0; animation: m-mouth .26s ease-in-out infinite alternate; }
     .mascot.is-sing .m-mouth { transform-box: fill-box; transform-origin: 50% 0; animation: m-mouth .26s ease-in-out infinite alternate; }
-    @keyframes m-sing { 25% { transform: translateY(-4px) rotate(-7deg); } 75% { transform: translateY(-4px) rotate(7deg); } }
+    @keyframes m-sing { 0%, 50%, 100% { transform: translateY(0) scale(1.06, .94); } 25% { transform: translateY(-9px) rotate(-9deg); } 75% { transform: translateY(-9px) rotate(9deg); } }
     @keyframes m-mouth { from { scale: 1 .45; } to { scale: 1.1 1.3; } }
 
     /* 物を動かすと、その物にちなんだ人たちが走って集まってくる */
@@ -1148,11 +1151,13 @@
         return songBuf;
       }
       var SONG_MS = 6400, LYRICS = [['かたづけ できたのだ♪', .06], ['ぴかぴか きれいなのだ〜♪', .46]];
-      function sing() {
+      function sing(choir) {
+        choir = choir || [];
         singing = true;
         clearTimeout(danceTimer);
         mascot.className = 'mascot is-blue is-sing';
-        var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 60, y = r.top - 30;
+        choir.forEach(function (h) { h.classList.remove('is-walk', 'is-carry'); h.style.scale = ''; h.classList.add('is-dance'); });
+        var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 90, y = r.top - 60;
         if (soundOn) {
           loadSong().then(function (buf) {
             var a = audio(); if (!a || !buf) return;
@@ -1170,7 +1175,15 @@
           mascot.className = 'mascot';
           singing = false;
           var q = mascot.getBoundingClientRect();
-          burst(q.left + q.width / 2, q.top, 50);
+          burst(q.left + q.width / 2, q.top, 50 + choir.length * 15);
+          // 仲間は手をふって、画面の左へ帰っていく
+          choir.forEach(function (h, i) {
+            h.classList.remove('is-dance');
+            setTimeout(function () {
+              hsay(h, 'またね〜', 700);
+              walk(h, window.scrollX - 60, h._y, 900).done.then(function () { h.remove(); });
+            }, 300 + i * 120);
+          });
         }, SONG_MS);
       }
 
@@ -1409,7 +1422,7 @@
       // 片付け：左下の生き物が出てきて、動かした物を1つずつ頭にのせて元の場所へ運ぶ。物が多いときは仲間（最大3匹）で手分けする
       function goHome(el) { el.style.translate = ''; }
       // 仲間の色（1匹目はいつものピンク）
-      var CREW_COLORS = ['#ffc4d3', '#a3c8ff', '#fff1a8', '#b8ecc8', '#d9c6ff', '#ffd2a8', '#c6f0f5', '#f5c6e8'];
+      var CREW_COLORS = ['#ffc4d3', '#fff1a8', '#b8ecc8', '#d9c6ff', '#ffd2a8', '#f5c6e8', '#c6f0f5', '#e6f5b8'];  // 歌うときにリーダーがなる青は使わない
       function helperAt(x, y, color) {
         var h = document.createElement('div');
         h.className = 'helper';
@@ -1455,19 +1468,31 @@
         }, Promise.resolve());
       }
       tidy.addEventListener('click', function () {
-        var list = Array.from(movedEls), party = maxCombo >= 10 && !singing;
+        var list = Array.from(movedEls), choir = [];
         movedEls.clear();
         maxCombo = 0;
         tidy.hidden = true;
         function finish() {
           tidying = false;
           mascot.classList.remove('is-away');
-          if (party) { sing(); return; }
           var r = mascot.getBoundingClientRect();
           burst(r.left + r.width / 2, r.top, 40);
           say('スッキリ！', r.left + r.width / 2 + 40, r.top - 30, '');
           sfx.tidy();
-          dance(3, 1600);
+          if (singing) return;
+          // 仲間が2匹に満たなければ呼んで、並んでから歌い出す
+          var calls = [];
+          for (var k = choir.length; k < 2 && !reduce; k++) {
+            var nh = helperAt(window.scrollX - 50 - k * 40, slot(k + 1)[1], CREW_COLORS[(k + 1) % CREW_COLORS.length]);
+            choir.push(nh);
+            calls.push(walk(nh, slot(k + 1)[0], slot(k + 1)[1], 900).done);
+          }
+          Promise.all(calls).then(function () { setTimeout(function () { sing(choir); }, 450); });
+        }
+        // 歌うときの並び位置（左下の生き物の右どなり。スマホでは下のメニューの上に立つ）
+        function slot(i) {
+          var q = mascot.getBoundingClientRect(), phone = innerWidth < 720;
+          return [q.left + q.width / 2 + window.scrollX + i * (phone ? 46 : 64), (phone ? q.top - 2 : q.bottom) + window.scrollY];
         }
         if (reduce || !list.length) { list.forEach(goHome); finish(); return; }
         tidying = true;
@@ -1494,17 +1519,17 @@
           jobs.push(new Promise(function (ok) { setTimeout(ok, c ? 250 + c * 90 : 0); }).then((function (h, mine, leader) {
             return function () {
               return carryAll(h, mine, speed).then(function () {
-                // 終わったら、リーダーは左下の定位置へ、仲間は画面の端へ帰っていく
-                var q = mascot.getBoundingClientRect();
-                var tx = leader ? q.left + q.width / 2 + window.scrollX : window.scrollX + (h._x - window.scrollX < innerWidth / 2 ? -60 : innerWidth + 60);
-                var ty = leader ? q.bottom + window.scrollY : h._y;
-                if (!leader) hsay(h, 'またね〜', 700);
-                return walk(h, tx, ty, speed * 1.2).done.then(function () { h.remove(); });
+                // 終わったら、リーダーは左下の定位置へ。仲間は4匹まで隣に並び、ほかは画面の端へ帰っていく
+                var q = mascot.getBoundingClientRect(), tx, ty, stay = !leader && choir.length < 4;
+                if (leader) { tx = q.left + q.width / 2 + window.scrollX; ty = q.bottom + window.scrollY; }
+                else if (stay) { choir.push(h); var sp = slot(choir.length); tx = sp[0]; ty = sp[1]; }
+                else { tx = window.scrollX + (h._x - window.scrollX < innerWidth / 2 ? -60 : innerWidth + 60); ty = h._y; hsay(h, 'またね〜', 700); }
+                return walk(h, tx, ty, speed * 1.2).done.then(function () { if (!stay) h.remove(); else h.style.scale = ''; });
               });
             };
           })(h, mine, c === 0)));
         }
-        Promise.all(jobs).then(finish, function () { list.forEach(goHome); document.querySelectorAll('.helper').forEach(function (h) { h.remove(); }); finish(); });
+        Promise.all(jobs).then(finish, function () { list.forEach(goHome); document.querySelectorAll('.helper').forEach(function (h) { h.remove(); }); choir = []; finish(); });
       });
 
       // ---------- ヘッダーの線を飛ぶ鳥 ----------

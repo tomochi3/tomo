@@ -454,27 +454,25 @@
     @media (max-width: 719px) { .mascot { --m: min(52px, 14vw); left: 6px; bottom: calc(12px + env(safe-area-inset-bottom)); } }
     html:not(.js) .mascot { display: none; }
 
-    /* 10コンボ以上で片付けると、手足が生えて8頭身のブレイクダンサーになる */
+    /* 10コンボ以上で片付けると、手足が生えたピンクの人型に変身してブレイクダンスする */
     /* 顔の大きさはいつもの姿と同じにする：ダンサーの頭は 0.34 倍で描いているので、全体を 100 / (140 × 0.34) 倍の幅にする */
     .mascot .bboy { display: none; position: absolute; left: 50%; bottom: calc(var(--m) * -.1); width: calc(var(--m) * 4.118); translate: -50% 0; overflow: visible; }
     .mascot.is-bboy { left: calc(var(--m) * 1.6); cursor: default; }
     .mascot.is-bboy .mascot__body { display: none; }
     .mascot.is-bboy .bboy { display: block; }
-    .bboy .ln { fill: none; stroke: #1c1915; stroke-width: 10; stroke-linecap: round; }
-    .bboy .skin { fill: none; stroke: #ffc4d3; stroke-width: 6; stroke-linecap: round; }
-    .bboy .jean { fill: none; stroke: #2b4aa8; stroke-width: 6.5; stroke-linecap: round; }
-    .bboy .shoe { fill: #fff; stroke: #1c1915; stroke-width: 2.5; }
-    .bboy .shoe-l { fill: #ffd23f; }
-    .bboy .top { fill: #1c1915; }
-    .bboy .stripe { fill: none; stroke: #ffd23f; stroke-width: 3; }
-    .bboy .cap { fill: #e2412b; stroke: #1c1915; stroke-width: 2; }
-    .bboy .shades { fill: #1c1915; }
+    /* 手足は「黒い太線の上にピンクの細い線」で、ふちどりのある丸い棒にする */
+    .bboy .ln { fill: none; stroke: #1c1915; stroke-width: 7.2; stroke-linecap: round; }
+    .bboy .skin { fill: none; stroke: #ffc4d3; stroke-width: 5.4; stroke-linecap: round; }
+    .bboy .bb-arm-l .ln, .bboy .bb-arm-r .ln { stroke-width: 6; }
+    .bboy .bb-arm-l .skin, .bboy .bb-arm-r .skin { stroke-width: 4.3; }
+    .bboy .pink { fill: #ffc4d3; stroke: #1c1915; stroke-width: .9; }
+    .bboy .navel { fill: #e89aae; }
     .bboy g { transform-box: view-box; }
-    .bb { transform-origin: 0 -40px; }
-    .bb-arm-l { transform-origin: -13px -60px; } .bb-fore-l { transform-origin: -15px -33px; }
-    .bb-arm-r { transform-origin: 13px -60px; } .bb-fore-r { transform-origin: 15px -33px; }
-    .bb-leg-l { transform-origin: -6px 0; } .bb-shin-l { transform-origin: -8px 46px; }
-    .bb-leg-r { transform-origin: 6px 0; } .bb-shin-r { transform-origin: 8px 46px; }
+    .bb { transform-origin: 0 -10px; }
+    .bb-arm-l { transform-origin: -6.5px -16px; } .bb-fore-l { transform-origin: -8.5px -5px; }
+    .bb-arm-r { transform-origin: 6.5px -16px; } .bb-fore-r { transform-origin: 8.5px -5px; }
+    .bb-leg-l { transform-origin: -3.2px 0; } .bb-shin-l { transform-origin: -3.3px 11px; }
+    .bb-leg-r { transform-origin: 3.2px 0; } .bb-shin-r { transform-origin: 3.3px 11px; }
     .is-bboy .bb { animation: bb-body 4s .55s ease-in-out infinite; }
     .is-bboy .bb-arm-l { animation: bb-grow .5s var(--bounce) backwards, bb-arm-l 4s .55s ease-in-out infinite; }
     .is-bboy .bb-arm-r { animation: bb-grow .5s var(--bounce) backwards, bb-arm-r 4s .55s ease-in-out infinite; }
@@ -482,16 +480,16 @@
     .is-bboy .bb-leg-l { animation: bb-grow .5s .1s var(--bounce) backwards, bb-leg-l 4s .55s ease-in-out infinite; }
     .is-bboy .bb-leg-r { animation: bb-grow .5s .1s var(--bounce) backwards, bb-leg-r 4s .55s ease-in-out infinite; }
     .is-bboy .bb-shin-l { animation: bb-shin-l 4s .55s ease-in-out infinite; }
-    .is-bboy .bb-torso { animation: bb-grow .45s var(--bounce) backwards; transform-origin: 0 -62px; }
+    .is-bboy .bb-torso { animation: bb-grow .45s var(--bounce) backwards; transform-origin: 0 -18px; }
     @keyframes bb-grow { from { scale: 0; } }
     @keyframes bb-body {
-      0%, 12% { transform: none; } 6%, 18% { transform: translateY(-8px); }
-      24% { transform: translate(0, 62px) rotate(-90deg); }
-      44% { transform: translate(0, 62px) rotate(-810deg); }
-      50% { transform: translate(0, 86px) rotate(-900deg); }
-      54%, 62%, 70% { transform: translate(0, 86px) rotate(-900deg) scaleX(-1); }
-      58%, 66% { transform: translate(0, 86px) rotate(-900deg); }
-      76%, 90% { transform: translate(10px, 74px) rotate(-880deg); }
+      0%, 12% { transform: none; } 6%, 18% { transform: translateY(-4px); }
+      24% { transform: translate(0, 22px) rotate(-90deg); }
+      44% { transform: translate(0, 22px) rotate(-810deg); }
+      50% { transform: translate(0, -9px) rotate(-900deg); }
+      54%, 62%, 70% { transform: translate(0, -9px) rotate(-900deg) scaleX(-1); }
+      58%, 66% { transform: translate(0, -9px) rotate(-900deg); }
+      76%, 90% { transform: translate(4px, -3px) rotate(-880deg); }
       100% { transform: rotate(-1080deg); }
     }
     @keyframes bb-arm-l { 0%, 12% { rotate: -25deg; } 6%, 18% { rotate: 45deg; } 24%, 44% { rotate: 95deg; } 50%, 72% { rotate: 65deg; } 76%, 90% { rotate: 175deg; } 100% { rotate: 0deg; } }
@@ -821,19 +819,19 @@
         <path class="m-mouth" d="M41 63h18l-9 11z"/>
       </svg>
     </div>
-    <svg class="bboy" viewBox="-70 -112 140 212">
+    <svg class="bboy" viewBox="-70 -60 140 90">
       <g class="bb">
-        <g class="bb-leg-r"><path class="ln" d="M6 0 8 46"/><path class="jean" d="M6 0 8 46"/><g class="bb-shin-r"><path class="ln" d="M8 46V88"/><path class="jean" d="M8 46V88"/><ellipse class="shoe" cx="13" cy="92" rx="10" ry="5.5"/></g></g>
-        <g class="bb-arm-r"><path class="ln" d="M13 -60 15 -33"/><path class="skin" d="M13 -60 15 -33"/><g class="bb-fore-r"><path class="ln" d="M15 -33V-7"/><path class="skin" d="M15 -33V-7"/></g></g>
-        <g class="bb-torso"><path class="top" d="M-15 -66C-8 -70 8 -70 15 -66L11 2H-11Z"/><path class="stripe" d="M-11 -50 11 -20"/></g>
-        <g class="bb-leg-l"><path class="ln" d="M-6 0-8 46"/><path class="jean" d="M-6 0-8 46"/><g class="bb-shin-l"><path class="ln" d="M-8 46V88"/><path class="jean" d="M-8 46V88"/><ellipse class="shoe shoe-l" cx="-13" cy="92" rx="10" ry="5.5"/></g></g>
-        <g class="bb-arm-l"><path class="ln" d="M-13 -60-15 -33"/><path class="skin" d="M-13 -60-15 -33"/><g class="bb-fore-l"><path class="ln" d="M-15 -33V-7"/><path class="skin" d="M-15 -33V-7"/></g></g>
-        <g transform="translate(-17 -104) scale(.34)">
+        <g class="bb-leg-r"><path class="ln" d="M3.2 0 3.4 22"/><path class="skin" d="M3.2 0 3.4 22"/><g class="bb-shin-r"><ellipse class="pink" cx="4.8" cy="23.4" rx="4.3" ry="2.6"/></g></g>
+        <g class="bb-leg-l"><path class="ln" d="M-3.2 0-3.4 22"/><path class="skin" d="M-3.2 0-3.4 22"/><g class="bb-shin-l"><ellipse class="pink" cx="-4.8" cy="23.4" rx="4.3" ry="2.6"/></g></g>
+        <g class="bb-torso"><path class="pink" d="M-7 -18C-8.4 -11-7.6-4-6.6 1-3 3 3 3 6.6 1 7.6-4 8.4-11 7-18 3-20.5-3-20.5-7-18Z"/><circle class="navel" cx="0" cy="-5" r=".8"/></g>
+        <g class="bb-arm-r"><path class="ln" d="M6.5 -16 8.5 -5"/><path class="skin" d="M6.5 -16 8.5 -5"/><g class="bb-fore-r"><path class="ln" d="M8.5 -5 9.4 5"/><path class="skin" d="M8.5 -5 9.4 5"/><circle class="pink" cx="9.6" cy="6.4" r="2.9"/></g></g>
+        <g class="bb-arm-l"><path class="ln" d="M-6.5 -16-8.5 -5"/><path class="skin" d="M-6.5 -16-8.5 -5"/><g class="bb-fore-l"><path class="ln" d="M-8.5 -5-9.4 5"/><path class="skin" d="M-8.5 -5-9.4 5"/><circle class="pink" cx="-9.6" cy="6.4" r="2.9"/></g></g>
+        <g transform="translate(-17 -49.5) scale(.34)">
           <path class="m-blob" d="M50 24C75 24 87 42 87 61S72 91 50 91 13 80 13 61 25 24 50 24Z"/>
-          <path class="cap" d="M18 40C24 22 76 22 82 40Z"/><path class="cap" d="M80 38C90 36 98 38 100 42L82 44Z"/>
-          <ellipse class="m-cheek" cx="27" cy="68" rx="6" ry="3.5"/><ellipse class="m-cheek" cx="73" cy="68" rx="6" ry="3.5"/>
-          <path class="shades" d="M24 50h22l-2 10c-1 4-16 4-18 0ZM54 50h22l-2 10c-1 4-16 4-18 0ZM44 52h12v3H44Z"/>
-          <path class="m-mouth" d="M41 67h18l-9 11z"/>
+          <g class="m-sprout"><path d="M50 24C50 17 51 13 54 9"/><path class="leaf" d="M54 9C58 3 66 3 69 5 66 10 59 12 54 9Z"/></g>
+          <ellipse class="m-cheek" cx="27" cy="64" rx="6" ry="3.5"/><ellipse class="m-cheek" cx="73" cy="64" rx="6" ry="3.5"/>
+          <path class="m-face" d="M31 55l6-8 6 8M57 55l6-8 6 8"/>
+          <path class="m-mouth" d="M41 63h18l-9 11z"/>
         </g>
       </g>
     </svg>
@@ -947,9 +945,22 @@
       function audio() {
         if (!soundOn) return null;
         if (!actx) { var C = window.AudioContext || window.webkitAudioContext; if (!C) return null; actx = new C(); }
-        if (actx.state === 'suspended') actx.resume();
+        if (actx.state !== 'running') actx.resume();
         return actx;
       }
+      // スマホのブラウザは、タップやクリックの中でしか音を出し始められない。
+      // 音ありのときは、触るたびに音の準備ができているか確かめ、無音を一瞬鳴らして起こしておく
+      function unlock() {
+        var a = audio();
+        if (!a || a.state === 'running' && a.__warm) return;
+        var src = a.createBufferSource();
+        src.buffer = a.createBuffer(1, 1, 22050);
+        src.connect(a.destination); src.start(0);
+        a.__warm = true;
+      }
+      ['touchstart', 'touchend', 'pointerdown', 'click', 'keydown'].forEach(function (t) { document.addEventListener(t, unlock, { capture: true, passive: true }); });
+      // iPhone の消音スイッチが入っていても鳴らす（対応している Safari のみ）
+      try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
       function tone(freq, at, dur, type, vol, slideTo) {
         var a = audio(); if (!a) return;
         var t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();

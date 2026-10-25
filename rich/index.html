@@ -951,6 +951,8 @@
       // スマホのブラウザは、タップやクリックの中でしか音を出し始められない。
       // 音ありのときは、触るたびに音の準備ができているか確かめ、無音を一瞬鳴らして起こしておく
       function unlock() {
+        if (!soundOn) return;
+        if (IOS && (!keepAlive || keepAlive.paused)) keepSession(true);
         var a = audio();
         if (!a || a.state === 'running' && a.__warm) return;
         var src = a.createBufferSource();
@@ -959,8 +961,28 @@
         a.__warm = true;
       }
       ['touchstart', 'touchend', 'pointerdown', 'click', 'keydown'].forEach(function (t) { document.addEventListener(t, unlock, { capture: true, passive: true }); });
-      // iPhone の消音スイッチが入っていても鳴らす（対応している Safari のみ）
+      // iPhone の消音スイッチが入っていても鳴らす。新しい Safari は audioSession で、
+      // 古い Safari は無音の音声を <audio> でくり返し流しておくことで（音ありの間だけ）
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+      var IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      var keepAlive = null;
+      function silentWav() {
+        var n = 800, buf = new ArrayBuffer(44 + n), v = new DataView(buf);
+        function str(o, t) { for (var i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); }
+        str(0, 'RIFF'); v.setUint32(4, 36 + n, true); str(8, 'WAVE'); str(12, 'fmt ');
+        v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true);
+        str(36, 'data'); v.setUint32(40, n, true);
+        for (var i = 0; i < n; i++) v.setUint8(44 + i, 128);
+        return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
+      }
+      function keepSession(on) {
+        if (!IOS) return;
+        if (on) {
+          if (!keepAlive) { keepAlive = new Audio(silentWav()); keepAlive.loop = true; keepAlive.setAttribute('x-webkit-airplay', 'deny'); keepAlive.disableRemotePlayback = true; }
+          var pr = keepAlive.play(); if (pr && pr.catch) pr.catch(function () {});
+        } else if (keepAlive) keepAlive.pause();
+      }
+      document.addEventListener('visibilitychange', function () { if (document.hidden) keepSession(false); });
       function tone(freq, at, dur, type, vol, slideTo) {
         var a = audio(); if (!a) return;
         var t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();
@@ -1006,6 +1028,7 @@
         soundOn = !soundOn;
         soundBtn.setAttribute('aria-pressed', String(soundOn));
         try { localStorage.setItem('tomochi-sound', soundOn ? '1' : '0'); } catch (e) {}
+        if (soundOn) unlock(); else keepSession(false);
         sfx.on();
       });
 

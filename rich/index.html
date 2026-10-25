@@ -311,6 +311,14 @@
     @keyframes legs { from { rotate: -32deg; } to { rotate: 32deg; } }
     .actor--fly .lg1, .actor--fly .lg2 { animation: none; }
     .actor .say { position: absolute; left: 0; bottom: 34px; translate: -50% 0; font-family: var(--hand); font-size: 17px; color: var(--red-ink); white-space: nowrap; -webkit-text-stroke: .3px currentColor; }
+    /* 小人・生き物・鳥のセリフは、背景色の太いふちで囲って読みやすくする（明るい画面では白、暗い画面では黒） */
+    .actor .say, .helper .hsay, .flier__say {
+      font-weight: 700;
+      -webkit-text-stroke: 0;
+      text-shadow: 0 0 1px var(--paper), 2px 0 0 var(--paper), -2px 0 0 var(--paper), 0 2px 0 var(--paper), 0 -2px 0 var(--paper),
+        1.5px 1.5px 0 var(--paper), -1.5px 1.5px 0 var(--paper), 1.5px -1.5px 0 var(--paper), -1.5px -1.5px 0 var(--paper),
+        3px 0 1px var(--paper), -3px 0 1px var(--paper), 0 3px 1px var(--paper), 0 -3px 1px var(--paper);
+    }
     .actor--fly .say { bottom: 96px; }
     .actor .chute, .actor .wing { transform-origin: 0 -40px; scale: 0; }
     .actor .chute { stroke: var(--ink); stroke-width: 1.5; }

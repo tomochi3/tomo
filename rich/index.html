@@ -824,7 +824,7 @@
       // 音ありのときは、触るたびに音の準備ができているか確かめ、無音を一瞬鳴らして起こしておく
       function unlock() {
         if (!soundOn) return;
-        if (IOS && (!keepAlive || keepAlive.paused)) keepSession(true);
+        loadSong();
         var a = audio();
         if (!a || a.state === 'running' && a.__warm) return;
         var src = a.createBufferSource();
@@ -833,28 +833,9 @@
         a.__warm = true;
       }
       ['touchstart', 'touchend', 'pointerdown', 'click', 'keydown'].forEach(function (t) { document.addEventListener(t, unlock, { capture: true, passive: true }); });
-      // iPhone の消音スイッチが入っていても鳴らす。新しい Safari は audioSession で、
-      // 古い Safari は無音の音声を <audio> でくり返し流しておくことで（音ありの間だけ）
+      // iPhone の消音スイッチが入っていても鳴らす（対応している Safari のみ）。
+      // <audio> 要素は使わない：iPhone では Web Audio と取り合いになり、効果音が鳴らなくなることがあるため
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
-      var IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-      var keepAlive = null;
-      function silentWav() {
-        var n = 800, buf = new ArrayBuffer(44 + n), v = new DataView(buf);
-        function str(o, t) { for (var i = 0; i < t.length; i++) v.setUint8(o + i, t.charCodeAt(i)); }
-        str(0, 'RIFF'); v.setUint32(4, 36 + n, true); str(8, 'WAVE'); str(12, 'fmt ');
-        v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true); v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true);
-        str(36, 'data'); v.setUint32(40, n, true);
-        for (var i = 0; i < n; i++) v.setUint8(44 + i, 128);
-        return URL.createObjectURL(new Blob([buf], { type: 'audio/wav' }));
-      }
-      function keepSession(on) {
-        if (!IOS) return;
-        if (on) {
-          if (!keepAlive) { keepAlive = new Audio(silentWav()); keepAlive.loop = true; keepAlive.setAttribute('x-webkit-airplay', 'deny'); keepAlive.disableRemotePlayback = true; }
-          var pr = keepAlive.play(); if (pr && pr.catch) pr.catch(function () {});
-        } else if (keepAlive) keepAlive.pause();
-      }
-      document.addEventListener('visibilitychange', function () { if (document.hidden) keepSession(false); });
       function tone(freq, at, dur, type, vol, slideTo) {
         var a = audio(); if (!a) return;
         var t = a.currentTime + at, o = a.createOscillator(), g = a.createGain();
@@ -893,7 +874,7 @@
         soundOn = !soundOn;
         soundBtn.setAttribute('aria-pressed', String(soundOn));
         try { localStorage.setItem('tomochi-sound', soundOn ? '1' : '0'); } catch (e) {}
-        if (soundOn) unlock(); else keepSession(false);
+        if (soundOn) unlock();
         sfx.on();
       });
 
@@ -1099,16 +1080,29 @@
 
       // ---------- 青くなって歌う ----------
       // 歌声は VOICEVOX:ずんだもん で作った音声（audio/zunda-song.mp3）。音なしのときは歌詞と音符だけ出す
-      var SONG_MS = 6400, LYRICS = [['かたづけ できたのだ♪', .06], ['ぴかぴか きれいなのだ〜♪', .46]], song = null;
+      // 歌声は効果音と同じ Web Audio で鳴らす。音量は元の 1/3
+      var SONG_VOLUME = .33, songBuf = null;
+      function loadSong() {
+        var a = audio();
+        if (!a) return Promise.resolve(null);
+        if (!songBuf) songBuf = fetch('audio/zunda-song.mp3').then(function (r) { return r.arrayBuffer(); }).then(function (d) {
+          return new Promise(function (ok, ng) { a.decodeAudioData(d, ok, ng); });
+        }).catch(function () { songBuf = null; return null; });
+        return songBuf;
+      }
+      var SONG_MS = 6400, LYRICS = [['かたづけ できたのだ♪', .06], ['ぴかぴか きれいなのだ〜♪', .46]];
       function sing() {
         singing = true;
         clearTimeout(danceTimer);
         mascot.className = 'mascot is-blue is-sing';
         var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 60, y = r.top - 30;
         if (soundOn) {
-          if (!song) song = new Audio('audio/zunda-song.mp3');
-          song.currentTime = 0;
-          var pr = song.play(); if (pr && pr.catch) pr.catch(function () {});
+          loadSong().then(function (buf) {
+            var a = audio(); if (!a || !buf) return;
+            var src = a.createBufferSource(), g = a.createGain();
+            src.buffer = buf; g.gain.value = SONG_VOLUME;
+            src.connect(g); g.connect(a.destination); src.start();
+          });
         } else {
           setTimeout(function () { say('音ありにすると歌が聞けます', x + 20, y - 60, ''); }, SONG_MS * .8);
         }

@@ -358,12 +358,9 @@
     .phone { width: min(250px, 62vw); border: 9px solid #1c1915; border-radius: 38px; overflow: hidden; background: #fff; box-shadow: 0 30px 50px -26px rgba(40, 25, 10, .6); }
     .phone img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; object-position: top; }
     .app h3 { margin-top: 16px; font-family: var(--display); font-weight: 400; font-size: clamp(30px, 4.4vw, 50px); line-height: 1.25; }
-    /* 卓球: ボールが縁の上を跳ねる */
+    /* 卓球: ボールがカードの縁の上を跳ね、動かした物にぶつかると跳ね返る（動きはスクリプト） */
     .pong { position: absolute; left: 6%; right: 6%; top: -30px; height: 30px; pointer-events: none; }
-    .pong i { position: absolute; left: 0; bottom: 2px; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #ff9a3c 45%, #f07a14); }
-    .in .pong i { animation: pong-x 3.2s ease-in-out 4 alternate, pong-y .4s cubic-bezier(.3, 0, .7, 1) 32 alternate; }
-    @keyframes pong-x { to { left: calc(100% - 22px); } }
-    @keyframes pong-y { from { transform: translateY(0); } to { transform: translateY(-26px); } }
+    .pong i { position: absolute; left: 0; bottom: 2px; width: 22px; height: 22px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #ff9a3c 45%, #f07a14); box-shadow: 0 3px 4px rgba(40, 28, 12, .25); }
     .checks { display: grid; gap: 14px; margin-top: 26px; }
     .checks li { position: relative; padding-left: 36px; line-height: 1.7; }
     .checks li::before { content: "✔"; position: absolute; left: 0; top: -2px; font-family: var(--hand); font-size: 24px; color: var(--red-ink); }
@@ -424,6 +421,40 @@
     @keyframes pop-up { 0% { opacity: 0; scale: .3; } 14% { opacity: 1; scale: 1.18; } 26% { scale: 1; } 70% { opacity: 1; } 100% { opacity: 0; translate: 0 -80px; } }
     .tidy:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
     @media (max-width: 719px) { .tidy { right: 12px; bottom: calc(76px + env(safe-area-inset-bottom)); min-height: 44px; padding: 0 16px; font-size: 14px; } }
+
+    /* 左下のニコニコした謎の生き物。コンボが続くほど激しく踊る */
+    .mascot { position: fixed; left: 16px; bottom: calc(14px + env(safe-area-inset-bottom)); z-index: 69; width: 76px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+    .mascot svg { display: block; width: 100%; overflow: visible; }
+    .mascot__body { transform-origin: 50% 92%; animation: m-idle 2.6s ease-in-out infinite; }
+    .m-blob { fill: #ffc4d3; stroke: #1c1915; stroke-width: 2.6; }
+    .m-face, .m-arm, .m-sprout { fill: none; stroke: #1c1915; stroke-width: 2.6; stroke-linecap: round; stroke-linejoin: round; }
+    .m-sprout .leaf { fill: #7fd39a; }
+    .m-mouth { fill: #1c1915; }
+    .m-cheek { fill: #ff8fab; opacity: .8; }
+    .m-foot { fill: #ffc4d3; stroke: #1c1915; stroke-width: 2.4; }
+    .m-arm { transform-box: fill-box; }
+    .m-arm--l { transform-origin: 100% 100%; }
+    .m-arm--r { transform-origin: 0 100%; }
+    @keyframes m-idle { 50% { transform: translateY(-3px) scale(1.02, .98); } }
+    .mascot.lv1 .mascot__body { animation: m-bob .38s ease-in-out infinite; }
+    .mascot.lv2 .mascot__body { animation: m-sway .5s ease-in-out infinite; }
+    .mascot.lv3 .mascot__body { animation: m-hop .42s ease-in-out infinite; }
+    .mascot.lv4 .mascot__body { animation: m-wild .34s ease-in-out infinite; }
+    .mascot.lv5 .mascot__body { animation: m-fever .8s cubic-bezier(.3, .1, .3, 1) infinite, m-rainbow 1.2s linear infinite; }
+    .mascot.lv2 .m-arm, .mascot.lv3 .m-arm { animation: m-wave .25s ease-in-out infinite alternate; }
+    .mascot.lv4 .m-arm, .mascot.lv5 .m-arm { animation: m-wave .14s ease-in-out infinite alternate; }
+    .mascot .m-arm--r { animation-direction: alternate-reverse !important; }
+    @keyframes m-bob { 50% { transform: translateY(-9px) scale(.96, 1.05); } }
+    @keyframes m-sway { 25% { transform: translateY(-6px) rotate(-12deg); } 75% { transform: translateY(-6px) rotate(12deg); } }
+    @keyframes m-hop { 0%, 100% { transform: scale(1.12, .88); } 40% { transform: translateY(-26px) rotate(-10deg) scale(.94, 1.08); } 60% { transform: translateY(-26px) rotate(10deg) scale(.94, 1.08); } }
+    @keyframes m-wild { 0%, 100% { transform: scale(1.18, .82); } 30% { transform: translate(-10px, -40px) rotate(-22deg) scale(.9, 1.12); } 70% { transform: translate(10px, -40px) rotate(22deg) scale(.9, 1.12); } }
+    @keyframes m-fever { 0% { transform: scale(1.2, .8); } 45% { transform: translateY(-56px) rotate(200deg) scale(1.15); } 70% { transform: translateY(-40px) rotate(360deg) scale(1.1); } 100% { transform: rotate(360deg) scale(1.2, .8); } }
+    @keyframes m-rainbow { to { filter: hue-rotate(360deg); } }
+    @keyframes m-wave { from { rotate: -35deg; } to { rotate: 30deg; } }
+    .m-note { position: absolute; left: 50%; top: 0; font-family: var(--display); font-size: 20px; color: var(--red); pointer-events: none; }
+    /* スマホでは下のメニューの左隣に収める */
+    @media (max-width: 719px) { .mascot { left: 6px; bottom: calc(12px + env(safe-area-inset-bottom)); width: min(52px, 14vw); } }
+    html:not(.js) .mascot { display: none; }
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
@@ -697,6 +728,22 @@
   </main>
 
   <button class="tidy" type="button" hidden>↺ 片付ける</button>
+  <div class="mascot" aria-hidden="true">
+    <div class="mascot__body">
+      <svg viewBox="0 0 100 100">
+        <path class="m-arm m-arm--l" d="M17 60C9 56 6 48 8 41"/>
+        <path class="m-arm m-arm--r" d="M83 60C91 56 94 48 92 41"/>
+        <ellipse class="m-foot" cx="37" cy="91" rx="8" ry="4.5"/>
+        <ellipse class="m-foot" cx="63" cy="91" rx="8" ry="4.5"/>
+        <path class="m-blob" d="M50 24C75 24 87 42 87 61S72 91 50 91 13 80 13 61 25 24 50 24Z"/>
+        <g class="m-sprout"><path d="M50 24C50 17 51 13 54 9"/><path class="leaf" d="M54 9C58 3 66 3 69 5 66 10 59 12 54 9Z"/></g>
+        <ellipse class="m-cheek" cx="27" cy="64" rx="6" ry="3.5"/>
+        <ellipse class="m-cheek" cx="73" cy="64" rx="6" ry="3.5"/>
+        <path class="m-face" d="M31 55l6-8 6 8M57 55l6-8 6 8"/>
+        <path class="m-mouth" d="M41 63h18l-9 11z"/>
+      </svg>
+    </div>
+  </div>
 
   <footer class="wrap foot">
     <p class="foot__bye">読んでくれて、ありがとう。</p>
@@ -780,6 +827,8 @@
         flee: function () { tone(1200, 0, .28, 'sine', .07, 380); tone(1500, .12, .22, 'sine', .05, 500); },
         chute: function () { tone(260, 0, .14, 'triangle', .13, 150); },
         glide: function () { tone(330, 0, .9, 'sine', .06, 1100); },
+        bonk: function () { tone(1250, 0, .06, 'square', .05); tone(820, .02, .07, 'triangle', .08); },
+        boing: function () { tone(300, 0, .25, 'sine', .1, 620); },
         on: function () { tone(note(4), 0, .15, 'sine', .14); tone(note(7), .08, .3, 'sine', .14); }
       };
       soundBtn.addEventListener('click', function () {
@@ -830,11 +879,32 @@
       }
       var WORDS = ['ナイス！', 'いいね！', 'おみごと！', 'ぴったり！', 'さいこう！', 'すてき！', 'それっ！', 'わーい！'];
       var combo = 0, lastDrop = 0, total = 0;
+      // 左下の生き物を踊らせる。level 1〜5（5は大回転）
+      var mascot = document.querySelector('.mascot'), danceTimer = 0;
+      function dance(level, ms) {
+        if (reduce) return;
+        mascot.className = 'mascot lv' + level;
+        clearTimeout(danceTimer);
+        danceTimer = setTimeout(function () { mascot.className = 'mascot'; }, ms || 2600);
+        for (var i = 0; i < level - 2; i++) musicNote(i);
+      }
+      function musicNote(i) {
+        var n = document.createElement('span');
+        n.className = 'm-note'; n.textContent = i % 2 ? '♫' : '♪';
+        n.style.color = COLORS[(i + 1) % COLORS.length];
+        mascot.appendChild(n);
+        var dx = (Math.random() - .3) * 70;
+        n.animate([{ translate: '0 0', opacity: 0, scale: .5 }, { opacity: 1, scale: 1.1, offset: .2 }, { translate: dx + 'px -90px', opacity: 0, rotate: (dx / 3) + 'deg' }], { duration: 1200, delay: i * 140, easing: 'ease-out', fill: 'both' });
+        setTimeout(function () { n.remove(); }, 1400 + i * 140);
+      }
+      mascot.addEventListener('click', function () { dance(2, 1400); sfx.boing(); });
+
       function cheer(el, x, y) {
         var now = Date.now();
         combo = now - lastDrop < 2500 ? combo + 1 : 1;
         lastDrop = now; total++;
         var big = total % 10 === 0;
+        dance(big ? 5 : Math.min(combo, 5));
         if (!reduce) {
           el.animate([{ scale: '1.16 .86' }, { scale: '.92 1.1' }, { scale: '1.04 .97' }, { scale: '1' }], { duration: 520, easing: 'ease-out' });
           var ring = document.createElement('span'); ring.className = 'ring'; ring.style.left = x + 'px'; ring.style.top = y + 'px';
@@ -1010,8 +1080,69 @@
         burst(r.left + r.width / 2, r.top, 40);
         say('スッキリ！', r.left + r.width / 2 - 40, r.top - 30, '');
         sfx.tidy();
+        dance(3, 1600);
         tidy.hidden = true;
       });
+
+      // ---------- 卓球のボール ----------
+      // カードの縁の上をぴょんぴょん跳ねる。動かした物（つかんでいる物も）は壁になり、ぶつかると跳ね返る
+      (function () {
+        var lane = document.querySelector('.pong');
+        if (!lane || reduce) return;
+        var ball = lane.querySelector('i');
+        var SIZE = 22, G = .5, HOP = 5.6, SPEED = 3.4;
+        var x = 0, y = 0, vx = SPEED, vy = -HOP, on = false, last = 0, lastHit = null, lastHitAt = 0;
+        ball.style.bottom = 'auto';
+        function place() { ball.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px)'; }
+        function obstacles(lr) {
+          var list = [];
+          movedEls.forEach(function (el) { list.push(el); });
+          if (drag && list.indexOf(drag.el) < 0) list.push(drag.el);
+          return list.map(function (el) {
+            var r = el.getBoundingClientRect();
+            return { el: el, l: r.left - lr.left, r: r.right - lr.left, t: r.top - lr.top, b: r.bottom - lr.top };
+          }).filter(function (o) { return o.r > -40 && o.l < lr.width + 40 && o.b > -260 && o.t < lr.height + 40; });
+        }
+        function hit(o) {
+          var now = Date.now();
+          if (o.el === lastHit && now - lastHitAt < 250) return;
+          lastHit = o.el; lastHitAt = now;
+          sfx.bonk();
+          o.el.animate([{ rotate: '0deg' }, { rotate: (vx > 0 ? 6 : -6) + 'deg' }, { rotate: '0deg' }], { duration: 260 });
+          var lr = lane.getBoundingClientRect();
+          burst(lr.left + x + SIZE / 2, lr.top + y + SIZE / 2, 8);
+        }
+        function step(t) {
+          if (!on) return;
+          var k = last ? Math.min(3, (t - last) / 16.67) : 1; last = t;
+          var lr = lane.getBoundingClientRect(), floor = lr.height - SIZE - 2, w = lr.width;
+          vy += G * k; x += vx * k; y += vy * k;
+          if (x < 0) { x = 0; vx = Math.abs(vx); }
+          if (x > w - SIZE) { x = w - SIZE; vx = -Math.abs(vx); }
+          if (y > floor) { y = floor; vy = -HOP; }
+          obstacles(lr).forEach(function (o) {
+            if (x + SIZE <= o.l || x >= o.r || y + SIZE <= o.t || y >= o.b) return;
+            var ox = Math.min(x + SIZE - o.l, o.r - x), oy = Math.min(y + SIZE - o.t, o.b - y);
+            if (ox < oy) {
+              // 横からぶつかった
+              if (x + SIZE / 2 < (o.l + o.r) / 2) { x = o.l - SIZE; vx = -Math.abs(vx); } else { x = o.r; vx = Math.abs(vx); }
+              hit(o);
+            } else if (y + SIZE / 2 < (o.t + o.b) / 2) {
+              // 上に乗った：そのまま跳ねる
+              y = o.t - SIZE; vy = -HOP;
+            } else {
+              y = o.b; vy = Math.abs(vy); hit(o);
+            }
+          });
+          place();
+          requestAnimationFrame(step);
+        }
+        new IntersectionObserver(function (entries) {
+          var vis = entries[0].isIntersecting;
+          if (vis && !on) { on = true; last = 0; requestAnimationFrame(step); } else if (!vis) on = false;
+        }, { rootMargin: '200px 0px' }).observe(lane);
+        place();
+      })();
 
       // 作品カードをマウスの位置に合わせて少し傾ける
       if (fine && !reduce) {

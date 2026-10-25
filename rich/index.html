@@ -321,9 +321,9 @@
         <svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="nav__links">
-        <a href="#works">作品</a>
         <a href="#book">本</a>
         <a href="#community">コミュニティ</a>
+        <a href="#works">作品</a>
       </div>
       <a class="nav__cta" href="https://x.com/tamachika11" target="_blank" rel="noopener"><span>Xでフォロー</span></a>
     </div>
@@ -335,10 +335,10 @@
     <section class="hero on-dark" id="top">
       <div class="wrap">
         <h1 class="h-xl hero__title"><span class="phrase">身近な不便を、</span><br><span class="phrase">小さなアプリで</span><span class="phrase">解決する。</span></h1>
-        <p class="lead soft"><span class="phrase">Webアプリ、スマホアプリ、</span><span class="phrase">ゲームを作っています。</span><br><span class="phrase">本の執筆や、</span><span class="phrase">もくもく会の主催もしています。</span></p>
+        <p class="lead soft"><span class="phrase">本の執筆や、</span><span class="phrase">もくもく会の主催をしています。</span><br><span class="phrase">Webアプリ、スマホアプリ、</span><span class="phrase">ゲームも作っています。</span></p>
         <div class="actions">
-          <a class="btn" href="#works">作品を見る</a>
-          <a class="link" href="#book">本について</a>
+          <a class="btn" href="#book">本を見る</a>
+          <a class="link" href="#works">作品を見る</a>
         </div>
       </div>
       <div class="hero__stage" aria-hidden="true">
@@ -361,6 +361,52 @@
           </div>
         </div>
         <div class="hero__fade"></div>
+      </div>
+    </section>
+
+    <!-- ===== 本とコミュニティ（暗） ===== -->
+    <section class="section bg-night on-dark" id="book" aria-labelledby="book-title">
+      <div class="wrap book">
+        <div>
+          <p class="eyebrow">ホームレス大学院生</p>
+          <h2 class="h-l mt-s" id="book-title"><span class="phrase">398日間、</span><span class="phrase">家がなかった。</span></h2>
+          <p class="lead soft"><span class="phrase">家を手放して友人宅を渡り歩いた、</span><span class="phrase">大学院生時代の体験記です。</span></p>
+          <div class="stats">
+            <div class="stat"><p class="stat__big">398<small>日</small></p><p class="stat__cap">家なしで過ごした日数</p></div>
+            <div class="stat"><p class="stat__big">32<small>人</small></p><p class="stat__cap">泊めてくれた友人</p></div>
+            <div class="stat"><p class="stat__big">11</p><p class="stat__cap">暮らした都府県<span class="stat__list"><span>東京・</span><span>神奈川・</span><span>埼玉・</span><span>千葉・</span><span>愛知・</span><span>三重・</span><span>京都・</span><span>大阪・</span><span>兵庫・</span><span>愛媛・</span><span>福岡</span></span></p></div>
+          </div>
+          <div class="actions">
+            <a class="link" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">Amazonで見る</a>
+          </div>
+        </div>
+        <div class="book__cover-wrap rise">
+          <img class="book__cover" data-book src="img/book-cover.webp" width="560" height="801" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy">
+        </div>
+      </div>
+      <div class="wrap">
+        <a class="book2" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">
+          <img class="book2__cover" src="img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
+          <div class="book2__text">
+            <p class="book2__kind">もう1冊の著書</p>
+            <h3 class="book2__title">中の上の人生戦略</h3>
+            <p class="book2__sub"><span class="phrase">〜名もなき人は</span><span class="phrase">名もなき人を参考にせよ〜</span></p>
+            <p class="book2__desc">超一流じゃない、「どこにでもいる人」のための人生戦略です。人間関係・健康・仕事・習慣について、すぐに試せる行動をまとめました。</p>
+            <span class="book2__go">Amazonで見る</span>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="community on-dark" id="community" aria-labelledby="cm-title">
+      <img class="community__bg" data-parallax src="img/mokumoku-wide.webp" width="1400" height="733" alt="もくもく会の会場。テーブルや椅子、ソファが並ぶラウンジ" loading="lazy">
+      <div class="wrap community__text">
+        <p class="eyebrow">コミュニティ</p>
+        <h2 class="h-l mt-s" id="cm-title"><span class="phrase">運動不足解消</span><span class="phrase">もくもく会</span></h2>
+        <p class="lead">運動を挟むことによって、健康的かつ効率的に勉強を進めています。</p>
+        <div class="actions">
+          <a class="link" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a>
+        </div>
       </div>
     </section>
 
@@ -442,52 +488,6 @@
             <img src="img/gchal-sm.webp" width="800" height="500" alt="Safari拡張のポップアップ。ページから読み取ったイベントの日時と場所が入力されている" loading="lazy">
             <div class="mini__text"><h3 class="mini__title">Event to Google Calendar</h3><p class="mini__desc">ページの予定をGoogleカレンダーに登録するSafari拡張です。</p><span class="mini__go">GitHubで見る</span></div>
           </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== 人柄（暗） ===== -->
-    <section class="section bg-night on-dark" id="book" aria-labelledby="book-title">
-      <div class="wrap book">
-        <div>
-          <p class="eyebrow">ホームレス大学院生</p>
-          <h2 class="h-l mt-s" id="book-title"><span class="phrase">398日間、</span><span class="phrase">家がなかった。</span></h2>
-          <p class="lead soft"><span class="phrase">家を手放して友人宅を渡り歩いた、</span><span class="phrase">大学院生時代の体験記です。</span></p>
-          <div class="stats">
-            <div class="stat"><p class="stat__big">398<small>日</small></p><p class="stat__cap">家なしで過ごした日数</p></div>
-            <div class="stat"><p class="stat__big">32<small>人</small></p><p class="stat__cap">泊めてくれた友人</p></div>
-            <div class="stat"><p class="stat__big">11</p><p class="stat__cap">暮らした都府県<span class="stat__list"><span>東京・</span><span>神奈川・</span><span>埼玉・</span><span>千葉・</span><span>愛知・</span><span>三重・</span><span>京都・</span><span>大阪・</span><span>兵庫・</span><span>愛媛・</span><span>福岡</span></span></p></div>
-          </div>
-          <div class="actions">
-            <a class="link" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">Amazonで見る</a>
-          </div>
-        </div>
-        <div class="book__cover-wrap rise">
-          <img class="book__cover" data-book src="img/book-cover.webp" width="560" height="801" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy">
-        </div>
-      </div>
-      <div class="wrap">
-        <a class="book2" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">
-          <img class="book2__cover" src="img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
-          <div class="book2__text">
-            <p class="book2__kind">もう1冊の著書</p>
-            <h3 class="book2__title">中の上の人生戦略</h3>
-            <p class="book2__sub"><span class="phrase">〜名もなき人は</span><span class="phrase">名もなき人を参考にせよ〜</span></p>
-            <p class="book2__desc">超一流じゃない、「どこにでもいる人」のための人生戦略です。人間関係・健康・仕事・習慣について、すぐに試せる行動をまとめました。</p>
-            <span class="book2__go">Amazonで見る</span>
-          </div>
-        </a>
-      </div>
-    </section>
-
-    <section class="community on-dark" id="community" aria-labelledby="cm-title">
-      <img class="community__bg" data-parallax src="img/mokumoku-wide.webp" width="1400" height="733" alt="もくもく会の会場。テーブルや椅子、ソファが並ぶラウンジ" loading="lazy">
-      <div class="wrap community__text">
-        <p class="eyebrow">コミュニティ</p>
-        <h2 class="h-l mt-s" id="cm-title"><span class="phrase">運動不足解消</span><span class="phrase">もくもく会</span></h2>
-        <p class="lead">運動を挟むことによって、健康的かつ効率的に勉強を進めています。</p>
-        <div class="actions">
-          <a class="link" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a>
         </div>
       </div>
     </section>

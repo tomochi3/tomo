@@ -1160,7 +1160,10 @@
       }
       function loadSong() { return Promise.all(PARTS.slice(0, 2).map(loadPart)); }
       var SONG_MS = 6400, LYRICS = [['かたづけ できたのだ♪', .06], ['ぴかぴか きれいなのだ〜♪', .46]];
-      function sing(choir) {
+      // moved: 片付けた物。10個以上なら全パートで歌い、20個以上なら物も一緒に踊る
+      function sing(choir, moved) {
+        moved = moved || [];
+        var parts = moved.length >= 10 ? 4 : null;
         choir = choir || [];
         singing = true;
         clearTimeout(danceTimer);
@@ -1173,13 +1176,23 @@
           var all = [mascot].concat(choir), who = all[Math.floor(Math.random() * all.length)].getBoundingClientRect();
           burst(who.left + who.width / 2, who.top, lv >= 4 ? 18 : 8);
         }, lv >= 4 ? 429 : 857) : 0;
+        // 20個以上片付けたら、元の場所に戻った物たちも歌に合わせて踊る（2拍で左右に1往復、少しずつずらす）
+        if (moved.length >= 20 && !reduce) {
+          moved.forEach(function (el, i) {
+            el.animate([
+              { rotate: '0deg', scale: '1' }, { rotate: '-7deg', scale: '1.06 .95', offset: .25 },
+              { rotate: '0deg', scale: '1' }, { rotate: '7deg', scale: '1.06 .95', offset: .75 }, { rotate: '0deg', scale: '1' }
+            ], { duration: 857, delay: (i % 8) * 54, iterations: Math.floor((SONG_MS - 600) / 857), easing: 'ease-in-out' });
+          });
+        }
         var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 90, y = r.top - 60;
         if (soundOn) {
-          Promise.all(PARTS.slice(0, lv + 1).map(loadPart)).then(function (bufs) {
+          var pl = parts || lv;
+          Promise.all(PARTS.slice(0, pl + 1).map(loadPart)).then(function (bufs) {
             var a = audio(); if (!a) return;
             // パートが増えるほど全体を少し下げて、合計の大きさをそろえる
             var g = a.createGain(), at = a.currentTime + .05;
-            g.gain.value = SONG_VOLUME * [1, 1, .85, .75, .7][lv];
+            g.gain.value = SONG_VOLUME * [1, 1, .85, .75, .7][pl];
             g.connect(a.destination);
             bufs.forEach(function (buf) {
               if (!buf) return;
@@ -1512,7 +1525,7 @@
             choir.push(nh);
             calls.push(walk(nh, slot(k + 1)[0], slot(k + 1)[1], 900 + k * 60).done);
           }
-          Promise.all(calls).then(function () { setTimeout(function () { sing(choir); }, 450); });
+          Promise.all(calls).then(function () { setTimeout(function () { sing(choir, list); }, 450); });
         }
         // 歌うときの並び位置（左下の生き物の右どなり。スマホでは下のメニューの上に立つ）
         function slot(i) {

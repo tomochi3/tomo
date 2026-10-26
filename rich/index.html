@@ -506,6 +506,13 @@
     /* 歌は 140 BPM。2拍（約0.86秒）で左右にゆれて跳ねる。リーダーと仲間で同じ動きにそろえる */
     .mascot.is-sing .mascot__body, .helper.is-dance svg { animation: m-sing .857s ease-in-out infinite; }
     .mascot.is-sing .m-arm, .helper.is-dance .m-arm { animation: m-wave .4286s ease-in-out infinite alternate; }
+    /* 人数が多いほどダンスを派手にする（lv2: 高く跳ねてウェーブ / lv3: 2小節ごとに全員で1回転 / lv4: 虹色） */
+    .mascot.is-sing.dance-lv2 .mascot__body, .helper.is-dance.dance-lv2 svg,
+    .mascot.is-sing.dance-lv3 .mascot__body, .helper.is-dance.dance-lv3 svg { animation-name: m-sing-big; animation-delay: calc(var(--i, 0) * -.107s); }
+    .mascot.is-sing.dance-lv4 .mascot__body, .helper.is-dance.dance-lv4 svg { animation: m-sing-big .857s ease-in-out infinite, m-rainbow 1.2s linear infinite; animation-delay: calc(var(--i, 0) * -.107s), calc(var(--i, 0) * -.15s); }
+    .mascot.is-sing.dance-lv3, .helper.is-dance.dance-lv3, .mascot.is-sing.dance-lv4, .helper.is-dance.dance-lv4 { transform-origin: 50% 70%; animation: m-spin 3.428s ease-in-out infinite; }
+    @keyframes m-sing-big { 0%, 50%, 100% { transform: translateY(0) scale(1.12, .88); } 25% { transform: translateY(-22px) rotate(-14deg) scale(.95, 1.06); } 75% { transform: translateY(-22px) rotate(14deg) scale(.95, 1.06); } }
+    @keyframes m-spin { 0%, 76% { rotate: 0deg; } 100% { rotate: 360deg; } }
     .helper.is-dance .m-mouth { transform-box: fill-box; transform-origin: 50% 0; animation: m-mouth .26s ease-in-out infinite alternate; }
     .mascot.is-sing .m-mouth { transform-box: fill-box; transform-origin: 50% 0; animation: m-mouth .26s ease-in-out infinite alternate; }
     @keyframes m-sing { 0%, 50%, 100% { transform: translateY(0) scale(1.06, .94); } 25% { transform: translateY(-9px) rotate(-9deg); } 75% { transform: translateY(-9px) rotate(9deg); } }
@@ -1156,7 +1163,14 @@
         singing = true;
         clearTimeout(danceTimer);
         mascot.className = 'mascot is-blue is-sing';
-        choir.forEach(function (h) { h.classList.remove('is-walk', 'is-carry'); h.style.scale = ''; h.classList.add('is-dance'); });
+        var n = choir.length, lv = n >= 10 ? 4 : n >= 6 ? 3 : n >= 4 ? 2 : 1;
+        mascot.classList.add('dance-lv' + lv); mascot.style.setProperty('--i', 0);
+        choir.forEach(function (h, i) { h.classList.remove('is-walk', 'is-carry'); h.style.scale = ''; h.style.setProperty('--i', i + 1); h.classList.add('is-dance', 'dance-lv' + lv); });
+        // lv3 以上は拍に合わせて、誰かの頭上で紙吹雪と音符
+        var beats = lv >= 3 ? setInterval(function () {
+          var all = [mascot].concat(choir), who = all[Math.floor(Math.random() * all.length)].getBoundingClientRect();
+          burst(who.left + who.width / 2, who.top, lv >= 4 ? 18 : 8);
+        }, lv >= 4 ? 429 : 857) : 0;
         var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 90, y = r.top - 60;
         if (soundOn) {
           loadSong().then(function (buf) {
@@ -1169,16 +1183,16 @@
           setTimeout(function () { say('音ありにすると歌が聞けます', x + 20, y - 60, ''); }, SONG_MS * .8);
         }
         LYRICS.forEach(function (l) { setTimeout(function () { say(l[0], x + 30, y, 'sing'); }, l[1] * SONG_MS); });
-        var k = 0, notes = setInterval(function () { musicNote(k++); }, 380);
+        var k = 0, notes = setInterval(function () { musicNote(k++); }, 420 - lv * 70);
         setTimeout(function () {
-          clearInterval(notes);
+          clearInterval(notes); clearInterval(beats);
           mascot.className = 'mascot';
           singing = false;
           var q = mascot.getBoundingClientRect();
           burst(q.left + q.width / 2, q.top, 50 + choir.length * 15);
           // 仲間は手をふって、画面の左へ帰っていく
           choir.forEach(function (h, i) {
-            h.classList.remove('is-dance');
+            h.classList.remove('is-dance', 'dance-lv1', 'dance-lv2', 'dance-lv3', 'dance-lv4');
             setTimeout(function () {
               hsay(h, 'またね〜', 700);
               walk(h, window.scrollX - 60, h._y, 900).done.then(function () { h.remove(); });
@@ -1469,10 +1483,10 @@
       }
       tidy.addEventListener('click', function () {
         var list = Array.from(movedEls), choir = [];
-        // 歌うときに並ぶ仲間の数：max(3, 最大コンボ数 ÷ 5)。画面の幅に収まる数までにする
+        // 歌うときに並ぶ仲間の数：max(2, 最大コンボ数 ÷ 5)。画面の幅に収まる数までにする
         var phoneW = innerWidth < 720, mq = mascot.getBoundingClientRect();
         var fit = Math.max(1, Math.floor((innerWidth - mq.right - 12) / (phoneW ? 46 : 64)));
-        var want = Math.min(fit, Math.max(3, Math.floor(maxCombo / 5)));
+        var want = Math.min(fit, Math.max(2, Math.floor(maxCombo / 5)));
         movedEls.clear();
         maxCombo = 0;
         tidy.hidden = true;

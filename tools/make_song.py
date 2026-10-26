@@ -4,12 +4,12 @@
   song-melody.mp3  主旋律（リーダー）           … いつも
   song-harmony.mp3 ハモり（主旋律の3度下）      … いつも
   song-bass.mp3    低音（和音の根音を「ぼん」） … 仲間4匹から
-  song-perc.mp3    ボイパ（キック・ハイハット・スネア） … 仲間6匹から
+  song-perc.mp3    ボイパ（録音した「ドゥ」「ツ」「パフ」） … 仲間6匹から
   song-top.mp3     上ハモり（主旋律の3度上）    … 仲間10匹から
 
 メロディと歌詞はオリジナル。ハ長調、テンポ 140、8分音符 = 20 フレーム（93.75 フレーム/秒）。
 低音は1オクターブ上で歌わせてから、声ごと1オクターブ下げて太い声にする。
-ボイパは声ではなく、口で鳴らす音（唇の破裂・息・歯の摩擦）をノイズと音程から合成する。
+ボイパは、本人が口で鳴らした録音（tools/beatbox/、tools/cut_beatbox.py で1打ずつ切り出したもの）を並べる。
 歌声を使うときは「VOICEVOX:ずんだもん」のクレジットが必要（ページのフッターに記載済み）。
 
 使い方: pip install numpy、ffmpeg を用意し、VOICEVOX エンジン（0.26 以降）を http://127.0.0.1:50021 で起動しておき、
@@ -79,76 +79,34 @@ def bass():
 
 
 RNG = np.random.default_rng(140)
+BEATBOX = Path(__file__).resolve().parent / 'beatbox'
 
 
-def lowpass(x, cutoff):
-    """1次のローパス（息や破裂音の明るさを調整する）"""
-    k = np.exp(-2 * np.pi * cutoff / SR)
-    y = np.empty_like(x); acc = 0.0
-    for i, v in enumerate(x):
-        acc = (1 - k) * v + k * acc
-        y[i] = acc
-    return y
-
-
-def highpass(x, cutoff):
-    return x - lowpass(x, cutoff)
-
-
-def bandpass(x, lo, hi):
-    return lowpass(highpass(x, lo), hi)
-
-
-def env(n, attack, decay):
-    """立ち上がり attack 秒、そのあと decay 秒で指数的に消える音量の形"""
-    t = np.arange(n) / SR
-    return np.minimum(1, t / max(attack, 1e-4)) * np.exp(-np.maximum(0, t - attack) / decay)
-
-
-def noise(sec):
-    return RNG.uniform(-1, 1, int(sec * SR))
-
-
-def kick():
-    """唇で鳴らす「B」：低く沈む音程と、唇が開く瞬間の小さな破裂"""
-    n = int(.22 * SR); t = np.arange(n) / SR
-    freq = 50 + 75 * np.exp(-t / .03)
-    body = np.sin(2 * np.pi * np.cumsum(freq) / SR) * env(n, .003, .07)
-    pop = lowpass(noise(.22), 900) * env(n, .0008, .006) * 2.2
-    return np.tanh((body + pop) * 1.8) * .9
-
-
-def hat(open_=False):
-    """歯のすき間から出す「ts」／長めの「tsss」"""
-    sec = .18 if open_ else .06
-    n = int(sec * SR)
-    hiss = highpass(noise(sec), 5200) * env(n, .002, .07 if open_ else .018)
-    tick = highpass(noise(sec), 2500) * env(n, .0005, .003) * .8   # 舌先の「t」
-    return (hiss + tick) * .55
-
-
-def snare():
-    """唇の破裂「P」のあとに息の「fff」を続ける、ボイパの定番スネア"""
-    n = int(.2 * SR); t = np.arange(n) / SR
-    pop = (lowpass(noise(.2), 1500) * 1.6 + np.sin(2 * np.pi * 190 * t) * .5) * env(n, .0008, .01)
-    breath = bandpass(noise(.2), 1300, 6500) * env(n, .006, .06)
-    return np.tanh((pop + breath * 1.3) * 1.4) * .8
+def hits(name):
+    """tools/beatbox/ にある1打ずつの録音（tools/cut_beatbox.py で作る）"""
+    files = sorted(BEATBOX.glob(f'{name}-*.wav'))
+    if not files:
+        sys.exit(f'{BEATBOX}/{name}-*.wav がありません。tools/cut_beatbox.py で作ってください')
+    return [to_array(f.read_bytes()) for f in files]
 
 
 def perc():
-    sounds = {'K': kick(), 'h': hat(), 'H': hat(True), 'S': snare()}
+    sounds = {'K': hits('kick'), 'h': hits('hat'), 'S': hits('snare')}
+    gain = {'K': 1, 'h': .5, 'S': .85}
     out = np.zeros(int(LENGTH * SR) + SR)
-    # 16分音符ごとの並び（1小節 = 16）。K: キック / h: ハイハット / H: 長いハイハット / S: スネア。歌い出しの2拍前から入る
-    bars = ['K.h.S.hhK.KhS.h.', 'K.h.S.hhK.KhS.H.']
+    # 16分音符ごとの並び（1小節 = 16）。K: キック / h: ハイハット / S: スネア。歌い出しの2拍前から入る
+    bars = ['K.h.S.hhK.KhS.h.', 'K.h.S.hhK.KhS.hh']
     step = EIGHTH / 2
+    turn = {k: 0 for k in sounds}
     for i in range(int(LENGTH / step)):
-        s = sounds.get(bars[(i // 16) % 2][i % 16])
-        if s is None:
+        c = bars[(i // 16) % 2][i % 16]
+        if c not in sounds:
             continue
+        # 同じ音でも録音した何打かを順番に使い、毎回少しずつ違う響きにする
+        s = sounds[c][turn[c] % len(sounds[c])]
+        turn[c] += 1
         at = int(i * step * SR)
-        # 人が鳴らすので、強さとタイミングを少しだけ揺らす
-        at = max(0, at + int(RNG.normal(0, .003) * SR))
-        out[at:at + len(s)] += s[:len(out) - at] * RNG.uniform(.85, 1)
+        out[at:at + len(s)] += s[:len(out) - at] * gain[c]
     return out
 
 

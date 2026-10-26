@@ -4,16 +4,17 @@
   song-melody.mp3  主旋律（リーダー）           … いつも
   song-harmony.mp3 ハモり（主旋律の3度下）      … いつも
   song-bass.mp3    低音（和音の根音を「ぼん」） … 仲間4匹から
-  song-perc.mp3    ボイパ（ドゥン・ツ・カッ）   … 仲間6匹から
+  song-perc.mp3    ボイパ（キック・ハイハット・スネア） … 仲間6匹から
   song-top.mp3     上ハモり（主旋律の3度上）    … 仲間10匹から
 
 メロディと歌詞はオリジナル。ハ長調、テンポ 140、8分音符 = 20 フレーム（93.75 フレーム/秒）。
 低音は1オクターブ上で歌わせてから、声ごと1オクターブ下げて太い声にする。
-ボイパは、ずんだもんの話し声で「ドゥン」「ツ」「カッ」を作って並べる。
-使うときは「VOICEVOX:ずんだもん」のクレジットが必要（ページのフッターに記載済み）。
+ボイパは声ではなく、口で鳴らす音（唇の破裂・息・歯の摩擦）をノイズと音程から合成する。
+歌声を使うときは「VOICEVOX:ずんだもん」のクレジットが必要（ページのフッターに記載済み）。
 
 使い方: pip install numpy、ffmpeg を用意し、VOICEVOX エンジン（0.26 以降）を http://127.0.0.1:50021 で起動しておき、
-        python3 tools/make_song.py
+        python3 tools/make_song.py         # 全パート
+        python3 tools/make_song.py perc    # ボイパだけ作り直す（エンジン不要）
 """
 import io, json, subprocess, sys, urllib.parse, urllib.request, wave
 from pathlib import Path
@@ -27,7 +28,6 @@ E = 20                      # 8分音符（フレーム）
 EIGHTH = 60 / 140 / 2       # 8分音符（秒）
 LENGTH = 6.4                # 1節の長さ（秒）
 NORMAL, AMAAMA, TSUNTSUN = 3003, 3001, 3007   # ずんだもんの歌声
-TALK = 3                    # ずんだもん（ノーマル）の話し声
 
 C3, D3, E3, F3, G3, A3, B3 = 48, 50, 52, 53, 55, 57, 59
 C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5 = 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79
@@ -78,27 +78,77 @@ def bass():
     return np.frombuffer(low, dtype='<i2').astype(np.float32) / 32768
 
 
-def talk(text, speed=1.6):
-    q = json.loads(post('/audio_query', query={'text': text, 'speaker': TALK}))
-    q.update(speedScale=speed, prePhonemeLength=0, postPhonemeLength=0, outputSamplingRate=SR)
-    a = to_array(post('/synthesis', q, {'speaker': TALK}))
-    nz = np.nonzero(np.abs(a) > .02)[0]
-    return a[nz[0]:nz[-1] + 1] if len(nz) else a
+RNG = np.random.default_rng(140)
+
+
+def lowpass(x, cutoff):
+    """1次のローパス（息や破裂音の明るさを調整する）"""
+    k = np.exp(-2 * np.pi * cutoff / SR)
+    y = np.empty_like(x); acc = 0.0
+    for i, v in enumerate(x):
+        acc = (1 - k) * v + k * acc
+        y[i] = acc
+    return y
+
+
+def highpass(x, cutoff):
+    return x - lowpass(x, cutoff)
+
+
+def bandpass(x, lo, hi):
+    return lowpass(highpass(x, lo), hi)
+
+
+def env(n, attack, decay):
+    """立ち上がり attack 秒、そのあと decay 秒で指数的に消える音量の形"""
+    t = np.arange(n) / SR
+    return np.minimum(1, t / max(attack, 1e-4)) * np.exp(-np.maximum(0, t - attack) / decay)
+
+
+def noise(sec):
+    return RNG.uniform(-1, 1, int(sec * SR))
+
+
+def kick():
+    """唇で鳴らす「B」：低く沈む音程と、唇が開く瞬間の小さな破裂"""
+    n = int(.22 * SR); t = np.arange(n) / SR
+    freq = 50 + 75 * np.exp(-t / .03)
+    body = np.sin(2 * np.pi * np.cumsum(freq) / SR) * env(n, .003, .07)
+    pop = lowpass(noise(.22), 900) * env(n, .0008, .006) * 2.2
+    return np.tanh((body + pop) * 1.8) * .9
+
+
+def hat(open_=False):
+    """歯のすき間から出す「ts」／長めの「tsss」"""
+    sec = .18 if open_ else .06
+    n = int(sec * SR)
+    hiss = highpass(noise(sec), 5200) * env(n, .002, .07 if open_ else .018)
+    tick = highpass(noise(sec), 2500) * env(n, .0005, .003) * .8   # 舌先の「t」
+    return (hiss + tick) * .55
+
+
+def snare():
+    """唇の破裂「P」のあとに息の「fff」を続ける、ボイパの定番スネア"""
+    n = int(.2 * SR); t = np.arange(n) / SR
+    pop = (lowpass(noise(.2), 1500) * 1.6 + np.sin(2 * np.pi * 190 * t) * .5) * env(n, .0008, .01)
+    breath = bandpass(noise(.2), 1300, 6500) * env(n, .006, .06)
+    return np.tanh((pop + breath * 1.3) * 1.4) * .8
 
 
 def perc():
-    kick, hat, snare = talk('ドゥン', 1.8), talk('ツ', 2.0) * .55, talk('カッ', 1.8)
+    sounds = {'K': kick(), 'h': hat(), 'H': hat(True), 'S': snare()}
     out = np.zeros(int(LENGTH * SR) + SR)
-    # 16分音符ごとの並び（1小節 = 16）。K: ドゥン / h: ツ / S: カッ。歌い出しの2拍前から入る
-    bar = 'K.h.S.hhK.KhS.h.'
+    # 16分音符ごとの並び（1小節 = 16）。K: キック / h: ハイハット / H: 長いハイハット / S: スネア。歌い出しの2拍前から入る
+    bars = ['K.h.S.hhK.KhS.h.', 'K.h.S.hhK.KhS.H.']
     step = EIGHTH / 2
     for i in range(int(LENGTH / step)):
-        c = bar[i % 16]
-        s = {'K': kick, 'h': hat, 'S': snare}.get(c)
+        s = sounds.get(bars[(i // 16) % 2][i % 16])
         if s is None:
             continue
         at = int(i * step * SR)
-        out[at:at + len(s)] += s[:len(out) - at]
+        # 人が鳴らすので、強さとタイミングを少しだけ揺らす
+        at = max(0, at + int(RNG.normal(0, .003) * SR))
+        out[at:at + len(s)] += s[:len(out) - at] * RNG.uniform(.85, 1)
     return out
 
 
@@ -116,9 +166,12 @@ def save(name, a, gain):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 1:
+    if len(sys.argv) > 2 or (len(sys.argv) == 2 and sys.argv[1] != 'perc'):
         sys.exit(__doc__)
     OUT.mkdir(parents=True, exist_ok=True)
+    if sys.argv[1:] == ['perc']:
+        save('perc', perc(), .7)
+        sys.exit()
     # 音量のつり合いはここで決める（ページ側では全体の音量だけを変える）
     save('melody', part(1, NORMAL), .9)
     save('harmony', part(2, AMAAMA), .6)

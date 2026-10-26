@@ -1469,6 +1469,10 @@
       }
       tidy.addEventListener('click', function () {
         var list = Array.from(movedEls), choir = [];
+        // 歌うときに並ぶ仲間の数：max(3, 最大コンボ数 ÷ 5)。画面の幅に収まる数までにする
+        var phoneW = innerWidth < 720, mq = mascot.getBoundingClientRect();
+        var fit = Math.max(1, Math.floor((innerWidth - mq.right - 12) / (phoneW ? 46 : 64)));
+        var want = Math.min(fit, Math.max(3, Math.floor(maxCombo / 5)));
         movedEls.clear();
         maxCombo = 0;
         tidy.hidden = true;
@@ -1480,12 +1484,12 @@
           say('スッキリ！', r.left + r.width / 2 + 40, r.top - 30, '');
           sfx.tidy();
           if (singing) return;
-          // 仲間が2匹に満たなければ呼んで、並んでから歌い出す
+          // 足りない仲間を呼んで、並んでから歌い出す
           var calls = [];
-          for (var k = choir.length; k < 2 && !reduce; k++) {
-            var nh = helperAt(window.scrollX - 50 - k * 40, slot(k + 1)[1], CREW_COLORS[(k + 1) % CREW_COLORS.length]);
+          for (var k = choir.length, k0 = k; k < want && !reduce; k++) {
+            var nh = helperAt(window.scrollX - 50 - (k - k0) * 44, slot(k + 1)[1], CREW_COLORS[(k + 1) % CREW_COLORS.length]);
             choir.push(nh);
-            calls.push(walk(nh, slot(k + 1)[0], slot(k + 1)[1], 900).done);
+            calls.push(walk(nh, slot(k + 1)[0], slot(k + 1)[1], 900 + k * 60).done);
           }
           Promise.all(calls).then(function () { setTimeout(function () { sing(choir); }, 450); });
         }
@@ -1520,7 +1524,7 @@
             return function () {
               return carryAll(h, mine, speed).then(function () {
                 // 終わったら、リーダーは左下の定位置へ。仲間は4匹まで隣に並び、ほかは画面の端へ帰っていく
-                var q = mascot.getBoundingClientRect(), tx, ty, stay = !leader && choir.length < 4;
+                var q = mascot.getBoundingClientRect(), tx, ty, stay = !leader && choir.length < want;
                 if (leader) { tx = q.left + q.width / 2 + window.scrollX; ty = q.bottom + window.scrollY; }
                 else if (stay) { choir.push(h); var sp = slot(choir.length); tx = sp[0]; ty = sp[1]; }
                 else { tx = window.scrollX + (h._x - window.scrollX < innerWidth / 2 ? -60 : innerWidth + 60); ty = h._y; hsay(h, 'またね〜', 700); }

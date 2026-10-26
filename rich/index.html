@@ -893,15 +893,38 @@
         if (!soundOn) return;
         loadSong();
         var a = audio();
-        if (!a || a.state === 'running' && a.__warm) return;
+        if (!a) return;
+        var o = out(a);
+        if (sink && sink.paused) { var pr = sink.play(); if (pr && pr.catch) pr.catch(function () {}); }
+        if (a.state === 'running' && a.__warm) return;
         var src = a.createBufferSource();
         src.buffer = a.createBuffer(1, 1, 22050);
-        src.connect(a.destination); src.start(0);
+        src.connect(o); src.start(0);
         a.__warm = true;
       }
       ['touchstart', 'touchend', 'pointerdown', 'click', 'keydown'].forEach(function (t) { document.addEventListener(t, unlock, { capture: true, passive: true }); });
-      // iPhone の消音スイッチが入っていても鳴らす（対応している Safari のみ）。
-      // <audio> 要素は使わない：iPhone では Web Audio と取り合いになり、効果音が鳴らなくなることがあるため
+      // iPhone では、消音スイッチが入っていると Web Audio の音は消される（<audio> の再生は消されない）。
+      // そこで iPhone では、すべての音をいったん1本の <audio> に流してから鳴らす
+      var IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      var master = null, sink = null;
+      function out(a) {
+        if (master) return master;
+        master = a.createGain();
+        if (IOS && a.createMediaStreamDestination) {
+          var dest = a.createMediaStreamDestination();
+          master.connect(dest);
+          sink = document.createElement('audio');
+          sink.setAttribute('playsinline', '');
+          sink.srcObject = dest.stream;
+          sink.setAttribute('aria-hidden', 'true');
+          document.body.appendChild(sink);
+          var pr = sink.play(); if (pr && pr.catch) pr.catch(function () {});
+        } else {
+          master.connect(a.destination);
+        }
+        return master;
+      }
+      document.addEventListener('visibilitychange', function () { if (document.hidden && sink) sink.pause(); });
       try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
       function tone(freq, at, dur, type, vol, slideTo) {
         var a = audio(); if (!a) return;
@@ -912,7 +935,7 @@
         g.gain.setValueAtTime(.0001, t);
         g.gain.exponentialRampToValueAtTime(vol || .16, t + .012);
         g.gain.exponentialRampToValueAtTime(.0001, t + dur);
-        o.connect(g); g.connect(a.destination);
+        o.connect(g); g.connect(out(a));
         o.start(t); o.stop(t + dur + .03);
       }
       // ド・レ・ミ・ソ・ラの音階。コンボが続くほど高い音から鳴らす
@@ -941,7 +964,7 @@
         soundOn = !soundOn;
         soundBtn.setAttribute('aria-pressed', String(soundOn));
         try { localStorage.setItem('tomochi-sound', soundOn ? '1' : '0'); } catch (e) {}
-        if (soundOn) unlock();
+        if (soundOn) unlock(); else if (sink) sink.pause();
         sfx.on();
       });
 
@@ -1193,7 +1216,7 @@
             // パートが増えるほど全体を少し下げて、合計の大きさをそろえる
             var g = a.createGain(), at = a.currentTime + .05;
             g.gain.value = SONG_VOLUME * [1, 1, .85, .75, .7][pl];
-            g.connect(a.destination);
+            g.connect(out(a));
             bufs.forEach(function (buf) {
               if (!buf) return;
               var src = a.createBufferSource(); src.buffer = buf; src.connect(g); src.start(at);

@@ -460,10 +460,6 @@
     .encore__play:disabled { opacity: .45; cursor: default; background: var(--paper); color: var(--ink); }
     .encore__seen { display: none; white-space: nowrap; font-family: var(--hand); font-size: 16px; font-weight: 700; color: var(--red-ink); }
     .is-seen .encore__seen { display: inline; }
-    .encore__complete { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; margin-top: 14px; padding: 14px 18px; border: 2px dashed var(--line); border-radius: 18px; color: var(--ink-soft); }
-    .encore__complete b { font-family: var(--display); font-weight: 400; color: var(--ink); }
-    .encore__complete.is-open { border: 2px solid var(--ink); background: var(--yellow); color: var(--fixed-ink); box-shadow: 4px 4px 0 var(--ink); }
-    .encore__complete.is-open b { color: var(--fixed-ink); }
     .encore__note { margin-top: 14px; font-size: 13px; color: var(--ink-soft); }
     .encore + .foot { margin-top: 56px; }
     .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 18px 24px; margin-top: clamp(110px, 14vw, 180px); padding-top: 36px; padding-bottom: 104px; border-top: 2px solid var(--ink); }  /* 右下の「片付ける」と重ならないよう、下を空ける */
@@ -866,10 +862,6 @@
       <li data-pattern="9"><span class="encore__no">④</span><b class="encore__name">住人も踊る</b><span class="encore__cond">家のそばに物を置く</span><span class="encore__desc">家の人たちが走ってきて、一緒に跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="9">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
       <li data-pattern="10"><span class="encore__no">⑤</span><b class="encore__name">アンコール</b><span class="encore__cond">小人を集める</span><span class="encore__desc">集まった人たちが応援して、最後に「アンコール！」</span><span class="encore__foot"><button class="encore__play" type="button" data-play="10">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
     </ul>
-    <div class="encore__complete" data-complete>
-      <p><b>★ コンプリート</b> <span data-complete-text>ゲストを5個全部見つけると……？</span></p>
-      <button class="encore__play" type="button" data-play="human" hidden>▶ 聴く</button>
-    </div>
   </section>
 
   <footer class="wrap foot">
@@ -1253,10 +1245,6 @@
         // 一度でも片付けたら、演出の一覧を出す
         try { if (localStorage.getItem('tomochi-tidied')) document.querySelector('.encore').hidden = false; } catch (e) {}
         document.querySelector('[data-friend-count]').textContent = friendsFor(guestsFound());
-        var done = guestsFound() >= 5, box = document.querySelector('[data-complete]');
-        box.classList.toggle('is-open', done);
-        box.querySelector('[data-play]').hidden = !done;
-        box.querySelector('[data-complete-text]').textContent = done ? '片付けると、仲間10匹とページ中の物が踊り、本物の人の歌声で歌います' : 'ゲストを5個全部見つけると……？';
       }
       function markSeen(id) {
         if (seen[id]) return;
@@ -1394,13 +1382,11 @@
         var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 90, y = r.top - 60;
         if (soundOn) {
           var pl = parts || lv;
-          // コンプリート（ゲスト5個）のときは、本物の人の歌声（主旋律とハモり）に低音とボイパを重ねる
-          var names = opts.human ? ['human-melody', 'human-harmony', 'bass', 'perc'] : PARTS.slice(0, pl + 1);
-          Promise.all(names.map(loadPart)).then(function (bufs) {
+          Promise.all(PARTS.slice(0, pl + 1).map(loadPart)).then(function (bufs) {
             var a = audio(); if (!a) return;
             // パートが増えるほど全体を少し下げて、合計の大きさをそろえる
             var g = a.createGain(), at = a.currentTime + .05;
-            g.gain.value = SONG_VOLUME * (opts.human ? .8 : [1, 1, .85, .75, .7][pl]);
+            g.gain.value = SONG_VOLUME * [1, 1, .85, .75, .7][pl];
             g.connect(out(a));
             bufs.forEach(function (buf) {
               if (!buf) return;
@@ -1735,8 +1721,7 @@
       // フッターの ▶：その演出をその場で再生する（押したら音ありにする）
       var PREVIEW = {
         6: { n: 3, lv: 1, guests: ['bird'] }, 7: { n: 3, lv: 1, guests: ['ball'] }, 8: { n: 3, lv: 1, guests: ['pref'], prefs: { '愛媛': 1, '東京': 1, '大阪': 1 } },
-        9: { n: 3, lv: 1, guests: ['house'] }, 10: { n: 3, lv: 1, guests: ['crowd'], crowd: 'macho' },
-        human: { n: 10, lv: 4, full: true, dance: true, human: true } };
+        9: { n: 3, lv: 1, guests: ['house'] }, 10: { n: 3, lv: 1, guests: ['crowd'], crowd: 'macho' } };
       document.querySelectorAll('[data-play]').forEach(function (b) {
         b.addEventListener('click', function () {
           if (singing || tidying) return;
@@ -1744,10 +1729,10 @@
           var cfg = PREVIEW[b.dataset.play];
           playButtons(false);
           var objs = cfg.dance ? Array.from(document.querySelectorAll('.dg')) : [];  // ⑤はページ中の物が全部踊る
-          if (reduce) { sing([], objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, human: cfg.human, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); return; }
+          if (reduce) { sing([], objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); return; }
           callChoir(Math.min(cfg.n, slotsFit())).then(function (choir) {
             // 画面の幅の都合で並べる数が少なくても、その演出の歌と踊りにする
-            setTimeout(function () { sing(choir, objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, human: cfg.human, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); }, 300);
+            setTimeout(function () { sing(choir, objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); }, 300);
           });
         });
       });
@@ -1771,7 +1756,7 @@
             choir = choir.concat(more);
             var guests = GUESTS.filter(function (g) { return found[g]; }), prefs = foundPrefs, crowd = found.crowd;
             found = {}; foundPrefs = {};
-            setTimeout(function () { sing(choir, gf >= 5 ? Array.from(document.querySelectorAll('.dg')) : list, { lv: gf >= 4 ? 4 : gf >= 2 ? 3 : gf >= 1 ? 2 : 1, full: gf >= 4, dance: gf >= 5, human: gf >= 5, guests: guests, prefs: prefs, crowd: typeof crowd === 'string' ? crowd : '' }); showEncore(); }, 450);
+            setTimeout(function () { sing(choir, gf >= 5 ? Array.from(document.querySelectorAll('.dg')) : list, { lv: gf >= 4 ? 4 : gf >= 2 ? 3 : gf >= 1 ? 2 : 1, full: gf >= 4, dance: gf >= 5, guests: guests, prefs: prefs, crowd: typeof crowd === 'string' ? crowd : '' }); showEncore(); }, 450);
           });
         }
         if (reduce || !list.length) { list.forEach(goHome); finish(); return; }

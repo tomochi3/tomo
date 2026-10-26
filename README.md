@@ -10,7 +10,7 @@ https://tomochi3.github.io/tomo/
 index.html      ページ本体（作品一覧はここに直接書いています）
 404.html        存在しないURLを開いたときのページ（中の参照は /tomo/ から始まる絶対パス）
 rich/           リッチ版（https://tomochi3.github.io/tomo/rich/）。index.html に CSS と JS を内包。画像は rich/img/ にまとめ、シンプル版の img/ には依存しない
-rich/audio/     リッチ版で生き物たちが歌う1節（歌声：VOICEVOX:ずんだもん）。主旋律・ハモり・低音・ボイパ・上ハモりの5パート（作り方は tools/make_song.py）と、ゲストを全部見つけたときの本人の歌声（song-human-*.mp3。作り方は tools/tune_vocal.py）
+rich/audio/     リッチ版で生き物たちが歌う1節（歌声：VOICEVOX:ずんだもん）。主旋律・ハモり・低音・ボイパ・上ハモりの5パート。作り方は tools/make_song.py
 rich/fonts/     リッチ版の見出し（Dela Gothic One）と手書き（Yomogi）。ページで使う文字だけに絞ったもの。ライセンスは OFL-*.txt（SIL OFL 1.1）
 css/style.css   スタイル（ライト / ダークはOSの設定に追従）
 img/            作品のサムネイル（WebP。小カード用は 800×500 で名前が -sm）

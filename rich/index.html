@@ -1146,17 +1146,19 @@
       }
 
       // ---------- 青くなって歌う ----------
-      // 歌声は VOICEVOX:ずんだもん で作った音声（audio/zunda-song.mp3）。音なしのときは歌詞と音符だけ出す
-      // 歌声は効果音と同じ Web Audio で鳴らす。音量は元の 1/3
-      var SONG_VOLUME = .33, songBuf = null;
-      function loadSong() {
+      // 歌声は VOICEVOX:ずんだもん で作った音声。パートごとのファイルを、並んだ仲間の数に応じて重ねる
+      // （主旋律とハモりはいつも、低音は4匹から、ボイパは6匹から、上ハモりは10匹から）。作り方は tools/make_song.py
+      // 効果音と同じ Web Audio で鳴らす。音なしのときは歌詞と音符だけ出す
+      var SONG_VOLUME = .33, PARTS = ['melody', 'harmony', 'bass', 'perc', 'top'], partBufs = {};
+      function loadPart(name) {
         var a = audio();
         if (!a) return Promise.resolve(null);
-        if (!songBuf) songBuf = fetch('audio/zunda-song.mp3').then(function (r) { return r.arrayBuffer(); }).then(function (d) {
+        if (!partBufs[name]) partBufs[name] = fetch('audio/song-' + name + '.mp3').then(function (r) { return r.arrayBuffer(); }).then(function (d) {
           return new Promise(function (ok, ng) { a.decodeAudioData(d, ok, ng); });
-        }).catch(function () { songBuf = null; return null; });
-        return songBuf;
+        }).catch(function () { partBufs[name] = null; return null; });
+        return partBufs[name];
       }
+      function loadSong() { return Promise.all(PARTS.slice(0, 2).map(loadPart)); }
       var SONG_MS = 6400, LYRICS = [['かたづけ できたのだ♪', .06], ['ぴかぴか きれいなのだ〜♪', .46]];
       function sing(choir) {
         choir = choir || [];
@@ -1173,11 +1175,16 @@
         }, lv >= 4 ? 429 : 857) : 0;
         var r = mascot.getBoundingClientRect(), x = r.left + r.width / 2 + 90, y = r.top - 60;
         if (soundOn) {
-          loadSong().then(function (buf) {
-            var a = audio(); if (!a || !buf) return;
-            var src = a.createBufferSource(), g = a.createGain();
-            src.buffer = buf; g.gain.value = SONG_VOLUME;
-            src.connect(g); g.connect(a.destination); src.start();
+          Promise.all(PARTS.slice(0, lv + 1).map(loadPart)).then(function (bufs) {
+            var a = audio(); if (!a) return;
+            // パートが増えるほど全体を少し下げて、合計の大きさをそろえる
+            var g = a.createGain(), at = a.currentTime + .05;
+            g.gain.value = SONG_VOLUME * [1, 1, .85, .75, .7][lv];
+            g.connect(a.destination);
+            bufs.forEach(function (buf) {
+              if (!buf) return;
+              var src = a.createBufferSource(); src.buffer = buf; src.connect(g); src.start(at);
+            });
           });
         } else {
           setTimeout(function () { say('音ありにすると歌が聞けます', x + 20, y - 60, ''); }, SONG_MS * .8);

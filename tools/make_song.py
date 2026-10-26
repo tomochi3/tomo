@@ -4,17 +4,16 @@
   song-melody.mp3  主旋律（リーダー）           … いつも
   song-harmony.mp3 ハモり（主旋律の3度下）      … いつも
   song-bass.mp3    低音（和音の根音を「ぼん」） … 仲間4匹から
-  song-perc.mp3    ボイパ（録音した「ドゥ」「ツ」「パフ」） … 仲間6匹から
+  song-perc.mp3    ボイパ（ドゥン・ツ・カッ）   … 仲間6匹から
   song-top.mp3     上ハモり（主旋律の3度上）    … 仲間10匹から
 
 メロディと歌詞はオリジナル。ハ長調、テンポ 140、8分音符 = 20 フレーム（93.75 フレーム/秒）。
 低音は1オクターブ上で歌わせてから、声ごと1オクターブ下げて太い声にする。
-ボイパは、本人が口で鳴らした録音（tools/beatbox/、tools/cut_beatbox.py で1打ずつ切り出したもの）を並べる。
-歌声を使うときは「VOICEVOX:ずんだもん」のクレジットが必要（ページのフッターに記載済み）。
+ボイパは、ずんだもんの話し声で「ドゥン」「ツ」「カッ」を作って並べる。
+使うときは「VOICEVOX:ずんだもん」のクレジットが必要（ページのフッターに記載済み）。
 
 使い方: pip install numpy、ffmpeg を用意し、VOICEVOX エンジン（0.26 以降）を http://127.0.0.1:50021 で起動しておき、
-        python3 tools/make_song.py         # 全パート
-        python3 tools/make_song.py perc    # ボイパだけ作り直す（エンジン不要）
+        python3 tools/make_song.py
 """
 import io, json, subprocess, sys, urllib.parse, urllib.request, wave
 from pathlib import Path
@@ -28,6 +27,7 @@ E = 20                      # 8分音符（フレーム）
 EIGHTH = 60 / 140 / 2       # 8分音符（秒）
 LENGTH = 6.4                # 1節の長さ（秒）
 NORMAL, AMAAMA, TSUNTSUN = 3003, 3001, 3007   # ずんだもんの歌声
+TALK = 3                    # ずんだもん（ノーマル）の話し声
 
 C3, D3, E3, F3, G3, A3, B3 = 48, 50, 52, 53, 55, 57, 59
 C4, D4, E4, F4, G4, A4, B4, C5, D5, E5, F5, G5 = 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79
@@ -78,35 +78,27 @@ def bass():
     return np.frombuffer(low, dtype='<i2').astype(np.float32) / 32768
 
 
-RNG = np.random.default_rng(140)
-BEATBOX = Path(__file__).resolve().parent / 'beatbox'
-
-
-def hits(name):
-    """tools/beatbox/ にある1打ずつの録音（tools/cut_beatbox.py で作る）"""
-    files = sorted(BEATBOX.glob(f'{name}-*.wav'))
-    if not files:
-        sys.exit(f'{BEATBOX}/{name}-*.wav がありません。tools/cut_beatbox.py で作ってください')
-    return [to_array(f.read_bytes()) for f in files]
+def talk(text, speed=1.6):
+    q = json.loads(post('/audio_query', query={'text': text, 'speaker': TALK}))
+    q.update(speedScale=speed, prePhonemeLength=0, postPhonemeLength=0, outputSamplingRate=SR)
+    a = to_array(post('/synthesis', q, {'speaker': TALK}))
+    nz = np.nonzero(np.abs(a) > .02)[0]
+    return a[nz[0]:nz[-1] + 1] if len(nz) else a
 
 
 def perc():
-    sounds = {'K': hits('kick'), 'h': hits('hat'), 'S': hits('snare')}
-    gain = {'K': 1, 'h': .5, 'S': .85}
+    kick, hat, snare = talk('ドゥン', 1.8), talk('ツ', 2.0) * .55, talk('カッ', 1.8)
     out = np.zeros(int(LENGTH * SR) + SR)
-    # 16分音符ごとの並び（1小節 = 16）。K: キック / h: ハイハット / S: スネア。歌い出しの2拍前から入る
-    bars = ['K.h.S.hhK.KhS.h.', 'K.h.S.hhK.KhS.hh']
+    # 16分音符ごとの並び（1小節 = 16）。K: ドゥン / h: ツ / S: カッ。歌い出しの2拍前から入る
+    bar = 'K.h.S.hhK.KhS.h.'
     step = EIGHTH / 2
-    turn = {k: 0 for k in sounds}
     for i in range(int(LENGTH / step)):
-        c = bars[(i // 16) % 2][i % 16]
-        if c not in sounds:
+        c = bar[i % 16]
+        s = {'K': kick, 'h': hat, 'S': snare}.get(c)
+        if s is None:
             continue
-        # 同じ音でも録音した何打かを順番に使い、毎回少しずつ違う響きにする
-        s = sounds[c][turn[c] % len(sounds[c])]
-        turn[c] += 1
         at = int(i * step * SR)
-        out[at:at + len(s)] += s[:len(out) - at] * gain[c]
+        out[at:at + len(s)] += s[:len(out) - at]
     return out
 
 
@@ -124,12 +116,9 @@ def save(name, a, gain):
 
 
 if __name__ == '__main__':
-    if len(sys.argv) > 2 or (len(sys.argv) == 2 and sys.argv[1] != 'perc'):
+    if len(sys.argv) != 1:
         sys.exit(__doc__)
     OUT.mkdir(parents=True, exist_ok=True)
-    if sys.argv[1:] == ['perc']:
-        save('perc', perc(), .7)
-        sys.exit()
     # 音量のつり合いはここで決める（ページ側では全体の音量だけを変える）
     save('melody', part(1, NORMAL), .9)
     save('harmony', part(2, AMAAMA), .6)

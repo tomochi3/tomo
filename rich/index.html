@@ -432,6 +432,12 @@
     .mini__go::after { content: " →"; }
 
     /* ---------- footer ---------- */
+    .guest-bird { position: absolute; left: -19px; top: -13px; width: 38px; height: 26px; }
+    .guest-bird svg { width: 100%; height: 100%; overflow: visible; }
+    .guest-bird .wing { transform-box: view-box; transform-origin: 19px 13px; animation: flap .2s ease-in-out infinite alternate; }
+    .guest-ball { position: absolute; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #fff, #ff9a3c 45%, #f07a14); box-shadow: 0 3px 4px rgba(40, 28, 12, .25); }
+    .encore__group { margin-top: 30px; font-family: var(--display); font-weight: 400; font-size: 18px; }
+    .encore__group span { margin-left: 10px; font-family: var(--font); font-size: 13px; font-weight: 700; color: var(--ink-soft); }
     /* ---------- 片付けのあとの演出 ---------- */
     html:not(.js) .encore { display: none; }
     .encore { margin-top: clamp(110px, 14vw, 180px); }
@@ -846,8 +852,9 @@
 
   <!-- ===== 片付けのあとの演出（全5種類。見つけたものに印が付き、▶ でいつでも聴ける） ===== -->
   <section class="wrap encore" aria-labelledby="encore-title">
-    <h2 class="encore__title" id="encore-title">片付けのあとの演出 <span class="encore__count">見つけた <b data-seen-count>0</b> / 5</span></h2>
-    <p class="encore__how"><span class="phrase">物を動かして右下の「片付ける」を押すと、</span><span class="phrase">生き物たちが並んで歌います。</span><span class="phrase">並ぶ仲間の数（最大コンボ÷5、最低2匹）と、</span><span class="phrase">片付けた数で演出が変わります。</span></p>
+    <h2 class="encore__title" id="encore-title">片付けのあとの演出 <span class="encore__count">見つけた <b data-seen-count>0</b> / 10 ・ 組み合わせ 160通り</span></h2>
+    <p class="encore__how"><span class="phrase">物を動かして右下の「片付ける」を押すと、</span><span class="phrase">生き物たちが並んで歌います。</span><span class="phrase">並ぶ仲間の数（最大コンボ÷5、最低2匹）と、</span><span class="phrase">片付けた数で歌い方が変わり、</span><span class="phrase">それまでに気づいた遊びで</span><span class="phrase">ゲストが加わります。</span></p>
+    <h3 class="encore__group">歌い方<span>5種類から1つ</span></h3>
     <ul class="encore__list">
       <li data-pattern="1"><span class="encore__no">①</span><b class="encore__name">ふたりでハモる</b><span class="encore__cond">仲間 2〜3匹</span><span class="encore__desc">主旋律とハモり。左右にゆれて跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="1">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
       <li data-pattern="2"><span class="encore__no">②</span><b class="encore__name">低音が入る</b><span class="encore__cond">仲間 4〜5匹</span><span class="encore__desc">「ぼん ぼん」の低音が加わり、ウェーブで踊る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="2">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
@@ -856,6 +863,14 @@
       <li data-pattern="5"><span class="encore__no">⑤</span><b class="encore__name">みんなで踊る</b><span class="encore__cond">20個以上片付ける</span><span class="encore__desc">フルコーラスで、片付けた物も一緒に踊る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="5">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
     </ul>
     <p class="encore__note">10個以上片付けると、仲間の数にかかわらず歌は全5パートになります。</p>
+    <h3 class="encore__group">ゲスト<span>前回の片付けから気づいた遊びの分だけ加わる</span></h3>
+    <ul class="encore__list">
+      <li data-pattern="6"><span class="encore__no">⑥</span><b class="encore__name">鳥のコーラス</b><span class="encore__cond">上の鳥に物をぶつける</span><span class="encore__desc">鳥がみんなの頭上をくるくる回って、さえずる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="6">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="7"><span class="encore__no">⑦</span><b class="encore__name">頭上ラリー</b><span class="encore__cond">卓球の球に物をぶつける</span><span class="encore__desc">球が拍に合わせて、みんなの頭をぽんぽん跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="7">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="8"><span class="encore__no">⑧</span><b class="encore__name">ご当地の雨</b><span class="encore__cond">都府県のハンコを動かす</span><span class="encore__desc">見つけた都府県の名物が、空から降ってくる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="8">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="9"><span class="encore__no">⑨</span><b class="encore__name">住人も踊る</b><span class="encore__cond">家のそばに置く・家を動かす</span><span class="encore__desc">家の人たちが走ってきて、一緒に跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="9">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="10"><span class="encore__no">⑩</span><b class="encore__name">アンコール</b><span class="encore__cond">小人を集める</span><span class="encore__desc">集まった人たちが応援して、最後に「アンコール！」</span><span class="encore__foot"><button class="encore__play" type="button" data-play="10">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+    </ul>
   </section>
 
   <footer class="wrap foot">
@@ -1058,6 +1073,9 @@
       }
       var WORDS = ['ナイス！', 'いいね！', 'おみごと！', 'ぴったり！', 'さいこう！', 'すてき！', 'それっ！', 'わーい！'];
       var combo = 0, lastDrop = 0, total = 0, maxCombo = 0, mascotTaps = 0, singing = false;
+      // 前回の片付けから気づいた遊び。片付けのあとの演出に「ゲスト」として出てくる
+      var found = {}, foundPrefs = {};
+      var GUESTS = ['bird', 'ball', 'pref', 'house', 'crowd'];
       // 左下の生き物を踊らせる。level 1〜5（5は大回転）
       var mascot = document.querySelector('.mascot'), danceTimer = 0;
       function dance(level, ms) {
@@ -1145,6 +1163,7 @@
       function prefFx(stamp) {
         var name = stamp.textContent.trim(), list = PREF[name];
         if (!list) return;
+        found.pref = 1; foundPrefs[name] = 1;
         var i = prefTurn[name] || 0; prefTurn[name] = (i + 1) % list.length;
         var fx = list[i], type = fx[0], e = fx[1], label = fx[2];
         var r = stamp.getBoundingClientRect(), x = r.left + r.width / 2, y = r.top + r.height / 2;
@@ -1238,7 +1257,95 @@
       showSeen();
       function playButtons(on) { document.querySelectorAll('[data-play]').forEach(function (b) { b.disabled = !on; }); }
 
+      // ---------- ゲスト（気づいた遊びに応じて、片付けのあとの演出に加わる） ----------
+      var BEAT = 428.6;  // 140 BPM の1拍
+      function heads(choir) {
+        var q = mascot.getBoundingClientRect();
+        return [[q.left + q.width / 2 + window.scrollX, q.top + window.scrollY]].concat(choir.map(function (h) { return [h._x, h._y - 56]; }));
+      }
+      function startGuests(guests, choir, prefs, crowdKind) {
+        if (reduce || !guests.length) return function () {};
+        var stops = [], layer = ensureActors(), n = choir.length;
+        var base = slot(1), right = slot(n + 1);
+        // ⑥ 鳥：みんなの頭上をくるくる回りながら、2拍ごとにさえずる
+        if (guests.indexOf('bird') >= 0) {
+          var bird = document.createElement('div');
+          bird.className = 'guest-bird';
+          bird.innerHTML = document.querySelector('.flier .bird').outerHTML;
+          layer.appendChild(bird);
+          var cx = (base[0] + slot(n)[0]) / 2, cy = base[1] - 150, rx = Math.max(60, (slot(n)[0] - base[0]) / 2 + 20), frames = [];
+          for (var a = 0; a <= 16; a++) { var t = a / 16 * Math.PI * 2; frames.push({ translate: (cx + Math.cos(t) * rx) + 'px ' + (cy + Math.sin(t) * 26) + 'px', scale: Math.sin(t + Math.PI / 2) < 0 ? '-1 1' : '1 1' }); }
+          bird.animate(frames, { duration: BEAT * 8, iterations: Infinity });
+          var tw = setInterval(function () { tone(2400, 0, .06, 'sine', .05, 3200); tone(2900, .08, .07, 'sine', .05, 3600); }, BEAT * 2);
+          stops.push(function () { clearInterval(tw); bird.remove(); });
+        }
+        // ⑦ 卓球の球：拍ごとに、となりの人の頭へぽんと跳ねる
+        if (guests.indexOf('ball') >= 0) {
+          var ball = document.createElement('i');
+          ball.className = 'guest-ball';
+          layer.appendChild(ball);
+          var hs = heads(choir), at = 0, dir = 1;
+          var hop = setInterval(function () {
+            var from = hs[at];
+            if (at + dir < 0 || at + dir >= hs.length) dir = -dir;
+            at += dir;
+            var to = hs[at];
+            ball.animate([{ translate: from[0] + 'px ' + (from[1] - 10) + 'px' }, { translate: (from[0] + to[0]) / 2 + 'px ' + (Math.min(from[1], to[1]) - 70) + 'px' }, { translate: to[0] + 'px ' + (to[1] - 10) + 'px' }], { duration: BEAT - 20, easing: 'ease-in-out', fill: 'forwards' });
+            setTimeout(sfx.bonk, BEAT - 40);
+          }, BEAT);
+          stops.push(function () { clearInterval(hop); ball.remove(); });
+        }
+        // ⑧ ご当地の雨：見つけた都府県の名物が、空から降ってくる
+        if (guests.indexOf('pref') >= 0) {
+          var items = [];
+          Object.keys(prefs).forEach(function (k) { (PREF[k] || []).forEach(function (f) { if (f[1].length < 5) items.push(f[1]); }); });
+          if (!items.length) items = ['🍊', '🗼', '🐙'];
+          var rain = setInterval(function () {
+            emojiBits(items[Math.floor(Math.random() * items.length)], Math.random() * innerWidth, -30, 1, { ang: Math.PI / 2, spread: .4, speed: 1.5, g: .12, size: 30, max: 160 });
+          }, BEAT / 2);
+          stops.push(function () { clearInterval(rain); });
+        }
+        // ⑨ 家の住人：右から走ってきて、拍に合わせて跳ねる
+        var used = 0;
+        if (guests.indexOf('house') >= 0) {
+          for (var i = 0; i < 4; i++) (function (i) {
+            var sp = slot(n + 1 + i), p = actor(window.scrollX + innerWidth + 30 + i * 30, sp[1], '', i === 0 ? 'ぼくらも〜！' : '', '');
+            if (!p) return;
+            p.animate([{ translate: '0 0' }, { translate: (sp[0] - window.scrollX - innerWidth - 30 - i * 30) + 'px 0' }], { duration: 900, delay: i * 80, fill: 'forwards' }).onfinish = function () {
+              p.classList.add('is-here');
+              p.querySelector('svg').animate([{ translate: '-50% 0' }, { translate: '-50% -14px' }], { duration: BEAT / 2, iterations: Infinity, direction: 'alternate', easing: 'ease-out' });
+            };
+            stops.push(function () { p.remove(); actorCount--; });
+          })(i);
+          used = 4;
+        }
+        // ⑩ 観客：集めた小人が応援して、最後に「アンコール！」
+        if (guests.indexOf('crowd') >= 0) {
+          var fans = [];
+          for (var j = 0; j < 4; j++) (function (j) {
+            var sp = slot(n + 1 + used + j), kind = crowdKind === 'study' ? (j % 2 ? 'dumbbell' : 'laptop') : crowdKind;
+            var p = actor(sp[0], sp[1], '', '', '');
+            if (!p) return;
+            var fig = p.querySelector('svg');
+            if (kind === 'macho') fig.innerHTML = MACHO; else fig.insertAdjacentHTML('beforeend', PROPS[kind] || '');
+            fig.setAttribute('width', 104); fig.setAttribute('height', 117);
+            p.classList.add('is-here');
+            p.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 400, delay: j * 100, fill: 'both' });
+            fig.animate([{ rotate: '-8deg' }, { rotate: '8deg' }], { duration: BEAT, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+            fans.push(p);
+            stops.push(function () { p.remove(); actorCount--; });
+          })(j);
+          var cheerT = setTimeout(function () {
+            if (fans[0]) { var t = document.createElement('span'); t.className = 'say'; t.textContent = 'アンコール！'; fans[0].appendChild(t); }
+            sfx.crowd();
+          }, SONG_MS - 1200);
+          stops.push(function () { clearTimeout(cheerT); });
+        }
+        return function () { stops.forEach(function (f) { f(); }); };
+      }
+
       // opts.full: 全パートで歌う / opts.dance: 物も踊る / opts.preview: ▶ での試聴（見つけた印は付けない）
+      // opts.guests: 加わるゲスト（bird / ball / pref / house / crowd）
       function sing(choir, moved, opts) {
         moved = moved || []; opts = opts || {};
         var parts = moved.length >= 10 || opts.full ? 4 : null;
@@ -1249,7 +1356,9 @@
         mascot.className = 'mascot is-blue is-sing';
         var n = choir.length, lv = opts.lv || (n >= 10 ? 4 : n >= 6 ? 3 : n >= 4 ? 2 : 1);
         mascot.classList.add('dance-lv' + lv); mascot.style.setProperty('--i', 0);
-        if (!opts.preview) { markSeen(lv); if (moved.length >= 20) markSeen(5); }
+        var guests = opts.guests || [];
+        if (!opts.preview) { markSeen(lv); if (moved.length >= 20) markSeen(5); guests.forEach(function (g) { markSeen(6 + GUESTS.indexOf(g)); }); }
+        var guestEnd = startGuests(guests, choir, opts.prefs || foundPrefs, opts.crowd || found.crowd || 'reader');
         choir.forEach(function (h, i) { h.classList.remove('is-walk', 'is-carry'); h.style.scale = ''; h.style.setProperty('--i', i + 1); h.classList.add('is-dance', 'dance-lv' + lv); });
         // lv3 以上は拍に合わせて、誰かの頭上で紙吹雪と音符
         var beats = lv >= 3 ? setInterval(function () {
@@ -1285,7 +1394,7 @@
         LYRICS.forEach(function (l) { setTimeout(function () { say(l[0], x + 30, y, 'sing'); }, l[1] * SONG_MS); });
         var k = 0, notes = setInterval(function () { musicNote(k++); }, 420 - lv * 70);
         setTimeout(function () {
-          clearInterval(notes); clearInterval(beats);
+          clearInterval(notes); clearInterval(beats); guestEnd();
           mascot.className = 'mascot';
           singing = false;
           playButtons(true);
@@ -1345,9 +1454,10 @@
           who.animate(frames, { duration: 1500, delay: delay, easing: 'linear', fill: 'both' });
           retire(who, 1600 + delay);
         });
-        if (n) sfx.flee();
+        if (n) { sfx.flee(); found.house = 1; }
       }
       function bailOut(x, y) {
+        found.house = 1;
         var glide = Math.random() < .35;
         if (glide) {
           var dir = Math.random() < .5 ? -1 : 1, dx = dir * (innerWidth * .9 + 100);
@@ -1399,6 +1509,7 @@
       function gather(el) {
         var type = crowdType(el);
         if (!type || reduce) return;
+        found.crowd = type;
         var r = el.getBoundingClientRect(), n = 4 + Math.floor(Math.random() * 3);
         var left = r.left + window.scrollX, bottom = r.bottom + window.scrollY, w = r.width;
         for (var i = 0; i < n; i++) (function (i) {
@@ -1603,7 +1714,9 @@
       }
 
       // フッターの ▶：その演出をその場で再生する（押したら音ありにする）
-      var PREVIEW = { 1: { n: 2, lv: 1 }, 2: { n: 4, lv: 2 }, 3: { n: 6, lv: 3 }, 4: { n: 10, lv: 4 }, 5: { n: 10, lv: 4, full: true, dance: true } };
+      var PREVIEW = { 1: { n: 2, lv: 1 }, 2: { n: 4, lv: 2 }, 3: { n: 6, lv: 3 }, 4: { n: 10, lv: 4 }, 5: { n: 10, lv: 4, full: true, dance: true },
+        6: { n: 3, lv: 1, guests: ['bird'] }, 7: { n: 3, lv: 1, guests: ['ball'] }, 8: { n: 3, lv: 1, guests: ['pref'], prefs: { '愛媛': 1, '東京': 1, '大阪': 1 } },
+        9: { n: 3, lv: 1, guests: ['house'] }, 10: { n: 3, lv: 1, guests: ['crowd'], crowd: 'macho' } };
       document.querySelectorAll('[data-play]').forEach(function (b) {
         b.addEventListener('click', function () {
           if (singing || tidying) return;
@@ -1611,10 +1724,10 @@
           var cfg = PREVIEW[b.dataset.play];
           playButtons(false);
           var objs = cfg.dance ? Array.from(document.querySelectorAll('.dg')) : [];  // ⑤はページ中の物が全部踊る
-          if (reduce) { sing([], objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true }); return; }
+          if (reduce) { sing([], objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); return; }
           callChoir(Math.min(cfg.n, slotsFit())).then(function (choir) {
             // 画面の幅の都合で並べる数が少なくても、その演出の歌と踊りにする
-            setTimeout(function () { sing(choir, objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true }); }, 300);
+            setTimeout(function () { sing(choir, objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); }, 300);
           });
         });
       });
@@ -1637,7 +1750,9 @@
           // 足りない仲間を呼んで、並んでから歌い出す
           (reduce ? Promise.resolve([]) : callChoir(want, choir.length)).then(function (more) {
             choir = choir.concat(more);
-            setTimeout(function () { sing(choir, list); }, 450);
+            var guests = GUESTS.filter(function (g) { return found[g]; }), prefs = foundPrefs, crowd = found.crowd;
+            found = {}; foundPrefs = {};
+            setTimeout(function () { sing(choir, list, { guests: guests, prefs: prefs, crowd: typeof crowd === 'string' ? crowd : '' }); }, 450);
           });
         }
         if (reduce || !list.length) { list.forEach(goHome); finish(); return; }
@@ -1692,6 +1807,7 @@
         }
         function react(el, r) {
           busy = Date.now() + 1100;
+          found.bird = 1;
           var kind = Math.floor(Math.random() * 3);
           var fr = f.getBoundingClientRect();
           burst(fr.left + fr.width / 2, fr.top + fr.height / 2, 10);
@@ -1761,6 +1877,7 @@
         function hit(o) {
           var now = Date.now();
           if (o.el === lastHit && now - lastHitAt < 250) return;
+          found.ball = 1;
           lastHit = o.el; lastHitAt = now;
           sfx.bonk();
           o.el.animate([{ rotate: '0deg' }, { rotate: (vx > 0 ? 6 : -6) + 'deg' }, { rotate: '0deg' }], { duration: 260 });

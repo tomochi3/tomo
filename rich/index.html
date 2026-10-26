@@ -441,6 +441,7 @@
     /* ---------- 片付けのあとの演出 ---------- */
     html:not(.js) .encore { display: none; }
     .encore { margin-top: clamp(110px, 14vw, 180px); }
+    .encore[hidden] { display: none; }
     .encore__title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; font-family: var(--display); font-weight: 400; font-size: clamp(24px, 3.4vw, 36px); line-height: 1.3; }
     .encore__count { font-family: var(--font); font-size: 15px; font-weight: 700; color: var(--ink-soft); }
     .encore__count b { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--red-ink); }
@@ -851,25 +852,15 @@
   </div>
 
   <!-- ===== 片付けのあとの演出（全5種類。見つけたものに印が付き、▶ でいつでも聴ける） ===== -->
-  <section class="wrap encore" aria-labelledby="encore-title">
-    <h2 class="encore__title" id="encore-title">片付けのあとの演出 <span class="encore__count">気づいた隠し要素 <b data-hidden-count>0</b> / 6 ・ 見つけた演出 <b data-seen-count>0</b> / 10 ・ 組み合わせ 160通り</span></h2>
-    <p class="encore__how"><span class="phrase">物を動かして右下の「片付ける」を押すと、</span><span class="phrase">生き物たちが並んで歌います。</span><span class="phrase">ページの隠し要素（全6つ）に</span><span class="phrase">気づくほど仲間が増えて歌が豪華になり、</span><span class="phrase">前回の片付けから気づいた遊びの分だけ</span><span class="phrase">ゲストが加わります。</span></p>
-    <h3 class="encore__group">歌い方<span>気づいた隠し要素の数で決まる</span></h3>
+  <section class="wrap encore" aria-labelledby="encore-title" hidden>
+    <h2 class="encore__title" id="encore-title">片付けのあとの演出 <span class="encore__count">見つけたゲスト <b data-seen-count>0</b> / 5 ・ いまの仲間 <b data-friend-count>2</b>匹</span></h2>
+    <p class="encore__how"><span class="phrase">前回の片付けから気づいた遊びの分だけ、</span><span class="phrase">ゲストが加わります。</span><span class="phrase">見つけたゲストが増えるほど、</span><span class="phrase">並ぶ仲間が増えて歌も豪華になります。</span></p>
     <ul class="encore__list">
-      <li data-pattern="1"><span class="encore__no">①</span><b class="encore__name">ふたりでハモる</b><span class="encore__cond">隠し要素 0〜1個</span><span class="encore__desc">仲間2匹。主旋律とハモり。左右にゆれて跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="1">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="2"><span class="encore__no">②</span><b class="encore__name">低音が入る</b><span class="encore__cond">隠し要素 2個</span><span class="encore__desc">仲間4匹。「ぼん ぼん」の低音が加わり、ウェーブで踊る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="2">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="3"><span class="encore__no">③</span><b class="encore__name">ボイパが入る</b><span class="encore__cond">隠し要素 3〜4個</span><span class="encore__desc">仲間6匹。ボイパが加わり、全員で回転。紙吹雪も</span><span class="encore__foot"><button class="encore__play" type="button" data-play="3">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="4"><span class="encore__no">④</span><b class="encore__name">虹色フルコーラス</b><span class="encore__cond">隠し要素 5個</span><span class="encore__desc">仲間10匹。上ハモりまで全5パート。みんな虹色に光る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="4">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="5"><span class="encore__no">⑤</span><b class="encore__name">コンプリート</b><span class="encore__cond">隠し要素 全6個</span><span class="encore__desc">フルコーラスで、ページ中の物も一緒に踊る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="5">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-    </ul>
-    <p class="encore__note">隠し要素：上の鳥、卓球の球、都府県のハンコ、家の住人、集まる小人、左下の生き物。</p>
-    <h3 class="encore__group">ゲスト<span>前回の片付けから気づいた遊びの分だけ加わる</span></h3>
-    <ul class="encore__list">
-      <li data-pattern="6"><span class="encore__no">⑥</span><b class="encore__name">鳥のコーラス</b><span class="encore__cond">上の鳥に物をぶつける</span><span class="encore__desc">鳥がみんなの頭上をくるくる回って、さえずる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="6">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="7"><span class="encore__no">⑦</span><b class="encore__name">頭上ラリー</b><span class="encore__cond">卓球の球に物をぶつける</span><span class="encore__desc">球が拍に合わせて、みんなの頭をぽんぽん跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="7">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="8"><span class="encore__no">⑧</span><b class="encore__name">ご当地の雨</b><span class="encore__cond">都府県のハンコを動かす</span><span class="encore__desc">見つけた都府県の名物が、空から降ってくる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="8">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="9"><span class="encore__no">⑨</span><b class="encore__name">住人も踊る</b><span class="encore__cond">家のそばに置く・家を動かす</span><span class="encore__desc">家の人たちが走ってきて、一緒に跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="9">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
-      <li data-pattern="10"><span class="encore__no">⑩</span><b class="encore__name">アンコール</b><span class="encore__cond">小人を集める</span><span class="encore__desc">集まった人たちが応援して、最後に「アンコール！」</span><span class="encore__foot"><button class="encore__play" type="button" data-play="10">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="6"><span class="encore__no">①</span><b class="encore__name">鳥のコーラス</b><span class="encore__cond">上の鳥に物をぶつける</span><span class="encore__desc">鳥がみんなの頭上をくるくる回って、さえずる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="6">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="7"><span class="encore__no">②</span><b class="encore__name">頭上ラリー</b><span class="encore__cond">卓球の球に物をぶつける</span><span class="encore__desc">球が拍に合わせて、みんなの頭をぽんぽん跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="7">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="8"><span class="encore__no">③</span><b class="encore__name">ご当地の雨</b><span class="encore__cond">都府県のハンコを動かす</span><span class="encore__desc">見つけた都府県の名物が、空から降ってくる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="8">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="9"><span class="encore__no">④</span><b class="encore__name">住人も踊る</b><span class="encore__cond">家のそばに物を置く</span><span class="encore__desc">家の人たちが走ってきて、一緒に跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="9">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="10"><span class="encore__no">⑤</span><b class="encore__name">アンコール</b><span class="encore__cond">小人を集める</span><span class="encore__desc">集まった人たちが応援して、最後に「アンコール！」</span><span class="encore__foot"><button class="encore__play" type="button" data-play="10">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
     </ul>
   </section>
 
@@ -1076,20 +1067,11 @@
       // 前回の片付けから気づいた遊び。片付けのあとの演出に「ゲスト」として出てくる
       var found = {}, foundPrefs = {};
       var GUESTS = ['bird', 'ball', 'pref', 'house', 'crowd'];
-      // 隠し要素（6つ）。一度気づいたらブラウザに覚えておき、気づいた数で歌い方と仲間の数を決める
-      var HIDDEN = ['bird', 'ball', 'pref', 'house', 'crowd', 'mascot'], hidden = {};
-      try { hidden = JSON.parse(localStorage.getItem('tomochi-hidden') || '{}') || {}; } catch (e) {}
-      function hiddenCount() { return HIDDEN.filter(function (k) { return hidden[k]; }).length; }
-      function discover(key, value) {
-        if (key !== 'mascot') found[key] = value || 1;
-        if (hidden[key]) return;
-        hidden[key] = 1;
-        try { localStorage.setItem('tomochi-hidden', JSON.stringify(hidden)); } catch (e) {}
-        var c = document.querySelector('[data-hidden-count]'); if (c) c.textContent = hiddenCount();
-      }
-      // 気づいた数 → 歌い方（①〜⑤）と並ぶ仲間の数
-      function tierOf(c) { return c >= 6 ? 5 : c >= 5 ? 4 : c >= 3 ? 3 : c >= 2 ? 2 : 1; }
-      var TIER_FRIENDS = { 1: 2, 2: 4, 3: 6, 4: 10, 5: 10 };
+      function discover(key, value) { if (key !== 'mascot') found[key] = value || 1; }
+      // 見つけたゲストの数（これまでの累計）で、片付けのあとに並ぶ仲間の数と歌の豪華さが決まる
+      // 0個: 2匹 / 1個: 4匹（低音） / 2〜3個: 6〜8匹（ボイパ） / 4個: 10匹（全パート） / 5個: 10匹＋物も踊る
+      function guestsFound() { return GUESTS.filter(function (g) { return seen[6 + GUESTS.indexOf(g)]; }).length; }
+      function friendsFor(c) { return Math.min(10, 2 + c * 2); }
       // 左下の生き物を踊らせる。level 1〜5（5は大回転）
       var mascot = document.querySelector('.mascot'), danceTimer = 0;
       function dance(level, ms) {
@@ -1112,7 +1094,6 @@
       mascot.addEventListener('click', function () {
         if (singing || mascotTaps >= 2) return;
         mascotTaps++;
-        discover('mascot');
         var r = mascot.getBoundingClientRect();
         cheer(mascot, r.left + r.width / 2, r.top + r.height / 3, true);
         sfx.boing();
@@ -1261,7 +1242,9 @@
         var n = 0;
         document.querySelectorAll('[data-pattern]').forEach(function (li) { var on = !!seen[li.dataset.pattern]; li.classList.toggle('is-seen', on); if (on) n++; });
         document.querySelector('[data-seen-count]').textContent = n;
-        document.querySelector('[data-hidden-count]').textContent = hiddenCount();
+        // 一度でも片付けたら、演出の一覧を出す
+        try { if (localStorage.getItem('tomochi-tidied')) document.querySelector('.encore').hidden = false; } catch (e) {}
+        document.querySelector('[data-friend-count]').textContent = friendsFor(guestsFound());
       }
       function markSeen(id) {
         if (seen[id]) return;
@@ -1270,6 +1253,13 @@
         showSeen();
       }
       showSeen();
+      function showEncore() {
+        try { localStorage.setItem('tomochi-tidied', '1'); } catch (e) {}
+        var el = document.querySelector('.encore');
+        if (!el.hidden) return;
+        el.hidden = false;
+        if (!reduce) el.animate([{ opacity: 0, translate: '0 24px' }, { opacity: 1, translate: '0 0' }], { duration: 600, easing: 'ease-out' });
+      }
       function playButtons(on) { document.querySelectorAll('[data-play]').forEach(function (b) { b.disabled = !on; }); }
 
       // ---------- ゲスト（気づいた遊びに応じて、片付けのあとの演出に加わる） ----------
@@ -1369,10 +1359,10 @@
         singing = true;
         clearTimeout(danceTimer);
         mascot.className = 'mascot is-blue is-sing';
-        var n = choir.length, tier = opts.tier || 1, lv = Math.min(4, tier);
+        var n = choir.length, lv = opts.lv || (n >= 10 ? 4 : n >= 6 ? 3 : n >= 4 ? 2 : 1);
         mascot.classList.add('dance-lv' + lv); mascot.style.setProperty('--i', 0);
         var guests = opts.guests || [];
-        if (!opts.preview) { markSeen(tier); guests.forEach(function (g) { markSeen(6 + GUESTS.indexOf(g)); }); }
+        if (!opts.preview) guests.forEach(function (g) { markSeen(6 + GUESTS.indexOf(g)); });
         var guestEnd = startGuests(guests, choir, opts.prefs || foundPrefs, opts.crowd || found.crowd || 'reader');
         choir.forEach(function (h, i) { h.classList.remove('is-walk', 'is-carry'); h.style.scale = ''; h.style.setProperty('--i', i + 1); h.classList.add('is-dance', 'dance-lv' + lv); });
         // lv3 以上は拍に合わせて、誰かの頭上で紙吹雪と音符
@@ -1729,7 +1719,7 @@
       }
 
       // フッターの ▶：その演出をその場で再生する（押したら音ありにする）
-      var PREVIEW = { 1: { n: 2, lv: 1 }, 2: { n: 4, lv: 2 }, 3: { n: 6, lv: 3 }, 4: { n: 10, lv: 4, full: true }, 5: { n: 10, lv: 5, full: true, dance: true },
+      var PREVIEW = {
         6: { n: 3, lv: 1, guests: ['bird'] }, 7: { n: 3, lv: 1, guests: ['ball'] }, 8: { n: 3, lv: 1, guests: ['pref'], prefs: { '愛媛': 1, '東京': 1, '大阪': 1 } },
         9: { n: 3, lv: 1, guests: ['house'] }, 10: { n: 3, lv: 1, guests: ['crowd'], crowd: 'macho' } };
       document.querySelectorAll('[data-play]').forEach(function (b) {
@@ -1739,10 +1729,10 @@
           var cfg = PREVIEW[b.dataset.play];
           playButtons(false);
           var objs = cfg.dance ? Array.from(document.querySelectorAll('.dg')) : [];  // ⑤はページ中の物が全部踊る
-          if (reduce) { sing([], objs, { tier: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); return; }
+          if (reduce) { sing([], objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); return; }
           callChoir(Math.min(cfg.n, slotsFit())).then(function (choir) {
             // 画面の幅の都合で並べる数が少なくても、その演出の歌と踊りにする
-            setTimeout(function () { sing(choir, objs, { tier: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); }, 300);
+            setTimeout(function () { sing(choir, objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true, guests: cfg.guests, prefs: cfg.prefs, crowd: cfg.crowd }); }, 300);
           });
         });
       });
@@ -1750,7 +1740,7 @@
       tidy.addEventListener('click', function () {
         var list = Array.from(movedEls), choir = [];
         // 歌い方と並ぶ仲間の数は、気づいた隠し要素の数で決める（画面の幅に収まる数まで）
-        var tier = tierOf(hiddenCount()), want = Math.min(slotsFit(), TIER_FRIENDS[tier]);
+        var gf = guestsFound(), want = Math.min(slotsFit(), friendsFor(gf));
         movedEls.clear();
         tidy.hidden = true;
         function finish() {
@@ -1766,7 +1756,7 @@
             choir = choir.concat(more);
             var guests = GUESTS.filter(function (g) { return found[g]; }), prefs = foundPrefs, crowd = found.crowd;
             found = {}; foundPrefs = {};
-            setTimeout(function () { sing(choir, tier === 5 ? Array.from(document.querySelectorAll('.dg')) : list, { tier: tier, full: tier >= 4, dance: tier === 5, guests: guests, prefs: prefs, crowd: typeof crowd === 'string' ? crowd : '' }); }, 450);
+            setTimeout(function () { sing(choir, gf >= 5 ? Array.from(document.querySelectorAll('.dg')) : list, { lv: gf >= 4 ? 4 : gf >= 2 ? 3 : gf >= 1 ? 2 : 1, full: gf >= 4, dance: gf >= 5, guests: guests, prefs: prefs, crowd: typeof crowd === 'string' ? crowd : '' }); showEncore(); }, 450);
           });
         }
         if (reduce || !list.length) { list.forEach(goHome); finish(); return; }

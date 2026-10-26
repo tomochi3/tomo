@@ -432,6 +432,29 @@
     .mini__go::after { content: " →"; }
 
     /* ---------- footer ---------- */
+    /* ---------- 片付けのあとの演出 ---------- */
+    html:not(.js) .encore { display: none; }
+    .encore { margin-top: clamp(110px, 14vw, 180px); }
+    .encore__title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 16px; font-family: var(--display); font-weight: 400; font-size: clamp(24px, 3.4vw, 36px); line-height: 1.3; }
+    .encore__count { font-family: var(--font); font-size: 15px; font-weight: 700; color: var(--ink-soft); }
+    .encore__count b { font-family: var(--display); font-weight: 400; font-size: 22px; color: var(--red-ink); }
+    .encore__how { margin-top: 12px; color: var(--ink-soft); line-height: 1.8; }
+    .encore__list { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-top: 24px; }
+    .encore__list li { display: flex; flex-direction: column; gap: 4px; padding: 16px 16px 14px; border: 2px solid var(--ink); border-radius: 18px; background: var(--card); }
+    .encore__list li.is-seen { box-shadow: 4px 4px 0 var(--ink); }
+    .encore__no { font-family: var(--display); font-size: 22px; line-height: 1; color: var(--ink-soft); }
+    .is-seen .encore__no { color: var(--red-ink); }
+    .encore__name { font-family: var(--display); font-weight: 400; font-size: 19px; line-height: 1.35; }
+    .encore__cond { align-self: start; padding: 1px 10px; border-radius: 999px; background: var(--yellow); color: var(--fixed-ink); font-size: 13px; font-weight: 700; }
+    .encore__desc { flex: 1; font-size: 14px; line-height: 1.6; color: var(--ink-soft); }
+    .encore__foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 8px; margin-top: 8px; }
+    .encore__play { display: inline-flex; align-items: center; min-height: 40px; padding: 0 16px; white-space: nowrap; border: 2px solid var(--ink); border-radius: 999px; background: var(--paper); color: var(--ink); font: 700 14px var(--font); cursor: pointer; }
+    .encore__play:hover { background: var(--yellow); color: var(--fixed-ink); }
+    .encore__play:disabled { opacity: .45; cursor: default; background: var(--paper); color: var(--ink); }
+    .encore__seen { display: none; white-space: nowrap; font-family: var(--hand); font-size: 16px; font-weight: 700; color: var(--red-ink); }
+    .is-seen .encore__seen { display: inline; }
+    .encore__note { margin-top: 14px; font-size: 13px; color: var(--ink-soft); }
+    .encore + .foot { margin-top: 56px; }
     .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 18px 24px; margin-top: clamp(110px, 14vw, 180px); padding-top: 36px; padding-bottom: 104px; border-top: 2px solid var(--ink); }  /* 右下の「片付ける」と重ならないよう、下を空ける */
     .foot__bye { font-family: var(--hand); font-size: clamp(22px, 3vw, 30px); }
     .foot__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 13px; color: var(--ink-soft); }
@@ -821,6 +844,20 @@
     </div>
   </div>
 
+  <!-- ===== 片付けのあとの演出（全5種類。見つけたものに印が付き、▶ でいつでも聴ける） ===== -->
+  <section class="wrap encore" aria-labelledby="encore-title">
+    <h2 class="encore__title" id="encore-title">片付けのあとの演出 <span class="encore__count">見つけた <b data-seen-count>0</b> / 5</span></h2>
+    <p class="encore__how"><span class="phrase">物を動かして右下の「片付ける」を押すと、</span><span class="phrase">生き物たちが並んで歌います。</span><span class="phrase">並ぶ仲間の数（最大コンボ÷5、最低2匹）と、</span><span class="phrase">片付けた数で演出が変わります。</span></p>
+    <ul class="encore__list">
+      <li data-pattern="1"><span class="encore__no">①</span><b class="encore__name">ふたりでハモる</b><span class="encore__cond">仲間 2〜3匹</span><span class="encore__desc">主旋律とハモり。左右にゆれて跳ねる</span><span class="encore__foot"><button class="encore__play" type="button" data-play="1">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="2"><span class="encore__no">②</span><b class="encore__name">低音が入る</b><span class="encore__cond">仲間 4〜5匹</span><span class="encore__desc">「ぼん ぼん」の低音が加わり、ウェーブで踊る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="2">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="3"><span class="encore__no">③</span><b class="encore__name">ボイパが入る</b><span class="encore__cond">仲間 6〜9匹</span><span class="encore__desc">ボイパが加わり、全員で回転。紙吹雪も</span><span class="encore__foot"><button class="encore__play" type="button" data-play="3">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="4"><span class="encore__no">④</span><b class="encore__name">虹色フルコーラス</b><span class="encore__cond">仲間 10匹以上</span><span class="encore__desc">上ハモりまで全5パート。みんな虹色に光る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="4">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+      <li data-pattern="5"><span class="encore__no">⑤</span><b class="encore__name">みんなで踊る</b><span class="encore__cond">20個以上片付ける</span><span class="encore__desc">フルコーラスで、片付けた物も一緒に踊る</span><span class="encore__foot"><button class="encore__play" type="button" data-play="5">▶ 聴く</button><span class="encore__seen">✓ 見つけた</span></span></li>
+    </ul>
+    <p class="encore__note">10個以上片付けると、仲間の数にかかわらず歌は全5パートになります。</p>
+  </section>
+
   <footer class="wrap foot">
     <p class="foot__bye">読んでくれて、ありがとう。</p>
     <p class="foot__meta">
@@ -960,13 +997,13 @@
         train: function () { for (var i = 0; i < 6; i++) tone(i % 2 ? 160 : 210, i * .18, .1, 'square', .05); },
         on: function () { tone(note(4), 0, .15, 'sine', .14); tone(note(7), .08, .3, 'sine', .14); }
       };
-      soundBtn.addEventListener('click', function () {
-        soundOn = !soundOn;
+      function setSound(on) {
+        soundOn = on;
         soundBtn.setAttribute('aria-pressed', String(soundOn));
         try { localStorage.setItem('tomochi-sound', soundOn ? '1' : '0'); } catch (e) {}
         if (soundOn) unlock(); else if (sink) sink.pause();
-        sfx.on();
-      });
+      }
+      soundBtn.addEventListener('click', function () { setSound(!soundOn); sfx.on(); });
 
       // 紙吹雪は1枚の canvas に描き、紙が残っている間だけ動かす
       var fx = null, fxc = null, bits = [], running = false;
@@ -1184,15 +1221,35 @@
       function loadSong() { return Promise.all(PARTS.slice(0, 2).map(loadPart)); }
       var SONG_MS = 6400, LYRICS = [['かたづけ できたのだ♪', .06], ['ぴかぴか きれいなのだ〜♪', .46]];
       // moved: 片付けた物。10個以上なら全パートで歌い、20個以上なら物も一緒に踊る
-      function sing(choir, moved) {
-        moved = moved || [];
-        var parts = moved.length >= 10 ? 4 : null;
+      // 見つけた演出（①〜⑤）はブラウザに覚えておき、フッターの一覧に印を付ける
+      var seen = {};
+      try { seen = JSON.parse(localStorage.getItem('tomochi-encore') || '{}') || {}; } catch (e) {}
+      function showSeen() {
+        var n = 0;
+        document.querySelectorAll('[data-pattern]').forEach(function (li) { var on = !!seen[li.dataset.pattern]; li.classList.toggle('is-seen', on); if (on) n++; });
+        document.querySelector('[data-seen-count]').textContent = n;
+      }
+      function markSeen(id) {
+        if (seen[id]) return;
+        seen[id] = 1;
+        try { localStorage.setItem('tomochi-encore', JSON.stringify(seen)); } catch (e) {}
+        showSeen();
+      }
+      showSeen();
+      function playButtons(on) { document.querySelectorAll('[data-play]').forEach(function (b) { b.disabled = !on; }); }
+
+      // opts.full: 全パートで歌う / opts.dance: 物も踊る / opts.preview: ▶ での試聴（見つけた印は付けない）
+      function sing(choir, moved, opts) {
+        moved = moved || []; opts = opts || {};
+        var parts = moved.length >= 10 || opts.full ? 4 : null;
+        playButtons(false);
         choir = choir || [];
         singing = true;
         clearTimeout(danceTimer);
         mascot.className = 'mascot is-blue is-sing';
-        var n = choir.length, lv = n >= 10 ? 4 : n >= 6 ? 3 : n >= 4 ? 2 : 1;
+        var n = choir.length, lv = opts.lv || (n >= 10 ? 4 : n >= 6 ? 3 : n >= 4 ? 2 : 1);
         mascot.classList.add('dance-lv' + lv); mascot.style.setProperty('--i', 0);
+        if (!opts.preview) { markSeen(lv); if (moved.length >= 20) markSeen(5); }
         choir.forEach(function (h, i) { h.classList.remove('is-walk', 'is-carry'); h.style.scale = ''; h.style.setProperty('--i', i + 1); h.classList.add('is-dance', 'dance-lv' + lv); });
         // lv3 以上は拍に合わせて、誰かの頭上で紙吹雪と音符
         var beats = lv >= 3 ? setInterval(function () {
@@ -1200,7 +1257,7 @@
           burst(who.left + who.width / 2, who.top, lv >= 4 ? 18 : 8);
         }, lv >= 4 ? 429 : 857) : 0;
         // 20個以上片付けたら、元の場所に戻った物たちも歌に合わせて踊る（2拍で左右に1往復、少しずつずらす）
-        if (moved.length >= 20 && !reduce) {
+        if ((moved.length >= 20 || opts.dance) && !reduce) {
           moved.forEach(function (el, i) {
             el.animate([
               { rotate: '0deg', scale: '1' }, { rotate: '-7deg', scale: '1.06 .95', offset: .25 },
@@ -1231,6 +1288,7 @@
           clearInterval(notes); clearInterval(beats);
           mascot.className = 'mascot';
           singing = false;
+          playButtons(true);
           var q = mascot.getBoundingClientRect();
           burst(q.left + q.width / 2, q.top, 50 + choir.length * 15);
           // 仲間は手をふって、画面の左へ帰っていく
@@ -1524,12 +1582,47 @@
           });
         }, Promise.resolve());
       }
+      // 歌うときの並び位置（左下の生き物の右どなり。スマホでは下のメニューの上に立つ）
+      function slot(i) {
+        var q = mascot.getBoundingClientRect(), phone = innerWidth < 720;
+        return [q.left + q.width / 2 + window.scrollX + i * (phone ? 46 : 64), (phone ? q.top - 2 : q.bottom) + window.scrollY];
+      }
+      function slotsFit() {
+        var q = mascot.getBoundingClientRect();
+        return Math.max(1, Math.floor((innerWidth - q.right - 12) / (innerWidth < 720 ? 46 : 64)));
+      }
+      // 仲間を n 匹、画面の左から呼んで並ばせる
+      function callChoir(n, from) {
+        var choir = [], calls = [];
+        for (var k = from || 0; k < n; k++) {
+          var nh = helperAt(window.scrollX - 50 - (k - (from || 0)) * 44, slot(k + 1)[1], CREW_COLORS[(k + 1) % CREW_COLORS.length]);
+          choir.push(nh);
+          calls.push(walk(nh, slot(k + 1)[0], slot(k + 1)[1], 900 + k * 60).done);
+        }
+        return Promise.all(calls).then(function () { return choir; });
+      }
+
+      // フッターの ▶：その演出をその場で再生する（押したら音ありにする）
+      var PREVIEW = { 1: { n: 2, lv: 1 }, 2: { n: 4, lv: 2 }, 3: { n: 6, lv: 3 }, 4: { n: 10, lv: 4 }, 5: { n: 10, lv: 4, full: true, dance: true } };
+      document.querySelectorAll('[data-play]').forEach(function (b) {
+        b.addEventListener('click', function () {
+          if (singing || tidying) return;
+          if (!soundOn) setSound(true);
+          var cfg = PREVIEW[b.dataset.play];
+          playButtons(false);
+          var objs = cfg.dance ? Array.from(document.querySelectorAll('.dg')) : [];  // ⑤はページ中の物が全部踊る
+          if (reduce) { sing([], objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true }); return; }
+          callChoir(Math.min(cfg.n, slotsFit())).then(function (choir) {
+            // 画面の幅の都合で並べる数が少なくても、その演出の歌と踊りにする
+            setTimeout(function () { sing(choir, objs, { lv: cfg.lv, full: cfg.full, dance: cfg.dance, preview: true }); }, 300);
+          });
+        });
+      });
+
       tidy.addEventListener('click', function () {
         var list = Array.from(movedEls), choir = [];
         // 歌うときに並ぶ仲間の数：max(2, 最大コンボ数 ÷ 5)。画面の幅に収まる数までにする
-        var phoneW = innerWidth < 720, mq = mascot.getBoundingClientRect();
-        var fit = Math.max(1, Math.floor((innerWidth - mq.right - 12) / (phoneW ? 46 : 64)));
-        var want = Math.min(fit, Math.max(2, Math.floor(maxCombo / 5)));
+        var want = Math.min(slotsFit(), Math.max(2, Math.floor(maxCombo / 5)));
         movedEls.clear();
         maxCombo = 0;
         tidy.hidden = true;
@@ -1542,18 +1635,10 @@
           sfx.tidy();
           if (singing) return;
           // 足りない仲間を呼んで、並んでから歌い出す
-          var calls = [];
-          for (var k = choir.length, k0 = k; k < want && !reduce; k++) {
-            var nh = helperAt(window.scrollX - 50 - (k - k0) * 44, slot(k + 1)[1], CREW_COLORS[(k + 1) % CREW_COLORS.length]);
-            choir.push(nh);
-            calls.push(walk(nh, slot(k + 1)[0], slot(k + 1)[1], 900 + k * 60).done);
-          }
-          Promise.all(calls).then(function () { setTimeout(function () { sing(choir, list); }, 450); });
-        }
-        // 歌うときの並び位置（左下の生き物の右どなり。スマホでは下のメニューの上に立つ）
-        function slot(i) {
-          var q = mascot.getBoundingClientRect(), phone = innerWidth < 720;
-          return [q.left + q.width / 2 + window.scrollX + i * (phone ? 46 : 64), (phone ? q.top - 2 : q.bottom) + window.scrollY];
+          (reduce ? Promise.resolve([]) : callChoir(want, choir.length)).then(function (more) {
+            choir = choir.concat(more);
+            setTimeout(function () { sing(choir, list); }, 450);
+          });
         }
         if (reduce || !list.length) { list.forEach(goHome); finish(); return; }
         tidying = true;

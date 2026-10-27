@@ -419,6 +419,10 @@
 
     .more { margin-top: clamp(80px, 10vw, 120px); }
     .more__title { font-family: var(--display); font-weight: 400; font-size: clamp(26px, 4vw, 40px); }
+    /* ラジオへの小さな案内（手書きの書き込み風） */
+    .radio { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; min-height: 44px; margin-top: 28px; padding: 4px 16px 6px; border: 2px dashed var(--line); border-radius: 999px; font-family: var(--hand); font-size: 18px; -webkit-text-stroke: .3px currentColor; transform: rotate(-1.5deg); transition: transform .3s var(--bounce), border-color .2s; }
+    .radio:hover { transform: rotate(0) scale(1.03); border-color: var(--red); }
+    .radio__go { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--red-ink); -webkit-text-stroke: 0; }
     .more__title span { display: inline-block; font-family: var(--hand); font-size: .7em; color: var(--red-ink); margin-left: 10px; }
     .minis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 16px; margin-top: 32px; }
     @media (min-width: 900px) { .minis { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; } }
@@ -829,6 +833,7 @@
             <span class="mini__title">ニコニコ笑顔</span><span class="mini__desc">手描きのゆるいLINEスタンプです。</span><span class="mini__go">ストアで見る</span>
           </a></li>
         </ul>
+        <a class="radio" href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener"><span aria-hidden="true">🎙</span> ラジオもやってます <span class="radio__go">stand.fm で聴く →</span></a>
       </div>
     </section>
   </main>
@@ -871,6 +876,7 @@
       <a href="../">シンプル版</a>
       <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">ラジオ</a>
       <span class="foot__credit">歌声：VOICEVOX:ずんだもん</span>
     </p>
   </footer>

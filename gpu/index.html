@@ -89,6 +89,8 @@
     /* HTML-in-Canvas：見出しは WebGPU のキャンバスの子にして、テクスチャとして揺らして描く。元の場所には同じ高さの空きを残す */
     .stage > .hero__title { position: absolute; left: 0; top: 0; color: #fff; }
     .hero__ph { display: block; }
+    /* HTML-in-Canvas が無いときは、見出しを WebGPU のタイルとして描き、DOM の見出しは透明にして残す */
+    .gpu-text .hero__title { opacity: 0; }
     .hero__lead { margin-top: 26px; max-width: 36em; font-size: clamp(16px, 1.8vw, 19px); color: var(--soft); }
     .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; margin-top: 32px; }
     .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; font-weight: 700; color: #0b0718; background: linear-gradient(90deg, var(--pink), var(--cyan)); box-shadow: 0 10px 30px -10px rgba(255, 92, 154, .6); transition: transform .2s var(--ease), box-shadow .2s; }
@@ -203,7 +205,7 @@
         <a class="ghost" href="#community">運動×勉強会</a>
         <a class="ghost" href="#works">作品を見る</a>
       </div>
-      <p class="hint" data-hint>ポインタを動かすと、背景と見出しが揺れます。</p>
+      <p class="hint" data-hint>見出しはタイルの壁です。ポインタを近づけると浮き上がり、クリックやタップで波が広がります。スクロールすると砕け散ります。</p>
     </section>
 
     <section class="wrap section" id="book" aria-labelledby="book-title">
@@ -284,8 +286,8 @@
       <div class="glass about-gpu">
         <h2 id="gpu-title">このページの描き方</h2>
         <ul>
-          <li>背景：<b>WebGPU</b> のシェーダーで、毎フレーム描いています（<span class="st off" data-st-gpu>未対応</span>）。</li>
-          <li>見出し：<b>HTML-in-Canvas</b> で HTML のまま canvas に描き、WebGPU のテクスチャにして揺らしています（<span class="st off" data-st-hic>未対応</span>）。</li>
+          <li>背景：<b>WebGPU</b> のシェーダーで、毎フレーム描いています。ポインタの位置には液体ガラスのレンズ、章が画面に入ると光の輪が広がります（<span class="st off" data-st-gpu>未対応</span>）。</li>
+          <li>見出し：テクスチャを数百枚のタイルに分け、3D の壁として描いています。<b>HTML-in-Canvas</b> が使えるときは HTML のままテクスチャにし（<span class="st off" data-st-hic>未対応</span>）、使えないときは文字の位置を1文字ずつ測って描き写しています。</li>
           <li>HTML-in-Canvas は実験中の機能です。Chrome で <code>chrome://flags/#canvas-draw-element</code> を有効にすると見られます。どちらも使えないブラウザでは、ふつうの HTML と CSS で表示します。</li>
         </ul>
       </div>
@@ -336,15 +338,12 @@
       if (!navigator.gpu || !isSecureContext) { status(false, false); return; }
 
       var WGSL = `
-struct U { hero: vec4f, res: vec2f, ptr: vec2f, vel: vec2f, time: f32, scroll: f32, heroOn: f32, melt: f32, dpr: f32, page: f32 };
+struct U { hero: vec4f, res: vec2f, ptr: vec2f, vel: vec2f, click: vec2f, time: f32, scroll: f32, heroOn: f32, melt: f32,
+           dpr: f32, page: f32, clickT: f32, pulseT: f32, pulse: vec2f, gx: f32, gy: f32, lens: f32, p0: f32, p1: f32, p2: f32 };
 @group(0) @binding(0) var<uniform> u: U;
 @group(0) @binding(1) var smp: sampler;
 @group(0) @binding(2) var tex: texture_2d<f32>;
 
-@vertex fn vs(@builtin(vertex_index) i: u32) -> @builtin(position) vec4f {
-  var p = array<vec2f, 3>(vec2f(-1., -3.), vec2f(-1., 1.), vec2f(3., 1.));
-  return vec4f(p[i], 0., 1.);
-}
 fn hash(p: vec2f) -> f32 { return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453); }
 fn noise(p: vec2f) -> f32 {
   let i = floor(p); let f = fract(p); let w = f * f * (3. - 2. * f);
@@ -357,9 +356,22 @@ fn fbm(p0: vec2f) -> f32 {
   return s;
 }
 fn rot(v: vec2f, a: f32) -> vec2f { let c = cos(a); let s = sin(a); return vec2f(c * v.x - s * v.y, s * v.x + c * v.y); }
+fn rotA(v: vec3f, k: vec3f, a: f32) -> vec3f { let c = cos(a); let s = sin(a); return v * c + cross(k, v) * s + k * dot(k, v) * (1. - c); }
+// 中心 c から広がる光の輪（t0 に始まり、3秒で消える）
+fn ring(px: vec2f, c: vec2f, t0: f32, speed: f32, w: f32) -> f32 {
+  let age = u.time - t0;
+  if (age < 0. || age > 3.) { return 0.; }
+  let d = (length(px - c) - age * speed * u.dpr) / (w * u.dpr);
+  // 細い芯と、まわりのぼんやりした光
+  return (exp(-d * d) + .3 * exp(-d * d * .05)) * exp(-age * 1.1);
+}
 
-@fragment fn fs(@builtin(position) pos: vec4f) -> @location(0) vec4f {
-  let px = pos.xy;
+// ---------- 背景：星雲のような流れ ----------
+@vertex fn vs(@builtin(vertex_index) i: u32) -> @builtin(position) vec4f {
+  var p = array<vec2f, 3>(vec2f(-1., -3.), vec2f(-1., 1.), vec2f(3., 1.));
+  return vec4f(p[i], 0., 1.);
+}
+fn scene(px: vec2f) -> vec3f {
   let uv = (px - .5 * u.res) / u.res.y;
   let pv = (u.ptr - .5 * u.res) / u.res.y;
   // ポインタのまわりを渦にする
@@ -378,89 +390,217 @@ fn rot(v: vec2f, a: f32) -> vec2f { let c = cos(a); let s = sin(a); return vec2f
   col *= .62 + .25 * f;
   col += vec3f(.35, .25, .9) * exp(-r * r * 14.) * .22;
   let vig = 1. - .55 * dot(uv * vec2f(.55, .8), uv * vec2f(.55, .8));
-  col *= vig;
-
-  // HTML-in-Canvas の見出し：テクスチャを液体のように揺らし、RGB をずらして重ねる
-  let lp = (px - u.hero.xy) / u.hero.zw;
-  let plp = (u.ptr - u.hero.xy) / u.hero.zw;
-  let asp = vec2f(u.hero.z / u.hero.w, 1.);
-  let dd = (lp - plp) * asp; let dist = length(dd);
-  let speed = min(length(u.vel), 2500.);
-  let ripple = sin(dist * 26. - u.time * 5.) * exp(-dist * 4.) * (.004 + speed * .000004);
-  let flow = (vec2f(fbm(lp * vec2f(3., 1.5) + u.time * .15), fbm(lp * vec2f(3., 1.5) + vec2f(3.1, 7.7) - u.time * .15)) - .5) * (.006 + u.melt * .12);
-  let off = (dd / max(dist, .0001)) * ripple / asp + flow;
-  let ca = .0018 + speed * .000006 + u.melt * .012;
-  let base = lp + off;
-  let ar = textureSample(tex, smp, base + vec2f(ca, 0.)).a;
-  let ag = textureSample(tex, smp, base).a;
-  let ab = textureSample(tex, smp, base - vec2f(ca, 0.)).a;
-  var glow = 0.;
-  for (var k = 0; k < 6; k++) {
-    let a = f32(k) * 1.0472;
-    glow += textureSample(tex, smp, base + vec2f(cos(a), sin(a)) * .012 / asp).a;
+  return col * vig;
+}
+@fragment fn fs(@builtin(position) pos: vec4f) -> @location(0) vec4f {
+  let px = pos.xy;
+  // 章が入ったときの光の輪と、クリックの衝撃波。通り道を少し押し広げる
+  let pr = ring(px, u.pulse, u.pulseT, 650., 16.);
+  let cr = ring(px, u.click, u.clickT, 1100., 12.);
+  let p = px - (normalize(px - u.pulse + vec2f(.001)) * pr + normalize(px - u.click + vec2f(.001)) * cr) * 14. * u.dpr;
+  // ポインタを追う液体ガラスのレンズ：中を拡大して、色を少しずつずらす
+  let L = 130. * u.dpr; let dl = p - u.ptr; let rr = length(dl) / L;
+  var col: vec3f;
+  if (rr < 1. && u.lens > .01) {
+    let k = sqrt(1. - rr * rr) * u.lens;
+    col = vec3f(scene(u.ptr + dl * (1. - .48 * k)).r, scene(u.ptr + dl * (1. - .44 * k)).g, scene(u.ptr + dl * (1. - .40 * k)).b);
+    col *= 1. + .15 * u.lens;
+    col += vec3f(.55, .85, 1.) * smoothstep(.8, 1., rr) * .3 * u.lens;
+    let hl = dl / L - vec2f(-.32, -.42);
+    col += vec3f(exp(-dot(hl, hl) * 26.) * .3 * u.lens);
+  } else {
+    col = scene(p) * (1. - .28 * (1. - smoothstep(1., 1.3, rr)) * u.lens);
   }
-  glow /= 6.;
-  let inside = step(0., base.x) * step(base.x, 1.) * step(0., base.y) * step(base.y, 1.) * u.heroOn;
-  let keep = smoothstep(u.melt * 1.15 - .1, u.melt * 1.15, fbm(lp * 5. + vec2f(0., u.time * .1)));
-  let grad = mix(vec3f(1., .38, .65), vec3f(.38, .9, 1.), clamp(lp.x * .9 + lp.y * .2, 0., 1.));
-  let tc = mix(vec3f(1.), grad, .45 + .3 * sin(u.time * .7 + lp.x * 3.));
-  let m = inside * keep;
-  col = col + grad * glow * .35 * m;
-  col = vec3f(mix(col.r, tc.r, ar * m), mix(col.g, tc.g, ag * m), mix(col.b, tc.b, ab * m));
+  col += mix(vec3f(.36, .9, 1.), vec3f(1., .36, .6), .5 + .5 * sin(atan2(px.y - u.pulse.y, px.x - u.pulse.x) * 3. + u.time * 2.)) * pr * .9;
+  col += vec3f(.8, .9, 1.) * cr * .45;
   col += (hash(px + fract(u.time) * 100.) - .5) * .025;
   return vec4f(col, 1.);
+}
+
+// ---------- 見出し：テクスチャを gx × gy 枚のタイルに分けた 3D の壁 ----------
+struct TO { @builtin(position) pos: vec4f, @location(0) uv: vec2f, @location(1) lc: vec2f, @location(2) shade: f32, @location(3) spec: f32, @location(4) e: f32, @location(5) lift: f32 };
+// 壁の各点の浮き上がり（手前が +）。ゆるい波 ＋ ポインタのふくらみ ＋ クリックの衝撃波
+fn field(p: vec2f) -> f32 {
+  let q = p / u.dpr;
+  var z = (sin(q.x * .011 + u.time * 1.3) + sin(q.y * .018 + q.x * .004 - u.time * 1.05)) * 2.5;
+  let d = length(p - u.ptr) / u.dpr;
+  z += 70. * u.lens * exp(-d * d / 28900.);
+  let age = u.time - u.clickT;
+  if (age > 0. && age < 3.) { let w = (length(p - u.click) / u.dpr - age * 1300.) / 60.; z += 55. * exp(-w * w) * exp(-age * 1.5); }
+  return z * u.dpr;
+}
+@vertex fn tvs(@builtin(vertex_index) vi: u32, @builtin(instance_index) ii: u32) -> TO {
+  let g = vec2f(u.gx, u.gy);
+  let cell = vec2f(f32(ii % u32(u.gx)), f32(ii / u32(u.gx)));
+  var cs = array<vec2f, 6>(vec2f(0., 0.), vec2f(1., 0.), vec2f(0., 1.), vec2f(0., 1.), vec2f(1., 0.), vec2f(1., 1.));
+  let lc = cs[vi];
+  let uv = (cell + lc) / g;
+  let corner = u.hero.xy + uv * u.hero.zw;
+  let center = u.hero.xy + (cell + .5) / g * u.hero.zw;
+  // 角ごとに高さを求めるので、静かなときはタイルどうしが継ぎ目なくつながる
+  let zc = field(corner);
+  let h = 4. * u.dpr;
+  var n = normalize(vec3f(-(field(corner + vec2f(h, 0.)) - zc) / h, -(field(corner + vec2f(0., h)) - zc) / h, 1.));
+  var p = vec3f(corner, zc);
+  // スクロールで、真ん中のタイルから順に回りながら砕け散る
+  let h1 = hash(cell); let h2 = hash(cell + vec2f(3.1, 7.7)); let h3 = hash(cell + vec2f(9.2, 1.3));
+  let rel = (center - (u.hero.xy + .5 * u.hero.zw)) / u.hero.zw;
+  let e = clamp(u.melt * 2.2 - length(rel * vec2f(1., .6)) * .9 - h1 * .5, 0., 1.);
+  if (e > 0.) {
+    let zm = field(center);
+    let ax = normalize(vec3f(h2 - .5, h3 - .5, h1 - .5 + .001));
+    let ang = e * (2.5 + 6. * h1) * select(-1., 1., h2 > .5);
+    n = rotA(n, ax, ang);
+    let dir = normalize(rel + (vec2f(h2, h3) - .5) * .9 + vec2f(.0001));
+    p = vec3f(center, zm) + rotA(vec3f(corner - center, zc - zm), ax, ang)
+      + vec3f(dir * (240. + 520. * h2) * e + vec2f(0., e * e * 420.), (h3 * 1.6 - .4) * 650. * e) * u.dpr;
+  }
+  // 遠近：画面の中心から見た透視
+  let f = u.res.y * 1.4; let c0 = .5 * u.res;
+  let sp = c0 + (p.xy - c0) * (f / max(f - p.z, f * .3));
+  let Ld = normalize(vec3f(-.35, -.55, 1.)); let hv = normalize(Ld + vec3f(0., 0., 1.));
+  var o: TO;
+  o.pos = vec4f(sp.x / u.res.x * 2. - 1., 1. - sp.y / u.res.y * 2., .5, 1.);
+  o.uv = uv; o.lc = lc; o.e = e;
+  // 裏返ったタイルも暗くなりすぎないよう、両面から光を当てる
+  o.shade = max(abs(dot(n, Ld)) / Ld.z, .45);
+  o.spec = max(pow(abs(dot(n, hv)), 60.) - pow(hv.z, 60.), 0.) * 1.6;
+  o.lift = clamp((zc / u.dpr - 6.) / 50., 0., 1.);
+  return o;
+}
+@fragment fn tfs(i: TO) -> @location(0) vec4f {
+  // 動きが速いほど、RGB を横にずらす
+  let ca = .0012 + min(length(u.vel), 2500.) * .0000035 + i.e * .005;
+  let tr = textureSample(tex, smp, i.uv + vec2f(ca, 0.));
+  let tg = textureSample(tex, smp, i.uv);
+  let tb = textureSample(tex, smp, i.uv - vec2f(ca, 0.));
+  let a = max(tg.a, max(tr.a, tb.a));
+  var rgb = vec3f(tr.r * tr.a, tg.g * tg.a, tb.b * tb.a);
+  // 文字のまわりの光
+  let o = vec2f(7. * u.dpr) / u.hero.zw;
+  var halo = 0.;
+  for (var k = 0; k < 6; k++) { let an = f32(k) * 1.0472; halo += textureSample(tex, smp, i.uv + vec2f(cos(an), sin(an)) * o).a; }
+  halo = halo / 6. * (1. - a);
+  // 浮き上がったり砕けたりしたタイルは、ガラスの板として見せる
+  let tint = mix(vec3f(1., .36, .62), vec3f(.36, .88, 1.), i.uv.x);
+  let ed = min(min(i.lc.x, 1. - i.lc.x), min(i.lc.y, 1. - i.lc.y));
+  let edge = 1. - smoothstep(0., .1, ed);
+  let gl = (1. - a) * min(clamp(i.e * 3., 0., 1.) * .05 + i.lift * .08 + edge * min(i.e * 2. + i.lift, 1.) * .22, .4);
+  rgb = rgb * i.shade + tint * (halo * .3 + gl) + vec3f(i.spec) * (a + gl);
+  let fade = 1. - smoothstep(.45, .9, i.e);
+  return vec4f(rgb, clamp(a + halo * .15 + gl, 0., 1.)) * fade;
 }`;
 
-      var device, ctx, pipe, ubuf, bind, sampler, heroTex, hero = null;
-      var ptr = [innerWidth / 2, innerHeight / 3], vel = [0, 0], lastPtr = null, dpr = 1;
+      var device, ctx, bgPipe, tilePipe, ubuf, bind, layout, sampler, heroTex, hero = null, hicOK = false;
+      var holder = document.querySelector('[data-hero]'), title = holder.querySelector('.hero__title');
+      var ptr = [innerWidth / 2, innerHeight / 3], sp = ptr.slice(), vel = [0, 0], lastPtr = null, dpr = 1;
+      var lens = 0, lensTo = 0, click = [0, 0], clickT = -10, pulse = [0, 0], pulseT = -10, t = 0;
 
-      // HTML-in-Canvas：見出しを WebGPU のキャンバス（layoutsubtree）の子にして、
-      // GPUQueue.copyElementImageToTexture で HTML のままテクスチャにする。
-      // 2D の drawElementImage で描いた canvas は読み出しが禁止される（tainted）ので、WebGPU へ直接写す方法だけを使う
-      function setupHero() {
-        if (typeof device.queue.copyElementImageToTexture !== 'function') return null;
-        var holder = document.querySelector('[data-hero]'), title = holder.querySelector('.hero__title');
+      function makeTex(w, h) {
+        if (heroTex && heroTex.width === w && heroTex.height === h) return;
+        if (heroTex) heroTex.destroy();
+        heroTex = device.createTexture({ size: [w, h], format: 'rgba8unorm', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
+        bind = device.createBindGroup({ layout: layout, entries: [
+          { binding: 0, resource: { buffer: ubuf } }, { binding: 1, resource: sampler }, { binding: 2, resource: heroTex.createView() }] });
+      }
+
+      // HTML-in-Canvas：見出しを WebGPU のキャンバス（content="drawable"）の子にして、HTML のままテクスチャに写す。
+      // 名前と引数が何度か変わっているので、新しい順に試す
+      function hicCopy(w, h) {
+        var q = device.queue;
+        if (typeof q.drawElementImageToTexture === 'function') return q.drawElementImageToTexture({ source: title }, { texture: heroTex, size: { width: w, height: h } });
+        if (typeof q.copyElementImageToTexture !== 'function') throw new Error('no HTML-in-Canvas');
+        try { q.copyElementImageToTexture({ source: title }, { destination: { texture: heroTex }, width: w, height: h }); }
+        catch (e) { q.copyElementImageToTexture(title, w, h, { texture: heroTex }); }
+      }
+      function useHIC() {
+        var q = device.queue;
+        if (typeof q.drawElementImageToTexture !== 'function' && typeof q.copyElementImageToTexture !== 'function') return false;
         var ph = document.createElement('div');
         ph.className = 'hero__ph'; ph.setAttribute('aria-hidden', 'true');
         holder.appendChild(ph);
-        stage.setAttribute('layoutsubtree', '');
+        stage.setAttribute('layoutsubtree', ''); stage.setAttribute('content', 'drawable');
+        title.setAttribute('drawable', '');
         stage.appendChild(title);
-        var h = { title: title, ph: ph, w: 1, h: 1, dirty: true };
-        h.size = function () {
-          title.style.width = holder.clientWidth + 'px';
-          ph.style.height = title.offsetHeight + 'px';
-          var d = Math.min(devicePixelRatio || 1, 2);
-          h.w = Math.max(1, Math.round(holder.clientWidth * d)); h.h = Math.max(1, Math.round(title.offsetHeight * d));
-        };
-        h.size();
-        return h;
-      }
-      // 見出しを写せなかったときは、キャンバスから出して普通の HTML に戻す
-      function undoHero() {
-        if (!hero) return;
-        var holder = document.querySelector('[data-hero]');
-        hero.title.style.width = '';
-        holder.appendChild(hero.title);
-        hero.ph.remove();
-        stage.removeAttribute('layoutsubtree');
-        root.classList.remove('gpu-hero');
-        hero = null;
-      }
-
-      function makeBind() {
-        bind = device.createBindGroup({ layout: pipe.getBindGroupLayout(0), entries: [
-          { binding: 0, resource: { buffer: ubuf } }, { binding: 1, resource: sampler }, { binding: 2, resource: heroTex.createView() }] });
-      }
-      function uploadHero() {
-        if (!hero) return;
-        hero.size();
-        if (!heroTex || heroTex.width !== hero.w || heroTex.height !== hero.h) {
-          if (heroTex) heroTex.destroy();
-          heroTex = device.createTexture({ size: [hero.w, hero.h], format: 'rgba8unorm', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
-          makeBind();
+        hero = { mode: 'hic', el: ph, dirty: true };
+        // 新しい仕様では、子の描画が変わると paint イベントが来るので、そのときに写す
+        if ('onpaint' in stage) {
+          hero.dirty = false;
+          stage.onpaint = function () { if (hero && hero.mode === 'hic') { try { upload(); } catch (e) { useText(); } } };
+          if (stage.requestPaint) stage.requestPaint();
         }
-        device.queue.copyElementImageToTexture(hero.title, { texture: heroTex });
+        // しばらく待っても写せなければ、文字の位置を測って描く方法に切り替える
+        setTimeout(function () { if (hero && hero.mode === 'hic' && !hero.ready) useText(); }, 2000);
+        return true;
+      }
+      function undoHIC() {
+        if (!hero || hero.mode !== 'hic') return;
+        title.style.width = ''; title.removeAttribute('drawable');
+        holder.appendChild(title);
+        hero.el.remove();
+        stage.removeAttribute('layoutsubtree'); stage.removeAttribute('content'); stage.onpaint = null;
+      }
+      // HTML-in-Canvas が無いとき：1文字ずつ実際の位置を測って 2D で描き、そのままテクスチャにする。
+      // DOM の見出しは透明にして残す（読み上げ・選択・レイアウトはそのまま）
+      function useText() {
+        undoHIC();
+        hicOK = false;
+        hero = { mode: 'text', el: title, dirty: true };
+        root.classList.add('gpu-text');
+        status(true, false);
+      }
+      function drawText(r, w, h) {
+        var c = document.createElement('canvas'); c.width = w; c.height = h;
+        var g = c.getContext('2d');
+        g.setTransform(w / r.width, 0, 0, h / r.height, 0, 0);
+        var walk = document.createTreeWalker(title, NodeFilter.SHOW_TEXT), node, range = document.createRange();
+        while ((node = walk.nextNode())) {
+          var el = node.parentElement, cs = getComputedStyle(el), grad = el.closest('.grad');
+          g.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+          if (grad) {
+            var gr = grad.getBoundingClientRect(), lg = g.createLinearGradient(gr.left - r.left, 0, gr.right - r.left, 0);
+            lg.addColorStop(0, '#ff5c9a'); lg.addColorStop(.5, '#9a7bff'); lg.addColorStop(1, '#5ce1ff');
+            g.fillStyle = lg;
+          } else g.fillStyle = cs.color;
+          for (var i = 0; i < node.data.length; i++) {
+            var ch = node.data[i];
+            if (/\s/.test(ch)) continue;
+            range.setStart(node, i); range.setEnd(node, i + 1);
+            var b = range.getBoundingClientRect();
+            if (!b.width) continue;
+            var m = g.measureText(ch), asc = m.fontBoundingBoxAscent, desc = m.fontBoundingBoxDescent;
+            var base = asc ? b.top + (b.height - asc - desc) / 2 + asc : b.top + b.height * .8;
+            g.fillText(ch, b.left - r.left, base - r.top);
+          }
+        }
+        return c;
+      }
+      function upload() {
+        if (hero.mode === 'hic') { title.style.width = holder.clientWidth + 'px'; hero.el.style.height = title.offsetHeight + 'px'; }
+        var r = hero.el.getBoundingClientRect(), d = Math.min(devicePixelRatio || 1, 2);
+        if (r.width < 1 || r.height < 1) return;
+        var w = Math.round(r.width * d), h = Math.round(r.height * d);
+        makeTex(w, h);
+        if (hero.mode === 'hic') hicCopy(w, h);
+        else device.queue.copyExternalImageToTexture({ source: drawText(r, w, h) }, { texture: heroTex }, [w, h]);
+        // タイルは1枚およそ 22px 角
+        hero.gx = Math.max(12, Math.min(48, Math.round(r.width / 22)));
+        hero.gy = Math.max(3, Math.round(hero.gx * r.height / r.width));
         hero.dirty = false;
+        if (!hero.ready) {
+          hero.ready = true;
+          if (hero.mode === 'hic') { hicOK = true; status(true, true); }
+        }
+      }
+      function refresh() {
+        if (!hero) return;
+        if (hero.mode === 'hic' && stage.onpaint && stage.requestPaint) stage.requestPaint();
+        else hero.dirty = true;
+      }
+      function stop() {
+        undoHIC(); hero = null;
+        root.classList.remove('gpu-on', 'gpu-text');
+        status(false, false);
       }
 
       navigator.gpu.requestAdapter().then(function (adapter) {
@@ -472,29 +612,28 @@ fn rot(v: vec2f, a: f32) -> vec2f { let c = cos(a); let s = sin(a); return vec2f
         var format = navigator.gpu.getPreferredCanvasFormat();
         ctx.configure({ device: device, format: format, alphaMode: 'opaque' });
         var mod = device.createShaderModule({ code: WGSL });
-        pipe = device.createRenderPipeline({ layout: 'auto', vertex: { module: mod, entryPoint: 'vs' }, fragment: { module: mod, entryPoint: 'fs', targets: [{ format: format }] }, primitive: { topology: 'triangle-list' } });
-        ubuf = device.createBuffer({ size: 64, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+        layout = device.createBindGroupLayout({ entries: [
+          { binding: 0, visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT, buffer: { type: 'uniform' } },
+          { binding: 1, visibility: GPUShaderStage.FRAGMENT, sampler: {} },
+          { binding: 2, visibility: GPUShaderStage.FRAGMENT, texture: {} }] });
+        var pl = device.createPipelineLayout({ bindGroupLayouts: [layout] });
+        bgPipe = device.createRenderPipeline({ layout: pl, vertex: { module: mod, entryPoint: 'vs' }, fragment: { module: mod, entryPoint: 'fs', targets: [{ format: format }] } });
+        var blend = { srcFactor: 'one', dstFactor: 'one-minus-src-alpha', operation: 'add' };
+        tilePipe = device.createRenderPipeline({ layout: pl, vertex: { module: mod, entryPoint: 'tvs' }, fragment: { module: mod, entryPoint: 'tfs', targets: [{ format: format, blend: { color: blend, alpha: blend } }] } });
+        ubuf = device.createBuffer({ size: 112, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
         sampler = device.createSampler({ magFilter: 'linear', minFilter: 'linear', addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge' });
-        heroTex = device.createTexture({ size: [1, 1], format: 'rgba8unorm', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST });
-        makeBind();
+        makeTex(1, 1);
 
-        hero = setupHero();
-        var hic = false;
-        if (hero) {
-          try { uploadHero(); hic = true; root.classList.add('gpu-hero'); }
-          catch (e) { undoHero(); }
-        }
-        // 新しい仕様では、子要素の描画が変わるとキャンバスに paint イベントが来るので、そのときに写し直す
-        stage.addEventListener('paint', function () { if (hero) hero.dirty = true; });
         root.classList.add('gpu-on');
-        status(true, hic);
-        if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { if (hero) hero.dirty = true; });
+        status(true, false);
+        if (!useHIC()) useText();
+        if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
 
         function resize() {
           dpr = Math.min(devicePixelRatio || 1, 1.5);
           var w = Math.max(1, Math.round(innerWidth * dpr)), h = Math.max(1, Math.round(innerHeight * dpr));
           if (stage.width !== w || stage.height !== h) { stage.width = w; stage.height = h; }
-          if (hero) hero.dirty = true;
+          refresh();
         }
         resize();
         addEventListener('resize', resize);
@@ -503,33 +642,60 @@ fn rot(v: vec2f, a: f32) -> vec2f { let c = cos(a); let s = sin(a); return vec2f
           if (lastPtr) { var dt = Math.max(8, now - lastPtr[2]); vel = [(e.clientX - lastPtr[0]) / dt * 1000, (e.clientY - lastPtr[1]) / dt * 1000]; }
           lastPtr = [e.clientX, e.clientY, now];
           ptr = [e.clientX, e.clientY];
+          if (e.pointerType === 'mouse' && !reduce) lensTo = 1;
         }, { passive: true });
+        addEventListener('pointerdown', function (e) {
+          ptr = [e.clientX, e.clientY];
+          if (e.pointerType !== 'mouse') { sp = ptr.slice(); lensTo = reduce ? 0 : 1; }
+          if (!reduce) { click = [e.clientX * dpr, e.clientY * dpr]; clickT = t; }
+        }, { passive: true });
+        function lift(e) { if (e.pointerType !== 'mouse') lensTo = 0; }
+        addEventListener('pointerup', lift); addEventListener('pointercancel', lift);
+        document.addEventListener('mouseout', function (e) { if (!e.relatedTarget) lensTo = 0; });
+        // 章の見出しが画面に入るたびに、そこから光の輪を広げる
+        if ('IntersectionObserver' in window && !reduce) {
+          var pio = new IntersectionObserver(function (es) {
+            es.forEach(function (e) {
+              if (!e.isIntersecting) return;
+              var r = e.target.querySelector('.sec-no').getBoundingClientRect();
+              pulse = [(r.left + r.width / 2) * dpr, (r.top + r.height / 2) * dpr]; pulseT = t;
+            });
+          }, { threshold: .6 });
+          document.querySelectorAll('.sec-head').forEach(function (el) { pio.observe(el); });
+        }
 
-        var data = new Float32Array(16), t0 = performance.now();
+        var data = new Float32Array(28), t0 = performance.now();
         function frame(now) {
-          if (hero && hero.dirty) { try { uploadHero(); } catch (e) { undoHero(); status(true, false); } }
+          if (hero && hero.dirty) { try { upload(); } catch (e) { if (hero.mode === 'hic') useText(); else stop(); } }
+          if (!device) return;
+          t = reduce ? 4 : (now - t0) / 1000;
           vel = [vel[0] * .92, vel[1] * .92];
-          var t = reduce ? 4 : (now - t0) / 1000;
-          var heroOn = 0, hr = [0, 0, 1, 1], melt = 0;
-          if (hero) {
-            var r = hero.ph.getBoundingClientRect();
+          sp = [sp[0] + (ptr[0] - sp[0]) * .2, sp[1] + (ptr[1] - sp[1]) * .2];
+          lens += (lensTo - lens) * .08;
+          var on = 0, hr = [0, 0, 1, 1], melt = 0;
+          if (hero && hero.ready) {
+            var r = hero.el.getBoundingClientRect();
             hr = [r.left * dpr, r.top * dpr, r.width * dpr, r.height * dpr];
-            heroOn = 1;
-            melt = Math.min(1, Math.max(0, -r.top / Math.max(1, r.height + 120)));
+            melt = reduce ? 0 : Math.min(1, Math.max(0, (140 - r.top) / (innerHeight * .55)));
+            on = melt < 1 && r.bottom > -innerHeight && r.top < innerHeight * 2 ? 1 : 0;
           }
           var maxScroll = Math.max(1, root.scrollHeight - innerHeight);
-          data.set([hr[0], hr[1], hr[2], hr[3], stage.width, stage.height, ptr[0] * dpr, ptr[1] * dpr, vel[0], vel[1], t, scrollY, heroOn, melt, dpr, scrollY / maxScroll]);
+          data.set([hr[0], hr[1], hr[2], hr[3], stage.width, stage.height, sp[0] * dpr, sp[1] * dpr, vel[0], vel[1], click[0], click[1],
+            t, scrollY, on, melt, dpr, scrollY / maxScroll, clickT, pulseT, pulse[0], pulse[1], on ? hero.gx : 1, on ? hero.gy : 1, lens, 0, 0, 0]);
           device.queue.writeBuffer(ubuf, 0, data);
           var enc = device.createCommandEncoder();
           var pass = enc.beginRenderPass({ colorAttachments: [{ view: ctx.getCurrentTexture().createView(), loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 } }] });
-          pass.setPipeline(pipe); pass.setBindGroup(0, bind); pass.draw(3); pass.end();
+          pass.setBindGroup(0, bind);
+          pass.setPipeline(bgPipe); pass.draw(3);
+          if (on) { pass.setPipeline(tilePipe); pass.draw(6, hero.gx * hero.gy); }
+          pass.end();
           device.queue.submit([enc.finish()]);
-          if (!reduce || hero && hero.dirty) requestAnimationFrame(frame);
+          if (!reduce || hero && (hero.dirty || !hero.ready)) requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
-        if (reduce) addEventListener('scroll', function () { requestAnimationFrame(frame); }, { passive: true });
-        device.lost.then(function () { undoHero(); root.classList.remove('gpu-on'); status(false, false); });
-      }).catch(function () { undoHero(); status(false, false); });
+        if (reduce) { addEventListener('scroll', function () { requestAnimationFrame(frame); }, { passive: true }); addEventListener('resize', function () { requestAnimationFrame(frame); }); }
+        device.lost.then(function () { device = null; stop(); });
+      }).catch(function () { stop(); });
     })();
   </script>
 </body>

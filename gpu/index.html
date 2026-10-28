@@ -205,7 +205,7 @@
         <a class="ghost" href="#community">運動×勉強会</a>
         <a class="ghost" href="#works">作品を見る</a>
       </div>
-      <p class="hint" data-hint>見出しはタイルの壁です。ポインタを近づけると浮き上がり、クリックやタップで波が広がります。スクロールすると砕け散ります。</p>
+      <p class="hint" data-hint>見出しはブロックでできています。ポインタを近づけると持ち上がり、クリックやタップで波が走ります。スクロールすると崩れ落ちます。</p>
     </section>
 
     <section class="wrap section" id="book" aria-labelledby="book-title">
@@ -286,8 +286,8 @@
       <div class="glass about-gpu">
         <h2 id="gpu-title">このページの描き方</h2>
         <ul>
-          <li>背景：<b>WebGPU</b> のシェーダーで、毎フレーム描いています。ポインタの位置には液体ガラスのレンズ、章が画面に入ると光の輪が広がります（<span class="st off" data-st-gpu>未対応</span>）。</li>
-          <li>見出し：テクスチャを数百枚のタイルに分け、3D の壁として描いています。<b>HTML-in-Canvas</b> が使えるときは HTML のままテクスチャにし（<span class="st off" data-st-hic>未対応</span>）、使えないときは文字の位置を1文字ずつ測って描き写しています。</li>
+          <li>背景：<b>WebGPU</b> のシェーダーで、マス目を毎フレーム描いています。ポインタの下のマスが光り、クリックや章の見出しが画面に入ったときは、マスが波のように点灯します（<span class="st off" data-st-gpu>未対応</span>）。</li>
+          <li>見出し：テクスチャを数百個のブロックに分け、3D に並べて描いています。<b>HTML-in-Canvas</b> が使えるときは HTML のままテクスチャにし（<span class="st off" data-st-hic>未対応</span>）、使えないときは文字の位置を1文字ずつ測って描き写しています。</li>
           <li>HTML-in-Canvas は実験中の機能です。Chrome で <code>chrome://flags/#canvas-draw-element</code> を有効にすると見られます。どちらも使えないブラウザでは、ふつうの HTML と CSS で表示します。</li>
         </ul>
       </div>
@@ -344,151 +344,116 @@ struct U { hero: vec4f, res: vec2f, ptr: vec2f, vel: vec2f, click: vec2f, time: 
 @group(0) @binding(1) var smp: sampler;
 @group(0) @binding(2) var tex: texture_2d<f32>;
 
+const CELL = 48.;   // 背景のマス目（CSS px）
 fn hash(p: vec2f) -> f32 { return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453); }
-fn noise(p: vec2f) -> f32 {
-  let i = floor(p); let f = fract(p); let w = f * f * (3. - 2. * f);
-  return mix(mix(hash(i), hash(i + vec2f(1., 0.)), w.x), mix(hash(i + vec2f(0., 1.)), hash(i + vec2f(1., 1.)), w.x), w.y);
-}
-fn fbm(p0: vec2f) -> f32 {
-  var p = p0; var a = .5; var s = 0.;
-  let m = mat2x2f(1.6, 1.2, -1.2, 1.6);
-  for (var k = 0; k < 5; k++) { s += a * noise(p); p = m * p; a *= .5; }
-  return s;
-}
-fn rot(v: vec2f, a: f32) -> vec2f { let c = cos(a); let s = sin(a); return vec2f(c * v.x - s * v.y, s * v.x + c * v.y); }
 fn rotA(v: vec3f, k: vec3f, a: f32) -> vec3f { let c = cos(a); let s = sin(a); return v * c + cross(k, v) * s + k * dot(k, v) * (1. - c); }
-// 中心 c から広がる光の輪（t0 に始まり、3秒で消える）
-fn ring(px: vec2f, c: vec2f, t0: f32, speed: f32, w: f32) -> f32 {
+// 背景のマス目は、スクロールの 3 割だけ一緒に動く（クリックと章の位置も、この座標で持つ）
+fn grid(px: vec2f) -> vec2f { return px + vec2f(0., u.scroll * .3 * u.dpr); }
+// マス id から、中心 c のマスを起点に広がる四角い波（t0 に始まる）
+fn wave(id: vec2f, c: vec2f, t0: f32, speed: f32) -> f32 {
   let age = u.time - t0;
-  if (age < 0. || age > 3.) { return 0.; }
-  let d = (length(px - c) - age * speed * u.dpr) / (w * u.dpr);
-  // 細い芯と、まわりのぼんやりした光
-  return (exp(-d * d) + .3 * exp(-d * d * .05)) * exp(-age * 1.1);
+  if (age < 0. || age > 2.5) { return 0.; }
+  let dc = abs(id - floor(c / (CELL * u.dpr)));
+  let w = max(dc.x, dc.y) - age * speed;
+  return exp(-w * w * 1.2) * exp(-age * 1.3);
 }
 
-// ---------- 背景：星雲のような流れ ----------
+// ---------- 背景：暗い地にマス目。ポインタの下のマスが光る ----------
 @vertex fn vs(@builtin(vertex_index) i: u32) -> @builtin(position) vec4f {
   var p = array<vec2f, 3>(vec2f(-1., -3.), vec2f(-1., 1.), vec2f(3., 1.));
   return vec4f(p[i], 0., 1.);
 }
-fn scene(px: vec2f) -> vec3f {
-  let uv = (px - .5 * u.res) / u.res.y;
-  let pv = (u.ptr - .5 * u.res) / u.res.y;
-  // ポインタのまわりを渦にする
-  let d = uv - pv; let r = length(d);
-  let sw = (1.1 + min(length(u.vel), 3000.) * .0004) * exp(-r * 3.2);
-  let w = pv + rot(d, sw);
-  let t = u.time * .05; let sc = u.scroll * .00035;
-  let q = vec2f(fbm(w * 1.5 + vec2f(0., t) + sc), fbm(w * 1.5 + vec2f(5.2, 1.3) - t));
-  let r2 = vec2f(fbm(w * 1.5 + 4. * q + vec2f(1.7, 9.2) + t * 1.3), fbm(w * 1.5 + 4. * q + vec2f(8.3, 2.8)));
-  let f = fbm(w * 1.5 + 4. * r2);
-  // ページの進み具合で色味を少しずつ変える（紫 → 青緑 → ピンク）
-  let hueA = mix(vec3f(.10, .05, .28), vec3f(.02, .16, .24), clamp(u.page * 1.5, 0., 1.));
-  var col = mix(vec3f(.02, .015, .05), hueA, clamp(f * f * 3.5, 0., 1.));
-  col = mix(col, vec3f(.0, .55, .78), clamp(length(q), 0., 1.) * .45);
-  col = mix(col, mix(vec3f(1., .3, .6), vec3f(.65, .45, 1.), u.page), clamp(r2.x * r2.x * 1.1, 0., 1.) * .5);
-  col *= .62 + .25 * f;
-  col += vec3f(.35, .25, .9) * exp(-r * r * 14.) * .22;
-  let vig = 1. - .55 * dot(uv * vec2f(.55, .8), uv * vec2f(.55, .8));
-  return col * vig;
-}
 @fragment fn fs(@builtin(position) pos: vec4f) -> @location(0) vec4f {
   let px = pos.xy;
-  // 章が入ったときの光の輪と、クリックの衝撃波。通り道を少し押し広げる
-  let pr = ring(px, u.pulse, u.pulseT, 650., 16.);
-  let cr = ring(px, u.click, u.clickT, 1100., 12.);
-  let p = px - (normalize(px - u.pulse + vec2f(.001)) * pr + normalize(px - u.click + vec2f(.001)) * cr) * 14. * u.dpr;
-  // ポインタを追う液体ガラスのレンズ：中を拡大して、色を少しずつずらす
-  let L = 130. * u.dpr; let dl = p - u.ptr; let rr = length(dl) / L;
-  var col: vec3f;
-  if (rr < 1. && u.lens > .01) {
-    let k = sqrt(1. - rr * rr) * u.lens;
-    col = vec3f(scene(u.ptr + dl * (1. - .48 * k)).r, scene(u.ptr + dl * (1. - .44 * k)).g, scene(u.ptr + dl * (1. - .40 * k)).b);
-    col *= 1. + .15 * u.lens;
-    col += vec3f(.55, .85, 1.) * smoothstep(.8, 1., rr) * .3 * u.lens;
-    let hl = dl / L - vec2f(-.32, -.42);
-    col += vec3f(exp(-dot(hl, hl) * 26.) * .3 * u.lens);
-  } else {
-    col = scene(p) * (1. - .28 * (1. - smoothstep(1., 1.3, rr)) * u.lens);
-  }
-  col += mix(vec3f(.36, .9, 1.), vec3f(1., .36, .6), .5 + .5 * sin(atan2(px.y - u.pulse.y, px.x - u.pulse.x) * 3. + u.time * 2.)) * pr * .9;
-  col += vec3f(.8, .9, 1.) * cr * .45;
-  col += (hash(px + fract(u.time) * 100.) - .5) * .025;
+  let uv = (px - .5 * u.res) / u.res.y;
+  // ページの進み具合で、差し色を紫 → 水色に変える
+  let accA = mix(vec3f(.60, .48, 1.), vec3f(.36, .88, 1.), clamp(u.page * 1.4, 0., 1.));
+  let accB = mix(vec3f(1., .36, .6), vec3f(.60, .48, 1.), u.page);
+  var col = vec3f(.027, .024, .06);
+  let a = uv - vec2f(-.65, -.45); let b = uv - vec2f(.75, .55);
+  col += accA * .09 * exp(-dot(a, a) * 2.2) + accB * .06 * exp(-dot(b, b) * 2.);
+
+  let cs = CELL * u.dpr;
+  let g = grid(px) / cs;
+  let id = floor(g); let f = fract(g);
+  let toLine = (.5 - abs(f - .5)) * cs;            // いちばん近い線までの距離（px）
+  let line = 1. - smoothstep(.5 * u.dpr, 1.3 * u.dpr, min(toLine.x, toLine.y));
+  let mark = line * (1. - step(5. * u.dpr, max(toLine.x, toLine.y)));   // 交点の「＋」
+  col += vec3f(.55, .6, 1.) * (line * .045 + mark * .16);
+
+  // ポインタの下のマスと、そのまわり
+  let dc = abs(id - floor(grid(u.ptr) / cs)); let cheb = max(dc.x, dc.y);
+  let inner = smoothstep(2. * u.dpr, 3. * u.dpr, min(toLine.x, toLine.y));   // マスの中（すき間を残す）
+  var fill = u.lens * .09 * exp(-cheb * 1.3) * step(cheb, 3.);
+  // カーソルのマスは、四隅にかぎ括弧
+  let q = abs(f - .5);
+  let edge = 1. - smoothstep(1.5 * u.dpr, 2.5 * u.dpr, min(toLine.x, toLine.y) - 2. * u.dpr);
+  let bracket = edge * step(.3, min(q.x, q.y)) * step(cheb, .5) * u.lens;
+
+  // クリックと、章が画面に入ったときの波
+  let cw = wave(id, u.click, u.clickT, 16.);
+  let pw = wave(id, u.pulse, u.pulseT, 11.);
+  col += (accA * (fill + cw * .3) + accB * pw * .32) * inner;
+  col += vec3f(.75, .95, 1.) * bracket * .8;
+  col *= 1. - .3 * dot(uv, uv);
   return vec4f(col, 1.);
 }
 
-// ---------- 見出し：テクスチャを gx × gy 枚のタイルに分けた 3D の壁 ----------
-struct TO { @builtin(position) pos: vec4f, @location(0) uv: vec2f, @location(1) lc: vec2f, @location(2) shade: f32, @location(3) spec: f32, @location(4) e: f32, @location(5) lift: f32 };
-// 壁の各点の浮き上がり（手前が +）。ゆるい波 ＋ ポインタのふくらみ ＋ クリックの衝撃波
-fn field(p: vec2f) -> f32 {
-  let q = p / u.dpr;
-  var z = (sin(q.x * .011 + u.time * 1.3) + sin(q.y * .018 + q.x * .004 - u.time * 1.05)) * 2.5;
-  let d = length(p - u.ptr) / u.dpr;
-  z += 70. * u.lens * exp(-d * d / 28900.);
+// ---------- 見出し：テクスチャを gx × gy 個のブロックに分けて 3D に置く ----------
+// 最初の gx × gy 個は影、そのあとがブロック本体
+struct TO { @builtin(position) pos: vec4f, @location(0) uv: vec2f, @location(1) lc: vec2f, @location(2) shade: f32, @location(3) lift: f32, @location(4) e: f32, @location(5) shadow: f32 };
+// ブロックの持ち上がり（手前が +）。ポインタの近く ＋ クリックの波
+fn liftAt(c: vec2f) -> f32 {
+  let d = length(c - u.ptr) / u.dpr;
+  var z = 44. * u.lens * exp(-d * d / 16900.);
   let age = u.time - u.clickT;
-  if (age > 0. && age < 3.) { let w = (length(p - u.click) / u.dpr - age * 1300.) / 60.; z += 55. * exp(-w * w) * exp(-age * 1.5); }
+  if (age > 0. && age < 2.) {
+    let w = (length(c - (u.click - vec2f(0., u.scroll * .3 * u.dpr))) / u.dpr - age * 900.) / 45.;
+    z += 36. * exp(-w * w) * exp(-age * 2.);
+  }
   return z * u.dpr;
 }
 @vertex fn tvs(@builtin(vertex_index) vi: u32, @builtin(instance_index) ii: u32) -> TO {
+  let nx = u32(u.gx); let n = nx * u32(u.gy);
+  let sh = select(0., 1., ii < n); let ti = ii % n;
   let g = vec2f(u.gx, u.gy);
-  let cell = vec2f(f32(ii % u32(u.gx)), f32(ii / u32(u.gx)));
+  let cell = vec2f(f32(ti % nx), f32(ti / nx));
   var cs = array<vec2f, 6>(vec2f(0., 0.), vec2f(1., 0.), vec2f(0., 1.), vec2f(0., 1.), vec2f(1., 0.), vec2f(1., 1.));
   let lc = cs[vi];
   let uv = (cell + lc) / g;
   let corner = u.hero.xy + uv * u.hero.zw;
   let center = u.hero.xy + (cell + .5) / g * u.hero.zw;
-  // 角ごとに高さを求めるので、静かなときはタイルどうしが継ぎ目なくつながる
-  let zc = field(corner);
-  let h = 4. * u.dpr;
-  var n = normalize(vec3f(-(field(corner + vec2f(h, 0.)) - zc) / h, -(field(corner + vec2f(0., h)) - zc) / h, 1.));
-  var p = vec3f(corner, zc);
-  // スクロールで、真ん中のタイルから順に回りながら砕け散る
+  let z = liftAt(center);
+  // スクロールで、下の段・左の列から順にくるっと返って落ちる
   let h1 = hash(cell); let h2 = hash(cell + vec2f(3.1, 7.7)); let h3 = hash(cell + vec2f(9.2, 1.3));
-  let rel = (center - (u.hero.xy + .5 * u.hero.zw)) / u.hero.zw;
-  let e = clamp(u.melt * 2.2 - length(rel * vec2f(1., .6)) * .9 - h1 * .5, 0., 1.);
-  if (e > 0.) {
-    let zm = field(center);
-    let ax = normalize(vec3f(h2 - .5, h3 - .5, h1 - .5 + .001));
-    let ang = e * (2.5 + 6. * h1) * select(-1., 1., h2 > .5);
-    n = rotA(n, ax, ang);
-    let dir = normalize(rel + (vec2f(h2, h3) - .5) * .9 + vec2f(.0001));
-    p = vec3f(center, zm) + rotA(vec3f(corner - center, zc - zm), ax, ang)
-      + vec3f(dir * (240. + 520. * h2) * e + vec2f(0., e * e * 420.), (h3 * 1.6 - .4) * 650. * e) * u.dpr;
-  }
+  let e = clamp(u.melt * 2.5 - (1. - cell.y / g.y) * .6 - cell.x / g.x * .5 - h1 * .2, 0., 1.);
+  let ax = normalize(vec3f(1., (h3 - .5) * .6, 0.));
+  let ang = e * e * 3.1416 * (1. + h2) * select(-1., 1., h3 > .5);
+  let n3 = rotA(vec3f(0., 0., 1.), ax, ang);
+  var p = vec3f(center, z) + rotA(vec3f(corner - center, 0.), ax, ang)
+        + vec3f((h2 - .5) * 260. * e, e * e * 1100. - e * 80., h3 * 220. * e) * u.dpr;
+  if (sh > 0.) { p = vec3f(corner + vec2f(.35, .55) * z, 0.); }   // 影は持ち上がった分だけ右下にずれる
   // 遠近：画面の中心から見た透視
-  let f = u.res.y * 1.4; let c0 = .5 * u.res;
-  let sp = c0 + (p.xy - c0) * (f / max(f - p.z, f * .3));
-  let Ld = normalize(vec3f(-.35, -.55, 1.)); let hv = normalize(Ld + vec3f(0., 0., 1.));
+  let fz = u.res.y * 1.4; let c0 = .5 * u.res;
+  let sp = c0 + (p.xy - c0) * (fz / max(fz - p.z, fz * .3));
   var o: TO;
   o.pos = vec4f(sp.x / u.res.x * 2. - 1., 1. - sp.y / u.res.y * 2., .5, 1.);
-  o.uv = uv; o.lc = lc; o.e = e;
-  // 裏返ったタイルも暗くなりすぎないよう、両面から光を当てる
-  o.shade = max(abs(dot(n, Ld)) / Ld.z, .45);
-  o.spec = max(pow(abs(dot(n, hv)), 60.) - pow(hv.z, 60.), 0.) * 1.6;
-  o.lift = clamp((zc / u.dpr - 6.) / 50., 0., 1.);
+  o.uv = uv; o.lc = lc; o.e = e; o.shadow = sh;
+  o.lift = clamp(z / (30. * u.dpr), 0., 1.);
+  // 表はそのまま、裏返った面は暗く
+  o.shade = select(.5, 1. + .12 * o.lift, n3.z > 0.) * (.8 + .2 * abs(n3.z));
   return o;
 }
 @fragment fn tfs(i: TO) -> @location(0) vec4f {
-  // 動きが速いほど、RGB を横にずらす
-  let ca = .0012 + min(length(u.vel), 2500.) * .0000035 + i.e * .005;
-  let tr = textureSample(tex, smp, i.uv + vec2f(ca, 0.));
-  let tg = textureSample(tex, smp, i.uv);
-  let tb = textureSample(tex, smp, i.uv - vec2f(ca, 0.));
-  let a = max(tg.a, max(tr.a, tb.a));
-  var rgb = vec3f(tr.r * tr.a, tg.g * tg.a, tb.b * tb.a);
-  // 文字のまわりの光
-  let o = vec2f(7. * u.dpr) / u.hero.zw;
-  var halo = 0.;
-  for (var k = 0; k < 6; k++) { let an = f32(k) * 1.0472; halo += textureSample(tex, smp, i.uv + vec2f(cos(an), sin(an)) * o).a; }
-  halo = halo / 6. * (1. - a);
-  // 浮き上がったり砕けたりしたタイルは、ガラスの板として見せる
-  let tint = mix(vec3f(1., .36, .62), vec3f(.36, .88, 1.), i.uv.x);
+  let t = textureSample(tex, smp, i.uv);
+  if (i.shadow > .5) { return vec4f(0., 0., 0., t.a * .55 * i.lift * (1. - i.e)); }
+  // 持ち上がったブロックは、輪郭と薄い面を見せる
   let ed = min(min(i.lc.x, 1. - i.lc.x), min(i.lc.y, 1. - i.lc.y));
-  let edge = 1. - smoothstep(0., .1, ed);
-  let gl = (1. - a) * min(clamp(i.e * 3., 0., 1.) * .05 + i.lift * .08 + edge * min(i.e * 2. + i.lift, 1.) * .22, .4);
-  rgb = rgb * i.shade + tint * (halo * .3 + gl) + vec3f(i.spec) * (a + gl);
-  let fade = 1. - smoothstep(.45, .9, i.e);
-  return vec4f(rgb, clamp(a + halo * .15 + gl, 0., 1.)) * fade;
+  let rim = (1. - smoothstep(.04, .09, ed)) * i.lift * (1. - i.e);
+  let back = (1. - t.a) * (rim * .28 + i.lift * .05);
+  let rgb = t.rgb * t.a * i.shade + vec3f(.36, .88, 1.) * back;
+  let fade = 1. - smoothstep(.75, 1., i.e);
+  return vec4f(rgb, t.a + back) * fade;
 }`;
 
       var device, ctx, bgPipe, tilePipe, ubuf, bind, layout, sampler, heroTex, hero = null, hicOK = false;
@@ -647,7 +612,7 @@ fn field(p: vec2f) -> f32 {
         addEventListener('pointerdown', function (e) {
           ptr = [e.clientX, e.clientY];
           if (e.pointerType !== 'mouse') { sp = ptr.slice(); lensTo = reduce ? 0 : 1; }
-          if (!reduce) { click = [e.clientX * dpr, e.clientY * dpr]; clickT = t; }
+          if (!reduce) { click = [e.clientX * dpr, (e.clientY + scrollY * .3) * dpr]; clickT = t; }
         }, { passive: true });
         function lift(e) { if (e.pointerType !== 'mouse') lensTo = 0; }
         addEventListener('pointerup', lift); addEventListener('pointercancel', lift);
@@ -658,7 +623,7 @@ fn field(p: vec2f) -> f32 {
             es.forEach(function (e) {
               if (!e.isIntersecting) return;
               var r = e.target.querySelector('.sec-no').getBoundingClientRect();
-              pulse = [(r.left + r.width / 2) * dpr, (r.top + r.height / 2) * dpr]; pulseT = t;
+              pulse = [(r.left + r.width / 2) * dpr, (r.top + r.height / 2 + scrollY * .3) * dpr]; pulseT = t;
             });
           }, { threshold: .6 });
           document.querySelectorAll('.sec-head').forEach(function (el) { pio.observe(el); });
@@ -687,7 +652,7 @@ fn field(p: vec2f) -> f32 {
           var pass = enc.beginRenderPass({ colorAttachments: [{ view: ctx.getCurrentTexture().createView(), loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 } }] });
           pass.setBindGroup(0, bind);
           pass.setPipeline(bgPipe); pass.draw(3);
-          if (on) { pass.setPipeline(tilePipe); pass.draw(6, hero.gx * hero.gy); }
+          if (on) { pass.setPipeline(tilePipe); pass.draw(6, hero.gx * hero.gy * 2); }
           pass.end();
           device.queue.submit([enc.finish()]);
           if (!reduce || hero && (hero.dirty || !hero.ready)) requestAnimationFrame(frame);

@@ -4,14 +4,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>tomochi — GPU</title>
-  <meta name="description" content="tomochi のポートフォリオ（GPU版）。WebGPU と HTML-in-Canvas で描いています。本の執筆、運動×勉強会の主催、身近な不便を解決するアプリづくり。">
+  <meta name="description" content="tomochi のポートフォリオ（GPU版）。ステージを選んで進む、ゲーム画面のようなポートフォリオ。本の執筆、運動×勉強会の主催、身近な不便を解決するアプリづくり。">
   <link rel="canonical" href="https://tomochi3.github.io/tomo/gpu/">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="tomochi">
   <meta property="og:locale" content="ja_JP">
   <meta property="og:url" content="https://tomochi3.github.io/tomo/gpu/">
   <meta property="og:title" content="tomochi — GPU">
-  <meta property="og:description" content="面白くて、できればためになることを、みんなでやる。WebGPU と HTML-in-Canvas で描いたポートフォリオ。">
+  <meta property="og:description" content="面白くて、できればためになることを、みんなでやる。ステージを選んで進む、ゲーム画面のようなポートフォリオ。">
   <meta property="og:image" content="https://tomochi3.github.io/tomo/img/og.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
@@ -21,7 +21,7 @@
   <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
   <meta name="theme-color" content="#07060f">
   <link rel="preload" href="../fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
-  <script>document.documentElement.classList.add('js');</script>
+  <script>document.documentElement.classList.add('js', 'game');</script>
   <style>
     @font-face { font-family: "Inter"; font-style: normal; font-weight: 100 900; font-display: swap; src: url("../fonts/inter-latin-var.woff2") format("woff2"); unicode-range: U+0000-00FF, U+2000-206F, U+2190-21FF; }
 
@@ -30,8 +30,8 @@
       --ink: #f4f1ff;
       --soft: #b9b3d6;
       --dim: #8a84ab;
-      --glass: rgba(22, 18, 44, .52);
-      --glass-hi: rgba(255, 255, 255, .08);
+      --glass: rgba(16, 14, 34, .72);
+      --glass-hi: rgba(255, 255, 255, .07);
       --line: rgba(255, 255, 255, .12);
       --pink: #ff5c9a;
       --cyan: #5ce1ff;
@@ -39,6 +39,8 @@
       --lime: #c8ff5c;
       --font: "Inter", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic UI", Meiryo, sans-serif;
       --ease: cubic-bezier(.2, .8, .2, 1);
+      --top: 60px;
+      --bot: 64px;
       color-scheme: dark;
     }
     *, *::before, *::after { box-sizing: border-box; }
@@ -47,67 +49,74 @@
     h1, h2, h3, p, ul, figure { margin: 0; }
     ul { padding: 0; list-style: none; }
     a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; }
     img { display: block; max-width: 100%; height: auto; }
     :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 8px; }
-    main:focus { outline: none; }
+    main:focus, .pane:focus { outline: none; }
     .phrase { display: inline-block; }
     .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
     .skip { position: absolute; left: 12px; top: -60px; z-index: 100; display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border-radius: 10px; background: var(--ink); color: var(--bg); font-size: 14px; }
     .skip:focus { top: 8px; }
+    .num { font-variant-numeric: tabular-nums; }
 
-    /* ---------- 背景：WebGPU のキャンバス。使えないときは CSS のグラデーション ---------- */
+    /* ---------- 背景：WebGPU のキャンバス。使えないときは CSS のマス目 ---------- */
     .stage { position: fixed; inset: 0; z-index: -1; width: 100%; height: 100%; display: block; pointer-events: none; }
     .fallback-bg { position: fixed; inset: 0; z-index: -2; background:
-      radial-gradient(60vmax 60vmax at 15% 20%, rgba(154, 123, 255, .35), transparent 60%),
-      radial-gradient(50vmax 50vmax at 85% 30%, rgba(255, 92, 154, .25), transparent 60%),
-      radial-gradient(70vmax 70vmax at 50% 100%, rgba(92, 225, 255, .22), transparent 60%), var(--bg); }
-    @media (prefers-reduced-motion: no-preference) { .fallback-bg { animation: drift 24s ease-in-out infinite alternate; background-size: 140% 140%; } }
-    @keyframes drift { to { background-position: 30% 20%, 70% 60%, 40% 0, 0 0; } }
+      linear-gradient(rgba(140, 150, 255, .06) 1px, transparent 1px) 0 0 / 48px 48px,
+      linear-gradient(90deg, rgba(140, 150, 255, .06) 1px, transparent 1px) 0 0 / 48px 48px,
+      radial-gradient(60vmax 50vmax at 10% 10%, rgba(154, 123, 255, .16), transparent 60%),
+      radial-gradient(60vmax 50vmax at 95% 95%, rgba(255, 92, 154, .1), transparent 60%), var(--bg); }
     .gpu-on .fallback-bg { display: none; }
 
-    /* ---------- top bar ---------- */
-    .bar { position: sticky; top: 0; z-index: 50; background: rgba(7, 6, 15, .55); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); border-bottom: 1px solid var(--line); }
-    .bar__in { display: flex; align-items: center; gap: 6px; height: 60px; }
+    /* ---------- HUD（上） ---------- */
+    .hud { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--line); }
+    /* ぼかしは疑似要素にかける（下のステージ選択を fixed で置けるように） */
+    .hud::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgba(7, 6, 15, .62); backdrop-filter: blur(16px) saturate(160%); -webkit-backdrop-filter: blur(16px) saturate(160%); }
+    .hud__in { display: flex; align-items: center; gap: 10px; height: var(--top); }
     .logo { display: inline-flex; align-items: center; min-height: 44px; font-weight: 800; font-size: 20px; letter-spacing: -.02em; }
     .logo span { background: linear-gradient(90deg, var(--pink), var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    .nav { display: flex; gap: 2px; margin-left: auto; }
-    .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; border-radius: 999px; font-size: 14px; font-weight: 600; color: var(--soft); transition: color .2s, background-color .2s; }
-    .nav a:hover { color: var(--ink); background: var(--glass-hi); }
-    .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; margin-left: 8px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; font: 600 12px/1 var(--font); color: var(--dim); white-space: nowrap; }
+    .stages { display: flex; gap: 4px; margin-left: auto; }
+    .stages a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 12px; border-radius: 10px; font-size: 14px; font-weight: 700; color: var(--soft); transition: color .2s, background-color .2s; }
+    .stages a b { font-size: 12px; letter-spacing: .06em; color: var(--dim); }
+    .stages a:hover { color: var(--ink); background: var(--glass-hi); }
+    .stages [data-go="0"] { display: none; }
+    .meter, .missions-btn, .clear-badge, .keys { display: none; }
+    .chip { display: inline-flex; align-items: center; gap: 6px; min-height: 30px; padding: 0 12px; border: 1px solid var(--line); border-radius: 999px; font: 600 12px/1 var(--font); color: var(--dim); white-space: nowrap; }
     .chip i { width: 7px; height: 7px; border-radius: 50%; background: var(--dim); }
     .chip.is-on { color: var(--ink); }
     .chip.is-on i { background: var(--lime); box-shadow: 0 0 10px var(--lime); }
-    @media (max-width: 719px) { .nav { display: none; } .chip { margin-left: auto; } }
+    @media (max-width: 719px) { .stages { display: none; } .chip { margin-left: auto; } }
 
-    /* ---------- hero ---------- */
+    /* ---------- 中身 ---------- */
     .hero { padding-top: clamp(64px, 12vw, 150px); padding-bottom: clamp(56px, 8vw, 110px); }
     .eyebrow { font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--cyan); }
     .hero__stage { position: relative; margin-top: 18px; }
     .hero__title { font-size: clamp(36px, 7.2vw, 92px); font-weight: 900; line-height: 1.12; letter-spacing: -.02em; }
     .hero__title .ln { display: block; }
     .hero__title .grad { background: linear-gradient(90deg, var(--pink), var(--violet) 50%, var(--cyan)); -webkit-background-clip: text; background-clip: text; color: transparent; }
-    /* HTML-in-Canvas：見出しは WebGPU のキャンバスの子にして、テクスチャとして揺らして描く。元の場所には同じ高さの空きを残す */
+    /* HTML-in-Canvas：見出しは WebGPU のキャンバスの子にしてテクスチャに写す。元の場所には同じ高さの空きを残す */
     .stage > .hero__title { position: absolute; left: 0; top: 0; color: #fff; }
     .hero__ph { display: block; }
-    /* HTML-in-Canvas が無いときは、見出しを WebGPU のタイルとして描き、DOM の見出しは透明にして残す */
+    /* HTML-in-Canvas が無いときは、見出しを WebGPU のブロックとして描き、DOM の見出しは透明にして残す */
     .gpu-text .hero__title { opacity: 0; }
     .hero__lead { margin-top: 26px; max-width: 36em; font-size: clamp(16px, 1.8vw, 19px); color: var(--soft); }
     .actions { display: flex; flex-wrap: wrap; align-items: center; gap: 12px 14px; margin-top: 32px; }
-    .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 999px; font-weight: 700; color: #0b0718; background: linear-gradient(90deg, var(--pink), var(--cyan)); box-shadow: 0 10px 30px -10px rgba(255, 92, 154, .6); transition: transform .2s var(--ease), box-shadow .2s; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 22px; border-radius: 12px; font-weight: 700; color: #0b0718; background: linear-gradient(90deg, var(--pink), var(--cyan)); box-shadow: 0 10px 30px -10px rgba(255, 92, 154, .6); transition: transform .2s var(--ease), box-shadow .2s; }
     .btn:hover { transform: translateY(-2px); box-shadow: 0 16px 40px -12px rgba(92, 225, 255, .7); }
     .btn::after { content: "→"; }
-    .ghost { display: inline-flex; align-items: center; min-height: 48px; padding: 0 20px; border: 1px solid var(--line); border-radius: 999px; font-weight: 600; color: var(--ink); background: var(--glass-hi); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); transition: border-color .2s; }
-    .ghost:hover { border-color: var(--cyan); }
-    .hint { margin-top: 40px; font-size: 13px; color: var(--dim); }
+    .start { min-height: 56px; padding: 0 28px; font-size: 17px; letter-spacing: .08em; }
+    .start::after { content: none; }
+    .start i { font-style: normal; }
+    .hint { margin-top: 36px; font-size: 13px; color: var(--dim); }
 
-    /* ---------- sections ---------- */
     .section { padding-top: clamp(80px, 11vw, 140px); }
     .sec-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: clamp(28px, 4vw, 48px); }
     .sec-no { font-size: clamp(48px, 8vw, 96px); font-weight: 900; line-height: .9; letter-spacing: -.04em; color: transparent; -webkit-text-stroke: 1.5px rgba(255, 255, 255, .35); }
+    .sec-no small { display: block; margin-bottom: 6px; font-size: 12px; letter-spacing: .2em; -webkit-text-stroke: 0; color: var(--cyan); }
     .sec-title { font-size: clamp(28px, 4.6vw, 54px); font-weight: 900; letter-spacing: -.02em; line-height: 1.15; }
     .sec-sub { margin-top: 4px; color: var(--soft); }
 
-    .glass { position: relative; border-radius: 26px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(18px) saturate(140%); -webkit-backdrop-filter: blur(18px) saturate(140%); box-shadow: 0 30px 80px -40px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .08); transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .4s var(--ease); }
+    .glass { position: relative; border-radius: 18px; background: var(--glass); border: 1px solid var(--line); backdrop-filter: blur(14px) saturate(140%); -webkit-backdrop-filter: blur(14px) saturate(140%); box-shadow: 0 30px 80px -40px rgba(0, 0, 0, .8), inset 0 1px 0 rgba(255, 255, 255, .08); transform: perspective(1200px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .4s var(--ease); }
     /* マウスの位置に光る縁 */
     .glass::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: radial-gradient(240px circle at var(--mx, 50%) var(--my, 0%), rgba(92, 225, 255, .8), rgba(255, 92, 154, .4) 40%, transparent 70%); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; opacity: 0; transition: opacity .3s; pointer-events: none; }
     .glass:hover::before { opacity: 1; }
@@ -125,7 +134,7 @@
 
     .meet { display: grid; gap: clamp(18px, 3vw, 36px); padding: clamp(18px, 3vw, 30px); }
     @media (min-width: 860px) { .meet { grid-template-columns: 1.1fr .9fr; align-items: center; } }
-    .meet img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 18px; }
+    .meet img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; }
     .meet h3 { font-size: clamp(22px, 3vw, 32px); font-weight: 800; line-height: 1.3; }
     .meet p { margin-top: 10px; color: var(--soft); }
     .ring { display: flex; align-items: center; gap: 18px; margin-top: 20px; }
@@ -137,7 +146,7 @@
     .apps { display: grid; gap: 20px; }
     @media (min-width: 860px) { .apps { grid-template-columns: repeat(3, 1fr); } }
     .app { display: flex; flex-direction: column; padding: 20px 20px 22px; }
-    .app__shot { display: grid; place-items: center; height: 280px; margin: -4px -4px 16px; border-radius: 18px; background: radial-gradient(circle at 50% 30%, rgba(154, 123, 255, .35), transparent 70%); overflow: hidden; }
+    .app__shot { display: grid; place-items: center; height: 280px; margin: -4px -4px 16px; border-radius: 12px; background: radial-gradient(circle at 50% 30%, rgba(154, 123, 255, .3), transparent 70%); overflow: hidden; }
     .app__shot img { width: auto; max-height: 260px; border-radius: 22px; box-shadow: 0 20px 40px -16px rgba(0, 0, 0, .9); }
     .app__shot--icon img { max-height: 150px; border-radius: 26%; }
     .kind { font-size: 12px; font-weight: 700; letter-spacing: .08em; color: var(--cyan); }
@@ -147,15 +156,19 @@
 
     .minis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin-top: 20px; }
     @media (min-width: 860px) { .minis { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-    .mini { display: flex; flex-direction: column; height: 100%; padding: 10px 10px 14px; border-radius: 20px; }
-    .mini img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 12px; }
+    .mini { display: flex; flex-direction: column; height: 100%; padding: 10px 10px 14px; border-radius: 14px; }
+    .mini img { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; border-radius: 8px; }
     .mini b { margin-top: 10px; padding: 0 4px; font-size: 15px; line-height: 1.4; }
     .mini span { padding: 2px 4px 0; flex: 1; font-size: 13px; line-height: 1.55; color: var(--soft); }
     .mini em { padding: 8px 4px 0; font-style: normal; font-size: 13px; font-weight: 700; color: var(--cyan); }
     .radio { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; margin-top: 22px; padding: 0 18px; border-radius: 999px; font-size: 14px; color: var(--soft); }
     .radio b { color: var(--ink); }
 
-    .about-gpu { margin-top: clamp(80px, 11vw, 140px); padding: 22px 24px; font-size: 14px; color: var(--soft); }
+    .next { display: flex; justify-content: flex-end; margin-top: 40px; }
+    .next a { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 20px; border: 1px solid rgba(92, 225, 255, .5); border-radius: 12px; font-size: 14px; font-weight: 800; letter-spacing: .06em; color: var(--cyan); background: rgba(92, 225, 255, .06); transition: background-color .2s; }
+    .next a:hover { background: rgba(92, 225, 255, .16); }
+
+    .about-gpu { margin-top: clamp(56px, 8vw, 96px); padding: 22px 24px; font-size: 14px; color: var(--soft); }
     .about-gpu h2 { font-size: 16px; color: var(--ink); }
     .about-gpu ul { margin-top: 8px; display: grid; gap: 4px; }
     .about-gpu code { padding: 1px 6px; border-radius: 6px; background: var(--glass-hi); font-size: 13px; }
@@ -169,6 +182,99 @@
 
     .js .rv { opacity: 0; transform: translateY(28px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
     .js .rv.in { opacity: 1; transform: none; }
+
+    /* ================= ゲーム画面 ================= */
+    /* 縦に長い1ページではなく、ステージを左右に切り替える。各ステージの中だけ縦にスクロールする */
+    .game, .game body { height: 100%; overflow: hidden; }
+    .game .hud { position: fixed; left: 0; right: 0; }
+    .game main { position: fixed; left: 0; right: 0; top: var(--top); bottom: var(--bot); overflow: hidden; }
+    .game .track { display: flex; height: 100%; transform: translateX(calc(var(--stage, 0) * -100%)); transition: transform .75s cubic-bezier(.7, 0, .2, 1); }
+    .game .pane { flex: 0 0 100%; height: 100%; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: rgba(92, 225, 255, .35) transparent; }
+    .game .pane > .wrap { position: relative; padding-bottom: 48px; transition: opacity .5s, transform .6s var(--ease); }
+    .game .pane:not(.is-on) > .wrap { opacity: 0; transform: scale(.97); }
+    .game .section { padding-top: 0; }
+    .game .section > .wrap { padding-top: clamp(28px, 5vw, 56px); }
+    .game .hero-pane { display: flex; flex-direction: column; justify-content: center; }
+    .game .hero-pane > .wrap { width: 100%; padding-top: 24px; padding-bottom: 24px; }
+    .game .hero__title { user-select: none; -webkit-user-select: none; cursor: crosshair; }
+    .game .stages [data-go="0"] { display: inline-flex; }
+    .game .stages a[aria-current="true"] { color: #0b0718; background: var(--cyan); }
+    .game .stages a[aria-current="true"] b { color: #0b0718; }
+    .no-anim .track, .no-anim .pane > .wrap { transition: none !important; }
+
+    /* 下のステージ選択 */
+    .game .stages { position: fixed; left: 0; right: 0; bottom: 0; z-index: 50; display: flex; justify-content: center; height: var(--bot); margin: 0; padding: 8px 12px calc(8px + env(safe-area-inset-bottom, 0px)); border-top: 1px solid var(--line); background: rgba(7, 6, 15, .8); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); }
+    .game .stages a { flex-direction: column; justify-content: center; gap: 0; min-width: 76px; padding: 0 12px; line-height: 1.2; font-size: 13px; }
+    @media (max-width: 719px) {
+      .game { --bot: 68px; }
+      .game .stages { gap: 2px; padding-left: 6px; padding-right: 6px; }
+      .game .stages a { flex: 1; min-width: 0; padding: 0 4px; font-size: 12px; }
+      .game .stages a span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+    }
+    .keys { position: fixed; left: 20px; bottom: 0; z-index: 51; align-items: center; height: var(--bot); margin: 0; font-size: 12px; color: var(--dim); pointer-events: none; }
+    .keys kbd { display: inline-block; min-width: 22px; margin: 0 2px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 5px; font: 700 11px/1.5 var(--font); text-align: center; color: var(--soft); }
+    @media (min-width: 1180px) { .game .keys { display: flex; } }
+
+    /* スコアと経験値 */
+    .game .meter { display: flex; align-items: center; gap: 12px; margin-left: auto; font-size: 12px; font-weight: 700; letter-spacing: .08em; color: var(--dim); white-space: nowrap; }
+    .meter b { color: var(--ink); font-size: 15px; letter-spacing: .02em; }
+    .exp { display: block; width: 72px; height: 6px; border-radius: 3px; background: rgba(255, 255, 255, .1); overflow: hidden; }
+    .exp i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--pink), var(--cyan)); transition: width .4s var(--ease); }
+    .game .missions-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--glass-hi); font-size: 12px; font-weight: 700; letter-spacing: .06em; cursor: pointer; }
+    .missions-btn b { color: var(--cyan); }
+    .game .clear-badge:not([hidden]) { display: inline-flex; align-items: center; min-height: 26px; padding: 0 10px; border-radius: 6px; font-size: 11px; font-weight: 900; letter-spacing: .12em; color: #0b0718; background: linear-gradient(90deg, var(--lime), var(--cyan)); }
+    @media (max-width: 719px) {
+      .game .chip, .game .meter .lbl, .game .exp { display: none; }
+      .game .meter { gap: 8px; }
+      .game .logo { font-size: 17px; }
+    }
+    @media (max-width: 380px) { .game .clear-badge:not([hidden]) { display: none; } }
+
+    /* ミッションの一覧 */
+    .missions { position: fixed; z-index: 60; top: calc(var(--top) + 8px); right: 12px; width: min(360px, calc(100vw - 24px)); max-height: calc(100% - var(--top) - var(--bot) - 16px); overflow-y: auto; padding: 18px 18px 14px; border-radius: 14px; border: 1px solid rgba(92, 225, 255, .35); background: rgba(10, 9, 24, .95); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .9); font-size: 14px; }
+    .missions h2 { font-size: 13px; letter-spacing: .16em; color: var(--cyan); }
+    .missions ol { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+    .missions li { display: grid; grid-template-columns: 22px 1fr; gap: 2px 8px; padding: 8px 10px; border-radius: 10px; background: rgba(255, 255, 255, .04); line-height: 1.5; }
+    .missions li::before { content: ""; grid-row: span 2; width: 16px; height: 16px; margin-top: 3px; border: 1.5px solid var(--dim); border-radius: 4px; }
+    .missions li.done::before { content: "✓"; display: grid; place-items: center; border-color: var(--lime); background: var(--lime); color: #0b0718; font-size: 12px; font-weight: 900; }
+    .missions li b { font-size: 14px; }
+    .missions li small { font-size: 12px; color: var(--dim); }
+    .missions li.done b { color: var(--lime); }
+    .missions__foot { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 12px; font-size: 12px; color: var(--dim); }
+    .missions__foot button { min-height: 36px; padding: 0 12px; border: 1px solid var(--line); border-radius: 8px; background: none; color: var(--soft); font-size: 12px; cursor: pointer; }
+
+    /* 実績のお知らせ（右上に流れる） */
+    .toasts { position: fixed; z-index: 70; top: calc(var(--top) + 10px); right: 12px; display: grid; gap: 8px; justify-items: end; pointer-events: none; }
+    .toast { display: grid; grid-template-columns: auto 1fr; gap: 0 12px; align-items: center; min-width: 240px; max-width: calc(100vw - 24px); padding: 10px 16px 10px 12px; border-radius: 12px; border: 1px solid rgba(200, 255, 92, .5); background: rgba(10, 9, 24, .95); box-shadow: 0 16px 40px -16px rgba(0, 0, 0, .9); animation: toast-in .45s var(--ease) both; }
+    .toast.out { animation: toast-out .35s ease both; }
+    .toast i { grid-row: span 2; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 8px; background: var(--lime); color: #0b0718; font-style: normal; font-weight: 900; }
+    .toast small { font-size: 11px; font-weight: 800; letter-spacing: .14em; color: var(--lime); }
+    .toast b { font-size: 14px; line-height: 1.4; }
+    @media (max-width: 719px) { .toasts { top: auto; bottom: calc(var(--bot) + 10px); left: 12px; justify-items: stretch; } .toast { min-width: 0; padding: 8px 12px 8px 10px; } }
+    @keyframes toast-in { from { opacity: 0; transform: translateX(30px); } }
+    @keyframes toast-out { to { opacity: 0; transform: translateX(30px); } }
+
+    /* ブロックを壊したときなどに出る点数 */
+    .pop { position: fixed; z-index: 65; pointer-events: none; font-weight: 900; font-size: 18px; white-space: nowrap; color: var(--lime); text-shadow: 0 0 2px #000, 0 2px 8px rgba(0, 0, 0, .8); transform: translate(-50%, -50%); animation: pop .9s ease-out forwards; }
+    @keyframes pop { from { transform: translate(-50%, -50%) scale(.7); } 30% { transform: translate(-50%, -110%) scale(1.15); } to { opacity: 0; transform: translate(-50%, -190%); } }
+
+    /* データの欠片（ステージの中に隠れている。ポインタで触ると集まる） */
+    .shard { position: absolute; z-index: 3; width: 44px; height: 44px; margin: -22px 0 0 -22px; display: grid; place-items: center; cursor: pointer; }
+    .shard::before { content: ""; width: 16px; height: 16px; transform: rotate(45deg); border: 2px solid var(--cyan); background: rgba(92, 225, 255, .25); box-shadow: 0 0 14px var(--cyan); animation: bob 2.4s ease-in-out infinite; }
+    .shard.got { pointer-events: none; animation: got .5s ease-out forwards; }
+    @keyframes bob { 50% { transform: rotate(45deg) translate(-3px, -3px) scale(1.12); } }
+    @keyframes got { to { opacity: 0; transform: scale(2.2); } }
+
+    /* ステージを切り替えるときに走る光 */
+    .wipe { position: fixed; z-index: 40; top: var(--top); bottom: var(--bot); left: 0; width: 100%; pointer-events: none; opacity: 0; background: linear-gradient(90deg, transparent 0 46%, rgba(92, 225, 255, .18) 49%, rgba(200, 245, 255, .9) 50%, rgba(92, 225, 255, .18) 51%, transparent 54%); }
+    .wipe.go-r { animation: wipe-r .7s cubic-bezier(.7, 0, .2, 1); }
+    .wipe.go-l { animation: wipe-l .7s cubic-bezier(.7, 0, .2, 1); }
+    @keyframes wipe-r { from { opacity: 1; transform: translateX(60%); } to { opacity: 1; transform: translateX(-60%); } }
+    @keyframes wipe-l { from { opacity: 1; transform: translateX(-60%); } to { opacity: 1; transform: translateX(60%); } }
+
+    .press { animation: blink 1.6s steps(2, start) infinite; }
+    @keyframes blink { to { visibility: hidden; } }
+
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition: none !important; animation: none !important; }
@@ -181,129 +287,155 @@
   <div class="fallback-bg" aria-hidden="true"></div>
   <canvas class="stage" aria-hidden="true"></canvas>
 
-  <header class="bar">
-    <div class="wrap bar__in">
+  <header class="hud">
+    <div class="wrap hud__in">
       <a class="logo" href="#top">tomochi<span>.gpu</span></a>
-      <nav class="nav" aria-label="ページ内">
-        <a href="#book">本</a>
-        <a href="#community">運動×勉強会</a>
-        <a href="#works">作品</a>
+      <nav class="stages" aria-label="ステージ">
+        <a href="#top" data-go="0"><b>00</b><span>START</span></a>
+        <a href="#book" data-go="1"><b>01</b><span>本</span></a>
+        <a href="#community" data-go="2"><b>02</b><span>運動×勉強会</span></a>
+        <a href="#works" data-go="3"><b>03</b><span>作品</span></a>
       </nav>
+      <div class="meter" role="group" aria-label="スコア">
+        <span class="clear-badge" data-clear hidden>ALL CLEAR</span>
+        <span>LV <b class="num" data-lv>1</b></span>
+        <span class="exp" aria-hidden="true"><i data-exp></i></span>
+        <span><span class="lbl">SCORE </span><b class="num" data-score>000000</b></span>
+      </div>
+      <button class="missions-btn" type="button" aria-expanded="false" aria-controls="missions" data-missions-btn>MISSION <b class="num" data-mcount>0/7</b></button>
       <span class="chip" data-chip title="このページの描画のしくみ"><i></i><span data-chip-text>CSS</span></span>
     </div>
   </header>
+  <p class="keys" aria-hidden="true"><kbd>←</kbd><kbd>→</kbd>&nbsp;ステージ移動　クリックでショット</p>
+
+  <div class="missions" id="missions" data-missions hidden>
+    <h2>MISSIONS</h2>
+    <ol data-mlist></ol>
+    <div class="missions__foot"><span>記録はこのブラウザだけに残ります</span><button type="button" data-reset>最初から</button></div>
+  </div>
+  <div class="toasts" aria-live="polite" data-toasts></div>
+  <div class="wipe" aria-hidden="true"></div>
 
   <main id="main" tabindex="-1">
-    <section class="wrap hero" id="top" aria-labelledby="hero-title">
-      <p class="eyebrow">tomochi / portfolio</p>
-      <div class="hero__stage" data-hero>
-        <h1 class="hero__title" id="hero-title"><span class="ln"><span class="grad">面白くて、</span>できれば</span><span class="ln">ためになることを、</span><span class="ln"><span class="grad">みんなで</span>やる。</span></h1>
-      </div>
-      <p class="hero__lead"><span class="phrase">398日の家なし生活を本にし、</span><span class="phrase">運動×勉強会</span><span class="phrase">「運動不足解消もくもく会」を主催。</span><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで解決しています。</span></p>
-      <div class="actions">
-        <a class="btn" href="#book">本を見る</a>
-        <a class="ghost" href="#community">運動×勉強会</a>
-        <a class="ghost" href="#works">作品を見る</a>
-      </div>
-      <p class="hint" data-hint>見出しはブロックでできています。ポインタを近づけると持ち上がり、クリックやタップで波が走ります。スクロールすると崩れ落ちます。</p>
-    </section>
-
-    <section class="wrap section" id="book" aria-labelledby="book-title">
-      <div class="sec-head"><p class="sec-no" aria-hidden="true">01</p><div><h2 class="sec-title" id="book-title">本を書く</h2><p class="sec-sub">これまでに2冊、出しています。</p></div></div>
-      <div class="books">
-        <article class="glass book rv" data-tilt>
-          <img src="../rich/img/book-cover.webp" width="560" height="801" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy">
-          <div>
-            <p class="kind">体験記</p>
-            <h3>ホームレス大学院生</h3>
-            <p><span class="phrase">398日間、家がなかった。</span><span class="phrase">家を手放して友人宅を渡り歩いた、</span><span class="phrase">大学院生時代の体験記です。</span></p>
-            <ul class="stats"><li><b>398</b> 日</li><li><b>32</b> 人の友人宅</li><li><b>11</b> 都府県</li></ul>
-            <div class="actions"><a class="btn" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">Amazonで見る</a></div>
+    <div class="track">
+      <section class="pane hero-pane" id="top" aria-labelledby="hero-title">
+        <div class="wrap hero">
+          <p class="eyebrow">tomochi / portfolio</p>
+          <div class="hero__stage" data-hero>
+            <h1 class="hero__title" id="hero-title"><span class="ln"><span class="grad">面白くて、</span>できれば</span><span class="ln">ためになることを、</span><span class="ln"><span class="grad">みんなで</span>やる。</span></h1>
           </div>
-        </article>
-        <article class="glass book rv" data-tilt>
-          <img src="../rich/img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
-          <div>
-            <p class="kind">人生戦略</p>
-            <h3>中の上の人生戦略</h3>
-            <p><span class="phrase">名もなき人は、</span><span class="phrase">名もなき人を参考にせよ。</span><span class="phrase">超一流じゃない、</span><span class="phrase">「どこにでもいる人」のための人生戦略です。</span></p>
-            <ul class="stats"><li>人間関係</li><li>健康</li><li>仕事</li><li>習慣</li></ul>
-            <div class="actions"><a class="btn" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">Amazonで見る</a></div>
+          <p class="hero__lead"><span class="phrase">398日の家なし生活を本にし、</span><span class="phrase">運動×勉強会</span><span class="phrase">「運動不足解消もくもく会」を主催。</span><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで解決しています。</span></p>
+          <div class="actions">
+            <a class="btn start" href="#book"><i aria-hidden="true">▶</i> <span class="press">PRESS START</span></a>
           </div>
-        </article>
-      </div>
-    </section>
-
-    <section class="wrap section" id="community" aria-labelledby="cm-title">
-      <div class="sec-head"><p class="sec-no" aria-hidden="true">02</p><div><h2 class="sec-title" id="cm-title"><span class="phrase">運動×勉強会を</span><span class="phrase">ひらく</span></h2><p class="sec-sub"><span class="phrase">運動不足を解消しながら、</span><span class="phrase">勉強時間も確保する会です。</span></p></div></div>
-      <article class="glass meet rv" data-tilt>
-        <img src="../rich/img/mokumoku-wide.webp" width="1400" height="733" alt="もくもく会の会場。テーブルや椅子、ソファが並ぶラウンジ" loading="lazy">
-        <div>
-          <p class="kind">運動不足解消もくもく会</p>
-          <h3><span class="phrase">勉強の合間に、</span><span class="phrase">運動を。</span></h3>
-          <p>運動を挟むことによって、健康的かつ効率的に勉強を進めています。</p>
-          <div class="ring"><div class="ring__c" aria-hidden="true"></div><p><span class="c">50分</span>勉強して、<span class="p">約15分</span>体を動かす。<span class="sub">それを、みんなでくり返す。</span></p></div>
-          <div class="actions"><a class="btn" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a></div>
+          <p class="hint" data-hint>ステージは全部で3つ。見出しのブロックはクリックやタップで壊せます。ステージのどこかに、データの欠片も隠れています。</p>
         </div>
-      </article>
-    </section>
+      </section>
 
-    <section class="wrap section" id="works" aria-labelledby="works-title">
-      <div class="sec-head"><p class="sec-no" aria-hidden="true">03</p><div><h2 class="sec-title" id="works-title"><span class="phrase">アプリを</span><span class="phrase">つくる</span></h2><p class="sec-sub"><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで。</span></p></div></div>
-      <div class="apps">
-        <article class="glass app rv" data-tilt>
-          <div class="app__shot"><img src="../rich/img/tt_record-phone.webp" width="780" height="1688" alt="卓球戦績メモの戦績画面。勝敗、勝率、対戦相手別の成績が並ぶ" loading="lazy"></div>
-          <p class="kind">Webアプリ</p>
-          <h3>卓球戦績メモ</h3>
-          <p>試合結果を数タップで記録。自前のデータベースを持たず、友だちとの結果共有は暗号化と改ざん検知つき。</p>
-          <div class="actions"><a class="btn" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">サイトを開く</a></div>
-        </article>
-        <article class="glass app rv" data-tilt>
-          <div class="app__shot"><img src="../rich/img/warikan-phone.webp" width="780" height="1688" alt="ワリカンのトップ画面。「みんなの立て替え、すっきりさせよう。」" loading="lazy"></div>
-          <p class="kind">Webアプリ</p>
-          <h3>ワリカン</h3>
-          <p>誰が誰にいくら払えばいいかを、自動で計算。会員登録なしで、共有リンクから一緒に記録できます。</p>
-          <div class="actions"><a class="btn" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">サイトを開く</a></div>
-        </article>
-        <article class="glass app rv" data-tilt>
-          <div class="app__shot app__shot--icon"><img src="../rich/img/pumpkin-icon.webp" width="480" height="480" alt="Pumpkin のアプリアイコン" loading="lazy"></div>
-          <p class="kind">スマホアプリ</p>
-          <h3>Pumpkin</h3>
-          <p>筋トレSNS「Pumpkin」のモバイルアプリ開発に参加。iOSはApp Storeで公開中、Androidは開発中です。</p>
-          <div class="actions"><a class="btn" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">App Storeで見る</a></div>
-        </article>
-      </div>
-      <ul class="minis">
-        <li><a class="glass mini rv" href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener"><img src="../rich/img/benri-sm.webp" width="800" height="500" alt="べんりツールズのRM換算表" loading="lazy"><b>べんりツールズ</b><span>RM換算表や日程調整の時短ツール</span><em>サイトを開く →</em></a></li>
-        <li><a class="glass mini rv" href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener"><img src="../rich/img/5grip-sm.webp" width="800" height="500" alt="チーム制ボルダリング交流会の告知ページ" loading="lazy"><b>ボルダリング交流会</b><span>チーム制で登る交流会の告知サイト</span><em>サイトを開く →</em></a></li>
-        <li><a class="glass mini rv" href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener"><img src="../rich/img/pingpong2-sm.webp" width="800" height="500" alt="Classic Ping Pong のタイトル画面" loading="lazy"><b>Classic Ping Pong</b><span>スピンや溜めショットで遊ぶピンポン</span><em>遊ぶ →</em></a></li>
-        <li><a class="glass mini rv" href="https://store.line.me/stickershop/product/23396313/ja" target="_blank" rel="noopener"><img src="../rich/img/line-sm.webp" width="800" height="500" alt="LINEスタンプ「ニコニコ笑顔」。手描きの棒人間や、^^ の顔のスタンプが並んでいる" loading="lazy"><b>ニコニコ笑顔</b><span>手描きのゆるいLINEスタンプ</span><em>ストアで見る →</em></a></li>
-      </ul>
-      <a class="glass radio" href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener"><span aria-hidden="true">🎙</span> <b>ラジオもやってます</b> stand.fm で聴く →</a>
-    </section>
+      <section class="pane section" id="book" aria-labelledby="book-title">
+        <div class="wrap">
+          <div class="sec-head"><p class="sec-no" aria-hidden="true"><small>STAGE</small>01</p><div><h2 class="sec-title" id="book-title">本を書く</h2><p class="sec-sub">これまでに2冊、出しています。</p></div></div>
+          <div class="books">
+            <article class="glass book rv" data-tilt>
+              <img src="../rich/img/book-cover.webp" width="560" height="801" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy">
+              <div>
+                <p class="kind">体験記</p>
+                <h3>ホームレス大学院生</h3>
+                <p><span class="phrase">398日間、家がなかった。</span><span class="phrase">家を手放して友人宅を渡り歩いた、</span><span class="phrase">大学院生時代の体験記です。</span></p>
+                <ul class="stats"><li><b>398</b> 日</li><li><b>32</b> 人の友人宅</li><li><b>11</b> 都府県</li></ul>
+                <div class="actions"><a class="btn" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">Amazonで見る</a></div>
+              </div>
+            </article>
+            <article class="glass book rv" data-tilt>
+              <img src="../rich/img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy">
+              <div>
+                <p class="kind">人生戦略</p>
+                <h3>中の上の人生戦略</h3>
+                <p><span class="phrase">名もなき人は、</span><span class="phrase">名もなき人を参考にせよ。</span><span class="phrase">超一流じゃない、</span><span class="phrase">「どこにでもいる人」のための人生戦略です。</span></p>
+                <ul class="stats"><li>人間関係</li><li>健康</li><li>仕事</li><li>習慣</li></ul>
+                <div class="actions"><a class="btn" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">Amazonで見る</a></div>
+              </div>
+            </article>
+          </div>
+          <p class="next"><a href="#community">NEXT STAGE ▶ 02 運動×勉強会</a></p>
+        </div>
+      </section>
 
-    <section class="wrap" aria-labelledby="gpu-title">
-      <div class="glass about-gpu">
-        <h2 id="gpu-title">このページの描き方</h2>
-        <ul>
-          <li>背景：<b>WebGPU</b> のシェーダーで、マス目を毎フレーム描いています。ポインタの下のマスが光り、クリックや章の見出しが画面に入ったときは、マスが波のように点灯します（<span class="st off" data-st-gpu>未対応</span>）。</li>
-          <li>見出し：テクスチャを数百個のブロックに分け、3D に並べて描いています。<b>HTML-in-Canvas</b> が使えるときは HTML のままテクスチャにし（<span class="st off" data-st-hic>未対応</span>）、使えないときは文字の位置を1文字ずつ測って描き写しています。</li>
-          <li>HTML-in-Canvas は実験中の機能です。Chrome で <code>chrome://flags/#canvas-draw-element</code> を有効にすると見られます。どちらも使えないブラウザでは、ふつうの HTML と CSS で表示します。</li>
-        </ul>
-      </div>
-    </section>
+      <section class="pane section" id="community" aria-labelledby="cm-title">
+        <div class="wrap">
+          <div class="sec-head"><p class="sec-no" aria-hidden="true"><small>STAGE</small>02</p><div><h2 class="sec-title" id="cm-title"><span class="phrase">運動×勉強会を</span><span class="phrase">ひらく</span></h2><p class="sec-sub"><span class="phrase">運動不足を解消しながら、</span><span class="phrase">勉強時間も確保する会です。</span></p></div></div>
+          <article class="glass meet rv" data-tilt>
+            <img src="../rich/img/mokumoku-wide.webp" width="1400" height="733" alt="もくもく会の会場。テーブルや椅子、ソファが並ぶラウンジ" loading="lazy">
+            <div>
+              <p class="kind">運動不足解消もくもく会</p>
+              <h3><span class="phrase">勉強の合間に、</span><span class="phrase">運動を。</span></h3>
+              <p>運動を挟むことによって、健康的かつ効率的に勉強を進めています。</p>
+              <div class="ring"><div class="ring__c" aria-hidden="true"></div><p><span class="c">50分</span>勉強して、<span class="p">約15分</span>体を動かす。<span class="sub">それを、みんなでくり返す。</span></p></div>
+              <div class="actions"><a class="btn" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a></div>
+            </div>
+          </article>
+          <p class="next"><a href="#works">NEXT STAGE ▶ 03 作品</a></p>
+        </div>
+      </section>
+
+      <section class="pane section" id="works" aria-labelledby="works-title">
+        <div class="wrap">
+          <div class="sec-head"><p class="sec-no" aria-hidden="true"><small>STAGE</small>03</p><div><h2 class="sec-title" id="works-title"><span class="phrase">アプリを</span><span class="phrase">つくる</span></h2><p class="sec-sub"><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで。</span></p></div></div>
+          <div class="apps">
+            <article class="glass app rv" data-tilt>
+              <div class="app__shot"><img src="../rich/img/tt_record-phone.webp" width="780" height="1688" alt="卓球戦績メモの戦績画面。勝敗、勝率、対戦相手別の成績が並ぶ" loading="lazy"></div>
+              <p class="kind">Webアプリ</p>
+              <h3>卓球戦績メモ</h3>
+              <p>試合結果を数タップで記録。自前のデータベースを持たず、友だちとの結果共有は暗号化と改ざん検知つき。</p>
+              <div class="actions"><a class="btn" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">サイトを開く</a></div>
+            </article>
+            <article class="glass app rv" data-tilt>
+              <div class="app__shot"><img src="../rich/img/warikan-phone.webp" width="780" height="1688" alt="ワリカンのトップ画面。「みんなの立て替え、すっきりさせよう。」" loading="lazy"></div>
+              <p class="kind">Webアプリ</p>
+              <h3>ワリカン</h3>
+              <p>誰が誰にいくら払えばいいかを、自動で計算。会員登録なしで、共有リンクから一緒に記録できます。</p>
+              <div class="actions"><a class="btn" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">サイトを開く</a></div>
+            </article>
+            <article class="glass app rv" data-tilt>
+              <div class="app__shot app__shot--icon"><img src="../rich/img/pumpkin-icon.webp" width="480" height="480" alt="Pumpkin のアプリアイコン" loading="lazy"></div>
+              <p class="kind">スマホアプリ</p>
+              <h3>Pumpkin</h3>
+              <p>筋トレSNS「Pumpkin」のモバイルアプリ開発に参加。iOSはApp Storeで公開中、Androidは開発中です。</p>
+              <div class="actions"><a class="btn" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">App Storeで見る</a></div>
+            </article>
+          </div>
+          <ul class="minis">
+            <li><a class="glass mini rv" href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener"><img src="../rich/img/benri-sm.webp" width="800" height="500" alt="べんりツールズのRM換算表" loading="lazy"><b>べんりツールズ</b><span>RM換算表や日程調整の時短ツール</span><em>サイトを開く →</em></a></li>
+            <li><a class="glass mini rv" href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener"><img src="../rich/img/5grip-sm.webp" width="800" height="500" alt="チーム制ボルダリング交流会の告知ページ" loading="lazy"><b>ボルダリング交流会</b><span>チーム制で登る交流会の告知サイト</span><em>サイトを開く →</em></a></li>
+            <li><a class="glass mini rv" href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener"><img src="../rich/img/pingpong2-sm.webp" width="800" height="500" alt="Classic Ping Pong のタイトル画面" loading="lazy"><b>Classic Ping Pong</b><span>スピンや溜めショットで遊ぶピンポン</span><em>遊ぶ →</em></a></li>
+            <li><a class="glass mini rv" href="https://store.line.me/stickershop/product/23396313/ja" target="_blank" rel="noopener"><img src="../rich/img/line-sm.webp" width="800" height="500" alt="LINEスタンプ「ニコニコ笑顔」。手描きの棒人間や、^^ の顔のスタンプが並んでいる" loading="lazy"><b>ニコニコ笑顔</b><span>手描きのゆるいLINEスタンプ</span><em>ストアで見る →</em></a></li>
+          </ul>
+          <a class="glass radio" href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener"><span aria-hidden="true">🎙</span> <b>ラジオもやってます</b> stand.fm で聴く →</a>
+
+          <div class="glass about-gpu">
+            <h2>このページの描き方</h2>
+            <ul>
+              <li>背景：<b>WebGPU</b> のシェーダーでマス目を毎フレーム描いています。ステージを移ると視点が横に流れ、クリックやステージの到着で、マスが波のように点灯します（<span class="st off" data-st-gpu>未対応</span>）。</li>
+              <li>見出し：テクスチャを数百個のブロックに分け、3D に並べて描いています。壊れたブロックは、しばらくすると元に戻ります。<b>HTML-in-Canvas</b> が使えるときは HTML のままテクスチャにし（<span class="st off" data-st-hic>未対応</span>）、使えないときは文字の位置を1文字ずつ測って描き写しています。</li>
+              <li>HTML-in-Canvas は実験中の機能です。Chrome で <code>chrome://flags/#canvas-draw-element</code> を有効にすると見られます。どちらも使えないブラウザでは、ふつうの HTML と CSS で表示します。</li>
+            </ul>
+          </div>
+          <p class="next"><a href="#top">▶ START に戻る</a></p>
+
+          <footer class="foot">
+            <span>© <span data-year>2026</span> tomochi</span>
+            <span class="foot__links">
+              <a href="../">シンプル版</a>
+              <a href="../rich/">リッチ版</a>
+              <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
+              <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
+              <a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">ラジオ</a>
+            </span>
+          </footer>
+        </div>
+      </section>
+    </div>
   </main>
-
-  <footer class="wrap foot">
-    <span>© <span data-year>2026</span> tomochi</span>
-    <span class="foot__links">
-      <a href="../">シンプル版</a>
-      <a href="../rich/">リッチ版</a>
-      <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
-      <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
-      <a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">ラジオ</a>
-    </span>
-  </footer>
 
   <script>
     (function () {
@@ -322,8 +454,188 @@
           el.addEventListener('pointerleave', function () { el.style.setProperty('--rx', '0deg'); el.style.setProperty('--ry', '0deg'); });
         });
       }
-      var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -10% 0px' }) : null;
+      var io = 'IntersectionObserver' in window ? new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { rootMargin: '0px 0px -5% 0px' }) : null;
       document.querySelectorAll('.rv').forEach(function (el) { if (io) io.observe(el); else el.classList.add('in'); });
+
+      // ================= ゲーム =================
+      var track = document.querySelector('.track'), panes = [].slice.call(document.querySelectorAll('.pane'));
+      var tabs = [].slice.call(document.querySelectorAll('[data-go]')), wipe = document.querySelector('.wipe');
+      var cur = -1, gpuOK = false;
+      // WebGPU 側から差し込む処理（ステージへの到着、全部クリア）
+      var hooks = { stage: function () {}, clear: function () {} };
+
+      var ACH = [
+        ['start', 'ゲームスタート', 'START を押すか、ステージを移る'],
+        ['s1', 'STAGE 01 到着', '本のステージを見る'],
+        ['s2', 'STAGE 02 到着', '運動×勉強会のステージを見る'],
+        ['s3', 'STAGE 03 到着', '作品のステージを見る'],
+        ['break', 'ブロック崩し', '見出しのブロックを40個壊す'],
+        ['shard', 'コレクター', 'データの欠片を9個ぜんぶ集める'],
+        ['out', '外の世界へ', '本やアプリのリンクを開く']];
+      var KEY = 'tomochi-gpu', save;
+      function fresh() { return { score: 0, done: {}, shards: {}, broken: 0 }; }
+      try { save = JSON.parse(localStorage.getItem(KEY)) || fresh(); } catch (e) { save = fresh(); }
+      if (!save.done || !save.shards || typeof save.score !== 'number') save = fresh();
+      function persist() { try { localStorage.setItem(KEY, JSON.stringify(save)); } catch (e) {} }
+
+      var elScore = document.querySelector('[data-score]'), elLv = document.querySelector('[data-lv]'), elExp = document.querySelector('[data-exp]');
+      function level() { return 1 + Math.floor(save.score / 1000); }
+      function hud() {
+        elScore.textContent = ('00000' + save.score).slice(-6);
+        elLv.textContent = level();
+        elExp.style.width = save.score % 1000 / 10 + '%';
+      }
+      function addScore(n) {
+        var lv = level();
+        save.score += n; persist(); hud();
+        if (level() > lv) toast('LEVEL UP', 'LV ' + level() + ' になりました', '▲');
+      }
+
+      var toasts = document.querySelector('[data-toasts]');
+      function toast(kind, text, icon) {
+        var el = document.createElement('div');
+        el.className = 'toast';
+        el.innerHTML = '<i aria-hidden="true"></i><small></small><b></b>';
+        el.querySelector('i').textContent = icon || '★';
+        el.querySelector('small').textContent = kind;
+        el.querySelector('b').textContent = text;
+        toasts.appendChild(el);
+        // 一度に見せるのは3つまで
+        while (toasts.children.length > 3) toasts.firstChild.remove();
+        setTimeout(function () { el.classList.add('out'); setTimeout(function () { el.remove(); }, 400); }, 2800);
+      }
+      function pop(x, y, text) {
+        var el = document.createElement('span');
+        el.className = 'pop'; el.setAttribute('aria-hidden', 'true'); el.textContent = text;
+        el.style.left = x + 'px'; el.style.top = y + 'px';
+        document.body.appendChild(el);
+        setTimeout(function () { el.remove(); }, 950);
+      }
+
+      // ミッション。ブロック崩しは WebGPU が動くときだけ数える
+      var mlist = document.querySelector('[data-mlist]'), mcount = document.querySelector('[data-mcount]'), badge = document.querySelector('[data-clear]');
+      function needed() { return ACH.filter(function (a) { return a[0] !== 'break' || gpuOK; }); }
+      function missions() {
+        mlist.textContent = '';
+        ACH.forEach(function (a) {
+          var li = document.createElement('li'), b = document.createElement('b'), s = document.createElement('small');
+          li.className = save.done[a[0]] ? 'done' : '';
+          b.textContent = a[1];
+          s.textContent = a[2] + (a[0] === 'break' ? '（いま ' + Math.min(40, save.broken) + '/40' + (gpuOK ? '' : '・WebGPU 対応ブラウザで遊べます') + '）' : a[0] === 'shard' ? '（いま ' + Object.keys(save.shards).length + '/9）' : '');
+          li.appendChild(b); li.appendChild(s);
+          mlist.appendChild(li);
+        });
+        var n = needed(), d = n.filter(function (a) { return save.done[a[0]]; }).length;
+        mcount.textContent = d + '/' + n.length;
+        badge.hidden = d < n.length;
+        return d === n.length;
+      }
+      function unlock(id) {
+        if (save.done[id]) return;
+        save.done[id] = 1;
+        var a = ACH.filter(function (x) { return x[0] === id; })[0];
+        toast('実績解除 +300', a[1]);
+        addScore(300);
+        if (missions()) {
+          setTimeout(function () { toast('ALL CLEAR', '全部のミッションを達成しました。遊んでくれてありがとう！', '♛'); }, 600);
+          hooks.clear();
+        }
+      }
+
+      var mbtn = document.querySelector('[data-missions-btn]'), mpanel = document.querySelector('[data-missions]');
+      function showMissions(on) { mpanel.hidden = !on; mbtn.setAttribute('aria-expanded', on); if (on) missions(); }
+      mbtn.addEventListener('click', function (e) { e.stopPropagation(); showMissions(mpanel.hidden); });
+      document.addEventListener('click', function (e) { if (!mpanel.hidden && !mpanel.contains(e.target)) showMissions(false); });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !mpanel.hidden) { showMissions(false); mbtn.focus(); } });
+      document.querySelector('[data-reset]').addEventListener('click', function () {
+        save = fresh(); persist(); hud(); missions(); placeShards();
+        toast('RESET', '記録を消しました。最初から遊べます', '↺');
+      });
+
+      // データの欠片：ステージ 01〜03 に3つずつ。ポインタで触ると集まる
+      var SHARDS = { book: [[1, 38], [99, 24], [62, 99]], community: [[99, 30], [1, 66], [74, 99]], works: [[1, 42], [99, 70], [40, 99]] };
+      function placeShards() {
+        document.querySelectorAll('.shard').forEach(function (el) { el.remove(); });
+        Object.keys(SHARDS).forEach(function (id) {
+          var wrap = document.querySelector('#' + id + ' > .wrap');
+          SHARDS[id].forEach(function (p, i) {
+            var key = id + i;
+            if (save.shards[key]) return;
+            var el = document.createElement('span');
+            el.className = 'shard'; el.setAttribute('aria-hidden', 'true');
+            el.style.left = p[0] + '%'; el.style.top = p[1] + '%';
+            function take() {
+              if (el.classList.contains('got')) return;
+              el.classList.add('got');
+              save.shards[key] = 1;
+              var r = el.getBoundingClientRect(), n = Object.keys(save.shards).length;
+              pop(r.left + r.width / 2, r.top, '+50  ' + n + '/9');
+              addScore(50);
+              if (n >= 9) unlock('shard'); else missions();
+              setTimeout(function () { el.remove(); }, 500);
+            }
+            el.addEventListener('pointerenter', take);
+            el.addEventListener('pointerdown', take);
+            wrap.appendChild(el);
+          });
+        });
+      }
+
+      // ステージの切り替え
+      function go(i, opt) {
+        opt = opt || {};
+        i = Math.max(0, Math.min(panes.length - 1, i));
+        if (i === cur) return;
+        var dir = i > cur ? 'go-r' : 'go-l', first = cur < 0;
+        cur = i;
+        if (first) { root.classList.add('no-anim'); setTimeout(function () { root.classList.remove('no-anim'); }, 50); }
+        track.style.setProperty('--stage', i);
+        panes.forEach(function (p, k) { p.classList.toggle('is-on', k === i); p.inert = k !== i; });
+        tabs.forEach(function (a) { a.setAttribute('aria-current', +a.getAttribute('data-go') === i ? 'true' : 'false'); });
+        if (!first && !reduce) { wipe.classList.remove('go-r', 'go-l'); void wipe.offsetWidth; wipe.classList.add(dir); }
+        if (opt.user) {
+          try { history.replaceState(null, '', '#' + panes[i].id); } catch (e) {}
+          unlock('start');
+        }
+        if (i > 0) unlock('s' + i);
+        hooks.stage(i, first);
+      }
+      function paneOf(hash) {
+        var el = hash && hash.length > 1 && document.getElementById(hash.slice(1));
+        if (!el) return -1;
+        for (var k = 0; k < panes.length; k++) if (panes[k] === el || panes[k].contains(el)) return k;
+        return -1;
+      }
+      // ページ内リンク（ステージ選択・NEXT STAGE・PRESS START）はステージの切り替えにする
+      document.addEventListener('click', function (e) {
+        var a = e.target.closest('a[href^="#"]');
+        if (a) {
+          var k = paneOf(a.getAttribute('href'));
+          if (k >= 0) { e.preventDefault(); go(k, { user: true }); if (a.closest('.pane')) panes[k].focus({ preventScroll: true }); }
+          return;
+        }
+        if (e.target.closest('a[target="_blank"]')) unlock('out');
+      });
+      panes.forEach(function (p) { p.setAttribute('tabindex', '-1'); });
+      document.addEventListener('keydown', function (e) {
+        if (e.altKey || e.ctrlKey || e.metaKey || /input|textarea|select/i.test(e.target.tagName)) return;
+        if (e.key === 'ArrowRight') { go(cur + 1, { user: true }); e.preventDefault(); }
+        else if (e.key === 'ArrowLeft') { go(cur - 1, { user: true }); e.preventDefault(); }
+        else if (/^[0-3]$/.test(e.key)) go(+e.key, { user: true });
+      });
+      // スマホは左右のスワイプで移る
+      var touch = null, mainEl = document.querySelector('main');
+      mainEl.addEventListener('touchstart', function (e) { var p = e.touches[0]; touch = [p.clientX, p.clientY, Date.now()]; }, { passive: true });
+      mainEl.addEventListener('touchend', function (e) {
+        if (!touch) return;
+        var p = e.changedTouches[0], dx = p.clientX - touch[0], dy = p.clientY - touch[1];
+        if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy) * 1.6 && Date.now() - touch[2] < 700) go(cur + (dx < 0 ? 1 : -1), { user: true });
+        touch = null;
+      }, { passive: true });
+      addEventListener('hashchange', function () { var k = paneOf(location.hash); if (k >= 0) go(k, { user: true }); });
+
+      hud(); missions(); placeShards();
+      go(Math.max(0, paneOf(location.hash)));
 
       // ---------- WebGPU ----------
       var stage = document.querySelector('.stage');
@@ -338,17 +650,18 @@
       if (!navigator.gpu || !isSecureContext) { status(false, false); return; }
 
       var WGSL = `
-struct U { hero: vec4f, res: vec2f, ptr: vec2f, vel: vec2f, click: vec2f, time: f32, scroll: f32, heroOn: f32, melt: f32,
-           dpr: f32, page: f32, clickT: f32, pulseT: f32, pulse: vec2f, gx: f32, gy: f32, lens: f32, p0: f32, p1: f32, p2: f32 };
+struct U { hero: vec4f, res: vec2f, ptr: vec2f, vel: vec2f, click: vec2f, time: f32, cam: f32, heroOn: f32, melt: f32,
+           dpr: f32, page: f32, clickT: f32, pulseT: f32, pulse: vec2f, gx: f32, gy: f32, lens: f32, warp: f32, clearT: f32, p2: f32 };
 @group(0) @binding(0) var<uniform> u: U;
 @group(0) @binding(1) var smp: sampler;
 @group(0) @binding(2) var tex: texture_2d<f32>;
+@group(0) @binding(3) var<storage, read> hits: array<f32>;   // ブロックごとの、壊された時刻
 
 const CELL = 48.;   // 背景のマス目（CSS px）
 fn hash(p: vec2f) -> f32 { return fract(sin(dot(p, vec2f(127.1, 311.7))) * 43758.5453); }
 fn rotA(v: vec3f, k: vec3f, a: f32) -> vec3f { let c = cos(a); let s = sin(a); return v * c + cross(k, v) * s + k * dot(k, v) * (1. - c); }
-// 背景のマス目は、スクロールの 3 割だけ一緒に動く（クリックと章の位置も、この座標で持つ）
-fn grid(px: vec2f) -> vec2f { return px + vec2f(0., u.scroll * .3 * u.dpr); }
+// 背景の世界の座標。ステージを移ると、視点（cam）が横に流れる（クリックと到着の位置も、この座標で持つ）
+fn world(px: vec2f) -> vec2f { return px + vec2f(u.cam, 0.); }
 // マス id から、中心 c のマスを起点に広がる四角い波（t0 に始まる）
 fn wave(id: vec2f, c: vec2f, t0: f32, speed: f32) -> f32 {
   let age = u.time - t0;
@@ -366,7 +679,7 @@ fn wave(id: vec2f, c: vec2f, t0: f32, speed: f32) -> f32 {
 @fragment fn fs(@builtin(position) pos: vec4f) -> @location(0) vec4f {
   let px = pos.xy;
   let uv = (px - .5 * u.res) / u.res.y;
-  // ページの進み具合で、差し色を紫 → 水色に変える
+  // ステージが進むほど、差し色を紫 → 水色に変える
   let accA = mix(vec3f(.60, .48, 1.), vec3f(.36, .88, 1.), clamp(u.page * 1.4, 0., 1.));
   let accB = mix(vec3f(1., .36, .6), vec3f(.60, .48, 1.), u.page);
   var col = vec3f(.027, .024, .06);
@@ -374,26 +687,37 @@ fn wave(id: vec2f, c: vec2f, t0: f32, speed: f32) -> f32 {
   col += accA * .09 * exp(-dot(a, a) * 2.2) + accB * .06 * exp(-dot(b, b) * 2.);
 
   let cs = CELL * u.dpr;
-  let g = grid(px) / cs;
+  let g = world(px) / cs;
   let id = floor(g); let f = fract(g);
   let toLine = (.5 - abs(f - .5)) * cs;            // いちばん近い線までの距離（px）
   let line = 1. - smoothstep(.5 * u.dpr, 1.3 * u.dpr, min(toLine.x, toLine.y));
   let mark = line * (1. - step(5. * u.dpr, max(toLine.x, toLine.y)));   // 交点の「＋」
-  col += vec3f(.55, .6, 1.) * (line * .045 + mark * .16);
+  // 移動中は、縦の線が光って流れる
+  let vline = 1. - smoothstep(.5 * u.dpr, 1.3 * u.dpr, toLine.x);
+  col += vec3f(.55, .6, 1.) * (line * .045 + mark * .16) + accA * vline * u.warp * .35;
 
   // ポインタの下のマスと、そのまわり
-  let dc = abs(id - floor(grid(u.ptr) / cs)); let cheb = max(dc.x, dc.y);
+  let dc = abs(id - floor(world(u.ptr) / cs)); let cheb = max(dc.x, dc.y);
   let inner = smoothstep(2. * u.dpr, 3. * u.dpr, min(toLine.x, toLine.y));   // マスの中（すき間を残す）
-  var fill = u.lens * .09 * exp(-cheb * 1.3) * step(cheb, 3.);
+  let fill = u.lens * .09 * exp(-cheb * 1.3) * step(cheb, 3.);
   // カーソルのマスは、四隅にかぎ括弧
   let q = abs(f - .5);
   let edge = 1. - smoothstep(1.5 * u.dpr, 2.5 * u.dpr, min(toLine.x, toLine.y) - 2. * u.dpr);
   let bracket = edge * step(.3, min(q.x, q.y)) * step(cheb, .5) * u.lens;
 
-  // クリックと、章が画面に入ったときの波
+  // クリックと、ステージに着いたときの波
   let cw = wave(id, u.click, u.clickT, 16.);
   let pw = wave(id, u.pulse, u.pulseT, 11.);
   col += (accA * (fill + cw * .3) + accB * pw * .32) * inner;
+  // 全部クリアしたら、画面の真ん中から色とりどりの波を何度も出す
+  let ca = u.time - u.clearT;
+  if (ca > 0. && ca < 6.) {
+    let c0 = world(.5 * u.res);
+    for (var k = 0; k < 6; k++) {
+      let hue = vec3f(.5) + .5 * cos(f32(k) * 1.1 + vec3f(0., 2.1, 4.2));
+      col += hue * wave(id, c0, u.clearT + f32(k) * .55, 12.) * .4 * inner;
+    }
+  }
   col += vec3f(.75, .95, 1.) * bracket * .8;
   col *= 1. - .3 * dot(uv, uv);
   return vec4f(col, 1.);
@@ -408,7 +732,7 @@ fn liftAt(c: vec2f) -> f32 {
   var z = 44. * u.lens * exp(-d * d / 16900.);
   let age = u.time - u.clickT;
   if (age > 0. && age < 2.) {
-    let w = (length(c - (u.click - vec2f(0., u.scroll * .3 * u.dpr))) / u.dpr - age * 900.) / 45.;
+    let w = (length(c - (u.click - vec2f(u.cam, 0.))) / u.dpr - age * 900.) / 45.;
     z += 36. * exp(-w * w) * exp(-age * 2.);
   }
   return z * u.dpr;
@@ -424,15 +748,22 @@ fn liftAt(c: vec2f) -> f32 {
   let corner = u.hero.xy + uv * u.hero.zw;
   let center = u.hero.xy + (cell + .5) / g * u.hero.zw;
   let z = liftAt(center);
-  // スクロールで、下の段・左の列から順にくるっと返って落ちる
+  // START を離れると、下の段・左の列から順にくるっと返って落ちる
   let h1 = hash(cell); let h2 = hash(cell + vec2f(3.1, 7.7)); let h3 = hash(cell + vec2f(9.2, 1.3));
-  let e = clamp(u.melt * 2.5 - (1. - cell.y / g.y) * .6 - cell.x / g.x * .5 - h1 * .2, 0., 1.);
+  var e = clamp(u.melt * 2.5 - (1. - cell.y / g.y) * .6 - cell.x / g.x * .5 - h1 * .2, 0., 1.);
+  // 撃たれたブロック：1秒で飛び散り、4.4秒後から元の場所に戻る
+  let ha = u.time - hits[ti];
+  var sc = 1.;
+  if (ha >= 0. && ha < 5.) {
+    if (ha < 4.4) { e = max(e, min(ha, 1.)); }
+    else { let k = (ha - 4.4) / .6; sc = k * k * (3. - 2. * k); }
+  }
   let ax = normalize(vec3f(1., (h3 - .5) * .6, 0.));
   let ang = e * e * 3.1416 * (1. + h2) * select(-1., 1., h3 > .5);
   let n3 = rotA(vec3f(0., 0., 1.), ax, ang);
-  var p = vec3f(center, z) + rotA(vec3f(corner - center, 0.), ax, ang)
+  var p = vec3f(center, z) + rotA(vec3f((corner - center) * sc, 0.), ax, ang)
         + vec3f((h2 - .5) * 260. * e, e * e * 1100. - e * 80., h3 * 220. * e) * u.dpr;
-  if (sh > 0.) { p = vec3f(corner + vec2f(.35, .55) * z, 0.); }   // 影は持ち上がった分だけ右下にずれる
+  if (sh > 0.) { p = vec3f(center + (corner - center) * sc + vec2f(.35, .55) * z, 0.); }   // 影は持ち上がった分だけ右下にずれる
   // 遠近：画面の中心から見た透視
   let fz = u.res.y * 1.4; let c0 = .5 * u.res;
   let sp = c0 + (p.xy - c0) * (fz / max(fz - p.z, fz * .3));
@@ -456,17 +787,19 @@ fn liftAt(c: vec2f) -> f32 {
   return vec4f(rgb, t.a + back) * fade;
 }`;
 
-      var device, ctx, bgPipe, tilePipe, ubuf, bind, layout, sampler, heroTex, hero = null, hicOK = false;
+      var MAXB = 1024;   // ブロックの数の上限
+      var device, ctx, bgPipe, tilePipe, ubuf, hbuf, bind, layout, sampler, heroTex, hero = null;
       var holder = document.querySelector('[data-hero]'), title = holder.querySelector('.hero__title');
       var ptr = [innerWidth / 2, innerHeight / 3], sp = ptr.slice(), vel = [0, 0], lastPtr = null, dpr = 1;
-      var lens = 0, lensTo = 0, click = [0, 0], clickT = -10, pulse = [0, 0], pulseT = -10, t = 0;
+      var lens = 0, lensTo = 0, click = [0, 0], clickT = -10, pulse = [0, 0], pulseT = -10, clearT = -10, t = 0;
+      var cam = 0, melt = 0, warp = 0, hitT = new Float32Array(MAXB).fill(-100), combo = 0, comboT = 0, until = 0, frame = null;
 
       function makeTex(w, h) {
         if (heroTex && heroTex.width === w && heroTex.height === h) return;
         if (heroTex) heroTex.destroy();
         heroTex = device.createTexture({ size: [w, h], format: 'rgba8unorm', usage: GPUTextureUsage.TEXTURE_BINDING | GPUTextureUsage.COPY_DST | GPUTextureUsage.RENDER_ATTACHMENT });
         bind = device.createBindGroup({ layout: layout, entries: [
-          { binding: 0, resource: { buffer: ubuf } }, { binding: 1, resource: sampler }, { binding: 2, resource: heroTex.createView() }] });
+          { binding: 0, resource: { buffer: ubuf } }, { binding: 1, resource: sampler }, { binding: 2, resource: heroTex.createView() }, { binding: 3, resource: { buffer: hbuf } }] });
       }
 
       // HTML-in-Canvas：見出しを WebGPU のキャンバス（content="drawable"）の子にして、HTML のままテクスチャに写す。
@@ -509,7 +842,6 @@ fn liftAt(c: vec2f) -> f32 {
       // DOM の見出しは透明にして残す（読み上げ・選択・レイアウトはそのまま）
       function useText() {
         undoHIC();
-        hicOK = false;
         hero = { mode: 'text', el: title, dirty: true };
         root.classList.add('gpu-text');
         status(true, false);
@@ -548,24 +880,52 @@ fn liftAt(c: vec2f) -> f32 {
         makeTex(w, h);
         if (hero.mode === 'hic') hicCopy(w, h);
         else device.queue.copyExternalImageToTexture({ source: drawText(r, w, h) }, { texture: heroTex }, [w, h]);
-        // タイルは1枚およそ 22px 角
-        hero.gx = Math.max(12, Math.min(48, Math.round(r.width / 22)));
-        hero.gy = Math.max(3, Math.round(hero.gx * r.height / r.width));
+        // ブロックは1個およそ 22px 角
+        var gx = Math.max(12, Math.min(48, Math.round(r.width / 22))), gy = Math.min(Math.floor(MAXB / gx), Math.max(3, Math.round(gx * r.height / r.width)));
+        if (gx !== hero.gx || gy !== hero.gy) { hitT.fill(-100); device.queue.writeBuffer(hbuf, 0, hitT); }
+        hero.gx = gx; hero.gy = gy;
         hero.dirty = false;
         if (!hero.ready) {
           hero.ready = true;
-          if (hero.mode === 'hic') { hicOK = true; status(true, true); }
+          if (hero.mode === 'hic') status(true, true);
         }
+        kick();
       }
       function refresh() {
         if (!hero) return;
         if (hero.mode === 'hic' && stage.onpaint && stage.requestPaint) stage.requestPaint();
         else hero.dirty = true;
+        kick();
       }
       function stop() {
         undoHIC(); hero = null;
         root.classList.remove('gpu-on', 'gpu-text');
         status(false, false);
+        gpuOK = false; missions();
+      }
+      // 動きを減らす設定のときは、何か起きたときだけしばらく描く
+      function kick() { var was = until > performance.now(); until = performance.now() + 1500; if (frame && reduce && !was) requestAnimationFrame(frame); }
+
+      // 見出しのブロックを撃つ：当たったブロックと上下左右の4つを壊す。続けて当てるとコンボ
+      function shoot(x, y) {
+        if (!hero || !hero.ready || cur !== 0 || melt > .05) return;
+        var r = hero.el.getBoundingClientRect();
+        if (x < r.left || x > r.right || y < r.top || y > r.bottom) return;
+        var cx = Math.floor((x - r.left) / r.width * hero.gx), cy = Math.floor((y - r.top) / r.height * hero.gy), n = 0;
+        [[0, 0], [1, 0], [-1, 0], [0, 1], [0, -1]].forEach(function (o) {
+          var X = cx + o[0], Y = cy + o[1], k = Y * hero.gx + X;
+          if (X < 0 || Y < 0 || X >= hero.gx || Y >= hero.gy || t - hitT[k] < 5) return;
+          hitT[k] = t; n++;
+        });
+        if (!n) return;
+        device.queue.writeBuffer(hbuf, 0, hitT);
+        var now = performance.now();
+        combo = now - comboT < 900 ? Math.min(combo + 1, 5) : 1; comboT = now;
+        var pts = n * 10 * combo;
+        pop(x, y, '+' + pts + (combo > 1 ? '  COMBO ×' + combo : ''));
+        save.broken += n;
+        addScore(pts);
+        if (save.broken >= 40) unlock('break'); else if (!mpanel.hidden) missions();
       }
 
       navigator.gpu.requestAdapter().then(function (adapter) {
@@ -580,19 +940,34 @@ fn liftAt(c: vec2f) -> f32 {
         layout = device.createBindGroupLayout({ entries: [
           { binding: 0, visibility: GPUShaderStage.VERTEX | GPUShaderStage.FRAGMENT, buffer: { type: 'uniform' } },
           { binding: 1, visibility: GPUShaderStage.FRAGMENT, sampler: {} },
-          { binding: 2, visibility: GPUShaderStage.FRAGMENT, texture: {} }] });
+          { binding: 2, visibility: GPUShaderStage.FRAGMENT, texture: {} },
+          { binding: 3, visibility: GPUShaderStage.VERTEX, buffer: { type: 'read-only-storage' } }] });
         var pl = device.createPipelineLayout({ bindGroupLayouts: [layout] });
         bgPipe = device.createRenderPipeline({ layout: pl, vertex: { module: mod, entryPoint: 'vs' }, fragment: { module: mod, entryPoint: 'fs', targets: [{ format: format }] } });
         var blend = { srcFactor: 'one', dstFactor: 'one-minus-src-alpha', operation: 'add' };
         tilePipe = device.createRenderPipeline({ layout: pl, vertex: { module: mod, entryPoint: 'tvs' }, fragment: { module: mod, entryPoint: 'tfs', targets: [{ format: format, blend: { color: blend, alpha: blend } }] } });
         ubuf = device.createBuffer({ size: 112, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+        hbuf = device.createBuffer({ size: MAXB * 4, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_DST });
+        device.queue.writeBuffer(hbuf, 0, hitT);
         sampler = device.createSampler({ magFilter: 'linear', minFilter: 'linear', addressModeU: 'clamp-to-edge', addressModeV: 'clamp-to-edge' });
         makeTex(1, 1);
 
         root.classList.add('gpu-on');
         status(true, false);
+        gpuOK = true; missions();
         if (!useHIC()) useText();
         if (document.fonts && document.fonts.ready) document.fonts.ready.then(refresh);
+
+        // ステージに着いたら、見出しの番号から波を出す
+        hooks.stage = function (i, first) {
+          kick();
+          if (reduce || first) return;
+          setTimeout(function () {
+            var r = panes[i].querySelector('.sec-no, .start').getBoundingClientRect();
+            pulse = [(r.left + r.width / 2) * dpr + cam, (r.top + r.height / 2) * dpr]; pulseT = t;
+          }, 650);
+        };
+        hooks.clear = function () { if (!reduce) clearT = t + .4; };
 
         function resize() {
           dpr = Math.min(devicePixelRatio || 1, 1.5);
@@ -612,41 +987,40 @@ fn liftAt(c: vec2f) -> f32 {
         addEventListener('pointerdown', function (e) {
           ptr = [e.clientX, e.clientY];
           if (e.pointerType !== 'mouse') { sp = ptr.slice(); lensTo = reduce ? 0 : 1; }
-          if (!reduce) { click = [e.clientX * dpr, (e.clientY + scrollY * .3) * dpr]; clickT = t; }
+          if (e.target.closest('a, button, .missions, .hud, .shard')) return;
+          shoot(e.clientX, e.clientY);
+          if (!reduce) { click = [e.clientX * dpr + cam, e.clientY * dpr]; clickT = t; }
+          kick();
         }, { passive: true });
         function lift(e) { if (e.pointerType !== 'mouse') lensTo = 0; }
         addEventListener('pointerup', lift); addEventListener('pointercancel', lift);
         document.addEventListener('mouseout', function (e) { if (!e.relatedTarget) lensTo = 0; });
-        // 章の見出しが画面に入るたびに、そこから光の輪を広げる
-        if ('IntersectionObserver' in window && !reduce) {
-          var pio = new IntersectionObserver(function (es) {
-            es.forEach(function (e) {
-              if (!e.isIntersecting) return;
-              var r = e.target.querySelector('.sec-no').getBoundingClientRect();
-              pulse = [(r.left + r.width / 2) * dpr, (r.top + r.height / 2 + scrollY * .3) * dpr]; pulseT = t;
-            });
-          }, { threshold: .6 });
-          document.querySelectorAll('.sec-head').forEach(function (el) { pio.observe(el); });
-        }
 
-        var data = new Float32Array(28), t0 = performance.now();
-        function frame(now) {
+        var data = new Float32Array(28), t0 = performance.now(), last = t0;
+        frame = function (now) {
           if (hero && hero.dirty) { try { upload(); } catch (e) { if (hero.mode === 'hic') useText(); else stop(); } }
           if (!device) return;
-          t = reduce ? 4 : (now - t0) / 1000;
+          var dt = Math.min(.1, (now - last) / 1000); last = now;
+          t = (now - t0) / 1000;
           vel = [vel[0] * .92, vel[1] * .92];
           sp = [sp[0] + (ptr[0] - sp[0]) * .2, sp[1] + (ptr[1] - sp[1]) * .2];
           lens += (lensTo - lens) * .08;
-          var on = 0, hr = [0, 0, 1, 1], melt = 0;
-          if (hero && hero.ready) {
+          // 視点はステージの位置へ流れ、見出しは START にいるときだけ組み上がる
+          var camTo = Math.max(cur, 0) * innerWidth * dpr * .6, meltTo = cur === 0 ? 0 : 1, prev = cam;
+          if (reduce) { cam = camTo; melt = meltTo; }
+          else {
+            cam += (camTo - cam) * Math.min(1, dt * 4);
+            melt = meltTo > melt ? Math.min(meltTo, melt + dt * 1.1) : Math.max(meltTo, melt - dt * .8);
+          }
+          warp = Math.min(1, Math.abs(cam - prev) / Math.max(dt, .001) / (innerWidth * dpr * 1.5));
+          var on = 0, hr = [0, 0, 1, 1];
+          if (hero && hero.ready && melt < 1) {
             var r = hero.el.getBoundingClientRect();
             hr = [r.left * dpr, r.top * dpr, r.width * dpr, r.height * dpr];
-            melt = reduce ? 0 : Math.min(1, Math.max(0, (140 - r.top) / (innerHeight * .55)));
-            on = melt < 1 && r.bottom > -innerHeight && r.top < innerHeight * 2 ? 1 : 0;
+            on = 1;
           }
-          var maxScroll = Math.max(1, root.scrollHeight - innerHeight);
           data.set([hr[0], hr[1], hr[2], hr[3], stage.width, stage.height, sp[0] * dpr, sp[1] * dpr, vel[0], vel[1], click[0], click[1],
-            t, scrollY, on, melt, dpr, scrollY / maxScroll, clickT, pulseT, pulse[0], pulse[1], on ? hero.gx : 1, on ? hero.gy : 1, lens, 0, 0, 0]);
+            t, cam, on, melt, dpr, Math.max(cur, 0) / 3, clickT, pulseT, pulse[0], pulse[1], on ? hero.gx : 1, on ? hero.gy : 1, lens, warp, clearT, 0]);
           device.queue.writeBuffer(ubuf, 0, data);
           var enc = device.createCommandEncoder();
           var pass = enc.beginRenderPass({ colorAttachments: [{ view: ctx.getCurrentTexture().createView(), loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 } }] });
@@ -655,10 +1029,9 @@ fn liftAt(c: vec2f) -> f32 {
           if (on) { pass.setPipeline(tilePipe); pass.draw(6, hero.gx * hero.gy * 2); }
           pass.end();
           device.queue.submit([enc.finish()]);
-          if (!reduce || hero && (hero.dirty || !hero.ready)) requestAnimationFrame(frame);
-        }
+          if (!reduce || now < until || hero && (hero.dirty || !hero.ready)) requestAnimationFrame(frame);
+        };
         requestAnimationFrame(frame);
-        if (reduce) { addEventListener('scroll', function () { requestAnimationFrame(frame); }, { passive: true }); addEventListener('resize', function () { requestAnimationFrame(frame); }); }
         device.lost.then(function () { device = null; stop(); });
       }).catch(function () { stop(); });
     })();

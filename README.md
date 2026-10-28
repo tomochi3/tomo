@@ -12,6 +12,7 @@ index.html      ページ本体（作品一覧はここに直接書いていま�
 rich/           リッチ版（https://tomochi3.github.io/tomo/rich/）。index.html に CSS と JS を内包。画像は rich/img/ にまとめ、シンプル版の img/ には依存しない
 rich/audio/     リッチ版で生き物たちが歌う1節（歌声：VOICEVOX:ずんだもん）。主旋律・ハモり・低音・ボイパ・上ハモりの5パート。作り方は tools/make_song.py
 rich/fonts/     リッチ版の見出し（Dela Gothic One）と手書き（Yomogi）。ページで使う文字だけに絞ったもの。ライセンスは OFL-*.txt（SIL OFL 1.1）
+gpu/            GPU版（https://tomochi3.github.io/tomo/gpu/）。背景を WebGPU のシェーダーで描き、見出しを HTML-in-Canvas（GPUQueue.copyElementImageToTexture）でテクスチャにして揺らす。使えないブラウザでは CSS で表示する。画像は rich/img/ を使う
 css/style.css   スタイル（ライト / ダークはOSの設定に追従）
 img/            作品のサムネイル（WebP。小カード用は 800×500 で名前が -sm）
 fonts/          Inter（英字用、可変ウェイト）。Google Fonts は使わず、ここから読み込む。ライセンスは LICENSE-Inter.txt（SIL OFL 1.1）
@@ -32,7 +33,7 @@ push すると GitHub Actions（`.github/workflows/check.yml`）で次を確認�
 
 ```sh
 python3 tools/check_links.py
-npx html-validate@8.29.0 index.html rich/index.html 404.html
+npx html-validate@8.29.0 index.html rich/index.html gpu/index.html 404.html
 ```
 
 ## ローカルで見る

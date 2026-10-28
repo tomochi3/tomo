@@ -266,8 +266,27 @@
     .kicker { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border: 2px solid var(--ink); border-radius: 999px; background: var(--card); font-size: 14px; font-weight: 700; }
     .big { margin-top: 18px; font-family: var(--display); font-weight: 400; font-size: clamp(32px, 5vw, 58px); line-height: 1.25; }
     .lead { margin-top: 18px; color: var(--ink-soft); font-size: clamp(16px, 1.8vw, 18px); line-height: 1.95; }
-    .js .rv { opacity: 0; transform: translateY(36px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+    /* 画面に入るときは、少し傾いた紙がぽんと置かれるように */
+    .js .rv { opacity: 0; transform: translateY(36px) rotate(-1.2deg); transition: opacity .7s var(--ease), transform .9s var(--bounce); }
     .js .rv.in { opacity: 1; transform: none; }
+
+    /* ---------- スクロールするだけで起きること ---------- */
+    /* 章に着くと、番号のまわりに赤ペンのはなまる、見出しに蛍光ペン */
+    .chap-no { position: relative; width: fit-content; }
+    .hanamaru { position: absolute; left: 50%; top: 50%; width: 132%; opacity: .9; aspect-ratio: 1; translate: -50% -50%; overflow: visible; pointer-events: none; }
+    .hanamaru path { fill: none; stroke: var(--red); stroke-width: 1.15; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; }
+    .is-here .hanamaru path { stroke-dashoffset: 0; transition: stroke-dashoffset 1.6s cubic-bezier(.45, .1, .35, 1) .15s; }
+    .js .chap-title { width: fit-content; background: linear-gradient(transparent 64%, var(--hl) 64%, var(--hl) 92%, transparent 92%) no-repeat left / 0 100%; }
+    .js .is-here .chap-title { background-size: 100% 100%; transition: background-size .8s var(--ease) .9s; }
+    /* 読んだ量の線に、25・50・75% の星を貼っていく */
+    .bar__mile { position: absolute; bottom: -12px; width: 22px; height: 22px; translate: -50% 0; border: 2px solid var(--fixed-ink); border-radius: 50%; background: var(--yellow); color: var(--fixed-ink); font-size: 11px; line-height: 18px; text-align: center; pointer-events: none; animation: mile-in .7s var(--bounce) both; }
+    @keyframes mile-in { from { scale: 0; rotate: -180deg; } }
+    /* スクロールしている間は、左下の生き物が小走りする */
+    .js.is-scrolling .mascot[class="mascot"] .mascot__body { animation: m-bob .38s ease-in-out infinite; }
+    /* 最後まで読むと、フッターに「よくできました」のはんこ */
+    .foot { position: relative; }
+    .foot__hanko { position: absolute; right: clamp(8px, 4vw, 40px); top: -46px; display: grid; place-items: center; width: 92px; height: 92px; border: 3px solid var(--red); border-radius: 50%; color: var(--red); font-family: var(--display); font-size: 15px; line-height: 1.2; text-align: center; rotate: -14deg; background: color-mix(in srgb, var(--paper) 70%, transparent); pointer-events: none; animation: hanko 1s var(--ease) both; }
+    @keyframes hanko { 0% { opacity: 0; scale: 2.6; } 40% { opacity: 1; scale: .92; } 55% { scale: 1.04; } 100% { scale: 1; } }
 
     /* ---------- 01 book ---------- */
     .bk { display: grid; gap: 48px; }
@@ -899,10 +918,12 @@
       function progress() {
         ticking = false;
         var max = root.scrollHeight - window.innerHeight;
-        bar.style.setProperty('--p', max > 0 ? Math.min(1, window.scrollY / max) : 0);
+        var p = max > 0 ? Math.min(1, window.scrollY / max) : 0;
+        bar.style.setProperty('--p', p);
+        if (onProgress) onProgress(p);
         root.classList.toggle('show-dock', window.scrollY > hero.offsetHeight * .6);
       }
-      var scrollIdle = 0;
+      var scrollIdle = 0, onProgress = null;
       window.addEventListener('scroll', function () {
         if (!ticking) { ticking = true; requestAnimationFrame(progress); }
         root.classList.add('is-scrolling');
@@ -1988,6 +2009,84 @@
         });
       }, { rootMargin: '0px 0px -12% 0px' });
       rvs.forEach(function (el) { io.observe(el); });
+
+      // ---------- スクロールするだけで起きること ----------
+      // 左下の生き物にひとこと言わせて、少し踊らせる（片付けや歌の最中、まだ出ていないときは黙っている）
+      function nudge(text, level) {
+        if (singing || mascot.classList.contains('is-away') || !root.classList.contains('show-dock')) return;
+        dance(level || 2, 1800);
+        var r = mascot.getBoundingClientRect();
+        say(text, r.right + 70, r.top - 10);
+      }
+      // 章に着いたら、番号のまわりに赤ペンのはなまるを一筆で描き、紙吹雪を少し飛ばす
+      function hanamaru() {
+        var d = '', k, a, r;
+        // 内側のうずまき（2回り半）から、そのまま外側のくるくるした花びら（9枚）へ一筆でつなげる
+        var A0 = -2.2, N = 9;
+        for (k = 0; k <= 100; k++) { a = A0 + k / 100 * Math.PI * 5; r = 3 + k / 100 * 21; d += (k ? 'L' : 'M') + (50 + Math.cos(a) * r).toFixed(1) + ' ' + (50 + Math.sin(a) * r * .9).toFixed(1); }
+        var a1 = A0 + Math.PI * 5;
+        for (k = 1; k <= 360; k++) {
+          a = a1 + k / 360 * Math.PI * 2.08;
+          // 大きな円を回りながら小さな輪を描くと、花びらの輪っかになる
+          var x = Math.cos(a) * 33 + Math.cos(a * N - a1 * N + Math.PI) * 7, y = Math.sin(a) * 33 + Math.sin(a * N - a1 * N + Math.PI) * 7;
+          var m = Math.min(1, k / 30);   // うずまきの端から、なめらかに花びらへ
+          d += 'L' + (50 + (Math.cos(a) * 24 * (1 - m) + x * m)).toFixed(1) + ' ' + (50 + (Math.sin(a) * 24 * (1 - m) + y * m) * .9).toFixed(1);
+        }
+        var svg = document.createElementNS(NS, 'svg'), path = document.createElementNS(NS, 'path');
+        svg.setAttribute('class', 'hanamaru'); svg.setAttribute('viewBox', '0 0 100 100'); svg.setAttribute('aria-hidden', 'true');
+        path.setAttribute('d', d); path.setAttribute('pathLength', '1');
+        svg.appendChild(path);
+        return svg;
+      }
+      var CHAPTER = { book: '01 本の章だよ！', community: '02 もくもく会の章！', works: '03 作品の章！' };
+      var arrive = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          arrive.unobserve(e.target);
+          e.target.classList.add('is-here');
+          if (reduce) return;
+          nudge(CHAPTER[e.target.parentNode.id]);
+          tone(note(4), .2, .18, 'triangle', .1); tone(note(7), .32, .3, 'triangle', .1);
+          setTimeout(function () {
+            var n = e.target.querySelector('.chap-no').getBoundingClientRect();
+            if (n.bottom > 0 && n.top < innerHeight) burst(n.left + n.width / 2, n.top + n.height / 2, 18);
+          }, 1300);
+        });
+      }, { rootMargin: '0px 0px -30% 0px' });
+      document.querySelectorAll('.chap-head').forEach(function (h) { h.querySelector('.chap-no').appendChild(hanamaru()); arrive.observe(h); });
+
+      // 読んだ量が 25・50・75% を超えたら、上の赤い線に星を貼る。最後まで読んだらお祝い
+      var MILES = [[.25, 'いい調子！'], [.5, '半分きたよ！'], [.75, 'あと少し！']], passed = 0, finished = false;
+      function readNow() { var max = root.scrollHeight - innerHeight; return max > 0 ? scrollY / max : 0; }
+      function star(at) {
+        var m = document.createElement('span');
+        m.className = 'bar__mile'; m.textContent = '★'; m.setAttribute('aria-hidden', 'true');
+        m.style.left = at * 100 + '%';
+        bar.appendChild(m);
+      }
+      // 開いた時点ですでに過ぎている星は、黙って貼っておく
+      while (passed < MILES.length && readNow() >= MILES[passed][0]) star(MILES[passed++][0]);
+      finished = readNow() > .985;
+      function finale() {
+        var foot = document.querySelector('.foot');
+        if (!foot.querySelector('.foot__hanko')) {
+          var h = document.createElement('span');
+          h.className = 'foot__hanko'; h.setAttribute('aria-hidden', 'true'); h.innerHTML = 'よく<br>できました';
+          foot.appendChild(h);
+        }
+        if (reduce) return;
+        say('ありがとう！', innerWidth / 2, innerHeight * .4, 'big');
+        burst(innerWidth * .15, innerHeight, 36); burst(innerWidth * .85, innerHeight, 36);
+        setTimeout(function () { burst(innerWidth / 2, innerHeight, 40); }, 350);
+        nudge('さいごまで読んでくれた！', 4);
+        if (soundOn) sfx.big();
+      }
+      onProgress = function (p) {
+        var hit = null;
+        while (passed < MILES.length && p >= MILES[passed][0]) { hit = MILES[passed]; star(MILES[passed++][0]); }
+        if (hit && !reduce) { nudge(hit[1]); tone(note(5), 0, .25, 'sine', .1); }
+        if (!finished && p > .985 && scrollY > 200) { finished = true; finale(); }
+      };
     })();
   </script>
 </body>

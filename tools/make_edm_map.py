@@ -35,6 +35,42 @@ ANCHORS = [(0, .23396), (32, 15.05312), (64, 29.87053), (96, 44.68081), (128, 59
 SEGMENTS = [(0, 16, 16), (16, 80, 32), (80, 88, 52), (88, 96, 120), (96, 128, 128), (128, 146, 96)]
 BIG = [16, 48, 80, 96, 128, 136]   # 映像の大きな場面（ドロップや章の頭）
 
+# 単調にならないように、DJ のように曲に手を加える（どれも映像の拍で書く。ページがその場でかける）
+#   ['hp'|'lp', 始め, 終わり, 始めの周波数, 終わりの周波数]  … 高い音だけ／低い音だけにしていくフィルター
+#   ['cut', 始め, 終わり]          … 音を止める（ドロップ前のため）
+#   ['gate', 始め, 終わり, 'x.x.', 刻み] … 刻みごとに音を出す・止める（x が出す）
+#   ['stutter', 始め, 長さ, 分割]  … 短い一切れを、分割の数だけくり返す
+#   ['tape', 始め, 終わり]         … テープを止めたように、音が下がりながら止まる
+#   ['riser', 始め, 長さ] / ['impact', 拍] / ['roll', 始め, 終わり] … 上に重ねる効果音
+FX = [
+    # イントロ：高い音だけの細い音から、だんだん開いていく。ドロップの直前で半拍だけ止める
+    ['hp', 0, 14, 900, 30], ['riser', 8, 7.5], ['cut', 15.5, 16], ['impact', 16],
+    ['stutter', 31, 1, 8],
+    # はんこ：8分音符で刻んで、はんこを押す音に合わせる
+    ['gate', 32, 38, 'x.', .5],
+    # 「友人の家を、渡り歩いた。」：こもっていって、ドロップで一気に開く
+    ['lp', 40, 47.5, 18000, 600], ['cut', 47.5, 48], ['lp', 48, 48.05, 600, 20000], ['impact', 48],
+    ['stutter', 63, 1, 8],
+    # 4つのテーマ：拍の頭だけ鳴らして止める（ストップタイム）
+    ['gate', 68, 72, 'x...', .25],
+    ['stutter', 75, 1, 4],
+    # 運動×勉強会の前で、テープを止めたように落とす。ブレイクは少しこもらせる
+    ['tape', 79, 80], ['lp', 80, 80.05, 20000, 1400], ['lp', 87.5, 88, 1400, 20000],
+    # 最後のドロップへ：低い音を抜いていきながら、ライザーとスネアのロール。直前で止めて、ドカン
+    ['hp', 88, 95.5, 30, 1800], ['riser', 88, 7.5], ['roll', 92, 95.5], ['cut', 95.5, 96], ['hp', 96, 96.05, 1800, 30], ['impact', 96],
+    ['stutter', 103, 1, 8], ['stutter', 111, 1, 8],
+    # 小さな作品4つ：ストップタイム
+    ['gate', 112, 116, 'x...', .25],
+    # 「ほかにも、いろいろ。」：16分音符で刻むノリに変える
+    ['gate', 116, 120, 'x.xxx.x.x.xxx.xx', .25],
+    # 「身近な不便を、小さなアプリで。」：こもらせてから、写真のところで開く
+    ['lp', 120, 123.5, 18000, 900], ['cut', 123.5, 124], ['lp', 124, 124.05, 900, 20000], ['impact', 124],
+    ['stutter', 127, 1, 8], ['impact', 128],
+    # 締め：ロゴで一撃、そのあとは高い音だけにして消えていく
+    ['impact', 136], ['hp', 138, 145, 30, 2500],
+]
+STOP = [68, 69, 70, 71, 112, 113, 114, 115]   # ストップタイムの一撃（映像も揺らす）
+
 
 def song_t(b):
     for (b0, t0), (b1, t1) in zip(ANCHORS, ANCHORS[1:]):
@@ -69,8 +105,17 @@ def main():
     steps = [v / 4 for v in range(0, 146 * 4)]   # 16分音符ごとに調べる
     lo = np.array([onset(low, song_t(song_beat(v))) for v in steps])
     hi = np.array([onset(high, song_t(song_beat(v))) for v in steps])
-    k = [v for v, x in zip(steps, lo) if x > np.percentile(lo, 82) and x > 0]
-    s = [v for v, x in zip(steps, hi) if x > np.percentile(hi, 85) and x > 0 and v not in k]
+    # 音を止めている間・刻んで消している間は、映像も揺らさない
+    def heard(v):
+        for f in FX:
+            if f[0] == 'cut' and f[1] <= v < f[2]:
+                return False
+            if f[0] == 'gate' and f[1] <= v < f[2] and f[3][int(round((v - f[1]) / f[4])) % len(f[3])] != 'x':
+                return False
+        return True
+    k = [v for v, x in zip(steps, lo) if x > np.percentile(lo, 82) and x > 0 and heard(v)]
+    s = [v for v, x in zip(steps, hi) if x > np.percentile(hi, 85) and x > 0 and v not in k and heard(v)]
+    k = sorted(set(k + STOP))
     beat = (ANCHORS[-1][1] - ANCHORS[0][1]) / (ANCHORS[-1][0] - ANCHORS[0][0])
     data = {
         'format': 'tomochi-mv-edm/1',
@@ -79,7 +124,8 @@ def main():
         'beat': round(beat, 6),
         'anchors': ANCHORS,
         'segments': SEGMENTS,
-        'k': k, 's': s, 'h': BIG,
+        'k': k, 's': s, 'h': sorted(set(BIG + STOP)),
+        'fx': FX,
     }
     OUT.write_text(json.dumps(data, ensure_ascii=False) + '\n', encoding='utf-8')
     print(f'{OUT.relative_to(ROOT)}: {data["bpm"]} BPM, kick {len(k)}, snare {len(s)}')

@@ -90,7 +90,8 @@
 
     /* ---------- 再生前の画面 ---------- */
     .intro { display: none; }
-    .js .intro { position: fixed; inset: 0; z-index: 20; display: grid; place-items: center; padding: 24px; background: var(--ink); text-align: center; }
+    .js .intro { position: fixed; inset: 0; z-index: 20; display: flex; overflow-y: auto; padding: 24px; background: var(--ink); text-align: center; }
+    .intro > div { margin: auto; }   /* 画面より高いときは、上が切れずにスクロールできる */
     .js .is-playing .intro, .js .is-ended .intro { display: none; }
     .intro h1 { margin: 0; font-family: var(--display); font-weight: 400; font-size: clamp(40px, 10vw, 96px); line-height: 1.05; }
     .intro h1 span { color: var(--yellow); }
@@ -124,7 +125,13 @@
     .end__foot a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
     .again { min-height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--yellow); color: var(--ink); font-family: var(--display); font-size: 17px; }
     .swap { min-height: 48px; padding: 0 18px; border: 2px solid var(--yellow); border-radius: 999px; background: none; color: var(--yellow); font-weight: 800; }
-    html:not(.js) .again, html:not(.js) .swap { display: none; }
+    .back { min-height: 48px; padding: 0 14px; border: 0; background: none; color: #c9c0b0; font-size: 14px; text-decoration: underline; }
+    html:not(.js) .end__bar { display: none; }
+    .end__bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; margin-top: 22px; }
+    /* 一覧が長いスマホでも、操作は画面の下に見えたままにする */
+    .js .end__bar { position: sticky; bottom: 0; z-index: 2; padding: 14px 0 calc(14px + env(safe-area-inset-bottom, 0px)); background: linear-gradient(rgba(20, 18, 15, 0), var(--ink) 30%); }
+    .notice { position: fixed; left: 50%; top: 16px; z-index: 30; translate: -50% 0; max-width: calc(100vw - 32px); margin: 0; padding: 10px 16px; border-radius: 12px; background: var(--paper); color: var(--ink); font-size: 14px; font-weight: 700; box-shadow: 0 10px 30px rgba(0, 0, 0, .4); }
+    .notice[hidden] { display: none; }
     .credit { margin-top: 10px; font-size: 12px; color: #c9c0b0; }
     .play[aria-busy="true"] { animation: none; opacity: .7; }
   </style>
@@ -132,6 +139,7 @@
 <body>
   <a class="skip" href="#end">内容の一覧へスキップ</a>
   <div class="app">
+    <p class="notice" role="status" data-notice hidden></p>
     <div class="intro">
       <div>
         <h1>tomochi<span>.</span><br>MV</h1>
@@ -143,6 +151,7 @@
         <p class="vers-note" data-ver-note>バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲をつないだ、ピアノとオーケストラ風の曲</p>
         <button class="play" type="button" data-play>▶ 再生 <small>音が出ます</small></button>
         <button class="mute" type="button" data-play-muted>音なしで見る</button>
+        <button class="mute" type="button" data-list>映像を見ずに、内容の一覧を見る</button>
         <p class="warn">画面をクリック・タップすると、4拍ごとの区切りで上の音符にボールが飛び込みます。<br>画面の色が拍に合わせて大きく切り替わります。</p>
       </div>
     </div>
@@ -191,9 +200,12 @@
             </ul>
           </section>
         </div>
-        <p class="end__foot">
+        <div class="end__bar">
           <button class="again" type="button" data-again>↺ もう一度見る</button>
           <button class="swap" type="button" data-swap>EDM版で見る</button>
+          <button class="back" type="button" data-back>最初の画面へ</button>
+        </div>
+        <p class="end__foot">
           <a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">ラジオ（stand.fm）</a>
           <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
           <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
@@ -418,10 +430,10 @@
       it(24, 28, 'ひとつの家に、', { size: 10, y: -12, fx: 'left' });
       it(25, 28, '住まない暮らし。', { size: 11, y: 10, fx: 'right' });
       it(28, 32, '0', { size: 30, y: -22, count: [32, 28, 31.75], fx: 'pop' });
-      it(28, 32, '人の友人宅に泊めてもらった', { size: 5.2, y: -4, fx: 'up' });
+      it(28, 32, '人の友人宅に泊めてもらった', { size: 5.2, y: -4, fx: 'up', p: { size: 6.2, y: 0 } });
       for (var h = 0; h < 32; h++) it(28 + Math.floor(h / 2) * .25, 32, '<svg class="house" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8v10H3Z" fill="currentColor"/><rect x="10" y="14" width="4" height="7" fill="#ffd23f"/></svg>', { size: 6, x: ((h % 8) - 3.5) * 9, y: 12 + Math.floor(h / 8) * 8, fx: 'pop', d: .2 });
       it(32, 40, '11', { size: 30, y: -24, fx: 'pop' });
-      it(32, 40, '都府県で暮らした', { size: 6, y: -6, fx: 'up' });
+      it(32, 40, '都府県で暮らした', { size: 6, y: -6, fx: 'up', p: { size: 7.5, y: -2 } });
       ['東京', '神奈川', '埼玉', '千葉', '愛知', '三重', '京都', '大阪', '兵庫', '愛媛', '福岡'].forEach(function (p, i) {
         it(32 + i * .5, 40, p, { cls: 'stamp', size: 3.4, x: ((i % 6) - 2.5) * 15 + (i >= 6 ? 7.5 : 0), y: i < 6 ? 12 : 27, fx: 'stamp', d: .2, color: '#e2412b', rot: (i % 3 - 1) * 8 });
       });
@@ -437,7 +449,7 @@
       it(56, 60, '参考にせよ。', { size: 12, y: 18 });
       it(60, 68, '中の上の人の、ある1週間', { size: 5, y: -24, fx: 'up' });
       [['月', '^^'], ['火', '-_-'], ['水', '^o^', 1], ['木', '^o^', 1], ['金', '^^'], ['土', '^o^', 1], ['日', '^^', 1]].forEach(function (d, i) {
-        it(60 + i * .5, 68, '<b>' + d[0] + '</b><span>' + d[1] + '</span>', { cls: 'day' + (d[2] ? ' fun' : ''), size: 3.6, x: (i - 3) * 13.6, y: -2, fx: 'drop', d: .25, rot: (i % 2 ? 3 : -3) });
+        it(60 + i * .5, 68, '<b>' + d[0] + '</b><span>' + d[1] + '</span>', { cls: 'day' + (d[2] ? ' fun' : ''), size: 3.6, x: (i - 3) * 13.6, y: -2, fx: 'pop', d: .25, rot: (i % 2 ? 3 : -3) });
       });
       it(64, 68, 'だいたい楽しい、くらいが<br>ちょうどいい。', { cls: 'hand', size: 6, y: 22, fx: 'up', color: '#e2412b' });
       [['人間関係', '#ffe27a', -1, -1], ['健康', '#ffc1cc', 1, -1], ['仕事', '#b9d1ff', -1, 1], ['習慣', '#bfe8cb', 1, 1]].forEach(function (n, i) {
@@ -498,8 +510,13 @@
       // 縦長の画面では、横に並べていた絵と言葉を縦に積む（o.p に縦長のときの位置や大きさを書く）
       var tall = false;
       function fit(o) {
-        var q = tall && o.p ? o.p : {};
-        o.el.style.fontSize = (q.size || o.size) + 'vmin';
+        var q = tall && o.p ? o.p : {}, size = q.size || o.size;
+        // 縦長の画面は上下が空くので、文字だけの言葉は、横幅に収まる範囲で大きくする
+        if (tall && !q.size && !o.w && !o.count && o.size < 20 && !/stamp|day|note|ring|pill/.test(o.el.className)) {
+          var longest = Math.max.apply(null, o.el.innerHTML.split(/<br>/).map(function (l) { return l.replace(/<[^>]+>/g, '').length; }));
+          if (longest) size = Math.min(size * 1.3, Math.max(size, 88 / longest));
+        }
+        o.el.style.fontSize = size + 'vmin';
         if (q.w || o.w) o.el.style.width = (q.w || o.w) + 'vmin';
         o.cx = q.x !== undefined ? q.x : o.x; o.cy = q.y !== undefined ? q.y : o.y;
       }
@@ -582,6 +599,8 @@
       function concert(b, sc, kick) {
         g.clearRect(0, 0, W, H);
         var i, nt, fg = sc[2];
+        // 明るい背景（象牙色・金）の上では、濃い金にして見えるようにする
+        GOLD = /^#(f3ead7|e8c766)$/.test(sc[1]) ? '150,104,22' : '232,199,102';
         // 上からのやわらかい光。ティンパニで少し明るくなる
         var sp = g.createRadialGradient(W / 2, -H * .2, 0, W / 2, -H * .2, H * 1.2);
         sp.addColorStop(0, 'rgba(255,236,190,' + (.1 + kick * .12).toFixed(3) + ')'); sp.addColorStop(1, 'rgba(255,236,190,0)');
@@ -617,7 +636,7 @@
           for (i = nfrom(b - 1.5); i < CNOTES.length && (nt = CNOTES[i]).b <= b; i++) {
             if (nt.tr !== 'organ') continue;
             var k = Math.exp(-(b - nt.b) * 2.2) * (1 - open), x = W * (.15 + .7 * ((nt.m[nt.m.length - 1] - 50) % 13) / 12);
-            var col = g.createLinearGradient(0, 0, 0, H); col.addColorStop(0, gold(0)); col.addColorStop(.5, gold(.22 * k)); col.addColorStop(1, gold(0));
+            var col = g.createLinearGradient(0, 0, 0, H); col.addColorStop(0, gold(0)); col.addColorStop(.5, gold(.36 * k)); col.addColorStop(1, gold(0));
             g.fillStyle = col; g.fillRect(x - vmin * 1.6, 0, vmin * 3.2, H);
           }
         }
@@ -626,7 +645,7 @@
           var lh = last([8, 10, 12, 14, 15], b);
           if (lh > 0 && b - lh < .8) {
             var t = clamp((b - lh) / .25), fade = 1 - clamp((b - lh - .25) / .55), R = Math.min(W, H) * .42;
-            g.strokeStyle = gold(.55 * fade); g.lineWidth = 1.5;
+            g.strokeStyle = gold(.85 * fade); g.lineWidth = 2.2;
             g.beginPath(); g.arc(W / 2 - R * .2, H / 2 - R * .9, R, Math.PI * .15, Math.PI * (.15 + .5 * t)); g.stroke();
           }
         }
@@ -635,7 +654,7 @@
           var mel = lastOf('melody', b), amp = mel ? Math.exp(-(b - mel.b) * 6) * vmin * 1.2 : 0;
           for (var side = -1; side <= 1; side += 2) for (var s1 = 0; s1 < 4; s1++) {
             var x0 = W / 2 + side * (W * .44 - s1 * vmin * 1.4);
-            g.strokeStyle = gold(.18 + amp / vmin * .12); g.lineWidth = 1; g.beginPath();
+            g.strokeStyle = gold(.3 + amp / vmin * .2); g.lineWidth = 1.3; g.beginPath();
             for (var yy = 0; yy <= H; yy += 8) { var xw = x0 + Math.sin(yy / H * Math.PI) * Math.sin(yy * .05 + b * 40 + s1) * amp; if (yy) g.lineTo(xw, yy); else g.moveTo(xw, yy); }
             g.stroke();
           }
@@ -646,15 +665,15 @@
           for (var c2 = -1; c2 <= 1; c2 += 2) for (i = 0; i < 7; i++) {
             // 左上の隅からは右下へ、右上の隅からは左下へ、扇のように
             var ang = .35 + i * .13, L = Math.hypot(W, H), x1 = c2 < 0 ? 0 : W;
-            g.strokeStyle = gold(.28 * f2 + .06); g.lineWidth = 1.2;
+            g.strokeStyle = gold(.45 * f2 + .1); g.lineWidth = 1.5;
             g.beginPath(); g.moveTo(x1, 0); g.lineTo(x1 - c2 * Math.cos(ang) * L, Math.sin(ang) * L); g.stroke();
           }
         }
         // 振り子（80〜96）：時計のカチコチに合わせて、小さな光の点が弧の上を行き来する
         if (b >= 80 && b < 96) {
           var px = W * (tall ? .5 : .82), py = H * (tall ? .16 : .3), pr = vmin * 10, pa = Math.PI / 2 + .45 * Math.cos(Math.PI * b);
-          g.strokeStyle = gold(.18); g.lineWidth = 1; g.beginPath(); g.arc(px, py, pr, Math.PI / 2 - .5, Math.PI / 2 + .5); g.stroke();
-          g.fillStyle = gold(.8); g.beginPath(); g.arc(px + Math.cos(pa) * pr, py + Math.sin(pa) * pr, vmin * .9, 0, 7); g.fill();
+          g.strokeStyle = gold(.32); g.lineWidth = 1.3; g.beginPath(); g.arc(px, py, pr, Math.PI / 2 - .5, Math.PI / 2 + .5); g.stroke();
+          g.fillStyle = gold(.95); g.beginPath(); g.arc(px + Math.cos(pa) * pr, py + Math.sin(pa) * pr, vmin * 1.2, 0, 7); g.fill();
         }
         // ティンパニ（96〜128）：低い音のたびに、下の両隅から波紋が広がる
         if (b >= 96 && b < 128) {
@@ -662,14 +681,14 @@
           for (var r = 0; r < 3; r++) {
             var age = b - lk + r;
             if (age < 0 || age > 3) continue;
-            g.strokeStyle = gold(.3 * (1 - age / 3)); g.lineWidth = 1.2;
+            g.strokeStyle = gold(.5 * (1 - age / 3)); g.lineWidth = 1.6;
             for (var c3 = -1; c3 <= 1; c3 += 2) { g.beginPath(); g.ellipse(W / 2 + c3 * W * .42, H * .9, (age * 30 + 4) * vmin, (age * 9 + 1.2) * vmin, 0, 0, 7); g.stroke(); }
           }
         }
         if (b >= 7) {
           // 上：五線のような細い5本の線に、旋律が光の点で流れていく（音符は描かない）
           var gap = Math.max(4, vmin * 1.1), top = Math.max(48, H * .085), bot = top + gap * 4, ph = W * .2, ppb = Math.max(48, W / 10);
-          g.strokeStyle = fg; g.globalAlpha = .13; g.lineWidth = 1;
+          g.strokeStyle = fg; g.globalAlpha = .2; g.lineWidth = 1;
           for (i = 0; i < 5; i++) { g.beginPath(); g.moveTo(0, top + i * gap); g.lineTo(W, top + i * gap); g.stroke(); }
           g.globalAlpha = 1;
           for (i = nfrom(b - 3); i < CNOTES.length && (nt = CNOTES[i]).b < b + 11; i++) {
@@ -677,7 +696,7 @@
             var nx = ph + (nt.b - b) * ppb;
             if (nx < -10 || nx > W + 10) continue;
             var tm = Math.max.apply(null, nt.m), ny = bot - (Math.max(40, Math.min(92, tm)) - 64) * gap * .32, hit = b >= nt.b ? Math.exp(-(b - nt.b) * 3) : 0;
-            g.fillStyle = gold(b >= nt.b ? .15 + hit * .8 : .45);
+            g.fillStyle = gold(b >= nt.b ? .25 + hit * .75 : .65);
             g.beginPath(); g.arc(nx, ny, vmin * (.35 + hit * .5), 0, 7); g.fill();
           }
           // 下：細い縦の線が並び、鳴っている高さの線が金色に光る（ピアノの弦のような気配）
@@ -689,7 +708,7 @@
           var sw = W / (hi - lo + 1);
           for (var m = lo; m <= hi; m++) {
             var L = light[m] || 0;
-            g.fillStyle = L ? gold(.2 + L * .8) : fg; g.globalAlpha = L ? 1 : .1;
+            g.fillStyle = L ? gold(.3 + L * .7) : fg; g.globalAlpha = L ? 1 : .16;
             g.fillRect(m === lo ? sw * .5 : (m - lo + .5) * sw, ky + kh * (1 - (.35 + L * .65)), 1.2, kh * (.35 + L * .65));
           }
           g.globalAlpha = 1;
@@ -700,7 +719,7 @@
             var st = 136 + hash(i) * 3, age2 = b - st;
             if (age2 < 0) continue;
             var dy = H * (1 - hash(i + 7) * .3) - age2 * H * .09, dx = hash(i + 99) * W + Math.sin(age2 * 2 + i) * vmin * 2;
-            g.fillStyle = gold(Math.max(0, .7 - age2 * .12) * (.5 + .5 * Math.sin(b * 6 + i)));
+            g.fillStyle = gold(Math.max(0, .9 - age2 * .12) * (.55 + .45 * Math.sin(b * 6 + i)));
             g.beginPath(); g.arc(dx, dy, vmin * (.2 + hash(i + 3) * .35), 0, 7); g.fill();
           }
         }
@@ -854,7 +873,9 @@
         syncSoundButton();
         if (ver === 'edm') { usePulse(EDM_PULSE); begin(null, at, paused); return; }
         var a = ac, btns = document.querySelectorAll('[data-play], [data-play-muted], [data-again]');
-        btns.forEach(function (bt) { bt.setAttribute('aria-busy', 'true'); bt.disabled = true; });
+        // 曲を読み込んでいる間は、押したボタンに「読み込み中…」と出す
+        btns.forEach(function (bt) { bt.setAttribute('aria-busy', 'true'); bt.disabled = true; bt.__label = bt.innerHTML; });
+        if (busyFrom) busyFrom.textContent = '読み込み中…';
         loadClassic().then(function (d) {
           usePulse(d.pulse);
           return a.decodeAudioData(d.mp3.slice(0));
@@ -862,10 +883,23 @@
           if (ac !== a) return;   // 待っている間に止められた
           begin(buf, at, paused);
         }).catch(function () {
-          // 読み込めなかったら EDM 版で流す
+          // 読み込めなかったら EDM 版で流し、そのことを知らせる（選び方としては覚えない）
           if (ac !== a) return;
-          setVer('edm'); usePulse(EDM_PULSE); begin(null, at, paused);
-        }).then(function () { btns.forEach(function (bt) { bt.removeAttribute('aria-busy'); bt.disabled = false; }); });
+          setVer('edm', true); usePulse(EDM_PULSE); begin(null, at, paused);
+          notice('クラシック版の曲を読み込めなかったので、EDM版で流しています');
+        }).then(function () { btns.forEach(function (bt) { bt.removeAttribute('aria-busy'); bt.disabled = false; if (bt.__label) bt.innerHTML = bt.__label; }); });
+      }
+      var busyFrom = null, noticeTimer = 0;
+      function notice(text) {
+        var el = document.querySelector('[data-notice]');
+        el.textContent = text; el.hidden = false;
+        clearTimeout(noticeTimer); noticeTimer = setTimeout(function () { el.hidden = true; }, 4500);
+      }
+      // 映像を見ずに、内容の一覧を出す
+      function showEnd(focus) {
+        stop();
+        app.classList.remove('is-playing'); app.classList.add('is-ended');
+        if (focus !== false) document.querySelector('#end').focus({ preventScroll: true });
       }
       function begin(buf, at, paused) {
         at = Math.max(0, Math.min(END - 1, at || 0));
@@ -893,13 +927,13 @@
       // ---------- 曲の切り替え（EDM / クラシック）。選んだほうを覚えておく ----------
       var ver = 'edm';
       var NOTES = { edm: 'オリジナルのダンス曲（その場で鳴らしています）', classic: 'バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲をつないだ、ピアノとオーケストラ風の曲' };
-      function setVer(v) {
+      function setVer(v, once) {
         ver = v === 'classic' ? 'classic' : 'edm';
         app.classList.toggle('v-classic', ver === 'classic');
         document.querySelectorAll('[data-ver]').forEach(function (bt) { bt.setAttribute('aria-pressed', String(bt.getAttribute('data-ver') === ver)); });
         document.querySelector('[data-ver-note]').textContent = NOTES[ver];
         document.querySelector('[data-swap]').textContent = ver === 'edm' ? 'クラシック版で見る' : 'EDM版で見る';
-        try { localStorage.setItem('tomochi-mv-v2', ver); } catch (e) {}
+        if (!once) { try { localStorage.setItem('tomochi-mv-v2', ver); } catch (e) {} }
         if (ver === 'classic') loadClassic();
       }
       document.querySelectorAll('[data-ver]').forEach(function (bt) { bt.addEventListener('click', function () { setVer(bt.getAttribute('data-ver')); }); });
@@ -954,10 +988,22 @@
         else { pausedAt = performance.now(); pauseBtn.textContent = '▶'; }
       });
       document.addEventListener('keydown', function (e) { if (e.key === ' ' && playing && e.target === document.body) { e.preventDefault(); pauseBtn.click(); } if (e.key === 'Escape' && playing) finish(); });
-      document.querySelector('[data-skip]').addEventListener('click', function () { stop(); app.classList.remove('is-playing'); app.classList.add('is-ended'); document.querySelector('#end').focus({ preventScroll: true }); });
-      document.querySelector('[data-play]').addEventListener('click', function () { start(true); });
-      document.querySelector('[data-play-muted]').addEventListener('click', function () { start(false); });
-      document.querySelector('[data-again]').addEventListener('click', function () { start(!muted); });
+      document.querySelector('[data-skip]').addEventListener('click', function () { showEnd(); });
+      document.querySelector('[data-list]').addEventListener('click', function () { showEnd(); });
+      document.querySelector('.skip').addEventListener('click', function (e) { e.preventDefault(); showEnd(); });
+      function press(sel, fn) { var el = document.querySelector(sel); el.addEventListener('click', function () { busyFrom = el; fn(); busyFrom = null; }); }
+      press('[data-play]', function () { start(true); });
+      press('[data-play-muted]', function () { start(false); });
+      press('[data-again]', function () { start(!muted); });
+      document.querySelector('[data-back]').addEventListener('click', function () {
+        stop(); app.classList.remove('is-ended', 'is-playing');
+        document.querySelector('[data-play]').focus();
+      });
+      // 動きを減らす設定の人には、最初から内容の一覧を見せる（映像は「映像を見る」で見られる）
+      if (reduce) {
+        document.querySelector('[data-again]').textContent = '▶ 映像を見る';
+        showEnd(false);
+      }
       document.addEventListener('visibilitychange', function () { if (document.hidden && playing && pauseBtn.textContent === '❚❚') pauseBtn.click(); });
       // 画像は先に読み込んでおく（出た瞬間に絵が無い、を防ぐ）
       ITEMS.forEach(function (o) { var im = o.el.querySelector('img'); if (im) { im.decoding = 'async'; var pre = new Image(); pre.src = im.src; } });

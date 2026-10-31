@@ -91,6 +91,10 @@
     .intro p { margin: 14px 0 0; color: #c9c0b0; }
     .play { display: inline-flex; align-items: center; gap: 12px; min-height: 60px; margin-top: 28px; padding: 0 30px; border: 0; border-radius: 999px; background: var(--yellow); color: var(--ink); font-family: var(--display); font-size: 22px; box-shadow: 0 0 0 0 rgba(255, 210, 63, .6); animation: breathe 1.8s ease-in-out infinite; }
     .play small { font-family: var(--font); font-size: 13px; font-weight: 700; }
+    .vers { display: inline-flex; gap: 4px; margin-top: 24px; padding: 4px; border: 2px solid rgba(255, 251, 243, .25); border-radius: 999px; }
+    .vers button { min-height: 44px; padding: 0 20px; border: 0; border-radius: 999px; background: none; font-weight: 800; letter-spacing: .04em; }
+    .vers [aria-pressed="true"] { background: var(--paper); color: var(--ink); }
+    .intro .vers-note { margin-top: 8px; font-size: 13px; }
     .mute { display: block; min-height: 44px; margin: 10px auto 0; padding: 0 14px; border: 0; background: none; color: #c9c0b0; font-size: 14px; text-decoration: underline; }
     @keyframes breathe { 50% { box-shadow: 0 0 0 16px rgba(255, 210, 63, 0); } }
     .intro .warn { font-size: 12px; }
@@ -113,7 +117,10 @@
     .end__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 22px; font-size: 14px; }
     .end__foot a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
     .again { min-height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--yellow); color: var(--ink); font-family: var(--display); font-size: 17px; }
-    html:not(.js) .again { display: none; }
+    .swap { min-height: 48px; padding: 0 18px; border: 2px solid var(--yellow); border-radius: 999px; background: none; color: var(--yellow); font-weight: 800; }
+    html:not(.js) .again, html:not(.js) .swap { display: none; }
+    .credit { margin-top: 10px; font-size: 12px; color: #c9c0b0; }
+    .play[aria-busy="true"] { animation: none; opacity: .7; }
   </style>
 </head>
 <body>
@@ -123,6 +130,11 @@
       <div>
         <h1>tomochi<span>.</span><br>MV</h1>
         <p>約70秒の曲に合わせて、本・運動×勉強会・アプリを紹介します。<br>スクロールはいりません。見るだけです。</p>
+        <div class="vers" role="group" aria-label="曲">
+          <button type="button" data-ver="edm" aria-pressed="true">EDM</button>
+          <button type="button" data-ver="classic" aria-pressed="false">クラシック</button>
+        </div>
+        <p class="vers-note" data-ver-note>オリジナルのダンス曲（その場で鳴らしています）</p>
         <button class="play" type="button" data-play>▶ 再生 <small>音が出ます</small></button>
         <button class="mute" type="button" data-play-muted>音なしで見る</button>
         <p class="warn">画面の色が拍に合わせて大きく切り替わります。</p>
@@ -168,12 +180,14 @@
         </div>
         <p class="end__foot">
           <button class="again" type="button" data-again>↺ もう一度見る</button>
+          <button class="swap" type="button" data-swap>クラシック版で見る</button>
           <a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">ラジオ（stand.fm）</a>
           <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
           <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
           <a href="../">シンプル版</a>
           <a href="../rich/">リッチ版</a>
         </p>
+        <p class="credit">クラシック版の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。</p>
       </div>
     </main>
   </div>
@@ -259,9 +273,36 @@
       ev(136, 'impact'); ev(136, 'pad', { c: [45, 57, 60, 64, 69], len: 9, from: 5000, to: 300 });
       [136, 137, 138, 139].forEach(function (b, i) { ev(b, 'pluck', [81, 76, 72, 69][i]); });
       EV.sort(function (x, y) { return x.b - y.b; });
-      var KICKS = EV.filter(function (e) { return e.type === 'kick' || e.type === 'impact'; }).map(function (e) { return e.b; });
-      var SNARES = EV.filter(function (e) { return e.type === 'clap' || e.type === 'snare'; }).map(function (e) { return e.b; });
-      var HITS = EV.filter(function (e) { return /impact|boom|stamp/.test(e.type); }).map(function (e) { return e.b; });
+      // 映像が拍に合わせて揺れるきっかけ（キック・スネア・大きな音）。クラシック版では楽譜から作る
+      var EDM_PULSE = {
+        k: EV.filter(function (e) { return e.type === 'kick' || e.type === 'impact'; }).map(function (e) { return e.b; }),
+        s: EV.filter(function (e) { return e.type === 'clap' || e.type === 'snare'; }).map(function (e) { return e.b; }),
+        h: EV.filter(function (e) { return /impact|boom|stamp/.test(e.type); }).map(function (e) { return e.b; })
+      };
+      var KICKS = EDM_PULSE.k, SNARES = EDM_PULSE.s, HITS = EDM_PULSE.h;
+      function usePulse(p) { KICKS = p.k; SNARES = p.s; HITS = p.h; }
+
+      // ---------- クラシック版：JingleScript の楽譜（classic.json）から書き出した音と、その時間の表を使う ----------
+      var classic = null;
+      function loadClassic() {
+        if (!classic) classic = Promise.all([
+          fetch('classic.mp3').then(function (r) { if (!r.ok) throw new Error('mp3'); return r.arrayBuffer(); }),
+          fetch('classic.timing.json').then(function (r) { return r.json(); }),
+          fetch('classic.json').then(function (r) { return r.json(); })
+        ]).then(function (a) {
+          var names = a[2].tracks.map(function (t) { return t.name; }), p = { k: [], s: [], h: [] };
+          a[1].notes.forEach(function (nt) {
+            var name = names[nt.track], b = Math.round(nt.t / B * 1000) / 1000;
+            if (name === 'timpani' || name === 'fx') p.k.push(b);
+            if (name === 'melody' || name === 'glock' || name === 'clock') p.s.push(b);
+            if (name === 'fx' || (name === 'timpani' && nt.vel >= .99)) p.h.push(b);
+          });
+          ['k', 's', 'h'].forEach(function (key) { p[key] = p[key].filter(function (v, i, l) { return l.indexOf(v) === i; }).sort(function (x, y) { return x - y; }); });
+          return { mp3: a[0], pulse: p };
+        });
+        classic.catch(function () { classic = null; });
+        return classic;
+      }
 
       var ac = null, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
       function makeAudio() {
@@ -545,20 +586,58 @@
       function start(withSound) {
         stop();
         muted = !withSound;
+        // 音の準備はクリックの中で始める（スマホはそうしないと鳴らない）
+        if (withSound) { makeAudio(); if (ac.state !== 'running') ac.resume(); }
+        if (ver === 'edm') { usePulse(EDM_PULSE); begin(); return; }
+        var a = ac, btns = document.querySelectorAll('[data-play], [data-play-muted], [data-again]');
+        btns.forEach(function (bt) { bt.setAttribute('aria-busy', 'true'); bt.disabled = true; });
+        loadClassic().then(function (d) {
+          usePulse(d.pulse);
+          if (!withSound) return null;
+          return a.decodeAudioData(d.mp3.slice(0));
+        }).then(function (buf) {
+          if (withSound && ac !== a) return;   // 待っている間に止められた
+          begin(buf);
+        }).catch(function () {
+          // 読み込めなかったら EDM 版で流す
+          setVer('edm'); usePulse(EDM_PULSE); begin();
+        }).then(function () { btns.forEach(function (bt) { bt.removeAttribute('aria-busy'); bt.disabled = false; }); });
+      }
+      function begin(buf) {
         size();
         app.classList.remove('is-ended');
         app.classList.add('is-playing');
         pauseBtn.textContent = '❚❚';
-        if (withSound) {
-          if (!ac || ac.state === 'closed') makeAudio();
-          if (ac.state !== 'running') ac.resume();
-          t0 = ac.currentTime + .15; next = 0;
-          music.gain.cancelScheduledValues(0); music.gain.value = 1;
-          schedule(); timer = setInterval(schedule, 40);
+        if (!muted) {
+          if (buf) {
+            var src = ac.createBufferSource();
+            src.buffer = buf; src.connect(ac.destination);
+            t0 = ac.currentTime + .1; src.start(t0);
+          } else {
+            t0 = ac.currentTime + .15; next = 0;
+            music.gain.cancelScheduledValues(0); music.gain.value = 1;
+            schedule(); timer = setInterval(schedule, 40);
+          }
         } else { clock0 = performance.now(); pausedAt = -1; }
         playing = true;
         raf = requestAnimationFrame(loop);
       }
+      // ---------- 曲の切り替え（EDM / クラシック）。選んだほうを覚えておく ----------
+      var ver = 'edm';
+      var NOTES = { edm: 'オリジナルのダンス曲（その場で鳴らしています）', classic: 'バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲をつないだ、ピアノとオーケストラ風の曲' };
+      function setVer(v) {
+        ver = v === 'classic' ? 'classic' : 'edm';
+        document.querySelectorAll('[data-ver]').forEach(function (bt) { bt.setAttribute('aria-pressed', String(bt.getAttribute('data-ver') === ver)); });
+        document.querySelector('[data-ver-note]').textContent = NOTES[ver];
+        document.querySelector('[data-swap]').textContent = ver === 'edm' ? 'クラシック版で見る' : 'EDM版で見る';
+        try { localStorage.setItem('tomochi-mv', ver); } catch (e) {}
+        if (ver === 'classic') loadClassic();
+      }
+      document.querySelectorAll('[data-ver]').forEach(function (bt) { bt.addEventListener('click', function () { setVer(bt.getAttribute('data-ver')); }); });
+      document.querySelector('[data-swap]').addEventListener('click', function () { setVer(ver === 'edm' ? 'classic' : 'edm'); start(!muted); });
+      var saved = /[?&]v=classic\b/.test(location.search) ? 'classic' : /[?&]v=edm\b/.test(location.search) ? 'edm' : null;
+      if (!saved) { try { saved = localStorage.getItem('tomochi-mv'); } catch (e) {} }
+      setVer(saved || 'edm');
       function stop() {
         playing = false;
         cancelAnimationFrame(raf); clearInterval(timer);

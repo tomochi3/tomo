@@ -750,44 +750,65 @@
         g.globalAlpha = 1;
       }
 
-      // クリックから次の強拍へ飛ぶ球。音は描画フレームではなく音声時計に予約する。
+      // 近い強拍を優先し、静かな区間は旋律へ。押した手応えを数秒先へ持ち越さない。
       var balls = [], ballSounds = {};
+      function ballImpact(b) {
+        // 聞こえる時刻と予約できる時刻は違う。出力遅延分だけ過去の音を選ばない。
+        var earliest = Math.max(b + .02 / B, (ac.currentTime + .02 - t0) / B);
+        // Bluetooth等では物理的な出力遅延より早く鳴らせない。無反応にせず次の半拍まで許容する。
+        var latency = Math.max(0, ac.currentTime - t0 - b * B);
+        var wait = Math.max(.55, latency + .02 + B / 2 + .01);
+        var latest = Math.min(END - .05, b + wait / B);
+        var strong = ACCENTS.find(function (at) { return at >= earliest && at <= latest; });
+        if (strong !== undefined) return { beat: strong, strength: 1 };
+        var note = CNOTES.find(function (nt) {
+          return nt.b >= earliest && nt.b <= latest && /^(melody|organ|brass|glock)$/.test(nt.tr);
+        });
+        if (note) return { beat: note.b, strength: .65 };
+        var kick = KICKS.find(function (at) { return at >= earliest && at <= latest; });
+        if (kick !== undefined) return { beat: kick, strength: .65 };
+        // 休符では、自分の音で拍に参加する。音のない長い待機は作らない。
+        var beat = Math.ceil(earliest * 2) / 2;
+        if (beat < END && beat <= latest) return { beat: beat, strength: .45 };
+        return null;
+      }
       stage.addEventListener('pointerdown', function (e) {
         if (!playing || e.button > 0 || e.target.closest('button, a') || balls.length >= 24) return;
         if (!ac || ac.state !== 'running') return;
-        var b = Math.max(0, now()), impact = ACCENTS.find(function (at) { return at > b + .2 && at < END; });
-        if (impact === undefined) return;
+        var b = Math.max(0, now()), target = ballImpact(b);
+        if (!target) return;
+        var impact = target.beat;
         var x = e.clientX / W, y = e.clientY / H;
-        var ball = { at: b, hit: impact, x: x, y: y, dx: (x < .5 ? 1 : -1) * (.12 + Math.random() * .12), dy: -.12 - Math.random() * .15, seed: Math.random() * 100 };
+        var reach = Math.min(1, (impact - b) * B / .3);
+        var ball = { at: b, hit: impact, strength: target.strength, x: x, y: y, dx: (x < .5 ? 1 : -1) * (.12 + Math.random() * .12) * reach, dy: (-.12 - Math.random() * .15) * reach, seed: Math.random() * 100 };
         balls.push(ball);
         if (!muted && ac && !ballSounds[impact]) {
           ballSounds[impact] = true;
-          var t = Math.max(ac.currentTime, t0 + impact * B);
-          var note = CNOTES.find(function (nt) { return Math.abs(nt.b - impact) < .01 && nt.tr === 'melody'; });
+          var t = t0 + impact * B;
+          var note = CNOTES.find(function (nt) { return Math.abs(nt.b - impact) < .01 && /^(melody|organ|brass|glock)$/.test(nt.tr); });
           var pitch = note ? note.m[note.m.length - 1] : CHORDS[chordAt(impact)][0] + 12;
           // 短い低音と、曲の和音に合わせたガラスの響き。同じ拍の連打は重ねない。
-          osc('sine', hz(pitch - 24), t, .2, env(t, .24, .003, .18, master));
+          osc('sine', hz(pitch - 24), t, .16, env(t, .24 * ball.strength, .002, .14, master));
           [0, 12].forEach(function (octave) {
-            osc('sine', hz(pitch + octave), t, .55, env(t, .15, .003, .5, master));
+            osc('sine', hz(pitch + octave), t, .25, env(t, .15 * ball.strength, .002, .22, master));
           });
-          noise(t, .08, env(t, .09, .002, .07, filt('highpass', 3500, .7, master)));
+          noise(t, .06, env(t, .09 * ball.strength, .001, .05, filt('highpass', 3500, .7, master)));
         }
       });
       function drawBalls(b) {
-        balls = balls.filter(function (ball) { return b < ball.hit + 1.5; });
+        balls = balls.filter(function (ball) { return (b - ball.hit) * B < .4; });
         g.save();
         balls.forEach(function (ball) {
-          var flight = Math.min(.7, ball.hit - ball.at);
-          var progress = outCubic(clamp((b - ball.at) / flight));
+          var progress = clamp((b - ball.at) / (ball.hit - ball.at));
           var tx = ball.x + ball.dx, ty = Math.max(.12, ball.y + ball.dy);
           function position(p) {
-            return [(ball.x + (tx - ball.x) * p) * W, (ball.y + (ty - ball.y) * p - (reduce ? 0 : Math.sin(p * Math.PI) * .18)) * H];
+            var arc = Math.min(1, (ball.hit - ball.at) * B / .3) * .12;
+            return [(ball.x + (tx - ball.x) * p) * W, (ball.y + (ty - ball.y) * p - (reduce ? 0 : 4 * p * (1 - p) * arc)) * H];
           }
           g.fillStyle = '#ffe7a3'; g.strokeStyle = '#ffe7a3';
           if (b < ball.hit) {
-            var xy = position(progress), waiting = clamp((b - ball.at - flight) / Math.max(.01, ball.hit - ball.at - flight));
-            var radius = Math.max(5, vmin * 1.1) * (1 + waiting * .8);
-            if (!reduce && progress === 1) { xy[0] += Math.sin((b - ball.at) * 3) * vmin; xy[1] += Math.sin((b - ball.at) * 4) * vmin; }
+            var xy = position(progress), squeeze = clamp(1 - (ball.hit - b) * B / .05);
+            var radius = Math.max(5, vmin * 1.1) * (1 - squeeze * .2);
             if (!reduce) {
               for (var k = 1; k <= 7; k++) {
                 var trail = position(Math.max(0, progress - k * .018));
@@ -796,11 +817,15 @@
             }
             g.globalAlpha = 1; g.beginPath(); g.arc(xy[0], xy[1], radius, 0, Math.PI * 2); g.fill();
           } else {
-            var age = (b - ball.hit) / 1.5, center = position(1);
+            var seconds = (b - ball.hit) * B, age = clamp(seconds / .4), spread = outCubic(age), center = position(1);
+            if (seconds < .08) {
+              g.globalAlpha = (1 - seconds / .08) * ball.strength;
+              g.beginPath(); g.arc(center[0], center[1], (1 + spread * 3) * vmin, 0, Math.PI * 2); g.fill();
+            }
             g.globalAlpha = Math.pow(1 - age, 2); g.lineWidth = 2;
-            g.beginPath(); g.arc(center[0], center[1], (1 + age * (reduce ? 2 : 15)) * vmin, 0, Math.PI * 2); g.stroke();
+            g.beginPath(); g.arc(center[0], center[1], (1 + spread * (reduce ? 2 : 12) * ball.strength) * vmin, 0, Math.PI * 2); g.stroke();
             if (!reduce) for (var j = 0; j < 16; j++) {
-              var angle = j * Math.PI * 2 / 16 + ball.seed, distance = age * (10 + hash(j + ball.seed) * 14) * vmin;
+              var angle = j * Math.PI * 2 / 16 + ball.seed, distance = spread * (8 + hash(j + ball.seed) * 12) * vmin * ball.strength;
               g.beginPath(); g.arc(center[0] + Math.cos(angle) * distance, center[1] + Math.sin(angle) * distance + age * age * 8 * vmin, Math.max(.5, (1 - age) * 2.5), 0, Math.PI * 2); g.fill();
             }
           }

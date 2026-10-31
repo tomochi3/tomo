@@ -212,7 +212,7 @@
           <a href="../">シンプル版</a>
           <a href="../rich/">リッチ版</a>
         </p>
-        <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。</p>
+        <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。EDM版の曲は <a href="https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5" target="_blank" rel="noopener">Suno</a> で作り、映像に合わせて小節の切れ目でつなぎ替えています。</p>
       </div>
     </main>
   </div>
@@ -222,7 +222,8 @@
       var app = document.querySelector('.app'), stage = document.querySelector('.stage'), shake = document.querySelector('.shake');
       var layer = document.querySelector('.items'), cv = document.querySelector('.stage canvas'), g = cv.getContext('2d');
       var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      var BPM = 128, B = 60 / BPM, END = 142, LEN = 146;   // 拍の数で数える。142拍で最後の画面、146拍で音が消える
+      // 拍の数で数える。142拍で最後の画面、146拍で音が消える。B は1拍の秒数（EDM版は Suno の曲の拍の長さに合わせて変える）
+      var BPM = 128, B = 60 / BPM, END = 142, LEN = 146;
       var IMG = '../rich/img/';
 
       // ================= 曲：全部 Web Audio でその場で鳴らす（音のファイルは読み込まない） =================
@@ -320,7 +321,7 @@
         ]).then(function (a) {
           var names = a[2].tracks.map(function (t) { return t.name; }), p = { k: [], s: [], h: [], a: [], notes: [] };
           a[1].notes.forEach(function (nt) {
-            var name = names[nt.track], b = Math.round(nt.t / B * 1000) / 1000;
+            var name = names[nt.track], b = Math.round(nt.t / (60 / BPM) * 1000) / 1000;
             // 打楽器（kick・ティンパニ・fx）で揺れ、旋律やブラシで小さく光る
             var drum = name === 'kick' || name === 'timpani';
             if (drum || name === 'fx') p.k.push(b);
@@ -337,6 +338,45 @@
         });
         classic.catch(function () { classic = null; });
         return classic;
+      }
+
+      // ---------- EDM版：Suno で作った曲（edm.mp3）と、映像に合わせてつなぎ替える地図（edm.timing.json） ----------
+      var edm = null;
+      function loadEdm() {
+        if (!edm) edm = Promise.all([
+          fetch('edm.mp3').then(function (r) { if (!r.ok) throw new Error('mp3'); return r.arrayBuffer(); }),
+          fetch('edm.timing.json').then(function (r) { return r.json(); })
+        ]).then(function (a) { return { mp3: a[0], map: a[1], pulse: { k: a[1].k, s: a[1].s, h: a[1].h } }; });
+        edm.catch(function () { edm = null; });
+        return edm;
+      }
+      // 曲の拍の番号 → 曲の中の秒（Suno の解析の目印の間を直線でつなぐ）
+      function songT(map, b) {
+        var A = map.anchors, i = 0;
+        while (i < A.length - 2 && b > A[i + 1][0]) i++;
+        return A[i][1] + (b - A[i][0]) * (A[i + 1][1] - A[i][1]) / (A[i + 1][0] - A[i][0]);
+      }
+      // 地図の区切りごとに、曲の該当する小節を映像の拍の位置で鳴らす。つなぎ目は短く重ねて、ぷつっと鳴らないように
+      function playSegments(buf, map, at) {
+        var start = ac.currentTime + .1, X = .012;
+        t0 = start - at * B;
+        map.segments.forEach(function (sg) {
+          var v0 = sg[0], v1 = sg[1], s0 = sg[2];
+          if (v1 <= at) return;
+          var from = Math.max(v0, at), when = t0 + from * B, dur = (v1 - from) * B;
+          var g = ac.createGain(), src = ac.createBufferSource();
+          src.buffer = buf; src.connect(g); g.connect(output);
+          g.gain.setValueAtTime(0, when);
+          g.gain.linearRampToValueAtTime(1, when + X);
+          if (v1 >= LEN) {   // 最後の区切りは、終わりの数拍で消していく
+            g.gain.setValueAtTime(1, t0 + (LEN - 6) * B);
+            g.gain.linearRampToValueAtTime(0, t0 + LEN * B);
+          } else {
+            g.gain.setValueAtTime(1, when + dur - X);
+            g.gain.linearRampToValueAtTime(0, when + dur + X);
+          }
+          src.start(when, songT(map, s0 + (from - v0)), dur + X * 2);
+        });
       }
 
       var ac = null, output, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
@@ -790,7 +830,7 @@
       }
       var LEAD = /^(melody|organ|brass|glock|vibes)$/;
       function leadAt(beat) {
-        if (ver === 'edm') return { m: [CHORDS[chordAt(beat)][0] + 12] };
+        if (ver === 'edm') return { m: [[67, 70, 74, 72][Math.floor(beat / 4) % 4]] };   // Suno の曲はト短調
         return CNOTES.find(function (nt) { return Math.abs(nt.b - beat) < .003 && LEAD.test(nt.tr); }) || null;
       }
       function ballImpact(b) {
@@ -895,22 +935,25 @@
         // 音の準備はクリックの中で始める（スマホはそうしないと鳴らない）
         makeAudio(); if (ac.state !== 'running') ac.resume();
         syncSoundButton();
-        if (ver === 'edm') { usePulse(EDM_PULSE); begin(null, at, paused); return; }
         var a = ac, btns = document.querySelectorAll('[data-play], [data-play-muted], [data-again]');
         // 曲を読み込んでいる間は、押したボタンに「読み込み中…」と出す
         btns.forEach(function (bt) { bt.setAttribute('aria-busy', 'true'); bt.disabled = true; bt.__label = bt.innerHTML; });
         if (busyFrom) busyFrom.textContent = '読み込み中…';
-        loadClassic().then(function (d) {
+        var map = null;
+        (ver === 'edm' ? loadEdm() : loadClassic()).then(function (d) {
           usePulse(d.pulse);
+          map = d.map || null;
           return a.decodeAudioData(d.mp3.slice(0));
         }).then(function (buf) {
           if (ac !== a) return;   // 待っている間に止められた
-          begin(buf, at, paused);
+          B = map ? map.beat : 60 / BPM;
+          begin(buf, at, paused, map);
         }).catch(function () {
-          // 読み込めなかったら EDM 版で流し、そのことを知らせる（選び方としては覚えない）
+          // 読み込めなかったら、その場で鳴らす前のEDM版で流し、そのことを知らせる（選び方としては覚えない）
           if (ac !== a) return;
-          setVer('edm', true); usePulse(EDM_PULSE); begin(null, at, paused);
-          notice('クラシック版の曲を読み込めなかったので、EDM版で流しています');
+          var was = ver;
+          setVer('edm', true); usePulse(EDM_PULSE); B = 60 / BPM; begin(null, at, paused);
+          notice((was === 'classic' ? 'クラシック版' : 'EDM版') + 'の曲を読み込めなかったので、その場で鳴らす曲で流しています');
         }).then(function () { btns.forEach(function (bt) { bt.removeAttribute('aria-busy'); bt.disabled = false; if (bt.__label) bt.innerHTML = bt.__label; }); });
       }
       var busyFrom = null, noticeTimer = 0;
@@ -925,7 +968,7 @@
         app.classList.remove('is-playing'); app.classList.add('is-ended');
         if (focus !== false) document.querySelector('#end').focus({ preventScroll: true });
       }
-      function begin(buf, at, paused) {
+      function begin(buf, at, paused, map) {
         at = Math.max(0, Math.min(END - 1, at || 0));
         size();
         app.classList.remove('is-ended');
@@ -933,7 +976,9 @@
         pauseBtn.textContent = '❚❚';
         pauseBtn.setAttribute('aria-label', '一時停止');
         if (ac) {
-          if (buf) {
+          if (buf && map) {
+            playSegments(buf, map, at);
+          } else if (buf) {
             var src = ac.createBufferSource();
             src.buffer = buf; src.connect(output);
             t0 = ac.currentTime + .1 - at * B; src.start(ac.currentTime + .1, at * B);
@@ -950,7 +995,7 @@
       }
       // ---------- 曲の切り替え（EDM / クラシック）。選んだほうを覚えておく ----------
       var ver = 'edm';
-      var NOTES = { edm: 'オリジナルのダンス曲（その場で鳴らしています）', classic: 'バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲を、ジャズ風（スウィング）にアレンジした曲' };
+      var NOTES = { edm: 'Suno で作った今どきのクラブトラック（ジャージークラブ × UKガラージ × フューチャーベース）', classic: 'バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲を、ジャズ風（スウィング）にアレンジした曲' };
       function setVer(v, once) {
         ver = v === 'classic' ? 'classic' : 'edm';
         app.classList.toggle('v-classic', ver === 'classic');
@@ -958,7 +1003,7 @@
         document.querySelector('[data-ver-note]').textContent = NOTES[ver];
         document.querySelector('[data-swap]').textContent = ver === 'edm' ? 'クラシック版で見る' : 'EDM版で見る';
         if (!once) { try { localStorage.setItem('tomochi-mv-v2', ver); } catch (e) {} }
-        if (ver === 'classic') loadClassic();
+        if (ver === 'classic') loadClassic(); else loadEdm();
       }
       document.querySelectorAll('[data-ver]').forEach(function (bt) { bt.addEventListener('click', function () { setVer(bt.getAttribute('data-ver')); }); });
       document.querySelector('[data-swap]').addEventListener('click', function () { setVer(ver === 'edm' ? 'classic' : 'edm'); start(!muted); });

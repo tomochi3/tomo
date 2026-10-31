@@ -197,7 +197,7 @@
             <ul>
               <li><a href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">卓球戦績メモ</a><span>試合結果を数タップで記録。</span></li>
               <li><a href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">ワリカン</a><span>誰が誰にいくら払えばいいかを自動で計算。</span></li>
-              <li><a href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">Pumpkin</a><span>筋トレSNSのモバイルアプリ開発に参加。</span></li>
+              <li><a href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">Pumpkin</a><span>筋トレSNS「Pumpkin」のモバイルアプリの開発メンバー。</span></li>
               <li><a href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">べんりツールズ</a> ・ <a href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">ボルダリング交流会</a> ・ <a href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener">Classic Ping Pong</a> ・ <a href="https://store.line.me/stickershop/product/23396313/ja" target="_blank" rel="noopener">ニコニコ笑顔</a></li>
             </ul>
           </section>
@@ -591,7 +591,7 @@
       });
       it(108, 112, '', { img: 'pumpkin-icon.webp', w: 30, y: -12, fx: 'pop' });
       it(108, 112, 'Pumpkin', { size: 10, y: 14 });
-      it(109, 112, '筋トレSNSのアプリ開発に参加', { cls: 'hand', size: 4.6, y: 28, fx: 'up' });
+      it(109, 112, '筋トレSNS「Pumpkin」の<br>モバイルアプリの開発メンバー', { cls: 'hand', size: 4.6, y: 30, fx: 'up' });
       [['benri-sm.webp', 'べんりツールズ', -1, -1], ['5grip-sm.webp', 'ボルダリング交流会', 1, -1], ['pingpong2-sm.webp', 'Classic Ping Pong', -1, 1], ['line-sm.webp', 'ニコニコ笑顔', 1, 1]].forEach(function (m, i) {
         it(112 + i, 120, '<b>' + m[1] + '</b>', { img: m[0], cls: 'card', w: 34, size: 3, x: m[2] * 19, y: m[3] * 17 - 6, fx: 'slam', rot: m[2] * 2 });
       });
@@ -911,11 +911,17 @@
         }
         return null;
       }
-      function noteHitPoint(note) {
-        // concert() の上の音符と同じ高さ。発音時は常に画面幅の20%を通る。
+      var progressBar = document.querySelector('.bar');
+      function noteHitPoint(note, beat) {
+        // 高さは concert() の上の音符と同じ。クラシック版は、発音時は常に画面幅の20%を通る。
+        // EDM版は、弾ける時刻が進むほど右へ：下の進み具合の線のうえで、その時刻にあたる位置で弾ける
         var gap = Math.max(4, vmin * 1.1), top = Math.max(48, H * .085), bot = top + gap * 4;
-        var pitch = Math.max.apply(null, note.m);
-        return [W * .2, bot - (Math.max(40, Math.min(92, pitch)) - 64) * gap * .32];
+        var pitch = Math.max.apply(null, note.m), x = W * .2;
+        if (ver === 'edm' && beat !== undefined) {
+          var r = progressBar.getBoundingClientRect(), p = clamp(beat / END);
+          x = r.width > 0 ? r.left + r.width * p : W * (.04 + .92 * p);
+        }
+        return [x, bot - (Math.max(40, Math.min(92, pitch)) - 64) * gap * .32];
       }
       stage.addEventListener('pointerdown', function (e) {
         if (!playing || e.button > 0 || e.target.closest('button, a') || balls.length >= 40) return;
@@ -973,7 +979,7 @@
           if (!ballSounds[hit] && (!ac || t0 + hit * B - ac.currentTime < .12)) { ballSounds[hit] = true; ballSound(hit, n, list[0].note); }
           if (b >= hit && !list[0].burst) {
             list.forEach(function (ball) { ball.burst = true; });
-            var c = noteHitPoint(list[0].note);
+            var c = noteHitPoint(list[0].note, hit);
             bursts.push({ at: hit, n: n, lv: tier(n), x: c[0], y: c[1], seed: Math.random() * 100 });
             if (tier(n) >= 4 && !reduce) burstShake = { at: hit, amp: tier(n) === 5 ? 2.2 : 1.2 };
           }
@@ -1041,7 +1047,7 @@
         g.save();
         balls.forEach(function (ball) {
           var progress = clamp((b - ball.at) / (ball.hit - ball.at));
-          var destination = noteHitPoint(ball.note), tx = destination[0] / W, ty = destination[1] / H;
+          var destination = noteHitPoint(ball.note, ball.hit), tx = destination[0] / W, ty = destination[1] / H;
           function position(p) {
             var arc = Math.min(.12, Math.max(0, Math.min(ball.y, ty) - .02));
             return [(ball.x + (tx - ball.x) * p) * W, (ball.y + (ty - ball.y) * p - (reduce ? 0 : 4 * p * (1 - p) * arc)) * H];

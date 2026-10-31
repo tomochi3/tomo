@@ -61,7 +61,7 @@
     .pill { padding: .1em .6em .2em; border: .6vmin solid currentColor; border-radius: 999px; }
     .card { padding: 1.2vmin; border: .8vmin solid var(--ink); border-radius: 1.6vmin; background: var(--paper); color: var(--ink); box-shadow: 1.4vmin 1.4vmin 0 var(--ink); }
     .card img { border-radius: .8vmin; }
-    .card b { display: block; margin-top: .8vmin; font-size: 3.4vmin; }
+    .card b { display: block; margin-top: .8vmin; font-size: 3.4vmin; white-space: normal; overflow-wrap: anywhere; line-height: 1.3; }
     .shadow img { box-shadow: 2vmin 2vmin 0 rgba(0, 0, 0, .35); }
     .phone img { border-radius: 4vmin; border: .8vmin solid var(--ink); }
     .house { width: 6vmin; height: 6vmin; }
@@ -80,6 +80,11 @@
     .bar i { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--t, 0) * 100%); border-radius: 2px; background: currentColor; }
     .bar b { position: absolute; top: -18px; translate: -50% 0; font-size: 10px; opacity: .7; white-space: nowrap; }
     .bar .m1 { left: 11%; } .bar .m2 { left: 56%; } .bar .m3 { left: 68%; }
+    .bar input { position: absolute; inset: -12px 0; width: 100%; height: 28px; margin: 0; opacity: 0; cursor: pointer; }
+    .bar:focus-within { outline: 2px solid currentColor; outline-offset: 5px; }
+    .chapters { display: none; position: fixed; top: calc(8px + env(safe-area-inset-top, 0px)); right: 12px; z-index: 6; gap: 4px; }
+    .is-playing .chapters { display: flex; }
+    .chapters button { min-height: 44px; border: 1px solid currentColor; border-radius: 99px; background: var(--ink); color: var(--paper); padding: 0 10px; font-size: 12px; }
     .hud button { min-width: 44px; min-height: 44px; padding: 0 12px; border: 2px solid currentColor; border-radius: 999px; background: none; font-size: 12px; font-weight: 800; letter-spacing: .06em; }
     .logo { position: absolute; left: 16px; top: calc(12px + env(safe-area-inset-top, 0px)); z-index: 5; font-family: var(--display); font-size: 16px; }
 
@@ -138,7 +143,7 @@
         <p class="vers-note" data-ver-note>バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲をつないだ、ピアノとオーケストラ風の曲</p>
         <button class="play" type="button" data-play>▶ 再生 <small>音が出ます</small></button>
         <button class="mute" type="button" data-play-muted>音なしで見る</button>
-        <p class="warn">画面の色が拍に合わせて大きく切り替わります。</p>
+        <p class="warn">画面をクリック・タップすると、次の強い拍でボールが弾けます。<br>画面の色が拍に合わせて大きく切り替わります。</p>
       </div>
     </div>
 
@@ -147,17 +152,24 @@
       <p class="logo">tomochi.</p>
     </div>
     <div class="hud">
-      <div class="bar" aria-hidden="true"><i></i><b class="m1">01</b><b class="m2">02</b><b class="m3">03</b></div>
+      <div class="bar"><i></i><input type="range" data-seek min="0" max="141" step="1" value="0" aria-label="再生位置"></div>
       <button type="button" data-pause aria-label="一時停止">❚❚</button>
+      <button type="button" data-sound aria-label="音を消す" aria-pressed="false">音あり</button>
       <button type="button" data-skip>スキップ</button>
     </div>
+
+    <nav class="chapters" aria-label="MVの章">
+      <button type="button" data-chapter="0">家なし生活</button>
+      <button type="button" data-chapter="80">勉強会</button>
+      <button type="button" data-chapter="96">アプリ</button>
+    </nav>
 
     <main class="end" id="end" tabindex="-1">
       <div class="end__in">
         <h2>面白くて、できれば<br>ためになることを、<span>みんなでやる。</span></h2>
         <div class="end__grid">
           <section aria-labelledby="e-book">
-            <h3 id="e-book"><small>01</small>本を書く</h3>
+            <h3 id="e-book"><small>01</small>家なし生活と、日々の工夫</h3>
             <ul>
               <li><a href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">ホームレス大学院生</a><span>398日間、家がなかった。32人の友人宅、11都府県を渡り歩いた体験記。</span></li>
               <li><a href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">中の上の人生戦略</a><span>名もなき人は、名もなき人を参考にせよ。人間関係・健康・仕事・習慣。</span></li>
@@ -282,7 +294,8 @@
       };
       var KICKS = EDM_PULSE.k, SNARES = EDM_PULSE.s, HITS = EDM_PULSE.h;
       var CNOTES = [];
-      function usePulse(p) { KICKS = p.k; SNARES = p.s; HITS = p.h; CNOTES = p.notes || []; }
+      var ACCENTS = [];
+      function usePulse(p) { KICKS = p.k; SNARES = p.s; HITS = p.h; CNOTES = p.notes || []; ACCENTS = p.a || p.h; }
       function midi(name) { var m = /^([A-G])(#|b)?(-?\d)$/.exec(name); return 12 * (+m[3] + 1) + { C: 0, D: 2, E: 4, F: 5, G: 7, A: 9, B: 11 }[m[1]] + (m[2] === '#' ? 1 : m[2] === 'b' ? -1 : 0); }
 
       // ---------- クラシック版：JingleScript の楽譜（classic.json）から書き出した音と、その時間の表を使う ----------
@@ -293,32 +306,37 @@
           fetch('classic.timing.json').then(function (r) { return r.json(); }),
           fetch('classic.json').then(function (r) { return r.json(); })
         ]).then(function (a) {
-          var names = a[2].tracks.map(function (t) { return t.name; }), p = { k: [], s: [], h: [], notes: [] };
+          var names = a[2].tracks.map(function (t) { return t.name; }), p = { k: [], s: [], h: [], a: [], notes: [] };
           a[1].notes.forEach(function (nt) {
             var name = names[nt.track], b = Math.round(nt.t / B * 1000) / 1000;
             if (name === 'timpani' || name === 'fx') p.k.push(b);
             if (name === 'melody' || name === 'glock' || name === 'clock') p.s.push(b);
             if (name === 'fx' || (name === 'timpani' && nt.vel >= .99)) p.h.push(b);
-            if (nt.pitch && /melody|bass|organ|brass|glock/.test(name)) p.notes.push({ b: b, m: [].concat(nt.pitch).map(midi), tr: name, v: nt.vel });
+            if (name === 'fx' || (name === 'timpani' && nt.vel >= .85)) p.a.push(b);
+            if (nt.pitch && /melody|bass|organ|brass|glock/.test(name)) {
+              var written = a[2].tracks[nt.track].notes.find(function (note) { return Math.abs(note.at - b) < .003; });
+              p.notes.push({ b: b, d: written && written.len || .5, m: [].concat(nt.pitch).map(midi), tr: name, v: nt.vel });
+            }
           });
-          ['k', 's', 'h'].forEach(function (key) { p[key] = p[key].filter(function (v, i, l) { return l.indexOf(v) === i; }).sort(function (x, y) { return x - y; }); });
+          ['k', 's', 'h', 'a'].forEach(function (key) { p[key] = p[key].filter(function (v, i, l) { return l.indexOf(v) === i; }).sort(function (x, y) { return x - y; }); });
           return { mp3: a[0], pulse: p };
         });
         classic.catch(function () { classic = null; });
         return classic;
       }
 
-      var ac = null, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
+      var ac = null, output, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
       function makeAudio() {
         var C = window.AudioContext || window.webkitAudioContext;
         ac = new C({ latencyHint: 'interactive' });
+        output = ac.createGain(); output.gain.value = muted ? 0 : 1; output.connect(ac.destination);
         try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
         var comp = ac.createDynamicsCompressor();
         comp.threshold.value = -10; comp.ratio.value = 4; comp.attack.value = .003; comp.release.value = .12;
         // 音を重ねると大きくなりすぎるので、圧縮したあとで全体を下げて割れないようにする
         var trim = ac.createGain(); trim.gain.value = .4;
         master = ac.createGain(); master.gain.value = .9;
-        master.connect(comp); comp.connect(trim); trim.connect(ac.destination);
+        master.connect(comp); comp.connect(trim); trim.connect(output);
         drums = ac.createGain(); drums.connect(master);
         music = ac.createGain(); music.connect(master);   // キックのたびに少し下げて、うねらせる
         // 響き：その場で作った残響
@@ -390,23 +408,15 @@
       var SCENES_C = [[0, '#1a0f0a', '#f3e6c8'], [16, '#6e0f1e', '#f3e6c8'], [48, '#f3ead7', '#2a1a10'], [68, '#6e0f1e', '#f3e6c8'], [80, '#10233a', '#f3e6c8'], [96, '#14120f', '#e8c766'], [112, '#1a0f0a', '#f3e6c8'], [120, '#6e0f1e', '#f3e6c8'], [128, '#e8c766', '#2a1a10'], [132, '#6e0f1e', '#f3e6c8'], [136, '#14120f', '#e8c766']];
       var SCENES = [[0, '#14120f', '#fffbf3'], [16, '#ffd23f', '#14120f'], [48, '#e2412b', '#fffbf3'], [60, '#fffbf3', '#14120f'], [68, '#e2412b', '#fffbf3'], [80, '#187049', '#fffbf3'], [96, '#2549d8', '#fffbf3'], [112, '#14120f', '#fffbf3'], [120, '#2549d8', '#fffbf3'], [128, '#ffd23f', '#14120f'], [132, '#e2412b', '#fffbf3'], [136, '#14120f', '#fffbf3']];
 
-      // --- イントロ ---
-      // 1拍に1文字ずつ落とす。文字の幅（em）に合わせて並べる
-      var WID = [.62, .78, 1.12, .78, .72, .8, .42], SZ = 17, tot = WID.reduce(function (a, c) { return a + c; }, 0), acc = -tot / 2;
-      'tomochi'.split('').forEach(function (ch, i) { it(i, 8, ch, { fx: 'drop', x: (acc + WID[i] / 2) * SZ, size: SZ }); acc += WID[i]; });
-      it(8, 10, '面白くて、', { size: 13 });
-      it(10, 12, 'できれば', { size: 15, fx: 'left' });
-      it(12, 14, 'ためになることを、', { size: 9.5, fx: 'right' });
-      it(14, 15, 'みんなで', { size: 15 });
-      it(15, 15.75, 'やる。', { size: 24 });
-      // --- 01 本 ---
-      it(16, 20, '01', { cls: 'out', size: 46, y: -6, fx: 'pop' });
-      it(16.5, 20, '本を書く', { size: 15, y: 6 });
-      it(20, 24, '', { img: 'book-cover.webp', cls: 'shadow', w: 34, x: -24, y: 2, fx: 'drop', rot: -6, p: { x: 0, y: -26, w: 42 } });
-      it(20, 24, '398日間、', { size: 9, x: 20, y: -10, fx: 'right', p: { x: 0, y: 20, size: 12 } });
-      it(22, 24, '家がなかった。', { size: 7.5, x: 20, y: 6, fx: 'right', p: { x: 0, y: 34, size: 10 } });
-      it(24, 28, '0', { size: 40, y: -6, count: [398, 24, 27], fx: 'pop' });
-      it(24, 28, '日、家なしで暮らした', { size: 6, y: 22, fx: 'up' });
+      // --- 体験から始める。名前と理念はフィナーレで紹介する ---
+      it(0, 8, '398日間、', { size: 15, y: -12, fx: 'up', d: .35 });
+      it(0, 8, '家がなかった。', { size: 11, y: 10, fx: 'up', d: .35 });
+      it(8, 16, '泊まる先は、', { size: 10, y: -12, fx: 'left' });
+      it(10, 16, '友人の家。', { size: 14, y: 10, fx: 'right' });
+      it(16, 24, '32人', { size: 30, y: -12, fx: 'pop' });
+      it(17, 24, 'の友人に泊めてもらった', { size: 5.5, y: 16, fx: 'up' });
+      it(24, 28, 'ひとつの家に、', { size: 10, y: -12, fx: 'left' });
+      it(25, 28, '住まない暮らし。', { size: 11, y: 10, fx: 'right' });
       it(28, 32, '0', { size: 30, y: -22, count: [32, 28, 31.75], fx: 'pop' });
       it(28, 32, '人の友人宅に泊めてもらった', { size: 5.2, y: -4, fx: 'up' });
       for (var h = 0; h < 32; h++) it(28 + Math.floor(h / 2) * .25, 32, '<svg class="house" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8v10H3Z" fill="currentColor"/><rect x="10" y="14" width="4" height="7" fill="#ffd23f"/></svg>', { size: 6, x: ((h % 8) - 3.5) * 9, y: 12 + Math.floor(h / 8) * 8, fx: 'pop', d: .2 });
@@ -415,14 +425,13 @@
       ['東京', '神奈川', '埼玉', '千葉', '愛知', '三重', '京都', '大阪', '兵庫', '愛媛', '福岡'].forEach(function (p, i) {
         it(32 + i * .5, 40, p, { cls: 'stamp', size: 3.4, x: ((i % 6) - 2.5) * 15 + (i >= 6 ? 7.5 : 0), y: i < 6 ? 12 : 27, fx: 'stamp', d: .2, color: '#e2412b', rot: (i % 3 - 1) * 8 });
       });
-      it(40, 48, '', { img: 'book-cover.webp', cls: 'shadow', w: 30, x: 0, y: -12, fx: 'zoom', d: 1, rot: -4 });
-      it(40, 48, 'ホームレス大学院生', { size: 8, y: 24 });
-      it(42, 48, '体験記', { cls: 'pill', size: 5, x: 20, y: -30, fx: 'pop', rot: 8 });
-      it(44, 48, 'Amazon で発売中', { cls: 'hand', size: 6, y: 36, fx: 'up' });
+      it(40, 48, '友人の家を、', { size: 10, y: -12, fx: 'left' });
+      it(42, 48, '渡り歩いた。', { size: 12, y: 10, fx: 'up' });
+      it(40, 48, '『ホームレス大学院生』より', { cls: 'hand', size: 3.6, y: 34, fx: 'up', pulse: false });
       // --- 中の上の人生戦略 ---
-      it(48, 52, '', { img: 'book2-cover.webp', cls: 'shadow', w: 28, x: -22, y: 0, fx: 'right', rot: 5, p: { x: 0, y: -24, w: 40 } });
-      it(48, 52, '中の上の', { size: 10, x: 18, y: -10, p: { x: 0, y: 18, size: 13 } });
-      it(49, 52, '人生戦略', { size: 12, x: 18, y: 6, p: { x: 0, y: 34, size: 16 } });
+      it(48, 52, '超一流じゃない、', { size: 9, y: -12, fx: 'up' });
+      it(49, 52, '自分のために。', { size: 11, y: 10, fx: 'up' });
+      it(48, 52, '『中の上の人生戦略』より', { cls: 'hand', size: 3.6, y: 34, fx: 'up', pulse: false });
       it(52, 60, '名もなき人は、', { size: 9, y: -18, fx: 'left' });
       it(54, 60, '名もなき人を', { size: 9, y: 0, fx: 'right' });
       it(56, 60, '参考にせよ。', { size: 12, y: 18 });
@@ -511,9 +520,10 @@
         for (var s = 0; s < list.length; s++) if (b >= list[s][0]) sc = list[s];
         stage.style.setProperty('--bg', sc[1]); app.style.setProperty('--fg', sc[2]);
         // ドロップと大きな音では、画面ごと揺らす
-        var sh = reduce ? 0 : hit * 1.4 * vmin;
+        var sh = reduce ? 0 : hit * (ver === 'classic' ? .25 : 1.4) * vmin;
         shake.style.transform = 'translate(' + ((Math.random() - .5) * sh).toFixed(1) + 'px,' + ((Math.random() - .5) * sh).toFixed(1) + 'px) scale(' + (1 + kick * .012).toFixed(4) + ')';
         if (ver === 'classic') concert(b, sc, kick); else background(b, sc, kick, snare);
+        if (b >= 16 && b < 80) bookBackdrop(b, sc[2]);
         for (var i = 0; i < ITEMS.length; i++) {
           var o = ITEMS[i], el = o.el;
           if (b < o.at || b >= o.out || (o.only && o.only !== ver)) { if (el.__on) { el.style.opacity = 0; el.__on = false; } continue; }
@@ -529,18 +539,42 @@
             case 'drop': y -= (1 - outBounce(k)) * H * .6; break;
             case 'zoom': sc2 = 1.25 - .25 * e; op = clamp(k * 4); break;
           }
-          if (o.pulse) sc2 *= 1 + kick * .05;
+          if (o.pulse && !reduce) sc2 *= 1 + kick * (ver === 'classic' ? .018 : .05);
           el.style.opacity = op;
           el.style.transform = 'translate(-50%,-50%) translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) rotate(' + rot + 'deg) scale(' + (o.flip ? -1 : 1) * Math.max(0, sc2).toFixed(3) + ',' + Math.max(0, sc2).toFixed(3) + ')';
           if (o.anim) o.anim(el, b, kick);
           if (o.count) { var p = clamp((b - o.count[1]) / (o.count[2] - o.count[1])); el.textContent = Math.round(o.count[0] * (1 - Math.pow(1 - p, 2))); }
           if (o.ring) { el.style.setProperty('--p', clamp((b - o.ring[0]) / (o.ring[1] - o.ring[0])).toFixed(3)); el.style.setProperty('--c', o.ring[2]); }
         }
+        drawBalls(b);
         document.querySelector('.bar i').style.setProperty('--t', clamp(b / END));
+        if (document.activeElement !== seekInput) seekInput.value = Math.floor(b);
+        seekInput.setAttribute('aria-valuetext', Math.floor(b * B) + '秒 / ' + Math.round(END * B) + '秒');
       }
       // ---------- クラシック版の背景：楽器は描かず、演奏会を「なんとなく」思わせる光と線だけ ----------
       // 細い金の線・光の柱・波紋・ちりで、弦・指揮・ティンパニ・ファンファーレの気配を出す。どれも曲の音の時刻で動く
       var GOLD = '232,199,102';
+      // 本の章だと背景だけで伝える。紹介文の後ろに開いたページを置く。
+      function bookBackdrop(b, color) {
+        g.save();
+        g.translate(W / 2, H * .51);
+        var width = Math.min(W * .92, H * 1.45), height = Math.min(H * .46, width * .52);
+        g.globalAlpha = .13 * Math.min(1, (b - 16) * 2, (80 - b) * 2);
+        g.strokeStyle = color; g.lineWidth = Math.max(1.5, vmin * .25);
+        [-1, 1].forEach(function (side) {
+          g.beginPath(); g.moveTo(0, -height * .35);
+          g.quadraticCurveTo(side * width * .22, -height * .65, side * width * .48, -height * .42);
+          g.lineTo(side * width * .48, height * .48);
+          g.quadraticCurveTo(side * width * .22, height * .25, 0, height * .5);
+          g.closePath(); g.stroke();
+          for (var line = 0; line < 7; line++) {
+            var y = -height * .22 + line * height * .085;
+            g.beginPath(); g.moveTo(side * width * .08, y);
+            g.quadraticCurveTo(side * width * .25, y - height * .16, side * width * .4, y - height * .05); g.stroke();
+          }
+        });
+        g.restore();
+      }
       function nfrom(b) { var lo = 0, hi = CNOTES.length; while (lo < hi) { var m = (lo + hi) >> 1; if (CNOTES[m].b < b) lo = m + 1; else hi = m; } return lo; }
       function hash(k) { var x = Math.sin(k * 12.9898) * 43758.5453; return x - Math.floor(x); }
       function lastOf(tr, b) { for (var i = nfrom(b + 1e-6) - 1; i >= 0 && b - CNOTES[i].b < 8; i--) if (CNOTES[i].tr === tr) return CNOTES[i]; return null; }
@@ -552,6 +586,28 @@
         var sp = g.createRadialGradient(W / 2, -H * .2, 0, W / 2, -H * .2, H * 1.2);
         sp.addColorStop(0, 'rgba(255,236,190,' + (.1 + kick * .12).toFixed(3) + ')'); sp.addColorStop(1, 'rgba(255,236,190,0)');
         g.fillStyle = sp; g.fillRect(0, 0, W, H);
+        // ゆっくり交差する照明。文字の中央は明るくしすぎない。
+        for (var beam = 0; beam < 2; beam++) {
+          var sway = reduce ? 0 : Math.sin(b * .12 + beam * 2) * W * .08;
+          var source = W * (beam ? .82 : .18), target = W * (beam ? .62 : .38) + sway;
+          var wash = g.createLinearGradient(source, 0, target, H);
+          wash.addColorStop(0, 'rgba(255,231,175,.09)');
+          wash.addColorStop(1, 'rgba(255,231,175,0)');
+          g.fillStyle = wash; g.beginPath(); g.moveTo(source, 0);
+          g.lineTo(target + W * .22, H); g.lineTo(target - W * .22, H); g.closePath(); g.fill();
+        }
+        // 強拍の余韻を舞台の両端へ広げる。カノンでは小さく、終盤では大きく。
+        if (!reduce) {
+          var age = b - last(KICKS, b), energy = b >= 80 && b < 92 ? .35 : 1;
+          if (age >= 0 && age < 2) {
+            g.strokeStyle = gold(1); g.lineWidth = Math.max(1, vmin * .12);
+            g.globalAlpha = Math.pow(1 - age / 2, 2) * .18 * energy;
+            for (var side = -1; side <= 1; side += 2) {
+              g.beginPath(); g.arc(W * (side < 0 ? .03 : .97), H * .57, (4 + age * 18) * vmin, 0, Math.PI * 2); g.stroke();
+            }
+          }
+        }
+        g.globalAlpha = 1;
         // イントロ：画面の端の暗がりが、8拍目でふっと晴れる。鳴った音で光の柱が立つ
         if (b < 10) {
           var open = outCubic(clamp((b - 7.6) / 1.4));
@@ -626,7 +682,10 @@
           }
           // 下：細い縦の線が並び、鳴っている高さの線が金色に光る（ピアノの弦のような気配）
           var lo = 36, hi = 96, kh = Math.max(20, H * .05), ky = H - 62 - kh, light = {};
-          for (i = nfrom(b - 1.2); i < CNOTES.length && (nt = CNOTES[i]).b <= b; i++) nt.m.forEach(function (m) { while (m > hi) m -= 12; while (m < lo) m += 12; light[m] = Math.max(light[m] || 0, Math.exp(-(b - nt.b) * 2.6)); });
+          for (i = nfrom(b - 8); i < CNOTES.length && (nt = CNOTES[i]).b <= b; i++) {
+            var glow = Math.exp(-Math.max(0, b - nt.b - nt.d) * 6) * nt.v;
+            nt.m.forEach(function (m) { while (m > hi) m -= 12; while (m < lo) m += 12; light[m] = Math.max(light[m] || 0, glow); });
+          }
           var sw = W / (hi - lo + 1);
           for (var m = lo; m <= hi; m++) {
             var L = light[m] || 0;
@@ -636,7 +695,7 @@
           g.globalAlpha = 1;
         }
         // 最後の和音のあとは、金のちりがゆっくり舞う
-        if (b >= 136) {
+        if (b >= 136 && !reduce) {
           for (i = 0; i < 70; i++) {
             var st = 136 + hash(i) * 3, age2 = b - st;
             if (age2 < 0) continue;
@@ -691,10 +750,68 @@
         g.globalAlpha = 1;
       }
 
+      // クリックから次の強拍へ飛ぶ球。音は描画フレームではなく音声時計に予約する。
+      var balls = [], ballSounds = {};
+      stage.addEventListener('pointerdown', function (e) {
+        if (!playing || e.button > 0 || e.target.closest('button, a') || balls.length >= 24) return;
+        if (!ac || ac.state !== 'running') return;
+        var b = Math.max(0, now()), impact = ACCENTS.find(function (at) { return at > b + .2 && at < END; });
+        if (impact === undefined) return;
+        var x = e.clientX / W, y = e.clientY / H;
+        var ball = { at: b, hit: impact, x: x, y: y, dx: (x < .5 ? 1 : -1) * (.12 + Math.random() * .12), dy: -.12 - Math.random() * .15, seed: Math.random() * 100 };
+        balls.push(ball);
+        if (!muted && ac && !ballSounds[impact]) {
+          ballSounds[impact] = true;
+          var t = Math.max(ac.currentTime, t0 + impact * B);
+          var note = CNOTES.find(function (nt) { return Math.abs(nt.b - impact) < .01 && nt.tr === 'melody'; });
+          var pitch = note ? note.m[note.m.length - 1] : CHORDS[chordAt(impact)][0] + 12;
+          // 短い低音と、曲の和音に合わせたガラスの響き。同じ拍の連打は重ねない。
+          osc('sine', hz(pitch - 24), t, .2, env(t, .24, .003, .18, master));
+          [0, 12].forEach(function (octave) {
+            osc('sine', hz(pitch + octave), t, .55, env(t, .15, .003, .5, master));
+          });
+          noise(t, .08, env(t, .09, .002, .07, filt('highpass', 3500, .7, master)));
+        }
+      });
+      function drawBalls(b) {
+        balls = balls.filter(function (ball) { return b < ball.hit + 1.5; });
+        g.save();
+        balls.forEach(function (ball) {
+          var flight = Math.min(.7, ball.hit - ball.at);
+          var progress = outCubic(clamp((b - ball.at) / flight));
+          var tx = ball.x + ball.dx, ty = Math.max(.12, ball.y + ball.dy);
+          function position(p) {
+            return [(ball.x + (tx - ball.x) * p) * W, (ball.y + (ty - ball.y) * p - (reduce ? 0 : Math.sin(p * Math.PI) * .18)) * H];
+          }
+          g.fillStyle = '#ffe7a3'; g.strokeStyle = '#ffe7a3';
+          if (b < ball.hit) {
+            var xy = position(progress), waiting = clamp((b - ball.at - flight) / Math.max(.01, ball.hit - ball.at - flight));
+            var radius = Math.max(5, vmin * 1.1) * (1 + waiting * .8);
+            if (!reduce && progress === 1) { xy[0] += Math.sin((b - ball.at) * 3) * vmin; xy[1] += Math.sin((b - ball.at) * 4) * vmin; }
+            if (!reduce) {
+              for (var k = 1; k <= 7; k++) {
+                var trail = position(Math.max(0, progress - k * .018));
+                g.globalAlpha = (1 - k / 8) * .3; g.beginPath(); g.arc(trail[0], trail[1], radius * (1 - k / 9), 0, Math.PI * 2); g.fill();
+              }
+            }
+            g.globalAlpha = 1; g.beginPath(); g.arc(xy[0], xy[1], radius, 0, Math.PI * 2); g.fill();
+          } else {
+            var age = (b - ball.hit) / 1.5, center = position(1);
+            g.globalAlpha = Math.pow(1 - age, 2); g.lineWidth = 2;
+            g.beginPath(); g.arc(center[0], center[1], (1 + age * (reduce ? 2 : 15)) * vmin, 0, Math.PI * 2); g.stroke();
+            if (!reduce) for (var j = 0; j < 16; j++) {
+              var angle = j * Math.PI * 2 / 16 + ball.seed, distance = age * (10 + hash(j + ball.seed) * 14) * vmin;
+              g.beginPath(); g.arc(center[0] + Math.cos(angle) * distance, center[1] + Math.sin(angle) * distance + age * age * 8 * vmin, Math.max(.5, (1 - age) * 2.5), 0, Math.PI * 2); g.fill();
+            }
+          }
+        });
+        g.restore();
+      }
+
       // ================= 再生のしくみ =================
       var raf = 0, playing = false;
       function now() {
-        if (ac && !muted) return (ac.currentTime - t0 - (ac.outputLatency || ac.baseLatency || 0)) / B;
+        if (ac) return (ac.currentTime - t0 - (ac.outputLatency || ac.baseLatency || 0)) / B;
         return ((pausedAt >= 0 ? pausedAt : performance.now()) - clock0) / 1000 / B;
       }
       function loop() {
@@ -703,43 +820,48 @@
         if (b >= END) { finish(); return; }
         raf = requestAnimationFrame(loop);
       }
-      function start(withSound) {
+      function start(withSound, at, paused) {
         stop();
         muted = !withSound;
         // 音の準備はクリックの中で始める（スマホはそうしないと鳴らない）
-        if (withSound) { makeAudio(); if (ac.state !== 'running') ac.resume(); }
-        if (ver === 'edm') { usePulse(EDM_PULSE); begin(); return; }
+        makeAudio(); if (ac.state !== 'running') ac.resume();
+        syncSoundButton();
+        if (ver === 'edm') { usePulse(EDM_PULSE); begin(null, at, paused); return; }
         var a = ac, btns = document.querySelectorAll('[data-play], [data-play-muted], [data-again]');
         btns.forEach(function (bt) { bt.setAttribute('aria-busy', 'true'); bt.disabled = true; });
         loadClassic().then(function (d) {
           usePulse(d.pulse);
-          if (!withSound) return null;
           return a.decodeAudioData(d.mp3.slice(0));
         }).then(function (buf) {
-          if (withSound && ac !== a) return;   // 待っている間に止められた
-          begin(buf);
+          if (ac !== a) return;   // 待っている間に止められた
+          begin(buf, at, paused);
         }).catch(function () {
           // 読み込めなかったら EDM 版で流す
-          setVer('edm'); usePulse(EDM_PULSE); begin();
+          if (ac !== a) return;
+          setVer('edm'); usePulse(EDM_PULSE); begin(null, at, paused);
         }).then(function () { btns.forEach(function (bt) { bt.removeAttribute('aria-busy'); bt.disabled = false; }); });
       }
-      function begin(buf) {
+      function begin(buf, at, paused) {
+        at = Math.max(0, Math.min(END - 1, at || 0));
         size();
         app.classList.remove('is-ended');
         app.classList.add('is-playing');
         pauseBtn.textContent = '❚❚';
-        if (!muted) {
+        pauseBtn.setAttribute('aria-label', '一時停止');
+        if (ac) {
           if (buf) {
             var src = ac.createBufferSource();
-            src.buffer = buf; src.connect(ac.destination);
-            t0 = ac.currentTime + .1; src.start(t0);
+            src.buffer = buf; src.connect(output);
+            t0 = ac.currentTime + .1 - at * B; src.start(ac.currentTime + .1, at * B);
           } else {
-            t0 = ac.currentTime + .15; next = 0;
+            t0 = ac.currentTime + .15 - at * B; next = EV.findIndex(function (e) { return e.b >= at; });
+            if (next < 0) next = EV.length;
             music.gain.cancelScheduledValues(0); music.gain.value = 1;
             schedule(); timer = setInterval(schedule, 40);
           }
         } else { clock0 = performance.now(); pausedAt = -1; }
         playing = true;
+        if (paused && ac) { ac.suspend(); pauseBtn.textContent = '▶'; pauseBtn.setAttribute('aria-label', '再生'); }
         raf = requestAnimationFrame(loop);
       }
       // ---------- 曲の切り替え（EDM / クラシック）。選んだほうを覚えておく ----------
@@ -761,6 +883,7 @@
       if (!saved) { try { saved = localStorage.getItem('tomochi-mv-v2'); } catch (e) {} }
       setVer(saved || 'classic');
       function stop() {
+        balls = []; ballSounds = {};
         playing = false;
         cancelAnimationFrame(raf); clearInterval(timer);
         if (ac && ac.state !== 'closed') { try { ac.close(); } catch (e) {} }
@@ -774,9 +897,32 @@
         document.querySelector('#end').focus({ preventScroll: true });
       }
       var pauseBtn = document.querySelector('[data-pause]');
+      var seekInput = document.querySelector('[data-seek]');
+      function seekTo(at) {
+        if (!playing) return;
+        var paused = ac && ac.state === 'suspended';
+        start(!muted, at, paused);
+      }
+      seekInput.addEventListener('change', function () { seekTo(Number(seekInput.value)); });
+      document.querySelectorAll('[data-chapter]').forEach(function (button) {
+        button.addEventListener('click', function () { seekTo(Number(button.getAttribute('data-chapter'))); });
+      });
+      var soundBtn = document.querySelector('[data-sound]');
+      function syncSoundButton() {
+        soundBtn.textContent = muted ? '音なし' : '音あり';
+        soundBtn.setAttribute('aria-label', muted ? '音を出す' : '音を消す');
+        soundBtn.setAttribute('aria-pressed', String(muted));
+      }
+      soundBtn.addEventListener('click', function () {
+        if (!playing || !ac) return;
+        muted = !muted;
+        output.gain.cancelScheduledValues(ac.currentTime);
+        output.gain.setTargetAtTime(muted ? 0 : 1, ac.currentTime, .015);
+        syncSoundButton();
+      });
       pauseBtn.addEventListener('click', function () {
         if (!playing) return;
-        if (!muted && ac) {
+        if (ac) {
           if (ac.state === 'running') { ac.suspend(); pauseBtn.textContent = '▶'; pauseBtn.setAttribute('aria-label', '再生'); } else { ac.resume(); pauseBtn.textContent = '❚❚'; pauseBtn.setAttribute('aria-label', '一時停止'); }
         } else if (pausedAt >= 0) { clock0 += performance.now() - pausedAt; pausedAt = -1; pauseBtn.textContent = '❚❚'; }
         else { pausedAt = performance.now(); pauseBtn.textContent = '▶'; }

@@ -48,8 +48,8 @@ def chord_hit(at, notes, bass, len=1, vel=0.95, timp=None):
 track('organ', 'organ', gain=-2)
 track('melody', 'grandpiano')
 track('bass', 'grandpiano', gain=-3)
-track('strings', 'strings', gain=-9)
-track('timpani', 'timpani', gain=-2, reverb=True)
+track('strings', 'strings', gain=-11)
+track('timpani', 'timpani', gain=-5, reverb=True)
 track('glock', 'glockenspiel', gain=-9)
 track('brass', 'trumpet', gain=-10)
 track('clock', 'clock', gain=-8, reverb=False)
@@ -232,6 +232,31 @@ n('strings', 136, ['C4', 'E4', 'G4', 'C5'], 5, .85)
 n('brass', 136, ['C4', 'G4'], 3, .9)
 for i, p in enumerate(['C6', 'E6', 'G6', 'C7']):
     n('glock', 136 + i, p, vel=.8)
+
+# 歓喜の歌の後半へ向けて、内声の分散和音で少しずつ温度を上げる。
+# 主旋律より下の音域を使い、言葉に合わせた打撃音の場所は空ける。
+for at in (48, 52, 56, 64, 72, 76):
+    tones = ['C3', 'G3', 'E4', 'G3'] if harm[at] == 'C' else ['G2', 'D3', 'B3', 'D3']
+    for k in range(8):
+        n('melody', at + k * .5, tones[k % 4], .38, .32 + k * .012)
+
+# カノンは低音から高音へ受け渡し、打楽器を引いて呼吸を作る。
+for i, (_, chord) in enumerate(canon[:6]):
+    n('glock', 80 + i * 2, chord[2][:-1] + '5', 1.5, .3 + i * .025)
+
+# 拍の位置は固定して映像との同期を保ち、音量と音の切り方にフレーズを作る。
+for name, tr in tracks.items():
+    for note in tr['notes']:
+        at = note['at']
+        quiet = 80 <= at < 92
+        if name == 'timpani' and quiet:
+            note['vel'] *= .5
+        if name == 'melody' and 16 <= at < 80:
+            note['vel'] *= .9 if at % 4 else 1
+        if name == 'strings' and 'len' in note:
+            note['len'] = max(.1, note['len'] - .12)
+        note['vel'] = round(note['vel'], 3)
+    tr['notes'].sort(key=lambda note: note['at'])
 
 score = {
     '$schema': 'https://raw.githubusercontent.com/receptron/jinglescript/main/schema/jinglescript-1.json',

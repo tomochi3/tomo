@@ -700,7 +700,7 @@
       "t": 8.203,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D3",
         "D4"
@@ -717,7 +717,7 @@
       "t": 8.438,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "G3",
         "G4"
@@ -754,7 +754,7 @@
       "t": 9.141,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D3",
         "D4"
@@ -798,7 +798,7 @@
       "t": 9.609,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D3",
         "D4"
@@ -815,7 +815,7 @@
       "t": 9.844,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "G3",
         "G4"
@@ -835,7 +835,7 @@
       "t": 10.078,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "B3",
         "B4"
@@ -852,7 +852,7 @@
       "t": 10.313,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "D4",
         "D5"
@@ -952,7 +952,7 @@
       "t": 11.953,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "A3",
         "A4"
@@ -969,7 +969,7 @@
       "t": 12.188,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "C4",
         "C5"
@@ -996,7 +996,7 @@
       "t": 12.656,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "D3",
         "D4",
@@ -1025,7 +1025,7 @@
       "t": 12.891,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "A3",
         "A4"
@@ -1083,7 +1083,7 @@
       "t": 13.359,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "A3",
         "A4"
@@ -1114,7 +1114,7 @@
       "t": 13.594,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "F#3",
         "F#4"
@@ -1148,7 +1148,7 @@
       "t": 13.828,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "A3",
         "A4"
@@ -1179,7 +1179,7 @@
       "t": 14.063,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "D3",
         "D4"
@@ -1319,7 +1319,7 @@
       "t": 15.234,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.815,
+      "vel": 0.734,
       "pitch": [
         "G3",
         "B3",
@@ -1348,7 +1348,7 @@
       "t": 15.469,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.83,
+      "vel": 0.747,
       "pitch": [
         "G3",
         "B3",
@@ -1377,7 +1377,7 @@
       "t": 15.703,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.845,
+      "vel": 0.761,
       "pitch": [
         "G3",
         "B3",
@@ -1406,7 +1406,7 @@
       "t": 15.938,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.86,
+      "vel": 0.774,
       "pitch": [
         "C4",
         "E4",
@@ -1435,7 +1435,7 @@
       "t": 16.172,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.875,
+      "vel": 0.787,
       "pitch": [
         "C4",
         "E4",
@@ -1464,7 +1464,7 @@
       "t": 16.406,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.89,
+      "vel": 0.801,
       "pitch": [
         "C4",
         "E4",
@@ -1493,7 +1493,7 @@
       "t": 16.641,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.905,
+      "vel": 0.815,
       "pitch": [
         "C4",
         "E4",
@@ -1562,7 +1562,7 @@
       "t": 17.109,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.935,
+      "vel": 0.842,
       "pitch": [
         "D4",
         "F#4",
@@ -1591,7 +1591,7 @@
       "t": 17.344,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "D4",
         "F#4",
@@ -1620,7 +1620,7 @@
       "t": 17.813,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.9,
       "pitch": [
         "G3",
         "B3",
@@ -1717,7 +1717,7 @@
       "t": 19.453,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "D3",
         "D4"
@@ -1734,7 +1734,7 @@
       "t": 19.688,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "G3",
         "G4"
@@ -1771,7 +1771,7 @@
       "t": 20.391,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "D3",
         "D4"
@@ -1815,7 +1815,7 @@
       "t": 20.859,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "D3",
         "D4"
@@ -1832,7 +1832,7 @@
       "t": 21.094,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "G3",
         "G4"
@@ -1852,7 +1852,7 @@
       "t": 21.328,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "B3",
         "B4"
@@ -1869,7 +1869,7 @@
       "t": 21.563,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "D4",
         "D5"
@@ -1896,7 +1896,7 @@
       "t": 22.031,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D4",
         "F#4",
@@ -1944,6 +1944,13 @@
     },
     {
       "t": 22.5,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "C3"
+    },
+    {
+      "t": 22.5,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.8,
@@ -1978,6 +1985,13 @@
     },
     {
       "t": 22.734,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.299,
+      "pitch": "G3"
+    },
+    {
+      "t": 22.734,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -1987,11 +2001,18 @@
       "t": 22.969,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "E4",
         "E5"
       ]
+    },
+    {
+      "t": 22.969,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.31,
+      "pitch": "E4"
     },
     {
       "t": 22.969,
@@ -2005,6 +2026,13 @@
     },
     {
       "t": 23.203,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "G3"
+    },
+    {
+      "t": 23.203,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2014,11 +2042,18 @@
       "t": 23.438,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "F4",
         "F5"
       ]
+    },
+    {
+      "t": 23.438,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.331,
+      "pitch": "C3"
     },
     {
       "t": 23.438,
@@ -2032,6 +2067,13 @@
     },
     {
       "t": 23.672,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.342,
+      "pitch": "G3"
+    },
+    {
+      "t": 23.672,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2041,11 +2083,18 @@
       "t": 23.906,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "G4",
         "G5"
       ]
+    },
+    {
+      "t": 23.906,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.353,
+      "pitch": "E4"
     },
     {
       "t": 23.906,
@@ -2056,6 +2105,13 @@
         "C2",
         "C3"
       ]
+    },
+    {
+      "t": 24.141,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.364,
+      "pitch": "G3"
     },
     {
       "t": 24.141,
@@ -2073,6 +2129,13 @@
         "G4",
         "G5"
       ]
+    },
+    {
+      "t": 24.375,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "G2"
     },
     {
       "t": 24.375,
@@ -2104,6 +2167,13 @@
     },
     {
       "t": 24.609,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.299,
+      "pitch": "D3"
+    },
+    {
+      "t": 24.609,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2113,11 +2183,18 @@
       "t": 24.844,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "F4",
         "F5"
       ]
+    },
+    {
+      "t": 24.844,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.31,
+      "pitch": "B3"
     },
     {
       "t": 24.844,
@@ -2131,6 +2208,13 @@
     },
     {
       "t": 25.078,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "D3"
+    },
+    {
+      "t": 25.078,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2140,11 +2224,18 @@
       "t": 25.313,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "E4",
         "E5"
       ]
+    },
+    {
+      "t": 25.313,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.331,
+      "pitch": "G2"
     },
     {
       "t": 25.313,
@@ -2158,6 +2249,13 @@
     },
     {
       "t": 25.547,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.342,
+      "pitch": "D3"
+    },
+    {
+      "t": 25.547,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2167,11 +2265,18 @@
       "t": 25.781,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D4",
         "D5"
       ]
+    },
+    {
+      "t": 25.781,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.353,
+      "pitch": "B3"
     },
     {
       "t": 25.781,
@@ -2182,6 +2287,13 @@
         "G2",
         "G3"
       ]
+    },
+    {
+      "t": 26.016,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.364,
+      "pitch": "D3"
     },
     {
       "t": 26.016,
@@ -2199,6 +2311,13 @@
         "C4",
         "C5"
       ]
+    },
+    {
+      "t": 26.25,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "C3"
     },
     {
       "t": 26.25,
@@ -2230,6 +2349,13 @@
     },
     {
       "t": 26.484,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.299,
+      "pitch": "G3"
+    },
+    {
+      "t": 26.484,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2239,11 +2365,18 @@
       "t": 26.719,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "C4",
         "C5"
       ]
+    },
+    {
+      "t": 26.719,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.31,
+      "pitch": "E4"
     },
     {
       "t": 26.719,
@@ -2257,6 +2390,13 @@
     },
     {
       "t": 26.953,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "G3"
+    },
+    {
+      "t": 26.953,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2266,11 +2406,18 @@
       "t": 27.188,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D4",
         "D5"
       ]
+    },
+    {
+      "t": 27.188,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.331,
+      "pitch": "C3"
     },
     {
       "t": 27.188,
@@ -2284,6 +2431,13 @@
     },
     {
       "t": 27.422,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.342,
+      "pitch": "G3"
+    },
+    {
+      "t": 27.422,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2293,11 +2447,18 @@
       "t": 27.656,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "E4",
         "E5"
       ]
+    },
+    {
+      "t": 27.656,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.353,
+      "pitch": "E4"
     },
     {
       "t": 27.656,
@@ -2308,6 +2469,13 @@
         "C2",
         "C3"
       ]
+    },
+    {
+      "t": 27.891,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.364,
+      "pitch": "G3"
     },
     {
       "t": 27.891,
@@ -2396,7 +2564,7 @@
       "t": 28.828,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D4",
         "D5"
@@ -2420,7 +2588,7 @@
       "t": 29.063,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.765,
       "pitch": [
         "D4",
         "D5"
@@ -2493,6 +2661,13 @@
     },
     {
       "t": 30,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "C3"
+    },
+    {
+      "t": 30,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.8,
@@ -2521,6 +2696,13 @@
     },
     {
       "t": 30.234,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.299,
+      "pitch": "G3"
+    },
+    {
+      "t": 30.234,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2530,11 +2712,18 @@
       "t": 30.469,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "E4",
         "E5"
       ]
+    },
+    {
+      "t": 30.469,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.31,
+      "pitch": "E4"
     },
     {
       "t": 30.469,
@@ -2548,6 +2737,13 @@
     },
     {
       "t": 30.703,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "G3"
+    },
+    {
+      "t": 30.703,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2557,11 +2753,18 @@
       "t": 30.938,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "F4",
         "F5"
       ]
+    },
+    {
+      "t": 30.938,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.331,
+      "pitch": "C3"
     },
     {
       "t": 30.938,
@@ -2575,6 +2778,13 @@
     },
     {
       "t": 31.172,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.342,
+      "pitch": "G3"
+    },
+    {
+      "t": 31.172,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2584,11 +2794,18 @@
       "t": 31.406,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "G4",
         "G5"
       ]
+    },
+    {
+      "t": 31.406,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.353,
+      "pitch": "E4"
     },
     {
       "t": 31.406,
@@ -2599,6 +2816,13 @@
         "C2",
         "C3"
       ]
+    },
+    {
+      "t": 31.641,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.364,
+      "pitch": "G3"
     },
     {
       "t": 31.641,
@@ -2658,7 +2882,7 @@
       "t": 32.344,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.9,
       "pitch": [
         "F4",
         "A4",
@@ -2687,7 +2911,7 @@
       "t": 32.813,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.9,
       "pitch": [
         "E4",
         "G4",
@@ -2716,7 +2940,7 @@
       "t": 33.281,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.9,
       "pitch": [
         "D4",
         "G4",
@@ -2753,6 +2977,13 @@
     },
     {
       "t": 33.75,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "C3"
+    },
+    {
+      "t": 33.75,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.8,
@@ -2781,6 +3012,13 @@
     },
     {
       "t": 33.984,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.299,
+      "pitch": "G3"
+    },
+    {
+      "t": 33.984,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2790,11 +3028,18 @@
       "t": 34.219,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "C4",
         "C5"
       ]
+    },
+    {
+      "t": 34.219,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.31,
+      "pitch": "E4"
     },
     {
       "t": 34.219,
@@ -2808,6 +3053,13 @@
     },
     {
       "t": 34.453,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "G3"
+    },
+    {
+      "t": 34.453,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2817,11 +3069,18 @@
       "t": 34.688,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "D4",
         "D5"
       ]
+    },
+    {
+      "t": 34.688,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.331,
+      "pitch": "C3"
     },
     {
       "t": 34.688,
@@ -2835,6 +3094,13 @@
     },
     {
       "t": 34.922,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.342,
+      "pitch": "G3"
+    },
+    {
+      "t": 34.922,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2844,11 +3110,18 @@
       "t": 35.156,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "E4",
         "E5"
       ]
+    },
+    {
+      "t": 35.156,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.353,
+      "pitch": "E4"
     },
     {
       "t": 35.156,
@@ -2859,6 +3132,13 @@
         "C2",
         "C3"
       ]
+    },
+    {
+      "t": 35.391,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.364,
+      "pitch": "G3"
     },
     {
       "t": 35.391,
@@ -2876,6 +3156,13 @@
         "D4",
         "D5"
       ]
+    },
+    {
+      "t": 35.625,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "G2"
     },
     {
       "t": 35.625,
@@ -2914,6 +3201,13 @@
     },
     {
       "t": 35.859,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.299,
+      "pitch": "D3"
+    },
+    {
+      "t": 35.859,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
@@ -2923,12 +3217,19 @@
       "t": 36.094,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.8,
+      "vel": 0.72,
       "pitch": [
         "G3",
         "B3",
         "D4"
       ]
+    },
+    {
+      "t": 36.094,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.31,
+      "pitch": "B3"
     },
     {
       "t": 36.094,
@@ -2951,11 +3252,18 @@
       "t": 36.328,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "C4",
         "C5"
       ]
+    },
+    {
+      "t": 36.328,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.32,
+      "pitch": "D3"
     },
     {
       "t": 36.328,
@@ -2968,7 +3276,7 @@
       "t": 36.563,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.9,
+      "vel": 0.81,
       "pitch": [
         "C4",
         "C5"
@@ -2978,13 +3286,20 @@
       "t": 36.563,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.855,
       "pitch": [
         "C3",
         "E3",
         "G3",
         "C4"
       ]
+    },
+    {
+      "t": 36.563,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.331,
+      "pitch": "G2"
     },
     {
       "t": 36.563,
@@ -3005,10 +3320,24 @@
     },
     {
       "t": 36.797,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.342,
+      "pitch": "D3"
+    },
+    {
+      "t": 36.797,
       "track": 2,
       "instrument": "grandpiano",
       "vel": 0.6,
       "pitch": "G3"
+    },
+    {
+      "t": 37.031,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.353,
+      "pitch": "B3"
     },
     {
       "t": 37.031,
@@ -3033,6 +3362,13 @@
       "instrument": "timpani",
       "vel": 0.67,
       "pitch": "D2"
+    },
+    {
+      "t": 37.266,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.364,
+      "pitch": "D3"
     },
     {
       "t": 37.266,
@@ -3087,8 +3423,15 @@
       "t": 37.5,
       "track": 4,
       "instrument": "timpani",
-      "vel": 0.9,
+      "vel": 0.45,
       "pitch": "D2"
+    },
+    {
+      "t": 37.5,
+      "track": 5,
+      "instrument": "glockenspiel",
+      "vel": 0.3,
+      "pitch": "A5"
     },
     {
       "t": 37.5,
@@ -3147,6 +3490,13 @@
       ]
     },
     {
+      "t": 38.438,
+      "track": 5,
+      "instrument": "glockenspiel",
+      "vel": 0.325,
+      "pitch": "A5"
+    },
+    {
       "t": 38.672,
       "track": 1,
       "instrument": "grandpiano",
@@ -3199,8 +3549,15 @@
       "t": 39.375,
       "track": 4,
       "instrument": "timpani",
-      "vel": 0.7,
+      "vel": 0.35,
       "pitch": "A2"
+    },
+    {
+      "t": 39.375,
+      "track": 5,
+      "instrument": "glockenspiel",
+      "vel": 0.35,
+      "pitch": "F#5"
     },
     {
       "t": 39.375,
@@ -3264,6 +3621,13 @@
         "C#4",
         "F#4"
       ]
+    },
+    {
+      "t": 40.313,
+      "track": 5,
+      "instrument": "glockenspiel",
+      "vel": 0.375,
+      "pitch": "F#5"
     },
     {
       "t": 40.313,
@@ -3332,8 +3696,15 @@
       "t": 41.25,
       "track": 4,
       "instrument": "timpani",
-      "vel": 0.7,
+      "vel": 0.35,
       "pitch": "G2"
+    },
+    {
+      "t": 41.25,
+      "track": 5,
+      "instrument": "glockenspiel",
+      "vel": 0.4,
+      "pitch": "G5"
     },
     {
       "t": 41.25,
@@ -3397,6 +3768,13 @@
         "D4",
         "F#4"
       ]
+    },
+    {
+      "t": 42.188,
+      "track": 5,
+      "instrument": "glockenspiel",
+      "vel": 0.425,
+      "pitch": "F#5"
     },
     {
       "t": 42.188,

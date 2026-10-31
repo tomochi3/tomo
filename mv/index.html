@@ -71,6 +71,8 @@
     .day.fun { background: var(--yellow); }
     .note { display: grid; place-items: center; width: 26vmin; height: 20vmin; color: var(--ink); font-family: var(--hand); font-weight: 700; font-size: 6vmin; box-shadow: 1.2vmin 1.6vmin 0 rgba(0, 0, 0, .25); }
     .v-classic .stamp { color: #e8c766 !important; }
+    /* ボールがまとめて弾けたときの「×n」。言葉より手前、左上のあたりに出す */
+    .blabel { position: absolute; left: 0; top: 0; z-index: 4; margin: 0; font-family: var(--display); line-height: 1; white-space: nowrap; color: #ffd23f; -webkit-text-stroke: .35vmin #14120f; paint-order: stroke fill; pointer-events: none; opacity: 0; will-change: transform, opacity; }
     .ring { display: grid; place-items: center; width: 46vmin; height: 46vmin; border-radius: 50%; background: conic-gradient(var(--c) calc(var(--p, 0) * 1turn), rgba(255, 255, 255, .16) 0); -webkit-mask: radial-gradient(closest-side, transparent 72%, #000 73%); mask: radial-gradient(closest-side, transparent 72%, #000 73%); }
 
     /* 上と下の小さな表示 */
@@ -152,12 +154,12 @@
         <button class="play" type="button" data-play>▶ 再生 <small>音が出ます</small></button>
         <button class="mute" type="button" data-play-muted>音なしで見る</button>
         <button class="mute" type="button" data-list>映像を見ずに、内容の一覧を見る</button>
-        <p class="warn">画面をクリック・タップすると、上の音符にボールが飛び込みます。盛り上がる区切りが近いときは、ためてまとめて弾けます。<br>画面の色が拍に合わせて大きく切り替わります。</p>
+        <p class="warn">画面をクリック・タップすると、上の音符にボールが飛び込みます。盛り上がる区切りが近いときは、ためてまとめて弾けます。同じ区切りにたくさん投げるほど、派手に弾けます。<br>画面の色が拍に合わせて大きく切り替わります。</p>
       </div>
     </div>
 
     <div class="stage" aria-hidden="true">
-      <div class="shake"><canvas></canvas><div class="items"></div></div>
+      <div class="shake"><canvas></canvas><div class="items"></div><p class="blabel" data-blabel></p></div>
       <p class="logo">tomochi.</p>
     </div>
     <div class="hud">
@@ -580,7 +582,7 @@
         for (var s = 0; s < list.length; s++) if (b >= list[s][0]) sc = list[s];
         stage.style.setProperty('--bg', sc[1]); app.style.setProperty('--fg', sc[2]);
         // ドロップと大きな音では、画面ごと揺らす
-        var sh = reduce ? 0 : hit * (ver === 'classic' ? .25 : 1.4) * vmin;
+        var sh = reduce ? 0 : (hit * (ver === 'classic' ? .25 : 1.4) + burstShake.amp * Math.exp(-(b - burstShake.at) * 5) * (b >= burstShake.at ? 1 : 0)) * vmin;
         shake.style.transform = 'translate(' + ((Math.random() - .5) * sh).toFixed(1) + 'px,' + ((Math.random() - .5) * sh).toFixed(1) + 'px) scale(' + (1 + kick * .012).toFixed(4) + ')';
         if (ver === 'classic') concert(b, sc, kick); else background(b, sc, kick, snare);
         if (b >= 16 && b < 80) bookBackdrop(b, sc[2]);
@@ -815,7 +817,7 @@
       }
 
       // 4拍の区切りにある音符へ飛び、発音位置で弾ける。休符なら次の区切りへ。
-      var balls = [], ballSounds = {};
+      var balls = [], ballSounds = {}, bursts = [], burstShake = { at: -99, amp: 0 };
       // ボールが弾ける場所を決める。基本は次の4拍の区切りの音符。
       // ただし、その次の8拍目が「かなり気持ちいい」（章の頭や、大きな一撃）なら、4拍目では弾けずに8拍目でまとめて弾ける
       var BIG = [16, 48, 80, 96, 128, 136];
@@ -853,7 +855,7 @@
         return [W * .2, bot - (Math.max(40, Math.min(92, pitch)) - 64) * gap * .32];
       }
       stage.addEventListener('pointerdown', function (e) {
-        if (!playing || e.button > 0 || e.target.closest('button, a') || balls.length >= 24) return;
+        if (!playing || e.button > 0 || e.target.closest('button, a') || balls.length >= 40) return;
         if (!ac || ac.state !== 'running') return;
         var b = Math.max(0, now()), target = ballImpact(b);
         if (!target) return;
@@ -861,19 +863,114 @@
         var x = e.clientX / W, y = e.clientY / H;
         var ball = { at: b, hit: impact, base: target.strength, strength: target.strength, note: target.note, x: x, y: y, seed: Math.random() * 100 };
         balls.push(ball);
-        if (!muted && ac && !ballSounds[impact]) {
-          ballSounds[impact] = true;
-          var t = t0 + impact * B;
-          var pitch = Math.max.apply(null, ball.note.m);
-          // 短い低音と、曲の和音に合わせたガラスの響き。同じ拍の連打は重ねない。
-          osc('sine', hz(pitch - 24), t, .16, env(t, .24 * ball.strength, .002, .14, master));
-          [0, 12].forEach(function (octave) {
-            osc('sine', hz(pitch + octave), t, .25, env(t, .15 * ball.strength, .002, .22, master));
-          });
-          noise(t, .06, env(t, .09 * ball.strength, .001, .05, filt('highpass', 3500, .7, master)));
-        }
       });
+      // ---------- 同じ拍に集まったボールの数で、弾け方と音を変える ----------
+      // 1個：ポン / 2〜3個：パーン / 4〜7個：×n のコンボ / 8〜15個：GREAT（画面が揺れる） / 16個〜：FEVER（紙吹雪）
+      function tier(n) { return n >= 16 ? 5 : n >= 8 ? 4 : n >= 4 ? 3 : n >= 2 ? 2 : 1; }
+      var BURST_COLORS = ['#2549d8', '#ffd23f', '#e2412b', '#5ce1ff', '#ff8fb1', '#7ee08a', '#b28dff'];
+      // その拍で鳴っている和音の音（ぶつからないように、ボールの音はこの音だけで作る）
+      function chordTones(beat, note) {
+        var pcs = {};
+        if (ver === 'edm') [7, 10, 2].forEach(function (pc) { pcs[pc] = 1; });   // ト短調
+        else CNOTES.forEach(function (nt) { if (Math.abs(nt.b - beat) < .02) nt.m.forEach(function (m) { pcs[m % 12] = 1; }); });
+        note.m.forEach(function (m) { pcs[m % 12] = 1; });
+        return Object.keys(pcs).map(Number);
+      }
+      function ballSound(impact, n, note) {
+        if (muted || !ac) return;
+        var t = t0 + impact * B, lv = tier(n), pitch = Math.max.apply(null, note.m), v = Math.min(1.6, .9 + n * .04);
+        var pcs = chordTones(impact, note), tones = [];
+        for (var o = 72; o < 100; o++) if (pcs.indexOf(o % 12) >= 0) tones.push(o);
+        // 1個のとき：短い低音と、旋律の音のガラスの響き
+        osc('sine', hz(pitch - 24), t, .16, env(t, .24 * v, .002, .14, master));
+        [0, 12].forEach(function (octave) { osc('sine', hz(pitch + octave), t, .25, env(t, .15 * v, .002, .22, master)); });
+        noise(t, .06, env(t, .09 * v, .001, .05, filt('highpass', 3500, .7, master)));
+        if (lv >= 2) tones.slice(0, 3).forEach(function (m) { osc('triangle', hz(m), t, .4, env(t, .06, .003, .36, master)); });
+        if (lv >= 3) tones.slice(0, lv >= 4 ? 8 : 5).forEach(function (m, i) {   // 和音の音で駆け上がる
+          var at = t + i * B / 6;
+          osc('sine', hz(m), at, .3, env(at, .09, .002, .26, master));
+        });
+        if (lv >= 4) {   // シンバルと、和音を少し伸ばす
+          noise(t, 1.4, env(t, .16, .002, 1.3, filt('highpass', 5000, .7, master)));
+          tones.slice(0, 4).forEach(function (m) { osc('triangle', hz(m - 12), t, 1.1, env(t, .05, .02, 1, master)); });
+        }
+        if (lv >= 5) {   // 下から上へ一気にのぼる音と、いちばん大きな和音
+          var sweep = osc('sawtooth', 110, t - B, B, env(t - B, .05, B * .9, .05, filt('lowpass', 2400, 1, master)));
+          sweep.frequency.exponentialRampToValueAtTime(880, t);
+          tones.slice(0, 6).forEach(function (m, i) { osc('sine', hz(m + 12), t + i * .02, 1.4, env(t + i * .02, .07, .004, 1.3, master)); });
+        }
+      }
+      // 弾ける少し前（0.1秒前）に、集まった数で音を決めて予約する。弾けた瞬間に、数に応じた演出を始める
+      function settleBursts(b) {
+        var groups = {};
+        balls.forEach(function (ball) { (groups[ball.hit] = groups[ball.hit] || []).push(ball); });
+        Object.keys(groups).forEach(function (key) {
+          var hit = +key, list = groups[key], n = list.length;
+          // 音の予約は、聞こえる時刻ではなく音の時計で 0.12 秒前（出力の遅れが大きい端末でも遅れないように）
+          if (!ballSounds[hit] && (!ac || t0 + hit * B - ac.currentTime < .12)) { ballSounds[hit] = true; ballSound(hit, n, list[0].note); }
+          if (b >= hit && !list[0].burst) {
+            list.forEach(function (ball) { ball.burst = true; });
+            var c = noteHitPoint(list[0].note);
+            bursts.push({ at: hit, n: n, lv: tier(n), x: c[0], y: c[1], seed: Math.random() * 100 });
+            if (tier(n) >= 4 && !reduce) burstShake = { at: hit, amp: tier(n) === 5 ? 2.2 : 1.2 };
+          }
+        });
+      }
+      var blabel = document.querySelector('[data-blabel]');
+      function drawLabel(b) {
+        // いちばん新しい「×n」だけを出す（数が多いほど大きく、ことばも変わる）
+        var bu = null;
+        bursts.forEach(function (x) { if (x.lv >= 3) bu = x; });
+        if (!bu) { blabel.style.opacity = 0; return; }
+        var sec = (b - bu.at) * B, life = bu.lv >= 5 ? 2.2 : 1.2;
+        blabel.textContent = bu.lv >= 5 ? 'FEVER ×' + bu.n : bu.lv >= 4 ? 'GREAT ×' + bu.n : '×' + bu.n;
+        blabel.style.fontSize = (bu.lv >= 5 ? 11 : bu.lv >= 4 ? 8 : 6) + 'vmin';
+        blabel.style.color = bu.lv >= 5 ? BURST_COLORS[Math.floor(sec * 12) % BURST_COLORS.length] : '#ffd23f';
+        blabel.style.opacity = 1 - clamp((sec - life * .6) / (life * .4));
+        var pop = 1 + (1 - clamp(sec / .25)) * .5;
+        blabel.style.transform = 'translate(' + Math.max(16, bu.x - 2 * vmin).toFixed(0) + 'px,' + (bu.y + 6 * vmin - sec * 4 * vmin).toFixed(0) + 'px) scale(' + pop.toFixed(3) + ') rotate(-6deg)';
+        blabel.style.transformOrigin = '0 50%';
+      }
+      function drawBursts(b) {
+        bursts = bursts.filter(function (bu) { return (b - bu.at) * B < (bu.lv >= 5 ? 2.2 : 1.2); });
+        drawLabel(b);
+        g.save();
+        bursts.forEach(function (bu) {
+          var sec = (b - bu.at) * B, life = bu.lv >= 5 ? 2.2 : 1.2, age = clamp(sec / life), sp = outCubic(clamp(sec / .5));
+          if (bu.lv >= 2) {   // 2色の火花
+            for (var j = 0; j < 12 + bu.n * 4 && j < 70; j++) {
+              var a = j * 2.399 + bu.seed, d = sp * (10 + hash(j + bu.seed) * (bu.lv >= 4 ? 40 : 22)) * vmin;
+              g.globalAlpha = Math.pow(1 - age, 1.5); g.fillStyle = BURST_COLORS[bu.lv >= 3 ? j % BURST_COLORS.length : j % 2];
+              g.beginPath(); g.arc(bu.x + Math.cos(a) * d, bu.y + Math.sin(a) * d + age * age * 14 * vmin, Math.max(1, (1 - age) * (bu.lv >= 4 ? 4 : 3)), 0, 7); g.fill();
+            }
+          }
+          if (bu.lv >= 3) {   // 二重の衝撃波と、色のついた一瞬の光
+            g.globalAlpha = Math.max(0, .35 - sec * 1.2); g.fillStyle = BURST_COLORS[(bu.n + 1) % BURST_COLORS.length];
+            g.fillRect(0, 0, W, H);
+            g.lineWidth = 3; g.strokeStyle = '#fff';
+            [1, .6].forEach(function (k) { g.globalAlpha = Math.pow(1 - age, 2); g.beginPath(); g.arc(bu.x, bu.y, sp * k * (bu.lv >= 4 ? 70 : 38) * vmin, 0, 7); g.stroke(); });
+          }
+          if (bu.lv >= 4 && !reduce) {   // 画面じゅうに散らばる星
+            for (var s2 = 0; s2 < 24; s2++) {
+              var sx = hash(s2 + bu.seed) * W, sy = hash(s2 + bu.seed + 7) * H, tw = Math.max(0, Math.sin(clamp(sec / .9) * Math.PI));
+              g.globalAlpha = tw * .9; g.fillStyle = BURST_COLORS[s2 % BURST_COLORS.length];
+              g.beginPath(); g.arc(sx, sy, (1.2 + hash(s2) * 1.6) * vmin * tw, 0, 7); g.fill();
+            }
+          }
+          if (bu.lv >= 5 && !reduce) {   // 紙吹雪が降る
+            for (var c2 = 0; c2 < 90; c2++) {
+              var cx = hash(c2 * 3 + bu.seed) * W + Math.sin(sec * 3 + c2) * 3 * vmin, cy = -20 + (sec * (.35 + hash(c2 + 11) * .4)) * H;
+              if (cy > H + 20) continue;
+              g.globalAlpha = 1 - clamp((sec - 1.6) / .6); g.fillStyle = BURST_COLORS[c2 % BURST_COLORS.length];
+              g.save(); g.translate(cx, cy); g.rotate(sec * 6 + c2); g.fillRect(-vmin * .8, -vmin * .4, vmin * 1.6, vmin * .8); g.restore();
+            }
+          }
+        });
+        g.restore();
+      }
       function drawBalls(b) {
+        settleBursts(b);
+        drawBursts(b);
         balls = balls.filter(function (ball) { return (b - ball.hit) * B < .4; });
         var together = {};
         balls.forEach(function (ball) { together[ball.hit] = (together[ball.hit] || 0) + 1; });
@@ -1012,7 +1109,8 @@
       if (!saved) { try { saved = localStorage.getItem('tomochi-mv-v2'); } catch (e) {} }
       setVer(saved || 'classic');
       function stop() {
-        balls = []; ballSounds = {};
+        balls = []; ballSounds = {}; bursts = []; burstShake = { at: -99, amp: 0 };
+        if (blabel) blabel.style.opacity = 0;
         playing = false;
         cancelAnimationFrame(raf); clearInterval(timer);
         if (ac && ac.state !== 'closed') { try { ac.close(); } catch (e) {} }

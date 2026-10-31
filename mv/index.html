@@ -70,9 +70,6 @@
     .day span { font-family: var(--hand); font-size: 6vmin; font-weight: 700; letter-spacing: -.06em; }
     .day.fun { background: var(--yellow); }
     .note { display: grid; place-items: center; width: 26vmin; height: 20vmin; color: var(--ink); font-family: var(--hand); font-weight: 700; font-size: 6vmin; box-shadow: 1.2vmin 1.6vmin 0 rgba(0, 0, 0, .25); }
-    .ico { display: block; width: 100%; height: auto; overflow: visible; }
-    .curtain { width: 54vw; height: 120vh; background: repeating-linear-gradient(90deg, #5a0c18 0 1vw, #8f1a2b 2.6vw, #b0263a 3.4vw, #8f1a2b 4.2vw, #5a0c18 6vw); box-shadow: inset 0 -6vh 6vh rgba(0, 0, 0, .45); }
-    .curtain::after { content: ""; position: absolute; left: 0; right: 0; bottom: 4vh; height: 2.4vh; background: repeating-linear-gradient(90deg, #d4af37 0 .6vw, #a8821f .6vw 1.2vw); }
     .v-classic .stamp { color: #e8c766 !important; }
     .ring { display: grid; place-items: center; width: 46vmin; height: 46vmin; border-radius: 50%; background: conic-gradient(var(--c) calc(var(--p, 0) * 1turn), rgba(255, 255, 255, .16) 0); -webkit-mask: radial-gradient(closest-side, transparent 72%, #000 73%); mask: radial-gradient(closest-side, transparent 72%, #000 73%); }
 
@@ -393,51 +390,6 @@
       var SCENES_C = [[0, '#1a0f0a', '#f3e6c8'], [16, '#6e0f1e', '#f3e6c8'], [48, '#f3ead7', '#2a1a10'], [68, '#6e0f1e', '#f3e6c8'], [80, '#10233a', '#f3e6c8'], [96, '#14120f', '#e8c766'], [112, '#1a0f0a', '#f3e6c8'], [120, '#6e0f1e', '#f3e6c8'], [128, '#e8c766', '#2a1a10'], [132, '#6e0f1e', '#f3e6c8'], [136, '#14120f', '#e8c766']];
       var SCENES = [[0, '#14120f', '#fffbf3'], [16, '#ffd23f', '#14120f'], [48, '#e2412b', '#fffbf3'], [60, '#fffbf3', '#14120f'], [68, '#e2412b', '#fffbf3'], [80, '#187049', '#fffbf3'], [96, '#2549d8', '#fffbf3'], [112, '#14120f', '#fffbf3'], [120, '#2549d8', '#fffbf3'], [128, '#ffd23f', '#14120f'], [132, '#e2412b', '#fffbf3'], [136, '#14120f', '#fffbf3']];
 
-      // ---------- クラシック版だけの飾り：楽器の絵。音に合わせて動かす ----------
-      var VIOLIN = '<svg class="ico" viewBox="0 0 60 170"><rect x="27.5" y="12" width="5" height="50" rx="1.5" fill="#2a1a10"/><circle cx="30" cy="10" r="6" fill="#5a2e14"/><path d="M30 60C16 60 13 71 18 81C12 85 10 93 12 101C8 114 12 144 30 144C48 144 52 114 48 101C50 93 48 85 42 81C47 71 44 60 30 60Z" fill="#a0521d" stroke="#2a1a10" stroke-width="2"/><path d="M22 92c-3 4 3 8 0 13M38 92c3 4-3 8 0 13" fill="none" stroke="#2a1a10" stroke-width="2"/><path d="M23 112h14" stroke="#2a1a10" stroke-width="2.5"/><path d="M28.5 20v120M31.5 20v120" stroke="#f3e6c8" stroke-width=".6"/><rect x="25" y="128" width="10" height="14" rx="3" fill="#2a1a10"/><g class="bow"><path d="M-14 112L74 98" stroke="#e8d9b5" stroke-width="2.2"/><path d="M-14 115L74 101" stroke="#3b2a1a" stroke-width="1.3"/></g></svg>';
-      var TRUMPET = '<svg class="ico" viewBox="0 0 170 60"><path d="M4 26h10v8H4z" fill="#b8902a"/><path d="M40 33c0 15 70 15 70 0" fill="none" stroke="#d4af37" stroke-width="5"/><path d="M14 27h96v6H14z" fill="#d4af37" stroke="#7a5c12" stroke-width="1.5"/><path d="M110 24L164 4V56L110 36Z" fill="#e8c24f" stroke="#7a5c12" stroke-width="1.5"/><path d="M58 14h6v13h-6zM70 14h6v13h-6zM82 14h6v13h-6z" fill="#d4af37" stroke="#7a5c12"/><circle cx="61" cy="12" r="3.5" fill="#f5e6b0"/><circle cx="73" cy="12" r="3.5" fill="#f5e6b0"/><circle cx="85" cy="12" r="3.5" fill="#f5e6b0"/></svg>';
-      var TIMPANI = '<svg class="ico" viewBox="0 0 110 110"><path d="M18 40L12 104M92 40L98 104M55 70V106" stroke="#3a2a1a" stroke-width="3"/><path d="M8 38Q55 112 102 38Z" fill="#b8733a" stroke="#5a3214" stroke-width="2"/><ellipse cx="55" cy="38" rx="47" ry="9" fill="#f3e6c8" stroke="#5a3214" stroke-width="2"/><g class="mallet"><path d="M55 30L96 -10" stroke="#e8d9b5" stroke-width="3"/><circle cx="55" cy="30" r="6.5" fill="#f3e6c8" stroke="#3a2a1a" stroke-width="2"/></g></svg>';
-      var BATON = '<svg class="ico" viewBox="0 0 200 30"><g class="bt"><path d="M30 15L196 13" stroke="#f3e6c8" stroke-width="3" stroke-linecap="round"/><rect x="6" y="10" width="26" height="10" rx="4" fill="#7a4a24"/></g></svg>';
-      var METRONOME = '<svg class="ico" viewBox="0 0 80 130"><path d="M18 124H62L49 8H31Z" fill="#6b3a1c" stroke="#2a1a10" stroke-width="2"/><path d="M25 70H55L58 124H22Z" fill="#4a2812"/><g class="pd"><path d="M40 104V20" stroke="#d4af37" stroke-width="3"/><rect x="33" y="40" width="14" height="10" rx="2" fill="#d4af37"/></g><circle cx="40" cy="104" r="4" fill="#d4af37"/></svg>';
-      function part(el, sel) { return el['__' + sel] || (el['__' + sel] = el.querySelector('.' + sel)); }
-      // 幕：イントロの間は両側から額縁のように囲み、8拍目（運命の最初の一撃）で開く
-      [-1, 1].forEach(function (side) {
-        it(0, 9.5, '', { cls: 'curtain', only: 'classic', fx: 'none', pulse: false, anim: function (el, b) {
-          var open = outCubic(clamp((b - 7.6) / 1.2)), gap = (tall ? 38 : 30) + open * 60;
-          el.style.transform = 'translate(-50%,-50%) translateX(' + (side * (gap + 27)) + 'vw)';
-        } });
-      });
-      // 指揮棒：面白くて、/できれば/… の一撃ごとに振り下ろす
-      var BATON_HITS = [8, 10, 12, 14, 15];
-      it(7, 16, BATON, { only: 'classic', w: 46, y: -30, fx: 'pop', pulse: false, p: { y: -44, w: 56 }, anim: function (el, b) {
-        var lh = last(BATON_HITS, b), sw = lh < 0 ? 0 : Math.exp(-(b - lh) * 4);
-        part(el, 'bt').setAttribute('transform', 'rotate(' + (-38 + 58 * sw).toFixed(1) + ' 10 15)');
-      } });
-      // バイオリン（01 本の間）：弓を8分音符で往復させる
-      [-1, 1].forEach(function (side) {
-        it(16, 48, VIOLIN, { only: 'classic', vw: 1, x: side * 41, y: 12, w: 15, rot: side * 16, flip: side > 0, fx: 'up', pulse: false, p: { x: side * 34, y: 66, w: 20 }, anim: function (el, b) {
-          var t = Math.sin(b * Math.PI * 2) * 14;
-          part(el, 'bow').setAttribute('transform', 'translate(' + t.toFixed(1) + ' ' + (-t * .16).toFixed(1) + ')');
-        } });
-      });
-      // トランペット：歓喜の歌の入り（48〜）と、最後のファンファーレ（128〜）
-      [[48, 60], [128, 136]].forEach(function (r) {
-        [-1, 1].forEach(function (side) {
-          it(r[0], r[1], TRUMPET, { only: 'classic', vw: 1, x: side * 36, y: -26, w: 28, rot: side * 22, flip: side < 0, fx: side < 0 ? 'left' : 'right', p: { x: side * 26, y: -66, w: 36 } });
-        });
-      });
-      // メトロノーム（02 運動×勉強会）：時計のカチコチに合わせて振り子を振る
-      it(80, 96, METRONOME, { only: 'classic', vw: 1, x: 36, y: 4, w: 16, fx: 'up', pulse: false, p: { x: 30, y: -38, w: 20 }, anim: function (el, b) {
-        part(el, 'pd').setAttribute('transform', 'rotate(' + (28 * Math.cos(Math.PI * b)).toFixed(1) + ' 40 104)');
-      } });
-      // ティンパニ（03 作品）：ティンパニの音のたびにマレットで叩く
-      [-1, 1].forEach(function (side) {
-        it(96, 128, TIMPANI, { only: 'classic', vw: 1, x: side * 40, y: 22, w: 20, flip: side > 0, fx: 'up', pulse: false, p: { x: side * 28, y: 68, w: 28 }, anim: function (el, b) {
-          var up = clamp((b - last(KICKS, b)) * 3);
-          part(el, 'mallet').setAttribute('transform', 'rotate(' + (-30 * up).toFixed(1) + ' 96 -10)');
-        } });
-      });
-
       // --- イントロ ---
       // 1拍に1文字ずつ落とす。文字の幅（em）に合わせて並べる
       var WID = [.62, .78, 1.12, .78, .72, .8, .42], SZ = 17, tot = WID.reduce(function (a, c) { return a + c; }, 0), acc = -tot / 2;
@@ -586,86 +538,117 @@
         }
         document.querySelector('.bar i').style.setProperty('--t', clamp(b / END));
       }
-      // ---------- クラシック版の背景：舞台の照明、パイプオルガン、五線譜に流れる本物の音符、光る鍵盤 ----------
-      var WHITE = [0, 2, 4, 5, 7, 9, 11];
+      // ---------- クラシック版の背景：楽器は描かず、演奏会を「なんとなく」思わせる光と線だけ ----------
+      // 細い金の線・光の柱・波紋・ちりで、弦・指揮・ティンパニ・ファンファーレの気配を出す。どれも曲の音の時刻で動く
+      var GOLD = '232,199,102';
       function nfrom(b) { var lo = 0, hi = CNOTES.length; while (lo < hi) { var m = (lo + hi) >> 1; if (CNOTES[m].b < b) lo = m + 1; else hi = m; } return lo; }
       function hash(k) { var x = Math.sin(k * 12.9898) * 43758.5453; return x - Math.floor(x); }
+      function lastOf(tr, b) { for (var i = nfrom(b + 1e-6) - 1; i >= 0 && b - CNOTES[i].b < 8; i--) if (CNOTES[i].tr === tr) return CNOTES[i]; return null; }
+      function gold(a) { return 'rgba(' + GOLD + ',' + Math.max(0, Math.min(1, a)).toFixed(3) + ')'; }
       function concert(b, sc, kick) {
         g.clearRect(0, 0, W, H);
-        var fg = sc[2], gold = '#e8c766';
-        // 上からのスポットライト。ティンパニで少し明るくなる
-        var sp = g.createRadialGradient(W / 2, -H * .15, 0, W / 2, -H * .15, H * 1.15);
-        sp.addColorStop(0, 'rgba(255,236,190,' + (.12 + kick * .14).toFixed(3) + ')'); sp.addColorStop(1, 'rgba(255,236,190,0)');
+        var i, nt, fg = sc[2];
+        // 上からのやわらかい光。ティンパニで少し明るくなる
+        var sp = g.createRadialGradient(W / 2, -H * .2, 0, W / 2, -H * .2, H * 1.2);
+        sp.addColorStop(0, 'rgba(255,236,190,' + (.1 + kick * .12).toFixed(3) + ')'); sp.addColorStop(1, 'rgba(255,236,190,0)');
         g.fillStyle = sp; g.fillRect(0, 0, W, H);
-        var i0 = nfrom(b - 3), i, nt;
-        // パイプオルガン（イントロ）：鳴った音のパイプが光る
-        if (b < 9) {
-          var N = 15, pw = Math.min(W * .7, H * 1.2) / N, base = H * .86, lit = {};
-          for (i = nfrom(b - 1.5); i < CNOTES.length && CNOTES[i].b <= b; i++) if (CNOTES[i].tr === 'organ') lit[(CNOTES[i].m[CNOTES[i].m.length - 1] % N)] = Math.exp(-(b - CNOTES[i].b) * 2.5);
-          for (i = 0; i < N; i++) {
-            var hh = H * (.22 + .3 * (1 - Math.abs(i - (N - 1) / 2) / ((N - 1) / 2))), xx = W / 2 + (i - (N - 1) / 2) * pw;
-            g.globalAlpha = (.16 + (lit[i] || 0) * .6) * (1 - clamp((b - 8) / 1));
-            g.fillStyle = lit[i] ? gold : fg;
-            g.fillRect(xx - pw * .32, base - hh, pw * .64, hh);
-            g.beginPath(); g.moveTo(xx - pw * .32, base - hh); g.lineTo(xx, base - hh - pw * .5); g.lineTo(xx + pw * .32, base - hh); g.fill();
+        // イントロ：画面の端の暗がりが、8拍目でふっと晴れる。鳴った音で光の柱が立つ
+        if (b < 10) {
+          var open = outCubic(clamp((b - 7.6) / 1.4));
+          var vg = g.createRadialGradient(W / 2, H / 2, Math.min(W, H) * (.25 + open * .6), W / 2, H / 2, Math.max(W, H) * (.75 + open * .5));
+          vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, 'rgba(0,0,0,' + (.75 * (1 - open)).toFixed(3) + ')');
+          g.fillStyle = vg; g.fillRect(0, 0, W, H);
+          for (i = nfrom(b - 1.5); i < CNOTES.length && (nt = CNOTES[i]).b <= b; i++) {
+            if (nt.tr !== 'organ') continue;
+            var k = Math.exp(-(b - nt.b) * 2.2) * (1 - open), x = W * (.15 + .7 * ((nt.m[nt.m.length - 1] - 50) % 13) / 12);
+            var col = g.createLinearGradient(0, 0, 0, H); col.addColorStop(0, gold(0)); col.addColorStop(.5, gold(.22 * k)); col.addColorStop(1, gold(0));
+            g.fillStyle = col; g.fillRect(x - vmin * 1.6, 0, vmin * 3.2, H);
+          }
+        }
+        // 指揮のひと振り（8〜16）：一撃ごとに、細い金の弧が走って消える
+        if (b >= 7.5 && b < 16) {
+          var lh = last([8, 10, 12, 14, 15], b);
+          if (lh > 0 && b - lh < .8) {
+            var t = clamp((b - lh) / .25), fade = 1 - clamp((b - lh - .25) / .55), R = Math.min(W, H) * .42;
+            g.strokeStyle = gold(.55 * fade); g.lineWidth = 1.5;
+            g.beginPath(); g.arc(W / 2 - R * .2, H / 2 - R * .9, R, Math.PI * .15, Math.PI * (.15 + .5 * t)); g.stroke();
+          }
+        }
+        // 弦（16〜48）：画面の両端に張った細い線が、旋律の音でふるえる
+        if (b >= 16 && b < 48) {
+          var mel = lastOf('melody', b), amp = mel ? Math.exp(-(b - mel.b) * 6) * vmin * 1.2 : 0;
+          for (var side = -1; side <= 1; side += 2) for (var s1 = 0; s1 < 4; s1++) {
+            var x0 = W / 2 + side * (W * .44 - s1 * vmin * 1.4);
+            g.strokeStyle = gold(.18 + amp / vmin * .12); g.lineWidth = 1; g.beginPath();
+            for (var yy = 0; yy <= H; yy += 8) { var xw = x0 + Math.sin(yy / H * Math.PI) * Math.sin(yy * .05 + b * 40 + s1) * amp; if (yy) g.lineTo(xw, yy); else g.moveTo(xw, yy); }
+            g.stroke();
+          }
+        }
+        // ファンファーレ（48〜52、128〜136）：上の両隅から光の筋が差す
+        if ((b >= 48 && b < 54) || (b >= 128 && b < 136)) {
+          var br = lastOf('brass', b) || lastOf('melody', b), f2 = br ? Math.exp(-(b - br.b) * 1.5) : 0;
+          for (var c2 = -1; c2 <= 1; c2 += 2) for (i = 0; i < 7; i++) {
+            // 左上の隅からは右下へ、右上の隅からは左下へ、扇のように
+            var ang = .35 + i * .13, L = Math.hypot(W, H), x1 = c2 < 0 ? 0 : W;
+            g.strokeStyle = gold(.28 * f2 + .06); g.lineWidth = 1.2;
+            g.beginPath(); g.moveTo(x1, 0); g.lineTo(x1 - c2 * Math.cos(ang) * L, Math.sin(ang) * L); g.stroke();
+          }
+        }
+        // 振り子（80〜96）：時計のカチコチに合わせて、小さな光の点が弧の上を行き来する
+        if (b >= 80 && b < 96) {
+          var px = W * (tall ? .5 : .82), py = H * (tall ? .16 : .3), pr = vmin * 10, pa = Math.PI / 2 + .45 * Math.cos(Math.PI * b);
+          g.strokeStyle = gold(.18); g.lineWidth = 1; g.beginPath(); g.arc(px, py, pr, Math.PI / 2 - .5, Math.PI / 2 + .5); g.stroke();
+          g.fillStyle = gold(.8); g.beginPath(); g.arc(px + Math.cos(pa) * pr, py + Math.sin(pa) * pr, vmin * .9, 0, 7); g.fill();
+        }
+        // ティンパニ（96〜128）：低い音のたびに、下の両隅から波紋が広がる
+        if (b >= 96 && b < 128) {
+          var lk = last(KICKS, b);
+          for (var r = 0; r < 3; r++) {
+            var age = b - lk + r;
+            if (age < 0 || age > 3) continue;
+            g.strokeStyle = gold(.3 * (1 - age / 3)); g.lineWidth = 1.2;
+            for (var c3 = -1; c3 <= 1; c3 += 2) { g.beginPath(); g.ellipse(W / 2 + c3 * W * .42, H * .9, (age * 30 + 4) * vmin, (age * 9 + 1.2) * vmin, 0, 0, 7); g.stroke(); }
           }
         }
         if (b >= 7) {
-          // 五線譜：右から流れてくる旋律が、左の縦線のところで鳴る
-          var gap = Math.max(5, vmin * 1.5), top = Math.max(46, H * .085), bot = top + gap * 4, ph = W * .2, ppb = Math.max(48, W / 10);
-          g.globalAlpha = .4; g.strokeStyle = fg; g.lineWidth = 1;
+          // 上：五線のような細い5本の線に、旋律が光の点で流れていく（音符は描かない）
+          var gap = Math.max(4, vmin * 1.1), top = Math.max(48, H * .085), bot = top + gap * 4, ph = W * .2, ppb = Math.max(48, W / 10);
+          g.strokeStyle = fg; g.globalAlpha = .13; g.lineWidth = 1;
           for (i = 0; i < 5; i++) { g.beginPath(); g.moveTo(0, top + i * gap); g.lineTo(W, top + i * gap); g.stroke(); }
-          for (var bar = Math.ceil((b - 3) / 4) * 4; bar < b + 12; bar += 4) { var bx = ph + (bar - b) * ppb; g.beginPath(); g.moveTo(bx, top); g.lineTo(bx, bot); g.stroke(); }
-          g.globalAlpha = .7; g.strokeStyle = gold; g.lineWidth = 2; g.beginPath(); g.moveTo(ph, top - gap * 1.5); g.lineTo(ph, bot + gap * 1.5); g.stroke();
-          for (i = i0; i < CNOTES.length && (nt = CNOTES[i]).b < b + 11; i++) {
+          g.globalAlpha = 1;
+          for (i = nfrom(b - 3); i < CNOTES.length && (nt = CNOTES[i]).b < b + 11; i++) {
             if (!/melody|organ|brass|glock/.test(nt.tr)) continue;
-            var x = ph + (nt.b - b) * ppb;
-            if (x < -20 || x > W + 20) continue;
-            var top_m = Math.max.apply(null, nt.m), oc = Math.floor(top_m / 12) - 1, pc = top_m % 12, step = 0;
-            for (var w = 0; w < 7; w++) if (WHITE[w] <= pc) step = w;
-            var idx = Math.max(18, Math.min(46, oc * 7 + step)), y = bot - (idx - 30) * gap / 2;
-            var now = nt.b <= b && b - nt.b < .3, past = nt.b < b;
-            g.globalAlpha = past ? Math.max(0, .55 - (b - nt.b) * .2) : .75;
-            g.fillStyle = now ? gold : fg; g.strokeStyle = now ? gold : fg;
-            // 五線の外は、加線を引く
-            g.lineWidth = 1;
-            for (var lv = 28; lv >= idx; lv -= 2) { g.beginPath(); g.moveTo(x - gap, bot - (lv - 30) * gap / 2); g.lineTo(x + gap, bot - (lv - 30) * gap / 2); g.stroke(); }
-            for (lv = 40; lv <= idx; lv += 2) { g.beginPath(); g.moveTo(x - gap, bot - (lv - 30) * gap / 2); g.lineTo(x + gap, bot - (lv - 30) * gap / 2); g.stroke(); }
-            var s2 = now ? 1.35 : 1;
-            g.save(); g.translate(x, y); g.rotate(-.35); g.beginPath(); g.ellipse(0, 0, gap * .62 * s2, gap * .44 * s2, 0, 0, 7); g.fill(); g.restore();
-            g.lineWidth = 1.4; g.beginPath();
-            if (idx < 34) { g.moveTo(x + gap * .55, y); g.lineTo(x + gap * .55, y - gap * 3.2); } else { g.moveTo(x - gap * .55, y); g.lineTo(x - gap * .55, y + gap * 3.2); }
-            g.stroke();
+            var nx = ph + (nt.b - b) * ppb;
+            if (nx < -10 || nx > W + 10) continue;
+            var tm = Math.max.apply(null, nt.m), ny = bot - (Math.max(40, Math.min(92, tm)) - 64) * gap * .32, hit = b >= nt.b ? Math.exp(-(b - nt.b) * 3) : 0;
+            g.fillStyle = gold(b >= nt.b ? .15 + hit * .8 : .45);
+            g.beginPath(); g.arc(nx, ny, vmin * (.35 + hit * .5), 0, 7); g.fill();
           }
-          // 鍵盤（C2〜C7）：いま鳴っている音の鍵が金色に光る
-          var lo = 36, hi = 96, whites = 0, kh = Math.max(24, H * .07), ky = H - 62 - kh, light = {};
-          for (i = nfrom(b - 1.2); i < CNOTES.length && (nt = CNOTES[i]).b <= b; i++) {
-            nt.m.forEach(function (m) { while (m > hi) m -= 12; while (m < lo) m += 12; light[m] = Math.max(light[m] || 0, Math.exp(-(b - nt.b) * 2.6)); });
+          // 下：細い縦の線が並び、鳴っている高さの線が金色に光る（ピアノの弦のような気配）
+          var lo = 36, hi = 96, kh = Math.max(20, H * .05), ky = H - 62 - kh, light = {};
+          for (i = nfrom(b - 1.2); i < CNOTES.length && (nt = CNOTES[i]).b <= b; i++) nt.m.forEach(function (m) { while (m > hi) m -= 12; while (m < lo) m += 12; light[m] = Math.max(light[m] || 0, Math.exp(-(b - nt.b) * 2.6)); });
+          var sw = W / (hi - lo + 1);
+          for (var m = lo; m <= hi; m++) {
+            var L = light[m] || 0;
+            g.fillStyle = L ? gold(.2 + L * .8) : fg; g.globalAlpha = L ? 1 : .1;
+            g.fillRect(m === lo ? sw * .5 : (m - lo + .5) * sw, ky + kh * (1 - (.35 + L * .65)), 1.2, kh * (.35 + L * .65));
           }
-          for (var m = lo; m <= hi; m++) if (WHITE.indexOf(m % 12) >= 0) whites++;
-          var kw = W / whites, wx = 0, blacks = [];
-          for (m = lo; m <= hi; m++) {
-            if (WHITE.indexOf(m % 12) < 0) { blacks.push([wx, m]); continue; }
-            g.globalAlpha = .18 + (light[m] || 0) * .75; g.fillStyle = light[m] ? gold : fg;
-            g.fillRect(wx + 1, ky, kw - 2, kh);
-            wx += kw;
-          }
-          blacks.forEach(function (bk) { g.globalAlpha = .55 + (light[bk[1]] || 0) * .45; g.fillStyle = light[bk[1]] ? gold : '#000'; g.fillRect(bk[0] - kw * .3, ky, kw * .6, kh * .62); });
+          g.globalAlpha = 1;
         }
-        // 最後の和音のあとは、金の音符が降ってくる
+        // 最後の和音のあとは、金のちりがゆっくり舞う
         if (b >= 136) {
-          g.font = (5 * vmin) + 'px serif'; g.textAlign = 'center'; g.fillStyle = gold;
-          for (i = 0; i < 46; i++) {
-            var st = 136 + hash(i) * 4, yy = (b - st) * H * .3 - 30;
-            if (yy < -30 || yy > H) continue;
-            g.globalAlpha = .75;
-            g.save(); g.translate(hash(i + 99) * W, yy); g.rotate(Math.sin(b * 2 + i) * .3); g.fillText(i % 3 ? '♪' : '♫', 0, 0); g.restore();
+          for (i = 0; i < 70; i++) {
+            var st = 136 + hash(i) * 3, age2 = b - st;
+            if (age2 < 0) continue;
+            var dy = H * (1 - hash(i + 7) * .3) - age2 * H * .09, dx = hash(i + 99) * W + Math.sin(age2 * 2 + i) * vmin * 2;
+            g.fillStyle = gold(Math.max(0, .7 - age2 * .12) * (.5 + .5 * Math.sin(b * 6 + i)));
+            g.beginPath(); g.arc(dx, dy, vmin * (.2 + hash(i + 3) * .35), 0, 7); g.fill();
           }
         }
         // ドロップの瞬間の光（金色がかった白）
         var imp = [16, 48, 80, 96, 128, 136], lb = -99;
         for (var j = 0; j < imp.length; j++) if (imp[j] <= b) lb = imp[j];
-        if (!reduce && b - lb < .6) { g.globalAlpha = (1 - (b - lb) / .6) * .7; g.fillStyle = '#fff3d0'; g.fillRect(0, 0, W, H); }
+        if (!reduce && b - lb < .6) { g.globalAlpha = (1 - (b - lb) / .6) * .6; g.fillStyle = '#fff3d0'; g.fillRect(0, 0, W, H); }
         g.globalAlpha = 1;
       }
       // 背景：キックで広がる輪、手拍子で走る帯、ドロップの白い光、下の音の棒

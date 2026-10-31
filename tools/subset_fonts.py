@@ -1,6 +1,7 @@
 """リッチ版の見出し・手書き用フォントを、ページで使っている文字だけに絞って rich/fonts/ に書き出す。
+MV版（mv/index.html）も同じフォントを使うので、両方のページの文字を入れる。
 
-rich/index.html の文章を変えたら実行し直す（使っていない文字は端末のフォントで表示される）。
+rich/index.html か mv/index.html の文章を変えたら実行し直す（使っていない文字は端末のフォントで表示される）。
 元のフォントは Google Fonts のリポジトリから取得する（どちらも SIL OFL 1.1）。
   https://raw.githubusercontent.com/google/fonts/main/ofl/delagothicone/DelaGothicOne-Regular.ttf
   https://raw.githubusercontent.com/google/fonts/main/ofl/yomogi/Yomogi-Regular.ttf
@@ -16,11 +17,15 @@ from pathlib import Path
 from fontTools import subset
 
 ROOT = Path(__file__).resolve().parent.parent
-PAGE = ROOT / 'rich' / 'index.html'
+PAGES = [ROOT / 'rich' / 'index.html', ROOT / 'mv' / 'index.html']
 
 
 def page_text():
-    src = PAGE.read_text(encoding='utf-8')
+    return ''.join(sorted(set(''.join(one_page(p) for p in PAGES))))
+
+
+def one_page(page):
+    src = page.read_text(encoding='utf-8')
     body = src[src.index('<body'):]
     # スクリプトの中で表示する言葉（「ナイス！」など）も入れる
     shown = ''.join(re.findall(r"'([^'\n]*[^\x00-\x7f][^'\n]*)'", ''.join(re.findall(r'<script>(.*?)</script>', body, flags=re.S))))

@@ -3,7 +3,7 @@
 import { chromium } from 'playwright';
 
 const base = process.env.BASE_URL || 'http://127.0.0.1:8000';
-const pages = ['/', '/rich/', '/gpu/', '/404.html'];
+const pages = ['/', '/rich/', '/gpu/', '/mv/', '/404.html'];
 const viewports = [{ width: 390, height: 844 }, { width: 1280, height: 800 }];
 
 const browser = await chromium.launch();

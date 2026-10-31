@@ -214,7 +214,7 @@
           <a href="../">シンプル版</a>
           <a href="../rich/">リッチ版</a>
         </p>
-        <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。EDM版の曲は <a href="https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5" target="_blank" rel="noopener">Suno</a> で作り、映像に合わせて小節の切れ目でつなぎ替えています。掛け声：VOICEVOX:青山龍星、玄野武宏、白上虎太郎、剣崎雌雄、雀松朱司、九州そら、春日部つむぎ。</p>
+        <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。EDM版の曲は <a href="https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5" target="_blank" rel="noopener">Suno</a> で作り、映像に合わせて小節の切れ目でつなぎ替えています。掛け声は <a href="https://suno.com/song/d2bbcf7e-34b3-43e7-96c6-3a6f7cb1306c" target="_blank" rel="noopener">Suno</a> の音声、効果音は JingleScript（ノック・小銭・シャッターは CC0 の録音）。</p>
       </div>
     </main>
   </div>
@@ -446,10 +446,10 @@
             // 録った音を、その拍に重ねる（フィルターは通さず、そのまま聞かせる）
             var sb = map.decoded && map.decoded[f[2]];
             if (!sb) return;
-            var off = Math.max(0, (at - f[1]) * B), sw0 = Math.max(start, T(f[1]) - (f[3] || 0));
+            var sw0 = T(f[1]) - (f[3] || 0), off = Math.max(0, start - sw0);   // 途中から見るときは、その位置から
             if (off >= sb.duration) return;
             var ss = ac.createBufferSource(), sgn = ac.createGain(); sgn.gain.value = 1.1;
-            ss.buffer = sb; ss.connect(sgn); sgn.connect(output); ss.start(sw0, off);
+            ss.buffer = sb; ss.connect(sgn); sgn.connect(output); ss.start(Math.max(start, sw0), off);
           } else if (kind === 'roll') {
             for (var r = f[1]; r < f[2] - 1e-6; r += .25) if (r >= at) SOUND.snare(T(r), .3 + (r - f[1]) / (f[2] - f[1]) * .5);
           }

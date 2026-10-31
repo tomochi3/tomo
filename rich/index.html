@@ -357,6 +357,7 @@
     /* 中の上の人の1週間：毎日が最高ではないけれど、だいたい楽しい（上下の順位には見せない） */
     .week-wrap { max-width: 460px; margin-top: 30px; }
     .week-cap { font-weight: 700; }
+    .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
     .week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; margin-top: 10px; }
     .week li { display: grid; justify-items: center; gap: 2px; padding: 8px 0 10px; border: 2px solid var(--ink); border-radius: 10px; background: var(--card); rotate: var(--r, 0deg); }
     .week li:nth-child(odd) { --r: -2deg; }
@@ -709,7 +710,8 @@
             <p class="lead"><span class="phrase">超一流じゃない、</span><span class="phrase">「どこにでもいる人」の</span><span class="phrase">ための人生戦略です。</span></p>
             <div class="week-wrap">
               <p class="week-cap">中の上の人の、ある1週間</p>
-              <ul class="week" aria-label="月曜から日曜まで、ほとんどの日が笑顔で、木曜だけふつうの顔">
+              <span class="sr">月曜から日曜まで、ほとんどの日が笑顔で、木曜だけふつうの顔。</span>
+              <ul class="week" aria-hidden="true">
                 <li><b>月</b><span>^^</span></li><li class="fun"><b>火</b><span>^o^</span></li><li><b>水</b><span>^^</span></li><li><b>木</b><span>-_-</span></li><li><b>金</b><span>^^</span></li><li class="fun"><b>土</b><span>^o^</span></li><li class="fun"><b>日</b><span>^^</span></li>
               </ul>
               <p class="week-say"><span class="phrase">毎日が最高じゃなくていい。</span><span class="phrase">だいたい楽しい、</span><span class="phrase">くらいがちょうどいい。</span></p>

@@ -148,11 +148,11 @@
           <button type="button" data-ver="classic" aria-pressed="true">クラシック</button>
           <button type="button" data-ver="edm" aria-pressed="false">EDM</button>
         </div>
-        <p class="vers-note" data-ver-note>バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲をつないだ、ピアノとオーケストラ風の曲</p>
+        <p class="vers-note" data-ver-note>バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲を、ジャズ風（スウィング）にアレンジした曲</p>
         <button class="play" type="button" data-play>▶ 再生 <small>音が出ます</small></button>
         <button class="mute" type="button" data-play-muted>音なしで見る</button>
         <button class="mute" type="button" data-list>映像を見ずに、内容の一覧を見る</button>
-        <p class="warn">画面をクリック・タップすると、4拍ごとの区切りで上の音符にボールが飛び込みます。<br>画面の色が拍に合わせて大きく切り替わります。</p>
+        <p class="warn">画面をクリック・タップすると、上の音符にボールが飛び込みます。盛り上がる区切りが近いときは、ためてまとめて弾けます。<br>画面の色が拍に合わせて大きく切り替わります。</p>
       </div>
     </div>
 
@@ -212,7 +212,7 @@
           <a href="../">シンプル版</a>
           <a href="../rich/">リッチ版</a>
         </p>
-        <p class="credit">クラシック版の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。</p>
+        <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。</p>
       </div>
     </main>
   </div>
@@ -321,11 +321,13 @@
           var names = a[2].tracks.map(function (t) { return t.name; }), p = { k: [], s: [], h: [], a: [], notes: [] };
           a[1].notes.forEach(function (nt) {
             var name = names[nt.track], b = Math.round(nt.t / B * 1000) / 1000;
-            if (name === 'timpani' || name === 'fx') p.k.push(b);
-            if (name === 'melody' || name === 'glock' || name === 'clock') p.s.push(b);
-            if (name === 'fx' || (name === 'timpani' && nt.vel >= .99)) p.h.push(b);
-            if (name === 'fx' || (name === 'timpani' && nt.vel >= .85)) p.a.push(b);
-            if (nt.pitch && /melody|bass|organ|brass|glock/.test(name)) {
+            // 打楽器（kick・ティンパニ・fx）で揺れ、旋律やブラシで小さく光る
+            var drum = name === 'kick' || name === 'timpani';
+            if (drum || name === 'fx') p.k.push(b);
+            if (/^(melody|glock|vibes|clock|brush)$/.test(name)) p.s.push(b);
+            if (name === 'fx' || (drum && nt.vel >= .99)) p.h.push(b);
+            if (name === 'fx' || (drum && nt.vel >= .85)) p.a.push(b);
+            if (nt.pitch && /melody|bass|organ|brass|glock|vibes|comp/.test(name)) {
               var written = a[2].tracks[nt.track].notes.find(function (note) { return Math.abs(note.at - b) < .003; });
               p.notes.push({ b: b, d: written && written.len || .5, m: [].concat(nt.pitch).map(midi), tr: name, v: nt.vel });
             }
@@ -411,7 +413,7 @@
         if (o.color) el.style.color = o.color;
         if (o.rot) el.style.setProperty('--rot', o.rot);
         layer.appendChild(el);
-        var item = { el: el, at: at, out: out, fx: o.fx || 'slam', x: o.x || 0, y: o.y || 0, size: o.size || 9, w: o.w, p: o.p, only: o.only, anim: o.anim, vw: o.vw, flip: o.flip, d: o.d || .3, rot: o.rot || 0, count: o.count, ring: o.ring, pulse: o.pulse !== false };
+        var item = { el: el, at: at, out: out, fx: o.fx || 'slam', x: o.x || 0, y: o.y || 0, size: o.size || 9, w: o.w, p: o.p, only: o.only, straight: o.straight, anim: o.anim, vw: o.vw, flip: o.flip, d: o.d || .3, rot: o.rot || 0, count: o.count, ring: o.ring, pulse: o.pulse !== false };
         ITEMS.push(item);
         fit(item);
         return item;
@@ -431,7 +433,7 @@
       it(25, 28, '住まない暮らし。', { size: 11, y: 10, fx: 'right' });
       it(28, 32, '0', { size: 30, y: -22, count: [32, 28, 31.75], fx: 'pop' });
       it(28, 32, '人の友人宅に泊めてもらった', { size: 5.2, y: -4, fx: 'up', p: { size: 6.2, y: 0 } });
-      for (var h = 0; h < 32; h++) it(28 + Math.floor(h / 2) * .25, 32, '<svg class="house" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8v10H3Z" fill="currentColor"/><rect x="10" y="14" width="4" height="7" fill="#ffd23f"/></svg>', { size: 6, x: ((h % 8) - 3.5) * 9, y: 12 + Math.floor(h / 8) * 8, fx: 'pop', d: .2 });
+      for (var h = 0; h < 32; h++) it(28 + Math.floor(h / 2) * .25, 32, '<svg class="house" viewBox="0 0 24 24"><path d="M3 11 12 3l9 8v10H3Z" fill="currentColor"/><rect x="10" y="14" width="4" height="7" fill="#ffd23f"/></svg>', { size: 6, x: ((h % 8) - 3.5) * 9, y: 12 + Math.floor(h / 8) * 8, fx: 'pop', d: .2, straight: true });
       it(32, 40, '11', { size: 30, y: -24, fx: 'pop' });
       it(32, 40, '都府県で暮らした', { size: 6, y: -6, fx: 'up', p: { size: 7.5, y: -2 } });
       ['東京', '神奈川', '埼玉', '千葉', '愛知', '三重', '京都', '大阪', '兵庫', '愛媛', '福岡'].forEach(function (p, i) {
@@ -520,6 +522,7 @@
         if (q.w || o.w) o.el.style.width = (q.w || o.w) + 'vmin';
         o.cx = q.x !== undefined ? q.x : o.x; o.cy = q.y !== undefined ? q.y : o.y;
       }
+      function swingB(x) { var w = Math.floor(x); return Math.abs(x - w - .5) < 1e-6 ? w + 2 / 3 : x; }
       function clamp(v) { return v < 0 ? 0 : v > 1 ? 1 : v; }
       function outCubic(k) { return 1 - Math.pow(1 - k, 3); }
       function outBack(k) { var c = 2.2; return 1 + (c + 1) * Math.pow(k - 1, 3) + c * Math.pow(k - 1, 2); }
@@ -543,9 +546,11 @@
         if (b >= 16 && b < 80) bookBackdrop(b, sc[2]);
         for (var i = 0; i < ITEMS.length; i++) {
           var o = ITEMS[i], el = o.el;
-          if (b < o.at || b >= o.out || (o.only && o.only !== ver)) { if (el.__on) { el.style.opacity = 0; el.__on = false; } continue; }
+          // クラシック版はジャズ風なので、裏拍（x.5）に出るものは曲と同じく拍の 2/3 まで遅らせる
+          var oat = ver === 'classic' && !o.straight ? swingB(o.at) : o.at, oout = ver === 'classic' && !o.straight ? swingB(o.out) : o.out;
+          if (b < oat || b >= oout || (o.only && o.only !== ver)) { if (el.__on) { el.style.opacity = 0; el.__on = false; } continue; }
           el.__on = true;
-          var k = clamp((b - o.at) / o.d), e = outCubic(k), x = o.cx * (o.vw ? W / 100 : vmin), y = o.cy * vmin, sc2 = 1, rot = o.rot, op = 1;
+          var k = clamp((b - oat) / o.d), e = outCubic(k), x = o.cx * (o.vw ? W / 100 : vmin), y = o.cy * vmin, sc2 = 1, rot = o.rot, op = 1;
           switch (o.fx) {
             case 'slam': sc2 = 2.6 - 1.6 * e; op = clamp(k * 3); break;
             case 'pop': sc2 = outBack(k); break;
@@ -692,7 +697,7 @@
           for (i = 0; i < 5; i++) { g.beginPath(); g.moveTo(0, top + i * gap); g.lineTo(W, top + i * gap); g.stroke(); }
           g.globalAlpha = 1;
           for (i = nfrom(b - 3); i < CNOTES.length && (nt = CNOTES[i]).b < b + 11; i++) {
-            if (!/melody|organ|brass|glock/.test(nt.tr)) continue;
+            if (!/melody|organ|brass|glock|vibes/.test(nt.tr)) continue;
             var nx = ph + (nt.b - b) * ppb;
             if (nx < -10 || nx > W + 10) continue;
             var tm = Math.max.apply(null, nt.m), ny = bot - (Math.max(40, Math.min(92, tm)) - 64) * gap * .32, hit = b >= nt.b ? Math.exp(-(b - nt.b) * 3) : 0;
@@ -771,17 +776,33 @@
 
       // 4拍の区切りにある音符へ飛び、発音位置で弾ける。休符なら次の区切りへ。
       var balls = [], ballSounds = {};
+      // ボールが弾ける場所を決める。基本は次の4拍の区切りの音符。
+      // ただし、その次の8拍目が「かなり気持ちいい」（章の頭や、大きな一撃）なら、4拍目では弾けずに8拍目でまとめて弾ける
+      var BIG = [16, 48, 80, 96, 128, 136];
+      function near(list, beat) { return list.some(function (v) { return Math.abs(v - beat) < .02; }); }
+      function payoff(beat) {
+        var lead = leadAt(beat), sc = 0;
+        if (BIG.indexOf(beat) >= 0) sc += 2;
+        if (near(HITS, beat)) sc += 2;
+        if (near(ACCENTS, beat)) sc += 1;
+        if (lead && lead.m.length >= 3) sc += 1;
+        return sc;
+      }
+      var LEAD = /^(melody|organ|brass|glock|vibes)$/;
+      function leadAt(beat) {
+        if (ver === 'edm') return { m: [CHORDS[chordAt(beat)][0] + 12] };
+        return CNOTES.find(function (nt) { return Math.abs(nt.b - beat) < .003 && LEAD.test(nt.tr); }) || null;
+      }
       function ballImpact(b) {
         // 聞こえる時刻と予約できる時刻は違う。出力遅延分だけ過去の音を選ばない。
         var earliest = Math.max(b + .02 / B, (ac.currentTime + .02 - t0) / B);
-        var note = CNOTES.find(function (nt) {
-          return nt.b >= Math.max(7, earliest) && nt.b < END &&
-            Math.abs(nt.b - Math.round(nt.b / 4) * 4) < .003 && /^(melody|organ|brass|glock)$/.test(nt.tr);
-        });
-        if (note) return { beat: note.b, strength: 1, note: note };
-        if (ver === 'edm') {
-          var beat = Math.ceil(earliest / 4) * 4;
-          if (beat < END) return { beat: beat, strength: 1, note: { m: [CHORDS[chordAt(beat)][0] + 12] } };
+        for (var beat = Math.ceil(Math.max(7, earliest) / 4) * 4; beat < END; beat += 4) {
+          var note = leadAt(beat);
+          if (!note) continue;
+          if (beat % 8 === 4 && beat + 4 < END && payoff(beat + 4) >= 4 && leadAt(beat + 4)) {
+            return { beat: beat + 4, strength: 1.4, note: leadAt(beat + 4), gathered: true };
+          }
+          return { beat: beat, strength: payoff(beat) >= 4 ? 1.25 : 1, note: note };
         }
         return null;
       }
@@ -798,7 +819,7 @@
         if (!target) return;
         var impact = target.beat;
         var x = e.clientX / W, y = e.clientY / H;
-        var ball = { at: b, hit: impact, strength: target.strength, note: target.note, x: x, y: y, seed: Math.random() * 100 };
+        var ball = { at: b, hit: impact, base: target.strength, strength: target.strength, note: target.note, x: x, y: y, seed: Math.random() * 100 };
         balls.push(ball);
         if (!muted && ac && !ballSounds[impact]) {
           ballSounds[impact] = true;
@@ -814,6 +835,9 @@
       });
       function drawBalls(b) {
         balls = balls.filter(function (ball) { return (b - ball.hit) * B < .4; });
+        var together = {};
+        balls.forEach(function (ball) { together[ball.hit] = (together[ball.hit] || 0) + 1; });
+        balls.forEach(function (ball) { ball.strength = ball.base * Math.min(1.8, 1 + (together[ball.hit] - 1) * .12); });
         g.save();
         balls.forEach(function (ball) {
           var progress = clamp((b - ball.at) / (ball.hit - ball.at));
@@ -926,7 +950,7 @@
       }
       // ---------- 曲の切り替え（EDM / クラシック）。選んだほうを覚えておく ----------
       var ver = 'edm';
-      var NOTES = { edm: 'オリジナルのダンス曲（その場で鳴らしています）', classic: 'バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲をつないだ、ピアノとオーケストラ風の曲' };
+      var NOTES = { edm: 'オリジナルのダンス曲（その場で鳴らしています）', classic: 'バッハ・ベートーヴェン・モーツァルト・パッヘルベルの名曲を、ジャズ風（スウィング）にアレンジした曲' };
       function setVer(v, once) {
         ver = v === 'classic' ? 'classic' : 'edm';
         app.classList.toggle('v-classic', ver === 'classic');

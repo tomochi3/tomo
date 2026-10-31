@@ -1,15 +1,19 @@
 """MV版のクラシック版の曲を、JingleScript の楽譜（JSON）として書き出す（mv/classic.json）。
 
-映像はEDM版と同じ拍の表で動くので、テンポ 128・全146拍の組み立てはEDM版と同じにして、
-文字が叩きつけられる拍・数が数え上がる拍・家やはんこが並ぶ拍などに、同じように音を置く。
-使っている旋律は、どれも著作権の切れたクラシックの冒頭（リズムは映像に合わせて少し変えている）。
-  0〜8   バッハ「トッカータとフーガ ニ短調」の出だし（オルガン）：1拍に1文字
-  8〜16  ベートーヴェン「運命」の「ダダダダーン」
-  16〜48 モーツァルト「アイネ・クライネ・ナハトムジーク」（01 本）
-  48〜80 ベートーヴェン「歓喜の歌」（中の上の人生戦略）
-  80〜96 パッヘルベル「カノン」の低音（02 運動×勉強会）。時計の音で時間を刻む
-  96〜128 ベートーヴェン「運命」（03 作品）
-  128〜146 ハ長調のファンファーレで終わり
+クラシックの名曲の冒頭を、ジャズ風（スウィング）にアレンジしたもの。
+映像はEDM版と同じ拍の表で動くので、テンポ 128・全146拍の組み立ては変えず、
+言葉が出る拍・家やはんこが並ぶ拍・ボールが弾ける4拍ごとの区切りに、同じように音を置く。
+裏拍の8分音符は、拍の 2/3 の位置まで遅らせて跳ねさせる（スウィング）。映像のほうも同じだけ遅らせる。
+  0〜8   バッハ「トッカータとフーガ ニ短調」の出だし（ジャズオルガン）：1拍に1文字
+  8〜16  ベートーヴェン「運命」の「ダダダダーン」を3連符の食い込みで
+  16〜48 モーツァルト「アイネ・クライネ・ナハトムジーク」をミディアムスウィングで（ウッドベースが4分音符で歩く）
+  48〜80 ベートーヴェン「歓喜の歌」を、II-V の和音で
+  80〜96 パッヘルベル「カノン」をバラードで（ブラシと時計の音）
+  96〜128 ベートーヴェン「運命」をアップテンポのシャウトで
+  128〜146 ハ長調で締める（C6/9 の和音とビブラフォン）
+
+楽器：ジャズオルガン（イントロ）、ピアノ（旋律と伴奏）、ビブラフォン、ウッドベース、
+      ライドシンバル・ハイハット・ブラシ・バスドラム・クラッシュ（どれも JingleScript の部品で作った音）、トランペット、時計。
 
 使い方: python3 tools/make_classic.py          # mv/classic.json を書く
         npx -y jinglescript@1.1.0 render mv/classic.json -o mv/classic.mp3
@@ -19,6 +23,14 @@ import json
 from pathlib import Path
 
 OUT = Path(__file__).resolve().parent.parent / 'mv' / 'classic.json'
+SW = 2 / 3   # 裏拍を置く位置（8分音符の跳ね）
+
+
+def sw(at):
+    """裏拍（x.5）の8分音符を、スウィングの位置（x.667）に動かす"""
+    whole = int(at // 1)
+    return round(whole + SW, 4) if abs(at - whole - .5) < 1e-6 else at
+
 
 tracks = {}
 def track(name, instrument, **kw):
@@ -29,8 +41,8 @@ def n(name, at, pitch=None, len=None, vel=0.85, **kw):
     if pitch is not None:
         note['pitch'] = pitch
     if len is not None:
-        note['len'] = len
-    note['vel'] = vel
+        note['len'] = round(len, 3)
+    note['vel'] = round(min(1, vel), 3)
     note.update(kw)
     tracks[name]['notes'].append(note)
 
@@ -39,242 +51,298 @@ def oct2(p):
     name, o = p[:-1], int(p[-1])
     return [f'{name}{o - 1}', p]
 
-def chord_hit(at, notes, bass, len=1, vel=0.95, timp=None):
-    n('melody', at, notes, len, vel)
-    n('bass', at, bass, len, vel)
-    if timp:
-        n('timpani', at, timp, vel=vel)
+# ジャズの和音（左手で弾く、根音を抜いた形）と、ベースの根音
+CH = {
+    'Cm9': (['Eb3', 'G3', 'Bb3', 'D4'], 'C'), 'Cm6': (['Eb3', 'A3', 'C4', 'D4'], 'C'),
+    'G7b9': (['F3', 'Ab3', 'B3', 'D4'], 'G'), 'G7alt': (['F3', 'A#3', 'B3', 'Eb4'], 'G'), 'G13': (['F3', 'B3', 'E4'], 'G'),
+    'Abmaj7': (['G3', 'C4', 'Eb4'], 'Ab'), 'Bb13': (['Ab3', 'D4', 'G4'], 'Bb'), 'Fm9': (['Ab3', 'C4', 'Eb4', 'G4'], 'F'),
+    'Gmaj7': (['F#3', 'B3', 'D4'], 'G'), 'G6': (['E3', 'B3', 'D4'], 'G'), 'Em9': (['G3', 'B3', 'D4', 'F#4'], 'E'),
+    'Am7': (['G3', 'C4', 'E4'], 'A'), 'A7': (['G3', 'C#4', 'E4'], 'A'), 'D7': (['F#3', 'C4', 'E4'], 'D'), 'D7#9': (['F#3', 'C4', 'F4'], 'D'),
+    'C6': (['E3', 'A3', 'D4'], 'C'), 'C9': (['E3', 'Bb3', 'D4'], 'C'), 'Cmaj7': (['E3', 'G3', 'B3', 'D4'], 'C'),
+    'Dm9': (['F3', 'A3', 'C4', 'E4'], 'D'), 'Em7': (['G3', 'B3', 'D4'], 'E'), 'A7#9': (['G3', 'C#4', 'F4'], 'A'),
+    'Fmaj7': (['E3', 'A3', 'C4'], 'F'), 'C69': (['E3', 'A3', 'D4', 'G4'], 'C'),
+    'Dmaj9': (['F#3', 'A3', 'C#4', 'E4'], 'D'), 'A6': (['F#3', 'C#4', 'E4'], 'A'), 'Bm9': (['D3', 'F#3', 'A3', 'C#4'], 'B'),
+    'F#m7': (['E3', 'A3', 'C#4'], 'F#'), 'Gmaj9': (['F#3', 'A3', 'B3', 'D4'], 'G'), 'A13': (['G3', 'C#4', 'F#4'], 'A'),
+}
+NOTE_NUM = {'C': 0, 'C#': 1, 'Db': 1, 'D': 2, 'D#': 3, 'Eb': 3, 'E': 4, 'F': 5, 'F#': 6, 'Gb': 6, 'G': 7, 'G#': 8, 'Ab': 8, 'A': 9, 'A#': 10, 'Bb': 10, 'B': 11}
+NAMES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'Ab', 'A', 'Bb', 'B']
+def nm(num):
+    return f'{NAMES[num % 12]}{num // 12 - 1}'
+def num(pitch):
+    return NOTE_NUM[pitch[:-1]] + 12 * (int(pitch[-1]) + 1)
 
-track('organ', 'organ', gain=-2)
+def walk(at, chords):
+    """ウッドベースの4分音符：根音 → 3度か5度 → 5度 → 次の根音へ半音で寄る"""
+    for i, ch in enumerate(chords):
+        root = 36 + NOTE_NUM[CH[ch][1]]
+        if root > 45:
+            root -= 12
+        nxt = chords[i + 1] if i + 1 < len(chords) else ch
+        target = 36 + NOTE_NUM[CH[nxt][1]]
+        if target > 45:
+            target -= 12
+        line = [root, root + (3 if 'm' in ch.replace('maj', '') else 4), root + 7, target + (1 if target < root + 7 else -1)]
+        for k, p in enumerate(line):
+            n('bass', at + i * 4 + k, nm(p), .9, .9 if k == 0 else .78)
+
+def comp(at, ch, vel=.55):
+    """伴奏：チャールストン（1拍目と、2拍目の裏）"""
+    n('comp', at, CH[ch][0], .55, vel)
+    n('comp', sw(at + 1.5), CH[ch][0], .3, vel - .08)
+
+def swing_drums(a, b, ride=.6):
+    """ライドの「チン、チキ、チン、チキ」とハイハットの2・4拍"""
+    beat = a
+    while beat < b - 1e-6:
+        n('ride', beat, vel=ride + (.08 if beat % 2 == 1 else 0))
+        if beat % 2 == 1:
+            n('ride', sw(beat + .5), vel=ride - .15)
+            n('hat', beat, vel=.6)
+        beat += 1
+
+def hit(at, ch, bass_oct=2, vel=1.0, crash=True, kick=True, brass=None, len=1):
+    """みんなで合わせる一撃（シャウト）"""
+    notes, root = CH[ch]
+    n('comp', at, notes, len, vel)
+    lo = 36 + NOTE_NUM[root] - (12 if bass_oct == 1 else 0)
+    n('bass', at, nm(lo), len, vel)
+    if kick:
+        n('kick', at, vel=vel)
+    if crash:
+        n('crash', at, vel=vel * .8)
+    if brass:
+        n('brass', at, brass, len * .8, vel * .9)
+
+track('organ', 'organ', gain=-3)
 track('melody', 'grandpiano')
-track('bass', 'grandpiano', gain=-3)
-track('strings', 'strings', gain=-11)
-track('timpani', 'timpani', gain=-5, reverb=True)
-track('glock', 'glockenspiel', gain=-9)
-track('brass', 'trumpet', gain=-10)
-track('clock', 'clock', gain=-8, reverb=False)
-track('fx', 'impact', gain=-6)
+track('comp', 'grandpiano', gain=-5)
+track('vibes', 'vibraphone', gain=-6)
+track('bass', 'upright', gain=-1)
+track('brass', 'trumpet', gain=-11)
+track('ride', 'ride', gain=-13, reverb=False)
+track('hat', 'hat', gain=-15, reverb=False)
+track('brush', 'brush', gain=-12, reverb=False)
+track('kick', 'kick', gain=-6, reverb=False)
+track('crash', 'crash', gain=-13)
+track('clock', 'clock', gain=-10, reverb=False)
+track('fx', 'impact', gain=-12)
 
-# ---------- 0〜8 トッカータ（ニ短調）：t・o・m・o・c・h・i が1拍ずつ ----------
+# ---------- 0〜8 トッカータ（ジャズオルガン）：t・o・m・o・c・h・i が1拍ずつ ----------
 n('organ', 0, ['A3', 'A4'], .125, .9)
 n('organ', .125, ['G3', 'G4'], .125, .9)
-n('organ', .25, ['A3', 'A4'], .7, .9)
+n('organ', .25, ['A3', 'A4'], .6, .9)
 for i, p in enumerate(['G', 'F', 'E', 'D', 'C#']):
-    n('organ', 1 + i, [f'{p}3', f'{p}4'], .85, .9)
-n('organ', 6, ['D2', 'D3', 'D4'], 1.1, 1.0)
+    n('organ', 1 + i, [f'{p}3', f'{p}4'], .7, .88)
+n('organ', 6, ['D3', 'F3', 'A3', 'C4', 'E4'], 1, .95)      # Dm9 でふわっと着地
+n('bass', 6, 'D2', 1, .8)
+n('ride', 6, vel=.5)
 
-# ---------- 8〜16 運命（ハ短調）：面白くて、/ できれば / ためになることを、/ みんなで / やる。 ----------
-for at in (7.25, 7.5, 7.75):
-    n('melody', at, ['G3', 'G4'], .2, .95)
-n('melody', 8, ['Eb3', 'Eb4'], 1.2, 1.0); n('bass', 8, ['C2', 'C3'], 1.2, .95); n('timpani', 8, 'C2', vel=1)
-for at in (9.25, 9.5, 9.75):
-    n('melody', at, ['F3', 'F4'], .2, .95)
-n('melody', 10, ['D3', 'D4'], 1.2, 1.0); n('bass', 10, ['G1', 'G2'], 1.2, .95); n('timpani', 10, 'G2', vel=1)
-for at in (11.25, 11.5, 11.75):
-    n('melody', at, ['G3', 'G4'], .2, .95)
-chord_hit(12, ['Ab3', 'C4', 'Eb4', 'Ab4'], ['Ab1', 'Ab2'], 1.5, 1.0, 'C2')
-chord_hit(14, ['G3', 'B3', 'D4', 'F4', 'G4'], ['G1', 'G2'], .9, 1.0, 'G2')
-chord_hit(15, ['C4', 'Eb4', 'G4', 'C5'], ['C2', 'C3'], .7, 1.0, 'C2')
-for i, at in enumerate([x / 4 for x in range(48, 63)]):   # 12〜15.75 ティンパニのロール
-    n('timpani', at, 'G2', vel=round(.35 + i * .04, 2))
-for at, c, l in [(8, ['C4', 'Eb4', 'G4'], 2), (10, ['B3', 'D4', 'G4'], 2), (12, ['Ab3', 'C4', 'Eb4'], 2), (14, ['G3', 'B3', 'F4'], 1), (15, ['C4', 'Eb4', 'G4'], .75)]:
-    n('strings', at, c, l, .8)
+# ---------- 8〜16 運命を3連符で食い込ませる ----------
+for at, p, hp, ch, drum in [(7, 'G4', 'Eb4', 'Cm9', 'C'), (9, 'F4', 'D4', 'G7b9', 'G'), (11, 'G4', 'Ab4', 'Abmaj7', 'Ab')]:
+    for k in range(3):
+        n('melody', at + k / 3, oct2(p), .25, .9)
+        n('brush', at + k / 3, vel=.4 + k * .1)
+    n('melody', at + 1, oct2(hp), 1.3, 1.0)
+    hit(at + 1, ch, 1, 1.0, brass=hp)
+hit(14, 'G7alt', 1, 1.0, brass=['B3', 'F4'], len=.9)
+n('melody', 14, ['F4', 'B4', 'Eb5'], .9, .95)
+hit(15, 'Cm6', 1, 1.0, brass=['C4', 'G4'], len=.7)
+n('melody', 15, ['C5', 'Eb5', 'G5'], .7, 1.0)
+for i in range(15):                                         # 12〜15.75 ブラシのロール
+    n('brush', 12 + i / 4, vel=round(.25 + i * .04, 2))
 
-# ---------- 16〜48 アイネ・クライネ・ナハトムジーク（ト長調） ----------
-def nacht(at):
-    """冒頭の4小節（16拍）"""
+# ---------- 16〜48 アイネ・クライネ・ナハトムジーク（ミディアムスウィング） ----------
+def nacht(at, bars=4):
     m = [(0, 'G4', 1), (1.5, 'D4', .5), (2, 'G4', 1), (3.5, 'D4', .5),
          (4, 'G4', .5), (4.5, 'D4', .5), (5, 'G4', .5), (5.5, 'B4', .5), (6, 'D5', 2),
          (8, 'C5', 1), (9.5, 'A4', .5), (10, 'C5', 1), (11.5, 'A4', .5),
          (12, 'C5', .5), (12.5, 'A4', .5), (13, 'F#4', .5), (13.5, 'A4', .5), (14, 'D4', 2)]
     for o, p, l in m:
-        n('melody', at + o, oct2(p), l * .9, .95 if o in (0, 6, 8, 14) else .85)
-    for b in range(16):
-        root = ['G2', 'G2', 'G2', 'G2', 'G2', 'G2', 'G2', 'G2', 'D2', 'D2', 'D2', 'D2', 'D2', 'D2', 'D2', 'D2'][b]
-        n('bass', at + b, [root, root[:-1] + '3'], .45, .8)
-        n('bass', at + b + .5, root[:-1] + '3', .4, .6)
-    n('strings', at, ['G3', 'B3', 'D4'], 8, .75)
-    n('strings', at + 8, ['F#3', 'A3', 'C4', 'D4'], 8, .75)
-    for b in (0, 4, 8, 12):
-        n('timpani', at + b, 'G2' if b < 8 else 'D2', vel=.9)
+        if o >= bars * 4:
+            continue
+        n('melody', sw(at + o), oct2(p), l * .85, .92 if o % 4 == 0 else .8)
+        n('vibes', sw(at + o), p, l * .85, .55)
+    # 7拍目の長い音の間に、ピアノの小さな合いの手（ブルーノートの B♭ → B）
+    n('melody', sw(at + 7.5), ['Bb4'], .2, .6)
 
+n('fx', 16, vel=.8, variant='soft')
+hit(16, 'Gmaj7', 1, .95)
 nacht(16)
-n('fx', 16, vel=1)
-n('timpani', 27, 'D2', vel=1)              # 398 が着地
-n('melody', 27, ['D3', 'D4', 'F#4', 'A4'], .4, .9)
-for i in range(16):                        # 28〜32 家が16分音符で建つ
-    n('glock', 28 + i / 4, ['D5', 'E5', 'F#5', 'G5', 'A5', 'B5', 'C#6', 'D6'][i % 8], vel=.8)
-# 32〜38 はんこ：8分音符ごとに和音を押す（11回）
-stamps = [(['G3', 'B3', 'D4', 'G4'], 'G2')] * 4 + [(['C4', 'E4', 'G4', 'C5'], 'C3')] * 4 + [(['D4', 'F#4', 'A4', 'D5'], 'D3')] * 3
-for i, (c, b) in enumerate(stamps):
-    at = 32 + i * .5
-    n('melody', at, c, .3, .8 + i * .015)
-    n('bass', at, [b[:-1] + '2', b], .3, .85)
-    n('timpani', at, 'G2' if i < 8 else 'D2', vel=round(.6 + i * .03, 2))
-chord_hit(38, ['G3', 'B3', 'D4', 'G4', 'B4'], ['G1', 'G2'], 1.6, 1.0, 'G2')
-n('strings', 32, ['G3', 'B3', 'D4'], 4, .8); n('strings', 36, ['D4', 'F#4', 'A4'], 2, .8); n('strings', 38, ['G3', 'B3', 'D4', 'G4'], 2, .85)
-# 40〜48 『ホームレス大学院生』：冒頭をもう一度（前半だけ）して、47 からロール
-for o, p, l in [(0, 'G4', 1), (1.5, 'D4', .5), (2, 'G4', 1), (3.5, 'D4', .5), (4, 'G4', .5), (4.5, 'D4', .5), (5, 'G4', .5), (5.5, 'B4', .5), (6, 'D5', 1)]:
-    n('melody', 40 + o, oct2(p), l * .9, .95)
-for b in range(7):
-    n('bass', 40 + b, ['G2', 'G3'], .45, .8); n('bass', 40.5 + b, 'G3', .4, .6)
-n('strings', 40, ['G3', 'B3', 'D4'], 7, .75)
-n('timpani', 40, 'G2', vel=.95); n('timpani', 44, 'G2', vel=.95)
-for i in range(4):
-    n('timpani', 47 + i / 4, 'G2', vel=round(.6 + i * .1, 2))
-n('melody', 47, ['D4', 'F#4', 'A4', 'C5'], .9, .85)
+walk(16, ['Gmaj7', 'G6', 'Am7', 'D7'])
+for at, ch in [(16, 'Gmaj7'), (20, 'G6'), (24, 'Am7'), (28, 'D7')]:
+    comp(at, ch)
+    comp(at + 2, ch, .5)
+swing_drums(16, 32)
+# 24「ひとつの家に、」と 25「住まない暮らし。」に軽いアクセント
+n('kick', 24, vel=.8); n('kick', 25, vel=.7)
+# 28〜32 家が16分音符で建つ：ビブラフォンの駆け上がり（ここだけ跳ねさせない）
+for i in range(16):
+    n('vibes', 28 + i / 4, ['D5', 'E5', 'F#5', 'G5', 'A5', 'B5', 'C#6', 'D6'][i % 8], .2, .7)
+# 32〜38 はんこ：跳ねた8分音符で11回、全員で合わせる
+stamps = ['G6'] * 4 + ['C9'] * 4 + ['D7#9'] * 3
+for i, ch in enumerate(stamps):
+    at = sw(32 + i * .5)
+    hit(at, ch, 2, round(.72 + i * .02, 2), crash=False, kick=True, brass=CH[ch][0][-1], len=.28)
+n('crash', 32, vel=.85)
+hit(38, 'Gmaj7', 1, 1.0, brass=['B3', 'F#4'], len=1.4)
+n('melody', 38, ['B4', 'D5', 'F#5', 'B5'], 1.4, .95)
+n('brush', 39, vel=.5); n('brush', 39 + 1 / 3, vel=.6); n('brush', 39 + 2 / 3, vel=.7)
+# 40〜48 「友人の家を、渡り歩いた。」：冒頭の前半をもう一度、ベースはそのまま歩く
+nacht(40, 2)
+walk(40, ['Gmaj7', 'Em9'])
+comp(40, 'Gmaj7'); comp(44, 'Em9')
+swing_drums(40, 47)
+for k in range(3):                                          # 47 で3連符のフィル
+    n('brush', 47 + k / 3, vel=.6 + k * .12)
+    n('kick', 47 + k / 3, vel=.5 + k * .1)
+n('melody', 47, ['D4', 'F#4', 'C5'], .8, .85)
 
-# ---------- 48〜80 歓喜の歌（ハ長調） ----------
-n('fx', 48, vel=1)
-ode1 = [(0, 'E4', 1), (1, 'E4', 1), (2, 'F4', 1), (3, 'G4', 1), (4, 'G4', 1), (5, 'F4', 1), (6, 'E4', 1), (7, 'D4', 1),
-        (8, 'C4', 1), (9, 'C4', 1), (10, 'D4', 1), (11, 'E4', 1), (12, 'E4', 1.5), (13.5, 'D4', .5), (14, 'D4', 2)]
-for o, p, l in ode1:
-    n('melody', 48 + o, [p, p[:-1] + '5'], l * .92, .95 if o % 4 == 0 else .85)
-harm = {48: 'C', 52: 'G', 56: 'C', 60: 'G', 64: 'C', 68: 'G', 72: 'C', 76: 'G'}
-CH = {'C': (['C4', 'E4', 'G4'], 'C'), 'G': (['B3', 'D4', 'G4'], 'G')}
-for at, h in harm.items():
-    c, r = CH[h]
-    n('strings', at, c, 4, .75)
-    for b in range(4):
-        if 68 <= at + b < 72:
-            continue
-        n('bass', at + b, [r + '2', r + '3'], .45, .8)
-        n('bass', at + b + .5, r + '3', .4, .6)
-    n('timpani', at, 'C2' if h == 'C' else 'G2', vel=.9)
-for i in range(8):                          # 60〜64 1週間のカードが8分音符で落ちる
-    if i < 7:
-        n('glock', 60 + i / 2, ['E5', 'G5', 'C6', 'E6', 'G6', 'E6', 'C6'][i], vel=.85)
-ode2 = [(0, 'E4', 1), (1, 'E4', 1), (2, 'F4', 1), (3, 'G4', 1)]
-for o, p, l in ode2:
-    n('melody', 64 + o, [p, p[:-1] + '5'], l * .92, .9)
-# 68〜72 4つのテーマ：1拍ずつ和音を叩きつける
-for i, (c, b) in enumerate([(['G4', 'B4', 'D5', 'G5'], 'G'), (['F4', 'A4', 'D5', 'F5'], 'D'), (['E4', 'G4', 'C5', 'E5'], 'C'), (['D4', 'G4', 'B4', 'D5'], 'G')]):
-    chord_hit(68 + i, c, [b + '1', b + '2'], .8, 1.0, 'G2' if b != 'C' else 'C2')
-for o, p, l in [(0, 'C4', 1), (1, 'C4', 1), (2, 'D4', 1), (3, 'E4', 1), (4, 'D4', 1.5), (5.5, 'C4', .5), (6, 'C4', 2)]:
-    n('melody', 72 + o, [p, p[:-1] + '5'], l * .92, .9)
-n('timpani', 76, 'G2', vel=.95); n('timpani', 77, 'G2', vel=.9); n('timpani', 78, 'C2', vel=1)
-n('melody', 77, ['G3', 'B3', 'D4'], .4, .8); n('melody', 78, ['C3', 'E3', 'G3', 'C4'], 1.2, .95)
-for i in range(4):
-    n('timpani', 79 + i / 4, 'D2', vel=round(.55 + i * .12, 2))
+# ---------- 48〜80 歓喜の歌（II-V の和音で） ----------
+n('fx', 48, vel=.8, variant='soft')
+ode = [(0, 'E4', 1), (1, 'E4', 1), (2, 'F4', 1), (3, 'G4', 1), (4, 'G4', 1), (5, 'F4', 1), (6, 'E4', 1), (7, 'D4', 1),
+       (8, 'C4', 1), (9, 'C4', 1), (10, 'D4', 1), (11, 'E4', 1), (12, 'E4', 1.5), (13.5, 'D4', .5), (14, 'D4', 2)]
+for o, p, l in ode:
+    n('melody', sw(48 + o), [p, p[:-1] + '5'], l * .9, .92 if o % 4 == 0 else .82)
+harm = [(48, ['Cmaj7']), (52, ['Dm9', 'G13']), (56, ['Em7', 'A7']), (60, ['Dm9', 'G13']), (64, ['Cmaj7']), (72, ['Dm9', 'G13'])]
+for at, chs in harm:
+    walk_chords = chs if len(chs) == 1 else chs
+    if len(chs) == 1:
+        walk(at, chs)
+        comp(at, chs[0]); comp(at + 2, chs[0], .5)
+    else:
+        for k, ch in enumerate(chs):
+            root = 36 + NOTE_NUM[CH[ch][1]]
+            n('bass', at + k * 2, nm(root if root <= 45 else root - 12), 1.8, .88)
+            n('bass', at + k * 2 + 1, nm((root if root <= 45 else root - 12) + 7), .9, .75)
+            comp(at + k * 2, ch)
+swing_drums(48, 68)
+hit(48, 'Cmaj7', 1, .95, crash=True)
+# 60〜64 1週間のカード：跳ねた8分音符でビブラフォン
+for i, p in enumerate(['E5', 'G5', 'C6', 'E6', 'G6', 'E6', 'C6']):
+    n('vibes', sw(60 + i * .5), p, .4, .8)
+for o, p, l in [(0, 'E4', 1), (1, 'E4', 1), (2, 'F4', 1), (3, 'G4', 1)]:
+    n('melody', 64 + o, [p, p[:-1] + '5'], l * .9, .88)
+# 68〜72 4つのテーマ：1拍ずつ和音を合わせる
+for i, ch in enumerate(['Dm9', 'G13', 'Em7', 'A7#9']):
+    hit(68 + i, ch, 1, 1.0, brass=CH[ch][0][-1], len=.8)
+    n('melody', 68 + i, [['A4', 'D5'], ['B4', 'E5'], ['B4', 'G5'], ['C#5', 'G5']][i], .8, .95)
+swing_drums(72, 76)
+for o, p, l in [(0, 'C4', 1), (1, 'C4', 1), (2, 'D4', 1), (3, 'E4', 1)]:
+    n('melody', 72 + o, [p, p[:-1] + '5'], l * .9, .88)
+# 76〜79 「超一流じゃない、／どこにでもいる人／のための人生戦略。」に3つの和音
+hit(76, 'Dm9', 1, .95, brass='C4', len=.9)
+hit(77, 'G13', 1, .95, brass='B3', len=.9)
+hit(78, 'C69', 1, 1.0, brass=['E4', 'G4'], len=1.2)
+n('melody', 78, ['E5', 'G5', 'A5', 'D6'], 1.2, .95)
+for k in range(3):
+    n('brush', 79 + k / 3, vel=.55 + k * .12)
 
-# ---------- 80〜96 カノン（ニ長調）の低音。84〜92 は時計の音 ----------
-n('fx', 80, vel=.8, variant='soft')
-canon = [('D', ['D4', 'F#4', 'A4']), ('A', ['C#4', 'E4', 'A4']), ('B', ['B3', 'D4', 'F#4']), ('F#', ['A3', 'C#4', 'F#4']),
-         ('G', ['B3', 'D4', 'G4']), ('D', ['A3', 'D4', 'F#4']), ('G', ['B3', 'D4', 'G4']), ('A', ['C#4', 'E4', 'A4'])]
-for i, (r, c) in enumerate(canon):
+# ---------- 80〜96 カノン（バラード）：ブラシと時計の音 ----------
+canon = [('Dmaj9', 'D2'), ('A6', 'C#2'), ('Bm9', 'B1'), ('F#m7', 'F#1'), ('Gmaj9', 'G1'), ('Dmaj9', 'F#1'), ('Gmaj9', 'G1'), ('A13', 'A1')]
+upper = ['F#5', 'E5', 'D5', 'C#5', 'B4', 'A4', 'B4', 'C#5']   # カノンの上の声
+n('fx', 80, vel=.6, variant='soft')
+for i, (ch, lo) in enumerate(canon):
     at = 80 + i * 2
-    lo = r + ('2' if r in ('D', 'F#', 'G') else '1')
-    n('bass', at, [lo, r + ('3' if r in ('D', 'F#', 'G') else '2')], 1.9, .85)
-    n('strings', at, c, 2, .7)
-    if at < 92:                              # 上は8分音符の分散和音
-        for k in range(4):
-            n('melody', at + k * .5, [c[0][:-1] + '5', c[1][:-1] + '5', c[2][:-1] + '5', c[1][:-1] + '5'][k], .45, .55)
+    n('bass', at, lo, 1.9, .82)
+    n('comp', at, CH[ch][0], 1.8, .5)
+    if at < 92:
+        n('vibes', at, upper[i], 1.8, .65)
+        n('brush', at, vel=.35); n('brush', at + 1, vel=.3)
 n('clock', 84, vel=.9, variant=['tick', 'tock'], repeat={'every': 1, 'count': 8})
-n('timpani', 80, 'D2', vel=.9); n('timpani', 84, 'A2', vel=.7); n('timpani', 88, 'G2', vel=.7)
-# 92〜95 盛り上げ：16分音符のトレモロとティンパニのロール。95〜95.25 は一瞬の無音
-for i in range(12):
-    at = 92 + i / 4
-    n('melody', at, ['A4', 'C#5', 'E5'] if at < 94 else ['A4', 'D5', 'F#5'], .2, round(.45 + i * .04, 2))
-for i in range(12):
-    n('timpani', 92 + i / 4, 'A2', vel=round(.4 + i * .05, 2))
-# 運命の頭（G G G）で 03 に飛び込む
-for at in (95.25, 95.5, 95.75):
-    n('melody', at, ['G3', 'G4'], .2, 1.0)
+n('kick', 80, vel=.7)
+# 92〜95 盛り上げ：3連符のスネアがだんだん強く。95〜95 は一瞬ためる
+for i in range(9):
+    n('brush', 92 + i / 3, vel=round(.4 + i * .05, 2))
+    n('kick', 92 + i / 3, vel=round(.3 + i * .05, 2)) if i % 3 == 0 else None
+for i in range(6):
+    n('melody', 94 + i / 6, ['A4', 'C#5', 'E5', 'G5', 'B5', 'C#6'][i], .15, .6 + i * .05)
+# 運命の頭（G G G、3連符）で 03 に飛び込む
+for k in range(3):
+    n('melody', 95 + k / 3, ['G3', 'G4'], .25, 1.0)
+    n('brush', 95 + k / 3, vel=.7 + k * .1)
 
-# ---------- 96〜128 運命（ハ短調）：8分音符で刻む低音の上に、ダダダダーン ----------
-n('fx', 96, vel=1, variant='hard')
-bars = {96: ('Cm', ['C4', 'Eb4', 'G4'], 'C'), 100: ('G', ['B3', 'D4', 'G4'], 'G'), 104: ('Cm', ['C4', 'Eb4', 'G4'], 'C'), 108: ('G', ['B3', 'D4', 'F4'], 'G'),
-        112: ('Ab', ['Ab3', 'C4', 'Eb4'], 'Ab'), 116: ('Fm', ['Ab3', 'C4', 'F4'], 'F'), 120: ('Fm', ['Ab3', 'C4', 'F4'], 'F'), 124: ('G', ['B3', 'D4', 'G4'], 'G')}
-for at, (_, c, r) in bars.items():
-    n('strings', at, c, 4, .8)
-    lo = r + ('1' if r in ('Ab', 'G') else '2')
-    for k in range(8):
-        if 112 <= at + k / 2 < 116 or at + k / 2 >= 124:
-            continue
-        n('bass', at + k / 2, [lo, r + ('2' if r in ('Ab', 'G') else '3')], .4, .85 if k % 2 == 0 else .65)
-    n('timpani', at, 'C2' if r in ('C', 'Ab', 'F') else 'G2', vel=.95)
-for at, low, hi in [(96, 'Eb4', None), (100, 'D4', ('F4',)), (104, 'Eb4', ('G4',)), (108, 'D4', ('F4',))]:
-    pick = 'G4' if low == 'Eb4' else 'F4'
+# ---------- 96〜128 運命（アップテンポのシャウト） ----------
+n('fx', 96, vel=.9, variant='hard')
+fate = [(96, 'Eb4', 'Cm9'), (100, 'D4', 'G7b9'), (104, 'Eb4', 'Cm9'), (108, 'D4', 'G7alt')]
+for at, low, ch in fate:
     if at > 96:
-        for p in (at - .75, at - .5, at - .25):
-            n('melody', p, oct2(pick), .2, .95)
-    n('melody', at, oct2(low), 2.5, 1.0)
-    n('brass', at, low[:-1] + '4', 2, .9)
-# 112〜116 小さな作品4つ：1拍ずつ和音
-for i, (c, b) in enumerate([(['Ab3', 'C4', 'Eb4', 'Ab4'], 'Ab'), (['Bb3', 'D4', 'F4', 'Bb4'], 'Bb'), (['C4', 'Eb4', 'G4', 'C5'], 'C'), (['B3', 'D4', 'G4', 'B4'], 'G')]):
-    chord_hit(112 + i, c, [b + '1', b + '2'], .8, 1.0, 'C2' if b in ('Ab', 'C') else 'G2')
-for i, p in enumerate(['C5', 'D5', 'Eb5', 'F5', 'G5', 'Ab5', 'B5', 'C6']):   # 116〜120 駆け上がり
-    n('melody', 116 + i / 2, oct2(p), .4, round(.7 + i * .03, 2))
-chord_hit(120, ['F3', 'Ab3', 'C4', 'F4'], ['F1', 'F2'], 1.6, 1.0, 'C2')
-chord_hit(122, ['G3', 'B3', 'D4', 'G4'], ['G1', 'G2'], 1.6, 1.0, 'G2')
-# 124〜128 写真が8分音符で切り替わる：和音も8分音符で
+        pick = 'G4' if low == 'Eb4' else 'F4'
+        for k in range(3):
+            n('melody', at - 1 + k / 3, oct2(pick), .25, .95)
+            n('brass', at - 1 + k / 3, pick, .25, .8)
+    n('melody', at, oct2(low), 2.4, 1.0)
+    hit(at, ch, 1, 1.0, brass=low, len=1.4)
+walk(96, ['Cm9', 'G7b9', 'Cm9', 'G7alt'])
+for at, ch in [(96, 'Cm9'), (100, 'G7b9'), (104, 'Cm9'), (108, 'G7alt')]:
+    n('comp', sw(at + 2.5), CH[ch][0], .3, .55)
+swing_drums(96, 112, .65)
+# 112〜116 小さな作品4つ：1拍ずつ合わせる
+for i, ch in enumerate(['Abmaj7', 'Bb13', 'Cm9', 'G7alt']):
+    hit(112 + i, ch, 1, 1.0, brass=CH[ch][0][-1], len=.8)
+# 116〜120 ビバップの駆け上がり（跳ねた8分音符）
+for i, p in enumerate(['C5', 'D5', 'Eb5', 'F5', 'G5', 'Ab5', 'A5', 'B5']):
+    n('melody', sw(116 + i * .5), oct2(p), .4, round(.72 + i * .03, 2))
+walk(116, ['Fm9'])
+swing_drums(116, 120, .65)
+hit(120, 'Fm9', 1, 1.0, brass=['Ab3', 'Eb4'], len=1.6)
+hit(122, 'G7alt', 1, 1.0, brass=['B3', 'F4'], len=1.6)
+# 124〜128 写真が跳ねた8分音符で切り替わる：シャウトも同じ位置で
 for i in range(8):
-    c = ['C4', 'Eb4', 'G4', 'C5'] if i % 2 == 0 else ['B3', 'D4', 'G4', 'B4']
-    chord_hit(124 + i / 2, c, ['C2', 'C3'] if i % 2 == 0 else ['G1', 'G2'], .35, round(.75 + i * .03, 2), 'C2' if i % 2 == 0 else 'G2')
+    ch = 'Cm9' if i % 2 == 0 else 'G7alt'
+    hit(sw(124 + i * .5), ch, 1, round(.78 + i * .03, 2), crash=i == 0, brass=CH[ch][0][-1], len=.3)
 
-# ---------- 128〜146 ハ長調のファンファーレで終わり ----------
-n('fx', 128, vel=.9)
-chord_hit(128, ['C4', 'E4', 'G4', 'C5'], ['C2', 'C3'], 1.2, 1.0, 'C2')
-for at, p in [(128.5, 'E5'), (129, 'G5'), (130, 'C6')]:
+# ---------- 128〜146 ハ長調で締める ----------
+n('fx', 128, vel=.8, variant='soft')
+hit(128, 'C69', 1, 1.0, brass=['E4', 'G4'], len=1.2)
+for at, p in [(sw(128.5), 'E5'), (129, 'G5'), (130, 'C6')]:
     n('melody', at, oct2(p), .9, .95)
-    n('brass', at, p[:-1] + '4' if p != 'C6' else 'C5', .9, .9)
-n('strings', 128, ['C4', 'E4', 'G4'], 4, .8)
-for b in range(4):
-    n('bass', 128 + b, ['C2', 'C3'], .45, .8); n('bass', 128.5 + b, 'C3', .4, .6)
-for i, (c, b) in enumerate([(['F4', 'A4', 'C5'], 'F'), (['G4', 'B4', 'D5'], 'G'), (['E4', 'G4', 'C5'], 'E'), (['A4', 'C5', 'E5'], 'A')]):
-    chord_hit(132 + i, c, [b + '2', b + '3'], .85, .95, 'C2' if b in ('F', 'A') else 'G2')
-    n('strings', 132 + i, c, 1, .8)
-for i in range(4):
-    n('timpani', 135.5 + i / 8, 'G2', vel=round(.6 + i * .1, 2))
-n('fx', 136, vel=1, variant='hard')
-chord_hit(136, ['C4', 'E4', 'G4', 'C5', 'E5'], ['C1', 'C2'], 5, 1.0, 'C2')
-n('strings', 136, ['C4', 'E4', 'G4', 'C5'], 5, .85)
-n('brass', 136, ['C4', 'G4'], 3, .9)
+    n('vibes', at, p, .9, .7)
+walk(128, ['C69'])
+comp(128, 'C69')
+swing_drums(128, 132, .62)
+for i, ch in enumerate(['Fmaj7', 'G13', 'Em7', 'A7']):
+    hit(132 + i, ch, 2, .95, crash=False, brass=CH[ch][0][-1], len=.85)
+for k in range(3):
+    n('brush', 135.333 + k * .222, vel=.6 + k * .12)
+n('fx', 136, vel=.9, variant='soft')
+hit(136, 'C69', 1, 1.0, brass=['C4', 'G4'], len=5)
+n('melody', 136, ['C4', 'E4', 'A4', 'D5', 'G5'], 5, 1.0)
+n('bass', 136, 'C1', 5, .9)
 for i, p in enumerate(['C6', 'E6', 'G6', 'C7']):
-    n('glock', 136 + i, p, vel=.8)
+    n('vibes', 136 + i, p, 2, .75)
+for i, p in enumerate(['G5', 'A5', 'C6', 'D6', 'E6', 'G6']):   # 最後にピアノがきらっと上がる
+    n('melody', 138 + i / 6, p, .3, .5)
 
-# 歓喜の歌の後半へ向けて、内声の分散和音で少しずつ温度を上げる。
-# 主旋律より下の音域を使い、言葉に合わせた打撃音の場所は空ける。
-for at in (48, 52, 56, 64, 72, 76):
-    tones = ['C3', 'G3', 'E4', 'G3'] if harm[at] == 'C' else ['G2', 'D3', 'B3', 'D3']
-    for k in range(8):
-        n('melody', at + k * .5, tones[k % 4], .38, .32 + k * .012)
-
-# カノンは低音から高音へ受け渡し、打楽器を引いて呼吸を作る。
-for i, (_, chord) in enumerate(canon[:6]):
-    n('glock', 80 + i * 2, chord[2][:-1] + '5', 1.5, .3 + i * .025)
-
-# 拍の位置は固定して映像との同期を保ち、音量と音の切り方にフレーズを作る。
-for name, tr in tracks.items():
-    for note in tr['notes']:
-        at = note['at']
-        quiet = 80 <= at < 92
-        if name == 'timpani' and quiet:
-            note['vel'] *= .5
-        if name == 'melody' and 16 <= at < 80:
-            note['vel'] *= .9 if at % 4 else 1
-        if name == 'strings' and 'len' in note:
-            note['len'] = max(.1, note['len'] - .12)
-        note['vel'] = round(note['vel'], 3)
+# ピアノの音は、鳴らしたあと長く残す（和音が変わるところでペダルを踏みかえる）
+for name in ('melody', 'comp'):
+    tracks[name]['pedal'] = [{'at': a, 'until': b} for a, b in [(0, 8), (8, 16), (136, 146)]]
+for tr in tracks.values():
     tr['notes'].sort(key=lambda note: note['at'])
 
 score = {
     '$schema': 'https://raw.githubusercontent.com/receptron/jinglescript/main/schema/jinglescript-1.json',
     'format': 'jinglescript/1',
-    'title': 'tomochi MV（クラシック版）',
+    'title': 'tomochi MV（クラシックをジャズで）',
     'tempo': 128,
     'length': {'beats': 146},
     'instruments': {
-        'timpani': {'blocks': [
-            {'modes': [{'ratio': 1, 'level': 1, 'decay': 1.6}, {'ratio': 1.5, 'level': .55, 'decay': 1.1},
-                       {'ratio': 1.98, 'level': .35, 'decay': .8}, {'ratio': 2.44, 'level': .2, 'decay': .5}]},
-            {'noise': 'white', 'burst': .01, 'level': .25},
-            {'filter': 'lowpass', 'cutoff': 1800}]},
-        'strings': {'blocks': [
-            {'osc': 'saw', 'detune': -8}, {'osc': 'saw', 'detune': 8}, {'osc': 'saw', 'ratio': .5, 'level': .4},
-            {'filter': 'lowpass', 'cutoff': 2600},
-            {'env': {'attack': .12, 'decay': .4, 'sustain': .75, 'release': .5}},
-            {'lfo': 'vibrato', 'rate': 5.2, 'depth': 10, 'delay': .25}]},
+        # ウッドベース：指で弾いた低い弦
+        'upright': {'description': 'Upright jazz bass, finger-plucked', 'blocks': [
+            {'string': {'pluck': 380, 'position': .22, 'damping': .82, 'ring': 1.2, 'body': 1100}},
+            {'osc': 'sine', 'level': .35, 'env': {'attack': .004, 'decay': .9}}]},
+        # ライドシンバル：金属の澄んだ「チン」
+        'ride': {'kind': 'sfx', 'pitch': 'F6', 'description': 'Jazz ride cymbal ping', 'blocks': [
+            {'modes': [{'ratio': 1, 'level': .5, 'decay': 1.4}, {'ratio': 1.47, 'level': .4, 'decay': 1.1}, {'ratio': 2.09, 'level': .35, 'decay': .9},
+                       {'ratio': 2.56, 'level': .3, 'decay': .8}, {'ratio': 3.2, 'level': .25, 'decay': .6}, {'ratio': 4.1, 'level': .2, 'decay': .5}]},
+            {'noise': 'white', 'level': .5, 'decay': .5, 'filter': {'type': 'highpass', 'cutoff': 6000}}]},
+        'hat': {'kind': 'sfx', 'description': 'Closed hi-hat chick', 'blocks': [
+            {'noise': 'white', 'level': 1, 'decay': .05, 'filter': {'type': 'highpass', 'cutoff': 7000}}]},
+        'brush': {'kind': 'sfx', 'description': 'Brush on a snare', 'blocks': [
+            {'noise': 'pink', 'level': 1, 'decay': .16, 'filter': {'type': 'bandpass', 'cutoff': 2600, 'q': .8}}]},
+        'kick': {'kind': 'sfx', 'pitch': 'C2', 'description': 'Soft jazz kick drum', 'blocks': [
+            {'osc': 'sine'}, {'pitchEnv': {'from': 12, 'to': 0, 'time': .07}}, {'env': {'attack': .002, 'decay': .35}}]},
+        'crash': {'kind': 'sfx', 'description': 'Washy crash cymbal', 'blocks': [
+            {'noise': 'white', 'level': 1, 'decay': 1.8, 'filter': {'type': 'highpass', 'cutoff': 4500}}]},
     },
     'tracks': list(tracks.values()),
 }

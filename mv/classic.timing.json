@@ -186,7 +186,7 @@
       "t": 0.469,
       "track": 0,
       "instrument": "organ",
-      "vel": 0.9,
+      "vel": 0.88,
       "pitch": [
         "G3",
         "G4"
@@ -196,7 +196,7 @@
       "t": 0.938,
       "track": 0,
       "instrument": "organ",
-      "vel": 0.9,
+      "vel": 0.88,
       "pitch": [
         "F3",
         "F4"
@@ -206,7 +206,7 @@
       "t": 1.406,
       "track": 0,
       "instrument": "organ",
-      "vel": 0.9,
+      "vel": 0.88,
       "pitch": [
         "E3",
         "E4"
@@ -216,7 +216,7 @@
       "t": 1.875,
       "track": 0,
       "instrument": "organ",
-      "vel": 0.9,
+      "vel": 0.88,
       "pitch": [
         "D3",
         "D4"
@@ -226,7 +226,7 @@
       "t": 2.344,
       "track": 0,
       "instrument": "organ",
-      "vel": 0.9,
+      "vel": 0.88,
       "pitch": [
         "C#3",
         "C#4"
@@ -236,42 +236,75 @@
       "t": 2.813,
       "track": 0,
       "instrument": "organ",
-      "vel": 1,
+      "vel": 0.95,
       "pitch": [
-        "D2",
         "D3",
-        "D4"
+        "F3",
+        "A3",
+        "C4",
+        "E4"
       ]
     },
     {
-      "t": 3.398,
+      "t": 2.813,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.8,
+      "pitch": "D2"
+    },
+    {
+      "t": 2.813,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 3.281,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "G3",
         "G4"
       ]
     },
     {
-      "t": 3.516,
+      "t": 3.281,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.4
+    },
+    {
+      "t": 3.437,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "G3",
         "G4"
       ]
     },
     {
-      "t": 3.633,
+      "t": 3.437,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.5
+    },
+    {
+      "t": 3.594,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "G3",
         "G4"
       ]
+    },
+    {
+      "t": 3.594,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.6
     },
     {
       "t": 3.75,
@@ -287,59 +320,87 @@
       "t": 3.75,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 1,
       "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 3.75,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4"
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
       ]
     },
     {
       "t": 3.75,
       "track": 4,
-      "instrument": "timpani",
+      "instrument": "upright",
       "vel": 1,
-      "pitch": "C2"
+      "pitch": "C1"
     },
     {
-      "t": 4.336,
+      "t": 3.75,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 3.75,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 3.75,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 4.219,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "F3",
         "F4"
       ]
     },
     {
-      "t": 4.453,
+      "t": 4.219,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.4
+    },
+    {
+      "t": 4.375,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "F3",
         "F4"
       ]
     },
     {
-      "t": 4.57,
+      "t": 4.375,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.5
+    },
+    {
+      "t": 4.531,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "F3",
         "F4"
       ]
+    },
+    {
+      "t": 4.531,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.6
     },
     {
       "t": 4.688,
@@ -355,59 +416,87 @@
       "t": 4.688,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 1,
       "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 4.688,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
+        "F3",
+        "Ab3",
         "B3",
-        "D4",
-        "G4"
+        "D4"
       ]
     },
     {
       "t": 4.688,
       "track": 4,
-      "instrument": "timpani",
+      "instrument": "upright",
       "vel": 1,
-      "pitch": "G2"
+      "pitch": "G1"
     },
     {
-      "t": 5.273,
+      "t": 4.688,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "D4"
+    },
+    {
+      "t": 4.688,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 4.688,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 5.156,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "G3",
         "G4"
       ]
     },
     {
-      "t": 5.391,
+      "t": 5.156,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.4
+    },
+    {
+      "t": 5.312,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "G3",
         "G4"
       ]
     },
     {
-      "t": 5.508,
+      "t": 5.312,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.5
+    },
+    {
+      "t": 5.469,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
+      "vel": 0.9,
       "pitch": [
         "G3",
         "G4"
       ]
+    },
+    {
+      "t": 5.469,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.6
     },
     {
       "t": 5.625,
@@ -416,8 +505,6 @@
       "vel": 1,
       "pitch": [
         "Ab3",
-        "C4",
-        "Eb4",
         "Ab4"
       ]
     },
@@ -427,17 +514,7 @@
       "instrument": "grandpiano",
       "vel": 1,
       "pitch": [
-        "Ab1",
-        "Ab2"
-      ]
-    },
-    {
-      "t": 5.625,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "Ab3",
+        "G3",
         "C4",
         "Eb4"
       ]
@@ -445,77 +522,86 @@
     {
       "t": 5.625,
       "track": 4,
-      "instrument": "timpani",
+      "instrument": "upright",
       "vel": 1,
-      "pitch": "C2"
+      "pitch": "Ab1"
     },
     {
       "t": 5.625,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.35,
-      "pitch": "G2"
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "Ab4"
+    },
+    {
+      "t": 5.625,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.25
+    },
+    {
+      "t": 5.625,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 5.625,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
     },
     {
       "t": 5.742,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.39,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.29
     },
     {
       "t": 5.859,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.43,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.33
     },
     {
       "t": 5.977,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.47,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.37
     },
     {
       "t": 6.094,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.51,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.41
     },
     {
       "t": 6.211,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.55,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.45
     },
     {
       "t": 6.328,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.59,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.49
     },
     {
       "t": 6.445,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.63,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.53
     },
     {
       "t": 6.563,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.95,
       "pitch": [
-        "G3",
-        "B3",
-        "D4",
         "F4",
-        "G4"
+        "B4",
+        "Eb5"
       ]
     },
     {
@@ -524,4372 +610,2050 @@
       "instrument": "grandpiano",
       "vel": 1,
       "pitch": [
-        "G1",
-        "G2"
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
       ]
     },
     {
       "t": 6.563,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "G1"
+    },
+    {
+      "t": 6.563,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
       "pitch": [
-        "G3",
         "B3",
         "F4"
       ]
     },
     {
       "t": 6.563,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.57
     },
     {
       "t": 6.563,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.67,
-      "pitch": "G2"
-    },
-    {
-      "t": 6.68,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.71,
-      "pitch": "G2"
-    },
-    {
-      "t": 6.797,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.75,
-      "pitch": "G2"
-    },
-    {
-      "t": 6.914,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.79,
-      "pitch": "G2"
-    },
-    {
-      "t": 7.031,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 7.031,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 7.031,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4"
-      ]
-    },
-    {
-      "t": 7.031,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
-    },
-    {
-      "t": 7.031,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.83,
-      "pitch": "G2"
-    },
-    {
-      "t": 7.148,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.87,
-      "pitch": "G2"
-    },
-    {
-      "t": 7.266,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.91,
-      "pitch": "G2"
-    },
-    {
-      "t": 7.5,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 7.5,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 7.5,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4"
-      ]
-    },
-    {
-      "t": 7.5,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 7.5,
-      "track": 8,
-      "instrument": "impact",
+      "track": 9,
+      "instrument": "kick",
       "vel": 1
     },
     {
-      "t": 7.734,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
+      "t": 6.563,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
     },
     {
-      "t": 7.969,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
+      "t": 6.68,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.61
     },
     {
-      "t": 8.203,
+      "t": 6.797,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.65
+    },
+    {
+      "t": 6.914,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.69
+    },
+    {
+      "t": 7.031,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D3",
-        "D4"
-      ]
-    },
-    {
-      "t": 8.203,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 8.438,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 8.438,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 8.672,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 8.906,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 9.141,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D3",
-        "D4"
-      ]
-    },
-    {
-      "t": 9.141,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 9.375,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 9.375,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 9.375,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 9.609,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D3",
-        "D4"
-      ]
-    },
-    {
-      "t": 9.609,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 9.844,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 9.844,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 10.078,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "B3",
-        "B4"
-      ]
-    },
-    {
-      "t": 10.078,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 10.313,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 10.313,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 10.547,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 10.781,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 11.016,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 11.25,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 11.25,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 11.25,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "F#3",
-        "A3",
-        "C4",
-        "D4"
-      ]
-    },
-    {
-      "t": 11.25,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "D2"
-    },
-    {
-      "t": 11.484,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 11.719,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 11.953,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "A3",
-        "A4"
-      ]
-    },
-    {
-      "t": 11.953,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 12.188,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 12.188,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 12.422,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 12.656,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "D3",
-        "D4",
-        "F#4",
-        "A4"
-      ]
-    },
-    {
-      "t": 12.656,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 12.656,
-      "track": 4,
-      "instrument": "timpani",
       "vel": 1,
-      "pitch": "D2"
+      "pitch": [
+        "C5",
+        "Eb5",
+        "G5"
+      ]
     },
     {
-      "t": 12.891,
-      "track": 1,
+      "t": 7.031,
+      "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.765,
+      "vel": 1,
       "pitch": [
+        "Eb3",
         "A3",
-        "A4"
-      ]
-    },
-    {
-      "t": 12.891,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 13.125,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
         "C4",
-        "C5"
+        "D4"
       ]
     },
     {
-      "t": 13.125,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 13.125,
+      "t": 7.031,
       "track": 4,
-      "instrument": "timpani",
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "C1"
+    },
+    {
+      "t": 7.031,
+      "track": 5,
+      "instrument": "trumpet",
       "vel": 0.9,
-      "pitch": "D2"
-    },
-    {
-      "t": 13.125,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "D5"
-    },
-    {
-      "t": 13.242,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "E5"
-    },
-    {
-      "t": 13.359,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
       "pitch": [
-        "A3",
-        "A4"
-      ]
-    },
-    {
-      "t": 13.359,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 13.359,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "F#5"
-    },
-    {
-      "t": 13.477,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "G5"
-    },
-    {
-      "t": 13.594,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "F#3",
-        "F#4"
-      ]
-    },
-    {
-      "t": 13.594,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 13.594,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "A5"
-    },
-    {
-      "t": 13.711,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "B5"
-    },
-    {
-      "t": 13.828,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "A3",
-        "A4"
-      ]
-    },
-    {
-      "t": 13.828,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 13.828,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "C#6"
-    },
-    {
-      "t": 13.945,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "D6"
-    },
-    {
-      "t": 14.063,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "D3",
-        "D4"
-      ]
-    },
-    {
-      "t": 14.063,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 14.063,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "D5"
-    },
-    {
-      "t": 14.18,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "E5"
-    },
-    {
-      "t": 14.297,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 14.297,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "F#5"
-    },
-    {
-      "t": 14.414,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "G5"
-    },
-    {
-      "t": 14.531,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 14.531,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "A5"
-    },
-    {
-      "t": 14.648,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "B5"
-    },
-    {
-      "t": 14.766,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "D3"
-    },
-    {
-      "t": 14.766,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "C#6"
-    },
-    {
-      "t": 14.883,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
-      "pitch": "D6"
-    },
-    {
-      "t": 15,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4",
+        "C4",
         "G4"
       ]
     },
     {
-      "t": 15,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G2",
-        "G2"
-      ]
+      "t": 7.031,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.73
     },
     {
-      "t": 15,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4"
-      ]
+      "t": 7.031,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
     },
     {
-      "t": 15,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.6,
-      "pitch": "G2"
+      "t": 7.031,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
     },
     {
-      "t": 15.234,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.734,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4",
-        "G4"
-      ]
+      "t": 7.148,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.77
     },
     {
-      "t": 15.234,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G2",
-        "G2"
-      ]
+      "t": 7.266,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.81
     },
     {
-      "t": 15.234,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.63,
-      "pitch": "G2"
-    },
-    {
-      "t": 15.469,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.747,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 15.469,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G2",
-        "G2"
-      ]
-    },
-    {
-      "t": 15.469,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.66,
-      "pitch": "G2"
-    },
-    {
-      "t": 15.703,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.761,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 15.703,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G2",
-        "G2"
-      ]
-    },
-    {
-      "t": 15.703,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.69,
-      "pitch": "G2"
-    },
-    {
-      "t": 15.938,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.774,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 15.938,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 15.938,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.72,
-      "pitch": "G2"
-    },
-    {
-      "t": 16.172,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.787,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 16.172,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 16.172,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.75,
-      "pitch": "G2"
-    },
-    {
-      "t": 16.406,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.801,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 16.406,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 16.406,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.78,
-      "pitch": "G2"
-    },
-    {
-      "t": 16.641,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.815,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 16.641,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 16.641,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.81,
-      "pitch": "G2"
-    },
-    {
-      "t": 16.875,
+      "t": 7.5,
       "track": 1,
       "instrument": "grandpiano",
       "vel": 0.92,
       "pitch": [
-        "D4",
-        "F#4",
-        "A4",
-        "D5"
-      ]
-    },
-    {
-      "t": 16.875,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 16.875,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "D4",
-        "F#4",
-        "A4"
-      ]
-    },
-    {
-      "t": 16.875,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.84,
-      "pitch": "D2"
-    },
-    {
-      "t": 17.109,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.842,
-      "pitch": [
-        "D4",
-        "F#4",
-        "A4",
-        "D5"
-      ]
-    },
-    {
-      "t": 17.109,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 17.109,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.87,
-      "pitch": "D2"
-    },
-    {
-      "t": 17.344,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "D4",
-        "F#4",
-        "A4",
-        "D5"
-      ]
-    },
-    {
-      "t": 17.344,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 17.344,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "D2"
-    },
-    {
-      "t": 17.813,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
         "G3",
-        "B3",
-        "D4",
-        "G4",
-        "B4"
-      ]
-    },
-    {
-      "t": 17.813,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 17.813,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.85,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4",
         "G4"
       ]
     },
     {
-      "t": 17.813,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
-    },
-    {
-      "t": 18.75,
-      "track": 1,
+      "t": 7.5,
+      "track": 2,
       "instrument": "grandpiano",
       "vel": 0.95,
       "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 18.75,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 18.75,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "G3",
+        "F#3",
         "B3",
         "D4"
       ]
     },
     {
-      "t": 18.75,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 18.984,
+      "t": 7.5,
       "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 19.219,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 19.453,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "D3",
-        "D4"
-      ]
-    },
-    {
-      "t": 19.453,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 19.688,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 19.688,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 19.922,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 20.156,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 20.391,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "D3",
-        "D4"
-      ]
-    },
-    {
-      "t": 20.391,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 20.625,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 20.625,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 20.625,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 20.859,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "D3",
-        "D4"
-      ]
-    },
-    {
-      "t": 20.859,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 21.094,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 21.094,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 21.328,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "B3",
-        "B4"
-      ]
-    },
-    {
-      "t": 21.328,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 21.563,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 21.563,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 21.797,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 22.031,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D4",
-        "F#4",
-        "A4",
-        "C5"
-      ]
-    },
-    {
-      "t": 22.031,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.6,
-      "pitch": "G2"
-    },
-    {
-      "t": 22.148,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.7,
-      "pitch": "G2"
-    },
-    {
-      "t": 22.266,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.8,
-      "pitch": "G2"
-    },
-    {
-      "t": 22.383,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 22.5,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 22.5,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "C3"
-    },
-    {
-      "t": 22.5,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 22.5,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4"
-      ]
-    },
-    {
-      "t": 22.5,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "C2"
-    },
-    {
-      "t": 22.5,
-      "track": 8,
-      "instrument": "impact",
-      "vel": 1
-    },
-    {
-      "t": 22.734,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.299,
-      "pitch": "G3"
-    },
-    {
-      "t": 22.734,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 22.969,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 22.969,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.31,
-      "pitch": "E4"
-    },
-    {
-      "t": 22.969,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 23.203,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "G3"
-    },
-    {
-      "t": 23.203,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 23.438,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "F4",
-        "F5"
-      ]
-    },
-    {
-      "t": 23.438,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.331,
-      "pitch": "C3"
-    },
-    {
-      "t": 23.438,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 23.672,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.342,
-      "pitch": "G3"
-    },
-    {
-      "t": 23.672,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 23.906,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "G4",
-        "G5"
-      ]
-    },
-    {
-      "t": 23.906,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.353,
-      "pitch": "E4"
-    },
-    {
-      "t": 23.906,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 24.141,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.364,
-      "pitch": "G3"
-    },
-    {
-      "t": 24.141,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 24.375,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G4",
-        "G5"
-      ]
-    },
-    {
-      "t": 24.375,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "G2"
-    },
-    {
-      "t": 24.375,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 24.375,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 24.375,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 24.609,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.299,
-      "pitch": "D3"
-    },
-    {
-      "t": 24.609,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 24.844,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "F4",
-        "F5"
-      ]
-    },
-    {
-      "t": 24.844,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.31,
-      "pitch": "B3"
-    },
-    {
-      "t": 24.844,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 25.078,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "D3"
-    },
-    {
-      "t": 25.078,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 25.313,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 25.313,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.331,
-      "pitch": "G2"
-    },
-    {
-      "t": 25.313,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 25.547,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.342,
-      "pitch": "D3"
-    },
-    {
-      "t": 25.547,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 25.781,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 25.781,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.353,
-      "pitch": "B3"
-    },
-    {
-      "t": 25.781,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 26.016,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.364,
-      "pitch": "D3"
-    },
-    {
-      "t": 26.016,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 26.25,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 26.25,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "C3"
-    },
-    {
-      "t": 26.25,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 26.25,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4"
-      ]
-    },
-    {
-      "t": 26.25,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "C2"
-    },
-    {
-      "t": 26.484,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.299,
-      "pitch": "G3"
-    },
-    {
-      "t": 26.484,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 26.719,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 26.719,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.31,
-      "pitch": "E4"
-    },
-    {
-      "t": 26.719,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 26.953,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "G3"
-    },
-    {
-      "t": 26.953,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 27.188,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 27.188,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.331,
-      "pitch": "C3"
-    },
-    {
-      "t": 27.188,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 27.422,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.342,
-      "pitch": "G3"
-    },
-    {
-      "t": 27.422,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 27.656,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 27.656,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.353,
-      "pitch": "E4"
-    },
-    {
-      "t": 27.656,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 27.891,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.364,
-      "pitch": "G3"
-    },
-    {
-      "t": 27.891,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 28.125,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 28.125,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 28.125,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 28.125,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 28.125,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.85,
-      "pitch": "E5"
-    },
-    {
-      "t": 28.359,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 28.359,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.85,
-      "pitch": "G5"
-    },
-    {
-      "t": 28.594,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 28.594,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.85,
-      "pitch": "C6"
-    },
-    {
-      "t": 28.828,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 28.828,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 28.828,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.85,
-      "pitch": "E6"
-    },
-    {
-      "t": 29.063,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.765,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 29.063,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 29.063,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.85,
-      "pitch": "G6"
-    },
-    {
-      "t": 29.297,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 29.297,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.85,
-      "pitch": "E6"
-    },
-    {
-      "t": 29.531,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 29.531,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.85,
-      "pitch": "C6"
-    },
-    {
-      "t": 29.766,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 30,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 30,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "C3"
-    },
-    {
-      "t": 30,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 30,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4"
-      ]
-    },
-    {
-      "t": 30,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "C2"
-    },
-    {
-      "t": 30.234,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.299,
-      "pitch": "G3"
-    },
-    {
-      "t": 30.234,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 30.469,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 30.469,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.31,
-      "pitch": "E4"
-    },
-    {
-      "t": 30.469,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 30.703,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "G3"
-    },
-    {
-      "t": 30.703,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 30.938,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "F4",
-        "F5"
-      ]
-    },
-    {
-      "t": 30.938,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.331,
-      "pitch": "C3"
-    },
-    {
-      "t": 30.938,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 31.172,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.342,
-      "pitch": "G3"
-    },
-    {
-      "t": 31.172,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 31.406,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "G4",
-        "G5"
-      ]
-    },
-    {
-      "t": 31.406,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.353,
-      "pitch": "E4"
-    },
-    {
-      "t": 31.406,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 31.641,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.364,
-      "pitch": "G3"
-    },
-    {
-      "t": 31.641,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 31.875,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G4",
-        "B4",
-        "D5",
-        "G5"
-      ]
-    },
-    {
-      "t": 31.875,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 31.875,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 31.875,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 31.875,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
-    },
-    {
-      "t": 32.344,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "F4",
-        "A4",
-        "D5",
-        "F5"
-      ]
-    },
-    {
-      "t": 32.344,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "D1",
-        "D2"
-      ]
-    },
-    {
-      "t": 32.344,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
-    },
-    {
-      "t": 32.813,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "E4",
-        "G4",
-        "C5",
-        "E5"
-      ]
-    },
-    {
-      "t": 32.813,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C1",
-        "C2"
-      ]
-    },
-    {
-      "t": 32.813,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
-    },
-    {
-      "t": 33.281,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "D4",
-        "G4",
-        "B4",
-        "D5"
-      ]
-    },
-    {
-      "t": 33.281,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 33.281,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
-    },
-    {
-      "t": 33.75,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 33.75,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "C3"
-    },
-    {
-      "t": 33.75,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 33.75,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4"
-      ]
-    },
-    {
-      "t": 33.75,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "C2"
-    },
-    {
-      "t": 33.984,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.299,
-      "pitch": "G3"
-    },
-    {
-      "t": 33.984,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 34.219,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 34.219,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.31,
-      "pitch": "E4"
-    },
-    {
-      "t": 34.219,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 34.453,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "G3"
-    },
-    {
-      "t": 34.453,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 34.688,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 34.688,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.331,
-      "pitch": "C3"
-    },
-    {
-      "t": 34.688,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 34.922,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.342,
-      "pitch": "G3"
-    },
-    {
-      "t": 34.922,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 35.156,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "E4",
-        "E5"
-      ]
-    },
-    {
-      "t": 35.156,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.353,
-      "pitch": "E4"
-    },
-    {
-      "t": 35.156,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 35.391,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.364,
-      "pitch": "G3"
-    },
-    {
-      "t": 35.391,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 35.625,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "D4",
-        "D5"
-      ]
-    },
-    {
-      "t": 35.625,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "G2"
-    },
-    {
-      "t": 35.625,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 35.625,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.75,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 35.625,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 35.625,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 35.859,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.299,
-      "pitch": "D3"
-    },
-    {
-      "t": 35.859,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 36.094,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.72,
-      "pitch": [
-        "G3",
-        "B3",
-        "D4"
-      ]
-    },
-    {
-      "t": 36.094,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.31,
-      "pitch": "B3"
-    },
-    {
-      "t": 36.094,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 36.094,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 36.328,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 36.328,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.32,
-      "pitch": "D3"
-    },
-    {
-      "t": 36.328,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 36.563,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 36.563,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.855,
-      "pitch": [
-        "C3",
-        "E3",
-        "G3",
-        "C4"
-      ]
-    },
-    {
-      "t": 36.563,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.331,
-      "pitch": "G2"
-    },
-    {
-      "t": 36.563,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 36.563,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
-    },
-    {
-      "t": 36.797,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.342,
-      "pitch": "D3"
-    },
-    {
-      "t": 36.797,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 37.031,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.353,
-      "pitch": "B3"
-    },
-    {
-      "t": 37.031,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 37.031,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.55,
-      "pitch": "D2"
-    },
-    {
-      "t": 37.148,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.67,
-      "pitch": "D2"
-    },
-    {
-      "t": 37.266,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.364,
-      "pitch": "D3"
-    },
-    {
-      "t": 37.266,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "G3"
-    },
-    {
-      "t": 37.266,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.79,
-      "pitch": "D2"
-    },
-    {
-      "t": 37.383,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.91,
-      "pitch": "D2"
-    },
-    {
-      "t": 37.5,
-      "track": 1,
       "instrument": "grandpiano",
       "vel": 0.55,
-      "pitch": "D5"
-    },
-    {
-      "t": 37.5,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
       "pitch": [
-        "D2",
-        "D3"
+        "F#3",
+        "B3",
+        "D4"
       ]
     },
     {
-      "t": 37.5,
+      "t": 7.5,
       "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
-        "D4",
-        "F#4",
-        "A4"
-      ]
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "G4"
     },
     {
-      "t": 37.5,
+      "t": 7.5,
       "track": 4,
-      "instrument": "timpani",
-      "vel": 0.45,
-      "pitch": "D2"
+      "instrument": "upright",
+      "vel": 0.95,
+      "pitch": "G1"
     },
     {
-      "t": 37.5,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.3,
-      "pitch": "A5"
+      "t": 7.5,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "G2"
     },
     {
-      "t": 37.5,
-      "track": 8,
+      "t": 7.5,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 7.5,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 7.5,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.76
+    },
+    {
+      "t": 7.5,
+      "track": 12,
       "instrument": "impact",
       "vel": 0.8,
       "variant": "soft"
     },
     {
-      "t": 37.734,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "F#5"
-    },
-    {
-      "t": 37.969,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "A5"
-    },
-    {
-      "t": 38.203,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "F#5"
-    },
-    {
-      "t": 38.438,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "C#5"
-    },
-    {
-      "t": 38.438,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "A1",
-        "A2"
-      ]
-    },
-    {
-      "t": 38.438,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
-        "C#4",
-        "E4",
-        "A4"
-      ]
-    },
-    {
-      "t": 38.438,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.325,
-      "pitch": "A5"
-    },
-    {
-      "t": 38.672,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "E5"
-    },
-    {
-      "t": 38.906,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "A5"
-    },
-    {
-      "t": 39.141,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "E5"
-    },
-    {
-      "t": 39.375,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "B5"
-    },
-    {
-      "t": 39.375,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "B1",
-        "B2"
-      ]
-    },
-    {
-      "t": 39.375,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
-        "B3",
-        "D4",
-        "F#4"
-      ]
-    },
-    {
-      "t": 39.375,
+      "t": 7.969,
       "track": 4,
-      "instrument": "timpani",
-      "vel": 0.35,
-      "pitch": "A2"
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "B2"
     },
     {
-      "t": 39.375,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.35,
-      "pitch": "F#5"
+      "t": 7.969,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
     },
     {
-      "t": 39.375,
+      "t": 7.969,
       "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tick"
+      "instrument": "hat",
+      "vel": 0.6
     },
     {
-      "t": 39.609,
+      "t": 8.281,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "D5"
+      "vel": 0.8,
+      "pitch": [
+        "D3",
+        "D4"
+      ]
     },
     {
-      "t": 39.844,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "F#5"
-    },
-    {
-      "t": 39.844,
-      "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tock"
-    },
-    {
-      "t": 40.078,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "D5"
-    },
-    {
-      "t": 40.313,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "A5"
-    },
-    {
-      "t": 40.313,
+      "t": 8.281,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.47,
       "pitch": [
-        "F#2",
-        "F#3"
-      ]
-    },
-    {
-      "t": 40.313,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
-        "A3",
-        "C#4",
-        "F#4"
-      ]
-    },
-    {
-      "t": 40.313,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.375,
-      "pitch": "F#5"
-    },
-    {
-      "t": 40.313,
-      "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tick"
-    },
-    {
-      "t": 40.547,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "C#5"
-    },
-    {
-      "t": 40.781,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "F#5"
-    },
-    {
-      "t": 40.781,
-      "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tock"
-    },
-    {
-      "t": 41.016,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "C#5"
-    },
-    {
-      "t": 41.25,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "B5"
-    },
-    {
-      "t": 41.25,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 41.25,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
+        "F#3",
         "B3",
-        "D4",
+        "D4"
+      ]
+    },
+    {
+      "t": 8.281,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "D4"
+    },
+    {
+      "t": 8.281,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 8.438,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "G3",
         "G4"
       ]
     },
     {
-      "t": 41.25,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.35,
-      "pitch": "G2"
-    },
-    {
-      "t": 41.25,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.4,
-      "pitch": "G5"
-    },
-    {
-      "t": 41.25,
-      "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tick"
-    },
-    {
-      "t": 41.484,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "D5"
-    },
-    {
-      "t": 41.719,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "G5"
-    },
-    {
-      "t": 41.719,
-      "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tock"
-    },
-    {
-      "t": 41.953,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "D5"
-    },
-    {
-      "t": 42.188,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "A5"
-    },
-    {
-      "t": 42.188,
+      "t": 8.438,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "D2",
-        "D3"
-      ]
-    },
-    {
-      "t": 42.188,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
-        "A3",
-        "D4",
-        "F#4"
-      ]
-    },
-    {
-      "t": 42.188,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.425,
-      "pitch": "F#5"
-    },
-    {
-      "t": 42.188,
-      "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tick"
-    },
-    {
-      "t": 42.422,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "D5"
-    },
-    {
-      "t": 42.656,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "F#5"
-    },
-    {
-      "t": 42.656,
-      "track": 7,
-      "instrument": "clock",
-      "vel": 0.9,
-      "variant": "tock"
-    },
-    {
-      "t": 42.891,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.55,
-      "pitch": "D5"
-    },
-    {
-      "t": 43.125,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.45,
-      "pitch": [
-        "A4",
-        "C#5",
-        "E5"
-      ]
-    },
-    {
-      "t": 43.125,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 43.125,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 43.125,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.4,
-      "pitch": "A2"
-    },
-    {
-      "t": 43.242,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.49,
-      "pitch": [
-        "A4",
-        "C#5",
-        "E5"
-      ]
-    },
-    {
-      "t": 43.242,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.45,
-      "pitch": "A2"
-    },
-    {
-      "t": 43.359,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.53,
-      "pitch": [
-        "A4",
-        "C#5",
-        "E5"
-      ]
-    },
-    {
-      "t": 43.359,
-      "track": 4,
-      "instrument": "timpani",
       "vel": 0.5,
-      "pitch": "A2"
-    },
-    {
-      "t": 43.477,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.57,
       "pitch": [
-        "A4",
-        "C#5",
-        "E5"
+        "F#3",
+        "B3",
+        "D4"
       ]
     },
     {
-      "t": 43.477,
-      "track": 4,
-      "instrument": "timpani",
+      "t": 8.438,
+      "track": 3,
+      "instrument": "vibraphone",
       "vel": 0.55,
-      "pitch": "A2"
+      "pitch": "G4"
     },
     {
-      "t": 43.594,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.61,
-      "pitch": [
-        "A4",
-        "C#5",
-        "E5"
-      ]
-    },
-    {
-      "t": 43.594,
+      "t": 8.438,
       "track": 4,
-      "instrument": "timpani",
-      "vel": 0.6,
-      "pitch": "A2"
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "D3"
     },
     {
-      "t": 43.711,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "A4",
-        "C#5",
-        "E5"
-      ]
-    },
-    {
-      "t": 43.711,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.65,
-      "pitch": "A2"
-    },
-    {
-      "t": 43.828,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.69,
-      "pitch": [
-        "A4",
-        "C#5",
-        "E5"
-      ]
-    },
-    {
-      "t": 43.828,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.7,
-      "pitch": "A2"
-    },
-    {
-      "t": 43.945,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.73,
-      "pitch": [
-        "A4",
-        "C#5",
-        "E5"
-      ]
-    },
-    {
-      "t": 43.945,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.75,
-      "pitch": "A2"
-    },
-    {
-      "t": 44.063,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.77,
-      "pitch": [
-        "A4",
-        "D5",
-        "F#5"
-      ]
-    },
-    {
-      "t": 44.063,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "A1",
-        "A2"
-      ]
-    },
-    {
-      "t": 44.063,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.7,
-      "pitch": [
-        "C#4",
-        "E4",
-        "A4"
-      ]
-    },
-    {
-      "t": 44.063,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.8,
-      "pitch": "A2"
-    },
-    {
-      "t": 44.18,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.81,
-      "pitch": [
-        "A4",
-        "D5",
-        "F#5"
-      ]
-    },
-    {
-      "t": 44.18,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.85,
-      "pitch": "A2"
-    },
-    {
-      "t": 44.297,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "A4",
-        "D5",
-        "F#5"
-      ]
-    },
-    {
-      "t": 44.297,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "A2"
-    },
-    {
-      "t": 44.414,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.89,
-      "pitch": [
-        "A4",
-        "D5",
-        "F#5"
-      ]
-    },
-    {
-      "t": 44.414,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "A2"
-    },
-    {
-      "t": 44.648,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 44.766,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 44.883,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 45,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "Eb3",
-        "Eb4"
-      ]
-    },
-    {
-      "t": 45,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 45,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4"
-      ]
-    },
-    {
-      "t": 45,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "C2"
-    },
-    {
-      "t": 45,
+      "t": 8.438,
       "track": 6,
-      "instrument": "trumpet",
-      "vel": 0.9,
-      "pitch": "Eb4"
+      "instrument": "ride",
+      "vel": 0.6
     },
     {
-      "t": 45,
-      "track": 8,
-      "instrument": "impact",
-      "vel": 1,
-      "variant": "hard"
+      "t": 8.906,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Ab2"
     },
     {
-      "t": 45.234,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
+      "t": 8.906,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
     },
     {
-      "t": 45.469,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
+      "t": 8.906,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
     },
     {
-      "t": 45.703,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 45.938,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 46.172,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 46.406,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 46.523,
+      "t": 9.219,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "F3",
-        "F4"
-      ]
-    },
-    {
-      "t": 46.641,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "F3",
-        "F4"
-      ]
-    },
-    {
-      "t": 46.641,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 46.758,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "F3",
-        "F4"
-      ]
-    },
-    {
-      "t": 46.875,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.8,
       "pitch": [
         "D3",
         "D4"
       ]
     },
     {
-      "t": 46.875,
+      "t": 9.219,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.42,
       "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 46.875,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
+        "F#3",
         "B3",
-        "D4",
-        "G4"
+        "D4"
       ]
     },
     {
-      "t": 46.875,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 46.875,
-      "track": 6,
-      "instrument": "trumpet",
-      "vel": 0.9,
+      "t": 9.219,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
       "pitch": "D4"
     },
     {
-      "t": 47.109,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 47.344,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 47.578,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 47.813,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 48.047,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 48.281,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 48.398,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 48.516,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 48.516,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 48.633,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G3",
-        "G4"
-      ]
-    },
-    {
-      "t": 48.75,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "Eb3",
-        "Eb4"
-      ]
-    },
-    {
-      "t": 48.75,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 48.75,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4"
-      ]
-    },
-    {
-      "t": 48.75,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "C2"
-    },
-    {
-      "t": 48.75,
+      "t": 9.219,
       "track": 6,
-      "instrument": "trumpet",
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 9.375,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 9.375,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "E3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 9.375,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "G4"
+    },
+    {
+      "t": 9.375,
+      "track": 4,
+      "instrument": "upright",
       "vel": 0.9,
-      "pitch": "Eb4"
+      "pitch": "G2"
     },
     {
-      "t": 48.984,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
+      "t": 9.375,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
     },
     {
-      "t": 49.219,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 49.453,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 49.688,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 49.922,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 50.156,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 50.273,
+      "t": 9.688,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "F3",
-        "F4"
-      ]
-    },
-    {
-      "t": 50.391,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "F3",
-        "F4"
-      ]
-    },
-    {
-      "t": 50.391,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 50.508,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "F3",
-        "F4"
-      ]
-    },
-    {
-      "t": 50.625,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.8,
       "pitch": [
         "D3",
         "D4"
       ]
     },
     {
-      "t": 50.625,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 50.625,
+      "t": 9.688,
       "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "B3",
-        "D4",
-        "F4"
-      ]
-    },
-    {
-      "t": 50.625,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 50.625,
-      "track": 6,
-      "instrument": "trumpet",
-      "vel": 0.9,
+      "instrument": "vibraphone",
+      "vel": 0.55,
       "pitch": "D4"
     },
     {
-      "t": 50.859,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 51.094,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 51.328,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 51.563,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 51.797,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 52.031,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 52.266,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 52.5,
+      "t": 9.844,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "Ab3",
-        "C4",
-        "Eb4",
-        "Ab4"
-      ]
-    },
-    {
-      "t": 52.5,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "Ab1",
-        "Ab2"
-      ]
-    },
-    {
-      "t": 52.5,
-      "track": 3,
-      "instrument": "strings",
       "vel": 0.8,
       "pitch": [
-        "Ab3",
-        "C4",
-        "Eb4"
+        "G3",
+        "G4"
       ]
     },
     {
-      "t": 52.5,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "C2"
+      "t": 9.844,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "G4"
     },
     {
-      "t": 52.5,
+      "t": 9.844,
       "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "B2"
     },
     {
-      "t": 52.969,
+      "t": 9.844,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 9.844,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 10.156,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "Bb3",
-        "D4",
-        "F4",
-        "Bb4"
-      ]
-    },
-    {
-      "t": 52.969,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "Bb1",
-        "Bb2"
-      ]
-    },
-    {
-      "t": 52.969,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
-    },
-    {
-      "t": 53.438,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 53.438,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C1",
-        "C2"
-      ]
-    },
-    {
-      "t": 53.438,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
-    },
-    {
-      "t": 53.906,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.8,
       "pitch": [
         "B3",
-        "D4",
-        "G4",
         "B4"
       ]
     },
     {
-      "t": 53.906,
+      "t": 10.156,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 1,
+      "vel": 0.47,
       "pitch": [
-        "G1",
-        "G2"
+        "E3",
+        "B3",
+        "D4"
       ]
     },
     {
-      "t": 53.906,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
-    },
-    {
-      "t": 54.375,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.7,
-      "pitch": [
-        "C4",
-        "C5"
-      ]
-    },
-    {
-      "t": 54.375,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 54.375,
+      "t": 10.156,
       "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "Ab3",
-        "C4",
-        "F4"
-      ]
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "B4"
     },
     {
-      "t": 54.375,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "C2"
+      "t": 10.156,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
     },
     {
-      "t": 54.609,
+      "t": 10.313,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.73,
+      "vel": 0.8,
       "pitch": [
         "D4",
         "D5"
       ]
     },
     {
-      "t": 54.609,
+      "t": 10.313,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.65,
+      "vel": 0.5,
       "pitch": [
-        "F2",
-        "F3"
+        "E3",
+        "B3",
+        "D4"
       ]
     },
     {
-      "t": 54.844,
+      "t": 10.313,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "D5"
+    },
+    {
+      "t": 10.313,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "D3"
+    },
+    {
+      "t": 10.313,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 10.781,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Bb2"
+    },
+    {
+      "t": 10.781,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 10.781,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 11.094,
       "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.6,
+      "pitch": "Bb4"
+    },
+    {
+      "t": 11.094,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.42,
+      "pitch": [
+        "E3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 11.094,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 11.25,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 11.25,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "G3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 11.25,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "C5"
+    },
+    {
+      "t": 11.25,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "A2"
+    },
+    {
+      "t": 11.25,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 11.25,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.8
+    },
+    {
+      "t": 11.719,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "C3"
+    },
+    {
+      "t": 11.719,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 11.719,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 11.719,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.7
+    },
+    {
+      "t": 12.031,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "t": 12.031,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "G3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 12.031,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "A4"
+    },
+    {
+      "t": 12.031,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 12.188,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 12.188,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "G3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 12.188,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "C5"
+    },
+    {
+      "t": 12.188,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "E3"
+    },
+    {
+      "t": 12.188,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 12.656,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Eb2"
+    },
+    {
+      "t": 12.656,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 12.656,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 12.969,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "t": 12.969,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.42,
+      "pitch": [
+        "G3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 12.969,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "A4"
+    },
+    {
+      "t": 12.969,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 13.125,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 13.125,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F#3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 13.125,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "C5"
+    },
+    {
+      "t": 13.125,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "D5"
+    },
+    {
+      "t": 13.125,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "D2"
+    },
+    {
+      "t": 13.125,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 13.242,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "E5"
+    },
+    {
+      "t": 13.359,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "F#5"
+    },
+    {
+      "t": 13.438,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "t": 13.438,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "A4"
+    },
+    {
+      "t": 13.477,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "G5"
+    },
+    {
+      "t": 13.594,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "F#3",
+        "F#4"
+      ]
+    },
+    {
+      "t": 13.594,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "F#4"
+    },
+    {
+      "t": 13.594,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "A5"
+    },
+    {
+      "t": 13.594,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "F#2"
+    },
+    {
+      "t": 13.594,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 13.594,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 13.711,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "B5"
+    },
+    {
+      "t": 13.828,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "C#6"
+    },
+    {
+      "t": 13.906,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "A3",
+        "A4"
+      ]
+    },
+    {
+      "t": 13.906,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F#3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 13.906,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "A4"
+    },
+    {
+      "t": 13.906,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 13.945,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "D6"
+    },
+    {
+      "t": 14.063,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "D3",
+        "D4"
+      ]
+    },
+    {
+      "t": 14.063,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "F#3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 14.063,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "D4"
+    },
+    {
+      "t": 14.063,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "D5"
+    },
+    {
+      "t": 14.063,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "A2"
+    },
+    {
+      "t": 14.063,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 14.18,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "E5"
+    },
+    {
+      "t": 14.297,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "F#5"
+    },
+    {
+      "t": 14.414,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "G5"
+    },
+    {
+      "t": 14.531,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "A5"
+    },
+    {
+      "t": 14.531,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Eb2"
+    },
+    {
+      "t": 14.531,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 14.531,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 14.648,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "B5"
+    },
+    {
+      "t": 14.766,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "C#6"
+    },
+    {
+      "t": 14.844,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.42,
+      "pitch": [
+        "F#3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 14.844,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 14.883,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "D6"
+    },
+    {
+      "t": 15,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.72,
+      "pitch": [
+        "E3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 15,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.72,
+      "pitch": "G2"
+    },
+    {
+      "t": 15,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.648,
+      "pitch": "D4"
+    },
+    {
+      "t": 15,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.72
+    },
+    {
+      "t": 15,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.85
+    },
+    {
+      "t": 15.313,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.74,
+      "pitch": [
+        "E3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 15.313,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.74,
+      "pitch": "G2"
+    },
+    {
+      "t": 15.313,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.666,
+      "pitch": "D4"
+    },
+    {
+      "t": 15.313,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.74
+    },
+    {
+      "t": 15.469,
+      "track": 2,
       "instrument": "grandpiano",
       "vel": 0.76,
       "pitch": [
-        "Eb4",
-        "Eb5"
+        "E3",
+        "B3",
+        "D4"
       ]
     },
     {
-      "t": 54.844,
+      "t": 15.469,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.76,
+      "pitch": "G2"
+    },
+    {
+      "t": 15.469,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.684,
+      "pitch": "D4"
+    },
+    {
+      "t": 15.469,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.76
+    },
+    {
+      "t": 15.781,
       "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.78,
+      "pitch": [
+        "E3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 15.781,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "G2"
+    },
+    {
+      "t": 15.781,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.702,
+      "pitch": "D4"
+    },
+    {
+      "t": 15.781,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.78
+    },
+    {
+      "t": 15.938,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "E3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 15.938,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.8,
+      "pitch": "C2"
+    },
+    {
+      "t": 15.938,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.72,
+      "pitch": "D4"
+    },
+    {
+      "t": 15.938,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.8
+    },
+    {
+      "t": 16.25,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "E3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 16.25,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "C2"
+    },
+    {
+      "t": 16.25,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.738,
+      "pitch": "D4"
+    },
+    {
+      "t": 16.25,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.82
+    },
+    {
+      "t": 16.406,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.84,
+      "pitch": [
+        "E3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 16.406,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.84,
+      "pitch": "C2"
+    },
+    {
+      "t": 16.406,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.756,
+      "pitch": "D4"
+    },
+    {
+      "t": 16.406,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.84
+    },
+    {
+      "t": 16.719,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.86,
+      "pitch": [
+        "E3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 16.719,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.86,
+      "pitch": "C2"
+    },
+    {
+      "t": 16.719,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.774,
+      "pitch": "D4"
+    },
+    {
+      "t": 16.719,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.86
+    },
+    {
+      "t": 16.875,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "F#3",
+        "C4",
+        "F4"
+      ]
+    },
+    {
+      "t": 16.875,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "D2"
+    },
+    {
+      "t": 16.875,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.792,
+      "pitch": "F4"
+    },
+    {
+      "t": 16.875,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.88
+    },
+    {
+      "t": 17.188,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.9,
+      "pitch": [
+        "F#3",
+        "C4",
+        "F4"
+      ]
+    },
+    {
+      "t": 17.188,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "D2"
+    },
+    {
+      "t": 17.188,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.81,
+      "pitch": "F4"
+    },
+    {
+      "t": 17.188,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.9
+    },
+    {
+      "t": 17.344,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "F#3",
+        "C4",
+        "F4"
+      ]
+    },
+    {
+      "t": 17.344,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.92,
+      "pitch": "D2"
+    },
+    {
+      "t": 17.344,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.828,
+      "pitch": "F4"
+    },
+    {
+      "t": 17.344,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.92
+    },
+    {
+      "t": 17.813,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "B4",
+        "D5",
+        "F#5",
+        "B5"
+      ]
+    },
+    {
+      "t": 17.813,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "F#3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 17.813,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "G1"
+    },
+    {
+      "t": 17.813,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": [
+        "B3",
+        "F#4"
+      ]
+    },
+    {
+      "t": 17.813,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 17.813,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 18.281,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.5
+    },
+    {
+      "t": 18.437,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.6
+    },
+    {
+      "t": 18.594,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.7
+    },
+    {
+      "t": 18.75,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 18.75,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F#3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 18.75,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "G4"
+    },
+    {
+      "t": 18.75,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "G2"
+    },
+    {
+      "t": 18.75,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 19.219,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "B2"
+    },
+    {
+      "t": 19.219,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 19.219,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 19.531,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "D3",
+        "D4"
+      ]
+    },
+    {
+      "t": 19.531,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F#3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 19.531,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "D4"
+    },
+    {
+      "t": 19.531,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 19.688,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 19.688,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "G4"
+    },
+    {
+      "t": 19.688,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "D3"
+    },
+    {
+      "t": 19.688,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 20.156,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "F2"
+    },
+    {
+      "t": 20.156,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 20.156,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 20.469,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "D3",
+        "D4"
+      ]
+    },
+    {
+      "t": 20.469,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "D4"
+    },
+    {
+      "t": 20.469,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 20.625,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 20.625,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "G3",
+        "B3",
+        "D4",
+        "F#4"
+      ]
+    },
+    {
+      "t": 20.625,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "G4"
+    },
+    {
+      "t": 20.625,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "E2"
+    },
+    {
+      "t": 20.625,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 20.938,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "D3",
+        "D4"
+      ]
+    },
+    {
+      "t": 20.938,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "D4"
+    },
+    {
+      "t": 21.094,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 21.094,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "G4"
+    },
+    {
+      "t": 21.094,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "G2"
+    },
+    {
+      "t": 21.094,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 21.094,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 21.406,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "B3",
+        "B4"
+      ]
+    },
+    {
+      "t": 21.406,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "G3",
+        "B3",
+        "D4",
+        "F#4"
+      ]
+    },
+    {
+      "t": 21.406,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "B4"
+    },
+    {
+      "t": 21.406,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 21.563,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": [
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "t": 21.563,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.55,
+      "pitch": "D5"
+    },
+    {
+      "t": 21.563,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "B2"
+    },
+    {
+      "t": 21.563,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 22.031,
+      "track": 1,
       "instrument": "grandpiano",
       "vel": 0.85,
       "pitch": [
-        "F2",
-        "F3"
+        "D4",
+        "F#4",
+        "C5"
       ]
     },
     {
-      "t": 55.078,
+      "t": 22.031,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "F2"
+    },
+    {
+      "t": 22.031,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.6
+    },
+    {
+      "t": 22.031,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.5
+    },
+    {
+      "t": 22.187,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.72
+    },
+    {
+      "t": 22.187,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.6
+    },
+    {
+      "t": 22.344,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.79,
+      "vel": 0.6,
+      "pitch": "Bb4"
+    },
+    {
+      "t": 22.344,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.84
+    },
+    {
+      "t": 22.344,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.7
+    },
+    {
+      "t": 22.5,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 22.5,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "E3",
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 22.5,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "E3",
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 22.5,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "C2"
+    },
+    {
+      "t": 22.5,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.95,
+      "pitch": "C1"
+    },
+    {
+      "t": 22.5,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 22.5,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 22.5,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.76
+    },
+    {
+      "t": 22.5,
+      "track": 12,
+      "instrument": "impact",
+      "vel": 0.8,
+      "variant": "soft"
+    },
+    {
+      "t": 22.969,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 22.969,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "E2"
+    },
+    {
+      "t": 22.969,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 22.969,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 23.281,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "E3",
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 23.281,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 23.438,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
       "pitch": [
         "F4",
         "F5"
       ]
     },
     {
-      "t": 55.078,
+      "t": 23.438,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.65,
+      "vel": 0.5,
       "pitch": [
-        "F2",
-        "F3"
+        "E3",
+        "G3",
+        "B3",
+        "D4"
       ]
     },
     {
-      "t": 55.313,
+      "t": 23.438,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "G2"
+    },
+    {
+      "t": 23.438,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 23.906,
       "track": 1,
       "instrument": "grandpiano",
       "vel": 0.82,
@@ -4899,539 +2663,3149 @@
       ]
     },
     {
-      "t": 55.313,
+      "t": 23.906,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "C#2"
+    },
+    {
+      "t": 23.906,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 23.906,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 24.219,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.85,
+      "vel": 0.42,
       "pitch": [
-        "F2",
-        "F3"
+        "E3",
+        "G3",
+        "B3",
+        "D4"
       ]
     },
     {
-      "t": 55.547,
+      "t": 24.219,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 24.375,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "G4",
+        "G5"
+      ]
+    },
+    {
+      "t": 24.375,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 24.375,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "D2"
+    },
+    {
+      "t": 24.375,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 24.844,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "F4",
+        "F5"
+      ]
+    },
+    {
+      "t": 24.844,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "A2"
+    },
+    {
+      "t": 24.844,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 24.844,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 25.156,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 25.156,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 25.313,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 25.313,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 25.313,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "G2"
+    },
+    {
+      "t": 25.313,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 25.781,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "t": 25.781,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "D3"
+    },
+    {
+      "t": 25.781,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 25.781,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 26.094,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 26.094,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 26.25,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 26.25,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 26.25,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "E2"
+    },
+    {
+      "t": 26.25,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 26.719,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 26.719,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "B2"
+    },
+    {
+      "t": 26.719,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 26.719,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 27.031,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 27.031,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 27.188,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "t": 27.188,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "G3",
+        "C#4",
+        "E4"
+      ]
+    },
+    {
+      "t": 27.188,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "A2"
+    },
+    {
+      "t": 27.188,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 27.656,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 27.656,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "E3"
+    },
+    {
+      "t": 27.656,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 27.656,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 27.969,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "G3",
+        "C#4",
+        "E4"
+      ]
+    },
+    {
+      "t": 27.969,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 28.125,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.92,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 28.125,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 28.125,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.8,
+      "pitch": "E5"
+    },
+    {
+      "t": 28.125,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "D2"
+    },
+    {
+      "t": 28.125,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 28.438,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.8,
+      "pitch": "G5"
+    },
+    {
+      "t": 28.594,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.8,
+      "pitch": "C6"
+    },
+    {
+      "t": 28.594,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "A2"
+    },
+    {
+      "t": 28.594,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 28.594,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 28.906,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "t": 28.906,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 28.906,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.8,
+      "pitch": "E6"
+    },
+    {
+      "t": 28.906,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 29.063,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.82,
+      "pitch": [
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "t": 29.063,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 29.063,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.8,
+      "pitch": "G6"
+    },
+    {
+      "t": 29.063,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "G2"
+    },
+    {
+      "t": 29.063,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 29.375,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.8,
+      "pitch": "E6"
+    },
+    {
+      "t": 29.531,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.8,
+      "pitch": "C6"
+    },
+    {
+      "t": 29.531,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "D3"
+    },
+    {
+      "t": 29.531,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 29.531,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 29.844,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 29.844,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 30,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 30,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "E3",
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 30,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "C2"
+    },
+    {
+      "t": 30,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 30.469,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 30.469,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "E2"
+    },
+    {
+      "t": 30.469,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 30.469,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 30.781,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "E3",
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 30.781,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 30.938,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "F4",
+        "F5"
+      ]
+    },
+    {
+      "t": 30.938,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "E3",
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 30.938,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "G2"
+    },
+    {
+      "t": 30.938,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 31.406,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "G4",
+        "G5"
+      ]
+    },
+    {
+      "t": 31.406,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "C#2"
+    },
+    {
+      "t": 31.406,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 31.406,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 31.719,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.42,
+      "pitch": [
+        "E3",
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 31.719,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 31.875,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "A4",
+        "D5"
+      ]
+    },
+    {
+      "t": 31.875,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 31.875,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "D1"
+    },
+    {
+      "t": 31.875,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "E4"
+    },
+    {
+      "t": 31.875,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 31.875,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 32.344,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "B4",
+        "E5"
+      ]
+    },
+    {
+      "t": 32.344,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 32.344,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "G1"
+    },
+    {
+      "t": 32.344,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "E4"
+    },
+    {
+      "t": 32.344,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 32.344,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 32.813,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "B4",
+        "G5"
+      ]
+    },
+    {
+      "t": 32.813,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 32.813,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "E1"
+    },
+    {
+      "t": 32.813,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "D4"
+    },
+    {
+      "t": 32.813,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 32.813,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 33.281,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "C#5",
+        "G5"
+      ]
+    },
+    {
+      "t": 33.281,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "G3",
+        "C#4",
+        "F4"
+      ]
+    },
+    {
+      "t": 33.281,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "A1"
+    },
+    {
+      "t": 33.281,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "F4"
+    },
+    {
+      "t": 33.281,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 33.281,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 33.75,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 33.75,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 33.75,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "D2"
+    },
+    {
+      "t": 33.75,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 34.219,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 34.219,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "A2"
+    },
+    {
+      "t": 34.219,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 34.219,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 34.531,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 34.531,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 34.688,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "t": 34.688,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 34.688,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.88,
+      "pitch": "G2"
+    },
+    {
+      "t": 34.688,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.6
+    },
+    {
+      "t": 35.156,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.88,
+      "pitch": [
+        "E4",
+        "E5"
+      ]
+    },
+    {
+      "t": 35.156,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.75,
+      "pitch": "D3"
+    },
+    {
+      "t": 35.156,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.68
+    },
+    {
+      "t": 35.156,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 35.469,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.47,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 35.469,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.45
+    },
+    {
+      "t": 35.625,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "A3",
+        "C4",
+        "E4"
+      ]
+    },
+    {
+      "t": 35.625,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.95,
+      "pitch": "D1"
+    },
+    {
+      "t": 35.625,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.855,
+      "pitch": "C4"
+    },
+    {
+      "t": 35.625,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 35.625,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.76
+    },
+    {
+      "t": 36.094,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 36.094,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.95,
+      "pitch": "G1"
+    },
+    {
+      "t": 36.094,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.855,
+      "pitch": "B3"
+    },
+    {
+      "t": 36.094,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 36.094,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.76
+    },
+    {
+      "t": 36.563,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "E5",
+        "G5",
+        "A5",
+        "D6"
+      ]
+    },
+    {
+      "t": 36.563,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "E3",
+        "A3",
+        "D4",
+        "G4"
+      ]
+    },
+    {
+      "t": 36.563,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "C1"
+    },
+    {
+      "t": 36.563,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": [
+        "E4",
+        "G4"
+      ]
+    },
+    {
+      "t": 36.563,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 36.563,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 37.031,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.55
+    },
+    {
+      "t": 37.187,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.67
+    },
+    {
+      "t": 37.344,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.79
+    },
+    {
+      "t": 37.5,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "F#3",
+        "A3",
+        "C#4",
+        "E4"
+      ]
+    },
+    {
+      "t": 37.5,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.65,
+      "pitch": "F#5"
+    },
+    {
+      "t": 37.5,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "D2"
+    },
+    {
+      "t": 37.5,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.35
+    },
+    {
+      "t": 37.5,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.7
+    },
+    {
+      "t": 37.5,
+      "track": 12,
+      "instrument": "impact",
+      "vel": 0.6,
+      "variant": "soft"
+    },
+    {
+      "t": 37.969,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.3
+    },
+    {
+      "t": 38.438,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "F#3",
+        "C#4",
+        "E4"
+      ]
+    },
+    {
+      "t": 38.438,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.65,
+      "pitch": "E5"
+    },
+    {
+      "t": 38.438,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "C#2"
+    },
+    {
+      "t": 38.438,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.35
+    },
+    {
+      "t": 38.906,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.3
+    },
+    {
+      "t": 39.375,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "D3",
+        "F#3",
+        "A3",
+        "C#4"
+      ]
+    },
+    {
+      "t": 39.375,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.65,
+      "pitch": "D5"
+    },
+    {
+      "t": 39.375,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "B1"
+    },
+    {
+      "t": 39.375,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.35
+    },
+    {
+      "t": 39.375,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tick"
+    },
+    {
+      "t": 39.844,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.3
+    },
+    {
+      "t": 39.844,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tock"
+    },
+    {
+      "t": 40.313,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "E3",
+        "A3",
+        "C#4"
+      ]
+    },
+    {
+      "t": 40.313,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.65,
+      "pitch": "C#5"
+    },
+    {
+      "t": 40.313,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "F#1"
+    },
+    {
+      "t": 40.313,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.35
+    },
+    {
+      "t": 40.313,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tick"
+    },
+    {
+      "t": 40.781,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.3
+    },
+    {
+      "t": 40.781,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tock"
+    },
+    {
+      "t": 41.25,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "F#3",
+        "A3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 41.25,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.65,
+      "pitch": "B4"
+    },
+    {
+      "t": 41.25,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "G1"
+    },
+    {
+      "t": 41.25,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.35
+    },
+    {
+      "t": 41.25,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tick"
+    },
+    {
+      "t": 41.719,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.3
+    },
+    {
+      "t": 41.719,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tock"
+    },
+    {
+      "t": 42.188,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "F#3",
+        "A3",
+        "C#4",
+        "E4"
+      ]
+    },
+    {
+      "t": 42.188,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.65,
+      "pitch": "A4"
+    },
+    {
+      "t": 42.188,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "F#1"
+    },
+    {
+      "t": 42.188,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.35
+    },
+    {
+      "t": 42.188,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tick"
+    },
+    {
+      "t": 42.656,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.3
+    },
+    {
+      "t": 42.656,
+      "track": 11,
+      "instrument": "clock",
+      "vel": 0.9,
+      "variant": "tock"
+    },
+    {
+      "t": 43.125,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "F#3",
+        "A3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 43.125,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "G1"
+    },
+    {
+      "t": 43.125,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.4
+    },
+    {
+      "t": 43.125,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.3
+    },
+    {
+      "t": 43.281,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.45
+    },
+    {
+      "t": 43.438,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.5
+    },
+    {
+      "t": 43.594,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.55
+    },
+    {
+      "t": 43.594,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.45
+    },
+    {
+      "t": 43.75,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.6
+    },
+    {
+      "t": 43.906,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.65
+    },
+    {
+      "t": 44.063,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.6,
+      "pitch": "A4"
+    },
+    {
+      "t": 44.063,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": [
+        "G3",
+        "C#4",
+        "F#4"
+      ]
+    },
+    {
+      "t": 44.063,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.82,
+      "pitch": "A1"
+    },
+    {
+      "t": 44.063,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.7
+    },
+    {
+      "t": 44.063,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.6
+    },
+    {
+      "t": 44.141,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.65,
+      "pitch": "C#5"
+    },
+    {
+      "t": 44.219,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.7,
+      "pitch": "E5"
+    },
+    {
+      "t": 44.219,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.75
+    },
+    {
+      "t": 44.297,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.75,
+      "pitch": "G5"
+    },
+    {
+      "t": 44.375,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.8,
+      "pitch": "B5"
+    },
+    {
+      "t": 44.375,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.8
+    },
+    {
+      "t": 44.453,
       "track": 1,
       "instrument": "grandpiano",
       "vel": 0.85,
+      "pitch": "C#6"
+    },
+    {
+      "t": 44.531,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 44.531,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.7
+    },
+    {
+      "t": 44.687,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 44.687,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.8
+    },
+    {
+      "t": 44.844,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 44.844,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.9
+    },
+    {
+      "t": 45,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "Eb3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 45,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 45,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "C1"
+    },
+    {
+      "t": 45,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "C2"
+    },
+    {
+      "t": 45,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 45,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 45,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 45,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 45,
+      "track": 12,
+      "instrument": "impact",
+      "vel": 0.9,
+      "variant": "hard"
+    },
+    {
+      "t": 45.469,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Eb2"
+    },
+    {
+      "t": 45.469,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 45.469,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 45.781,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 45.938,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "G2"
+    },
+    {
+      "t": 45.938,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 46.25,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 46.406,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "F4"
+      ]
+    },
+    {
+      "t": 46.406,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "F#2"
+    },
+    {
+      "t": 46.406,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "F4"
+    },
+    {
+      "t": 46.406,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 46.406,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 46.562,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "F4"
+      ]
+    },
+    {
+      "t": 46.562,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "F4"
+    },
+    {
+      "t": 46.719,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "F4"
+      ]
+    },
+    {
+      "t": 46.719,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "F4"
+    },
+    {
+      "t": 46.719,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 46.875,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "D3",
+        "D4"
+      ]
+    },
+    {
+      "t": 46.875,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "F3",
+        "Ab3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 46.875,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "G1"
+    },
+    {
+      "t": 46.875,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "G2"
+    },
+    {
+      "t": 46.875,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "D4"
+    },
+    {
+      "t": 46.875,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 46.875,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 46.875,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 47.344,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "B2"
+    },
+    {
+      "t": 47.344,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 47.344,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 47.656,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 47.813,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "D3"
+    },
+    {
+      "t": 47.813,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 48.125,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "Ab3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 48.281,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 48.281,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "C#2"
+    },
+    {
+      "t": 48.281,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "G4"
+    },
+    {
+      "t": 48.281,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 48.281,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 48.437,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 48.437,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "G4"
+    },
+    {
+      "t": 48.594,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "G3",
+        "G4"
+      ]
+    },
+    {
+      "t": 48.594,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "G4"
+    },
+    {
+      "t": 48.594,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 48.75,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "Eb3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 48.75,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 48.75,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "C1"
+    },
+    {
+      "t": 48.75,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "C2"
+    },
+    {
+      "t": 48.75,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 48.75,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 48.75,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 48.75,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 49.219,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Eb2"
+    },
+    {
+      "t": 49.219,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 49.219,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 49.531,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 49.688,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "G2"
+    },
+    {
+      "t": 49.688,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 50,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 50.156,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "F4"
+      ]
+    },
+    {
+      "t": 50.156,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "F#2"
+    },
+    {
+      "t": 50.156,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "F4"
+    },
+    {
+      "t": 50.156,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 50.156,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 50.312,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "F4"
+      ]
+    },
+    {
+      "t": 50.312,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "F4"
+    },
+    {
+      "t": 50.469,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "F4"
+      ]
+    },
+    {
+      "t": 50.469,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.8,
+      "pitch": "F4"
+    },
+    {
+      "t": 50.469,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 50.625,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "D3",
+        "D4"
+      ]
+    },
+    {
+      "t": 50.625,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 50.625,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "G1"
+    },
+    {
+      "t": 50.625,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "G2"
+    },
+    {
+      "t": 50.625,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "D4"
+    },
+    {
+      "t": 50.625,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 50.625,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 50.625,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 51.094,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "B2"
+    },
+    {
+      "t": 51.094,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 51.094,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 51.406,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 51.563,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "D3"
+    },
+    {
+      "t": 51.563,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 51.875,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 52.031,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Ab2"
+    },
+    {
+      "t": 52.031,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 52.031,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 52.344,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 52.5,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "G3",
+        "C4",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 52.5,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "Ab1"
+    },
+    {
+      "t": 52.5,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 52.5,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 52.5,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 52.969,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "Ab3",
+        "D4",
+        "G4"
+      ]
+    },
+    {
+      "t": 52.969,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "Bb1"
+    },
+    {
+      "t": 52.969,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "G4"
+    },
+    {
+      "t": 52.969,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 52.969,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 53.438,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 53.438,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "C1"
+    },
+    {
+      "t": 53.438,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "D4"
+    },
+    {
+      "t": 53.438,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 53.438,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 53.906,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 53.906,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "G1"
+    },
+    {
+      "t": 53.906,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 53.906,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 53.906,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 54.375,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.72,
+      "pitch": [
+        "C4",
+        "C5"
+      ]
+    },
+    {
+      "t": 54.375,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "F2"
+    },
+    {
+      "t": 54.375,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 54.688,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.75,
+      "pitch": [
+        "D4",
+        "D5"
+      ]
+    },
+    {
+      "t": 54.844,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.78,
+      "pitch": [
+        "Eb4",
+        "Eb5"
+      ]
+    },
+    {
+      "t": 54.844,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "Ab2"
+    },
+    {
+      "t": 54.844,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 54.844,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 55.156,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.81,
+      "pitch": [
+        "F4",
+        "F5"
+      ]
+    },
+    {
+      "t": 55.156,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
+    },
+    {
+      "t": 55.313,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.84,
+      "pitch": [
+        "G4",
+        "G5"
+      ]
+    },
+    {
+      "t": 55.313,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "C3"
+    },
+    {
+      "t": 55.313,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.65
+    },
+    {
+      "t": 55.625,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.87,
       "pitch": [
         "Ab4",
         "Ab5"
       ]
     },
     {
-      "t": 55.547,
-      "track": 2,
+      "t": 55.781,
+      "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.65,
+      "vel": 0.9,
       "pitch": [
-        "F2",
-        "F3"
+        "A4",
+        "A5"
       ]
     },
     {
       "t": 55.781,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "F#2"
+    },
+    {
+      "t": 55.781,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.73
+    },
+    {
+      "t": 55.781,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 56.094,
       "track": 1,
       "instrument": "grandpiano",
-      "vel": 0.88,
+      "vel": 0.93,
       "pitch": [
         "B4",
         "B5"
       ]
     },
     {
-      "t": 55.781,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
+      "t": 56.094,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.5
     },
     {
-      "t": 56.016,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.91,
-      "pitch": [
-        "C5",
-        "C6"
-      ]
-    },
-    {
-      "t": 56.016,
+      "t": 56.25,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.65,
+      "vel": 1,
       "pitch": [
-        "F2",
-        "F3"
+        "Ab3",
+        "C4",
+        "Eb4",
+        "G4"
       ]
     },
     {
       "t": 56.25,
-      "track": 1,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "F1"
+    },
+    {
+      "t": 56.25,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": [
+        "Ab3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 56.25,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 56.25,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 57.188,
+      "track": 2,
       "instrument": "grandpiano",
       "vel": 1,
       "pitch": [
         "F3",
-        "Ab3",
-        "C4",
-        "F4"
-      ]
-    },
-    {
-      "t": 56.25,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 56.25,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "F1",
-        "F2"
-      ]
-    },
-    {
-      "t": 56.25,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "Ab3",
-        "C4",
-        "F4"
-      ]
-    },
-    {
-      "t": 56.25,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "C2"
-    },
-    {
-      "t": 56.25,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
-    },
-    {
-      "t": 56.484,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 56.719,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 56.953,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "F2",
-        "F3"
+        "A#3",
+        "B3",
+        "Eb4"
       ]
     },
     {
       "t": 57.188,
-      "track": 1,
-      "instrument": "grandpiano",
+      "track": 4,
+      "instrument": "upright",
       "vel": 1,
+      "pitch": "G1"
+    },
+    {
+      "t": 57.188,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
       "pitch": [
+        "B3",
+        "F4"
+      ]
+    },
+    {
+      "t": 57.188,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 57.188,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 58.125,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.78,
+      "pitch": [
+        "Eb3",
         "G3",
-        "B3",
-        "D4",
-        "G4"
-      ]
-    },
-    {
-      "t": 57.188,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 57.188,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 57.188,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "G2"
-    },
-    {
-      "t": 57.422,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 57.656,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.85,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 57.891,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.65,
-      "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 58.125,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.75,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 58.125,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.75,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 58.125,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4"
+        "Bb3",
+        "D4"
       ]
     },
     {
       "t": 58.125,
       "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 58.125,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.75,
-      "pitch": "C2"
-    },
-    {
-      "t": 58.359,
-      "track": 1,
-      "instrument": "grandpiano",
+      "instrument": "upright",
       "vel": 0.78,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4",
-        "B4"
-      ]
+      "pitch": "C1"
     },
     {
-      "t": 58.359,
+      "t": 58.125,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.702,
+      "pitch": "D4"
+    },
+    {
+      "t": 58.125,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.78
+    },
+    {
+      "t": 58.125,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.624
+    },
+    {
+      "t": 58.438,
       "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.78,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 58.359,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.78,
-      "pitch": "G2"
-    },
-    {
-      "t": 58.594,
-      "track": 1,
       "instrument": "grandpiano",
       "vel": 0.81,
       "pitch": [
-        "C4",
-        "Eb4",
-        "G4",
-        "C5"
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
       ]
+    },
+    {
+      "t": 58.438,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.81,
+      "pitch": "G1"
+    },
+    {
+      "t": 58.438,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.729,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 58.438,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.81
     },
     {
       "t": 58.594,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.81,
+      "vel": 0.84,
       "pitch": [
-        "C2",
-        "C3"
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
       ]
     },
     {
       "t": 58.594,
       "track": 4,
-      "instrument": "timpani",
+      "instrument": "upright",
+      "vel": 0.84,
+      "pitch": "C1"
+    },
+    {
+      "t": 58.594,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.756,
+      "pitch": "D4"
+    },
+    {
+      "t": 58.594,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.84
+    },
+    {
+      "t": 58.906,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.87,
+      "pitch": [
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 58.906,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.87,
+      "pitch": "G1"
+    },
+    {
+      "t": 58.906,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.783,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 58.906,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.87
+    },
+    {
+      "t": 59.063,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.9,
+      "pitch": [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 59.063,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "C1"
+    },
+    {
+      "t": 59.063,
+      "track": 5,
+      "instrument": "trumpet",
       "vel": 0.81,
-      "pitch": "C2"
-    },
-    {
-      "t": 58.828,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.84,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4",
-        "B4"
-      ]
-    },
-    {
-      "t": 58.828,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.84,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 58.828,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.84,
-      "pitch": "G2"
+      "pitch": "D4"
     },
     {
       "t": 59.063,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.87,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 59.063,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.87,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 59.063,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.87,
-      "pitch": "C2"
-    },
-    {
-      "t": 59.297,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4",
-        "B4"
-      ]
-    },
-    {
-      "t": 59.297,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.9,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 59.297,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 59.531,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.93,
-      "pitch": [
-        "C4",
-        "Eb4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 59.531,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.93,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 59.531,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.93,
-      "pitch": "C2"
-    },
-    {
-      "t": 59.766,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.96,
-      "pitch": [
-        "B3",
-        "D4",
-        "G4",
-        "B4"
-      ]
-    },
-    {
-      "t": 59.766,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.96,
-      "pitch": [
-        "G1",
-        "G2"
-      ]
-    },
-    {
-      "t": 59.766,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.96,
-      "pitch": "G2"
-    },
-    {
-      "t": 60,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 60,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 60,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
-    },
-    {
-      "t": 60,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4"
-      ]
-    },
-    {
-      "t": 60,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
-    },
-    {
-      "t": 60,
-      "track": 8,
-      "instrument": "impact",
+      "track": 9,
+      "instrument": "kick",
       "vel": 0.9
     },
     {
-      "t": 60.234,
+      "t": 59.375,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.93,
+      "pitch": [
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 59.375,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.93,
+      "pitch": "G1"
+    },
+    {
+      "t": 59.375,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.837,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 59.375,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.93
+    },
+    {
+      "t": 59.531,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.96,
+      "pitch": [
+        "Eb3",
+        "G3",
+        "Bb3",
+        "D4"
+      ]
+    },
+    {
+      "t": 59.531,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.96,
+      "pitch": "C1"
+    },
+    {
+      "t": 59.531,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.864,
+      "pitch": "D4"
+    },
+    {
+      "t": 59.531,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.96
+    },
+    {
+      "t": 59.844,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.99,
+      "pitch": [
+        "F3",
+        "A#3",
+        "B3",
+        "Eb4"
+      ]
+    },
+    {
+      "t": 59.844,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.99,
+      "pitch": "G1"
+    },
+    {
+      "t": 59.844,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.891,
+      "pitch": "Eb4"
+    },
+    {
+      "t": 59.844,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.99
+    },
+    {
+      "t": 60,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "E3",
+        "A3",
+        "D4",
+        "G4"
+      ]
+    },
+    {
+      "t": 60,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.55,
+      "pitch": [
+        "E3",
+        "A3",
+        "D4",
+        "G4"
+      ]
+    },
+    {
+      "t": 60,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "C1"
+    },
+    {
+      "t": 60,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "C2"
+    },
+    {
+      "t": 60,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.9,
+      "pitch": [
+        "E4",
+        "G4"
+      ]
+    },
+    {
+      "t": 60,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.62
+    },
+    {
+      "t": 60,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 60,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 60,
+      "track": 12,
+      "instrument": "impact",
+      "vel": 0.8,
+      "variant": "soft"
+    },
+    {
+      "t": 60.313,
       "track": 1,
       "instrument": "grandpiano",
       "vel": 0.95,
@@ -5441,18 +5815,11 @@
       ]
     },
     {
-      "t": 60.234,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
-    },
-    {
-      "t": 60.234,
-      "track": 6,
-      "instrument": "trumpet",
-      "vel": 0.9,
-      "pitch": "E4"
+      "t": 60.313,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "E5"
     },
     {
       "t": 60.469,
@@ -5466,27 +5833,47 @@
     },
     {
       "t": 60.469,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "G5"
+    },
+    {
+      "t": 60.469,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "E2"
     },
     {
       "t": 60.469,
       "track": 6,
-      "instrument": "trumpet",
-      "vel": 0.9,
-      "pitch": "G4"
+      "instrument": "ride",
+      "vel": 0.7
     },
     {
-      "t": 60.703,
+      "t": 60.469,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 60.781,
       "track": 2,
       "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
+      "vel": 0.47,
+      "pitch": [
+        "E3",
+        "A3",
+        "D4",
+        "G4"
+      ]
+    },
+    {
+      "t": 60.781,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.47
     },
     {
       "t": 60.938,
@@ -5500,55 +5887,48 @@
     },
     {
       "t": 60.938,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.7,
+      "pitch": "C6"
+    },
+    {
+      "t": 60.938,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "G2"
     },
     {
       "t": 60.938,
       "track": 6,
-      "instrument": "trumpet",
-      "vel": 0.9,
-      "pitch": "C5"
-    },
-    {
-      "t": 61.172,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
+      "instrument": "ride",
+      "vel": 0.62
     },
     {
       "t": 61.406,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.8,
-      "pitch": [
-        "C2",
-        "C3"
-      ]
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.78,
+      "pitch": "C#2"
     },
     {
-      "t": 61.641,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.6,
-      "pitch": "C3"
+      "t": 61.406,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.7
     },
     {
-      "t": 61.875,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "F4",
-        "A4",
-        "C5"
-      ]
+      "t": 61.406,
+      "track": 7,
+      "instrument": "hat",
+      "vel": 0.6
+    },
+    {
+      "t": 61.719,
+      "track": 6,
+      "instrument": "ride",
+      "vel": 0.47
     },
     {
       "t": 61.875,
@@ -5556,225 +5936,191 @@
       "instrument": "grandpiano",
       "vel": 0.95,
       "pitch": [
-        "F2",
-        "F3"
-      ]
-    },
-    {
-      "t": 61.875,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "F4",
-        "A4",
-        "C5"
+        "E3",
+        "A3",
+        "C4"
       ]
     },
     {
       "t": 61.875,
       "track": 4,
-      "instrument": "timpani",
+      "instrument": "upright",
       "vel": 0.95,
-      "pitch": "C2"
+      "pitch": "F2"
     },
     {
-      "t": 62.344,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G4",
-        "B4",
-        "D5"
-      ]
-    },
-    {
-      "t": 62.344,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "G2",
-        "G3"
-      ]
-    },
-    {
-      "t": 62.344,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "G4",
-        "B4",
-        "D5"
-      ]
-    },
-    {
-      "t": 62.344,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 62.813,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 62.813,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "E2",
-        "E3"
-      ]
-    },
-    {
-      "t": 62.813,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 62.813,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "G2"
-    },
-    {
-      "t": 63.281,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "A4",
-        "C5",
-        "E5"
-      ]
-    },
-    {
-      "t": 63.281,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 0.95,
-      "pitch": [
-        "A2",
-        "A3"
-      ]
-    },
-    {
-      "t": 63.281,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.8,
-      "pitch": [
-        "A4",
-        "C5",
-        "E5"
-      ]
-    },
-    {
-      "t": 63.281,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.95,
-      "pitch": "C2"
-    },
-    {
-      "t": 63.516,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.6,
-      "pitch": "G2"
-    },
-    {
-      "t": 63.574,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.7,
-      "pitch": "G2"
-    },
-    {
-      "t": 63.633,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.8,
-      "pitch": "G2"
-    },
-    {
-      "t": 63.691,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 0.9,
-      "pitch": "G2"
-    },
-    {
-      "t": 63.75,
-      "track": 1,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4",
-        "C5",
-        "E5"
-      ]
-    },
-    {
-      "t": 63.75,
-      "track": 2,
-      "instrument": "grandpiano",
-      "vel": 1,
-      "pitch": [
-        "C1",
-        "C2"
-      ]
-    },
-    {
-      "t": 63.75,
-      "track": 3,
-      "instrument": "strings",
-      "vel": 0.85,
-      "pitch": [
-        "C4",
-        "E4",
-        "G4",
-        "C5"
-      ]
-    },
-    {
-      "t": 63.75,
-      "track": 4,
-      "instrument": "timpani",
-      "vel": 1,
-      "pitch": "C2"
-    },
-    {
-      "t": 63.75,
+      "t": 61.875,
       "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
+      "instrument": "trumpet",
+      "vel": 0.855,
+      "pitch": "C4"
+    },
+    {
+      "t": 61.875,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 62.344,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "F3",
+        "B3",
+        "E4"
+      ]
+    },
+    {
+      "t": 62.344,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.95,
+      "pitch": "G2"
+    },
+    {
+      "t": 62.344,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.855,
+      "pitch": "E4"
+    },
+    {
+      "t": 62.344,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 62.813,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "G3",
+        "B3",
+        "D4"
+      ]
+    },
+    {
+      "t": 62.813,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.95,
+      "pitch": "E2"
+    },
+    {
+      "t": 62.813,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.855,
+      "pitch": "D4"
+    },
+    {
+      "t": 62.813,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 63.281,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 0.95,
+      "pitch": [
+        "G3",
+        "C#4",
+        "E4"
+      ]
+    },
+    {
+      "t": 63.281,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.95,
+      "pitch": "A2"
+    },
+    {
+      "t": 63.281,
+      "track": 5,
+      "instrument": "trumpet",
+      "vel": 0.855,
+      "pitch": "E4"
+    },
+    {
+      "t": 63.281,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 0.95
+    },
+    {
+      "t": 63.437,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.6
+    },
+    {
+      "t": 63.541,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.72
+    },
+    {
+      "t": 63.645,
+      "track": 8,
+      "instrument": "brush",
+      "vel": 0.84
+    },
+    {
+      "t": 63.75,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "C4",
+        "E4",
+        "A4",
+        "D5",
+        "G5"
+      ]
+    },
+    {
+      "t": 63.75,
+      "track": 2,
+      "instrument": "grandpiano",
+      "vel": 1,
+      "pitch": [
+        "E3",
+        "A3",
+        "D4",
+        "G4"
+      ]
+    },
+    {
+      "t": 63.75,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.75,
       "pitch": "C6"
     },
     {
       "t": 63.75,
-      "track": 6,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 1,
+      "pitch": "C1"
+    },
+    {
+      "t": 63.75,
+      "track": 4,
+      "instrument": "upright",
+      "vel": 0.9,
+      "pitch": "C1"
+    },
+    {
+      "t": 63.75,
+      "track": 5,
       "instrument": "trumpet",
       "vel": 0.9,
       "pitch": [
@@ -5784,32 +6130,86 @@
     },
     {
       "t": 63.75,
-      "track": 8,
+      "track": 9,
+      "instrument": "kick",
+      "vel": 1
+    },
+    {
+      "t": 63.75,
+      "track": 10,
+      "instrument": "crash",
+      "vel": 0.8
+    },
+    {
+      "t": 63.75,
+      "track": 12,
       "instrument": "impact",
-      "vel": 1,
-      "variant": "hard"
+      "vel": 0.9,
+      "variant": "soft"
     },
     {
       "t": 64.219,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.75,
       "pitch": "E6"
     },
     {
       "t": 64.688,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": "G5"
+    },
+    {
+      "t": 64.688,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.75,
+      "pitch": "G6"
+    },
+    {
+      "t": 64.766,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": "A5"
+    },
+    {
+      "t": 64.844,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": "C6"
+    },
+    {
+      "t": 64.922,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": "D6"
+    },
+    {
+      "t": 65,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.5,
+      "pitch": "E6"
+    },
+    {
+      "t": 65.078,
+      "track": 1,
+      "instrument": "grandpiano",
+      "vel": 0.5,
       "pitch": "G6"
     },
     {
       "t": 65.156,
-      "track": 5,
-      "instrument": "glockenspiel",
-      "vel": 0.8,
+      "track": 3,
+      "instrument": "vibraphone",
+      "vel": 0.75,
       "pitch": "C7"
     }
   ],
-  "audibleUntil": 68.143
+  "audibleUntil": 68.159
 }

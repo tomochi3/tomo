@@ -216,6 +216,7 @@
           <a href="../rich/">リッチ版</a>
         </p>
         <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。EDM版の曲は <a href="https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5" target="_blank" rel="noopener">Suno</a> で作り、映像に合わせて小節の切れ目でつなぎ替えています。場面ごとの効果音は JingleScript（ノック・小銭・シャッターは CC0 の録音）。</p>
+        <p class="credit">「おじゃましまーす」「おじゃましましたー」「ナイスバルク」「キレてるよ」の声：VOICEVOX:ずんだもん</p>
       </div>
     </main>
   </div>
@@ -375,7 +376,7 @@
         function T(v) { return t0 + v * B; }
         var bus = ac.createGain(), lp = ac.createBiquadFilter(), hp = ac.createBiquadFilter();
         lp.type = 'lowpass'; lp.frequency.value = 20000; hp.type = 'highpass'; hp.frequency.value = 20;
-        bus.connect(lp); lp.connect(hp); hp.connect(output);
+        bus.connect(lp); lp.connect(hp); hp.connect(musicBed);
         map.segments.forEach(function (sg) {
           var v0 = sg[0], v1 = sg[1], s0 = sg[2];
           if (v1 <= at) return;
@@ -457,7 +458,51 @@
         });
       }
 
-      var ac = null, output, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
+      var ac = null, output, musicBed, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
+      var voiceFiles = ['welcome', 'goodbye', 'nice-bulk', 'looking-sharp'], voiceData = null;
+      function loadSceneVoices() {
+        if (!voiceData) voiceData = Promise.all(voiceFiles.map(function (name) {
+          return fetch('audio/' + name + '.mp3').then(function (r) {
+            if (!r.ok) throw new Error('voice: ' + name);
+            return r.arrayBuffer();
+          });
+        })).catch(function (error) { voiceData = null; throw error; });
+        return voiceData;
+      }
+      var SCENE_SOUNDS = [
+        { b: 10.5, type: 'knock' }, { b: 11, type: 'knock' },
+        { b: 11.5, voice: 'welcome' }, { b: 44.6, voice: 'goodbye' },
+        { b: 108, voice: 'nice-bulk' }, { b: 110, voice: 'looking-sharp' }
+      ];
+      for (var step = 40; step < 44; step += .5) SCENE_SOUNDS.push({ b: step, type: 'footstep' });
+      for (var photo = 0; photo < 8; photo++) SCENE_SOUNDS.push({ b: 124 + photo * .5, type: 'shutter' });
+      function scheduleSceneSounds(at, voices) {
+        SCENE_SOUNDS.forEach(function (event) {
+          if (event.b < at || (ver === 'edm' && !event.voice)) return; // EDMの効果音は既存トラックを使う
+          var beat = ver === 'classic' ? swingB(event.b) : event.b;
+          var t = t0 + beat * B;
+          if (event.voice) {
+            var source = ac.createBufferSource(), gain = ac.createGain();
+            source.buffer = voices[voiceFiles.indexOf(event.voice)];
+            gain.gain.value = .8; source.connect(gain); gain.connect(output); source.start(t);
+            musicBed.gain.setValueAtTime(1, t - .03);
+            musicBed.gain.linearRampToValueAtTime(.45, t);
+            musicBed.gain.setValueAtTime(.45, t + source.buffer.duration);
+            musicBed.gain.linearRampToValueAtTime(1, t + source.buffer.duration + .12);
+          } else if (event.type === 'knock') {
+            osc('sine', 185, t, .12, env(t, .65, .001, .11, master));
+            noise(t, .035, env(t, .45, .001, .03, filt('bandpass', 750, 1.5, master)));
+          } else if (event.type === 'footstep') {
+            osc('sine', event.b % 2 ? 95 : 115, t, .1, env(t, .35, .002, .09, master));
+            noise(t, .09, env(t, .3, .002, .08, filt('lowpass', 1400, .7, master)));
+          } else if (event.type === 'shutter') {
+            [0, .045].forEach(function (delay) {
+              noise(t + delay, .055, env(t + delay, delay ? .32 : .55, .001, .05, filt('bandpass', delay ? 2200 : 4200, .8, master)));
+            });
+            osc('triangle', 650, t, .025, env(t, .18, .001, .02, master));
+          }
+        });
+      }
       function makeAudio() {
         var C = window.AudioContext || window.webkitAudioContext;
         ac = new C({ latencyHint: 'interactive' });
@@ -465,13 +510,14 @@
         var limiter = ac.createDynamicsCompressor();
         limiter.threshold.value = -3; limiter.knee.value = 0; limiter.ratio.value = 20; limiter.attack.value = .002; limiter.release.value = .15;
         output = ac.createGain(); output.gain.value = muted ? 0 : 1; output.connect(limiter); limiter.connect(ac.destination);
+        musicBed = ac.createGain(); musicBed.connect(output);
         try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
         var comp = ac.createDynamicsCompressor();
         comp.threshold.value = -10; comp.ratio.value = 4; comp.attack.value = .003; comp.release.value = .12;
         // 音を重ねると大きくなりすぎるので、圧縮したあとで全体を下げて割れないようにする
         var trim = ac.createGain(); trim.gain.value = .4;
         master = ac.createGain(); master.gain.value = .9;
-        master.connect(comp); comp.connect(trim); trim.connect(output);
+        master.connect(comp); comp.connect(trim); trim.connect(musicBed);
         drums = ac.createGain(); drums.connect(master);
         music = ac.createGain(); music.connect(master);   // キックのたびに少し下げて、うねらせる
         // 響き：その場で作った残響
@@ -1116,31 +1162,42 @@
         if (b >= END) { finish(); return; }
         raf = requestAnimationFrame(loop);
       }
+      function changeAudioState(context, running) {
+        (running ? context.resume() : context.suspend()).catch(function () {
+          // シークで古いコンテキストを閉じた場合、その保留中の要求は不要。
+          if (ac === context && context.state !== 'closed') notice('音声を切り替えられませんでした。再生ボタンをもう一度押してください');
+        });
+      }
       function start(withSound, at, paused) {
         stop();
         muted = !withSound;
         // 音の準備はクリックの中で始める（スマホはそうしないと鳴らない）
-        makeAudio(); if (ac.state !== 'running') ac.resume();
+        makeAudio(); if (ac.state !== 'running') changeAudioState(ac, true);
         syncSoundButton();
         var a = ac, btns = document.querySelectorAll('[data-play], [data-play-muted], [data-again]');
         // 曲を読み込んでいる間は、押したボタンに「読み込み中…」と出す
         btns.forEach(function (bt) { bt.setAttribute('aria-busy', 'true'); bt.disabled = true; bt.__label = bt.innerHTML; });
         if (busyFrom) busyFrom.textContent = '読み込み中…';
-        var map = null;
-        (ver === 'edm' ? loadEdm() : loadClassic()).then(function (d) {
+        var map = null, sceneVoices = null;
+        Promise.all([ver === 'edm' ? loadEdm() : loadClassic(), loadSceneVoices()]).then(function (data) {
+          if (ac !== a) return null;
+          var d = data[0];
           usePulse(d.pulse);
           map = d.map || null;
-          if (map && d.samples) {
-            map.decoded = {};
-            return Promise.all(Object.keys(d.samples).map(function (nm) {
-              return a.decodeAudioData(d.samples[nm].slice(0)).then(function (sb) { map.decoded[nm] = sb; });
-            })).then(function () { return a.decodeAudioData(d.mp3.slice(0)); });
-          }
-          return a.decodeAudioData(d.mp3.slice(0));
+          return Promise.all(data[1].map(function (bytes) { return a.decodeAudioData(bytes.slice(0)); })).then(function (voices) {
+            sceneVoices = voices;
+            if (map && d.samples) {
+              map.decoded = {};
+              return Promise.all(Object.keys(d.samples).map(function (nm) {
+                return a.decodeAudioData(d.samples[nm].slice(0)).then(function (sb) { map.decoded[nm] = sb; });
+              })).then(function () { return a.decodeAudioData(d.mp3.slice(0)); });
+            }
+            return a.decodeAudioData(d.mp3.slice(0));
+          });
         }).then(function (buf) {
           if (ac !== a) return;   // 待っている間に止められた
           B = map ? map.beat : 60 / BPM;
-          begin(buf, at, paused, map);
+          begin(buf, at, paused, map, sceneVoices);
         }).catch(function () {
           // 読み込めなかったら、その場で鳴らす前のEDM版で流し、そのことを知らせる（選び方としては覚えない）
           if (ac !== a) return;
@@ -1161,7 +1218,7 @@
         app.classList.remove('is-playing'); app.classList.add('is-ended');
         if (focus !== false) document.querySelector('#end').focus({ preventScroll: true });
       }
-      function begin(buf, at, paused, map) {
+      function begin(buf, at, paused, map, sceneVoices) {
         at = Math.max(0, Math.min(END - 1, at || 0));
         size();
         app.classList.remove('is-ended');
@@ -1173,7 +1230,7 @@
             playSegments(buf, map, at);
           } else if (buf) {
             var src = ac.createBufferSource();
-            src.buffer = buf; src.connect(output);
+            src.buffer = buf; src.connect(musicBed);
             t0 = ac.currentTime + .1 - at * B; src.start(ac.currentTime + .1, at * B);
           } else {
             t0 = ac.currentTime + .15 - at * B; next = EV.findIndex(function (e) { return e.b >= at; });
@@ -1183,7 +1240,8 @@
           }
         } else { clock0 = performance.now(); pausedAt = -1; }
         playing = true;
-        if (paused && ac) { ac.suspend(); pauseBtn.textContent = '▶'; pauseBtn.setAttribute('aria-label', '再生'); }
+        if (sceneVoices) scheduleSceneSounds(at, sceneVoices);
+        if (paused && ac) { changeAudioState(ac, false); pauseBtn.textContent = '▶'; pauseBtn.setAttribute('aria-label', '再生'); }
         raf = requestAnimationFrame(loop);
       }
       // ---------- 曲の切り替え（EDM / クラシック）。選んだほうを覚えておく ----------
@@ -1245,7 +1303,7 @@
       pauseBtn.addEventListener('click', function () {
         if (!playing) return;
         if (ac) {
-          if (ac.state === 'running') { ac.suspend(); pauseBtn.textContent = '▶'; pauseBtn.setAttribute('aria-label', '再生'); } else { ac.resume(); pauseBtn.textContent = '❚❚'; pauseBtn.setAttribute('aria-label', '一時停止'); }
+          if (ac.state === 'running') { changeAudioState(ac, false); pauseBtn.textContent = '▶'; pauseBtn.setAttribute('aria-label', '再生'); } else { changeAudioState(ac, true); pauseBtn.textContent = '❚❚'; pauseBtn.setAttribute('aria-label', '一時停止'); }
         } else if (pausedAt >= 0) { clock0 += performance.now() - pausedAt; pausedAt = -1; pauseBtn.textContent = '❚❚'; }
         else { pausedAt = performance.now(); pauseBtn.textContent = '▶'; }
       });

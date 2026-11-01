@@ -459,7 +459,7 @@
       }
 
       var ac = null, output, musicBed, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
-      var voiceFiles = ['welcome', 'goodbye', 'nice-bulk', 'looking-sharp'], voiceData = null;
+      var voiceFiles = ['welcome', 'goodbye', 'nice-bulk', 'looking-sharp'], voiceData = null, burstVoices = [], voicePlayed = {};
       function loadSceneVoices() {
         if (!voiceData) voiceData = Promise.all(voiceFiles.map(function (name) {
           return fetch('audio/' + name + '.mp3').then(function (r) {
@@ -470,26 +470,34 @@
         return voiceData;
       }
       var SCENE_SOUNDS = [
-        { b: 10.5, type: 'knock' }, { b: 11, type: 'knock' },
-        { b: 11.5, voice: 'welcome' }, { b: 44.6, voice: 'goodbye' },
-        { b: 108, voice: 'nice-bulk' }, { b: 110, voice: 'looking-sharp' }
+        { b: 10.5, type: 'knock' }, { b: 11, type: 'knock' }
       ];
       for (var step = 40; step < 44; step += .5) SCENE_SOUNDS.push({ b: step, type: 'footstep' });
       for (var photo = 0; photo < 8; photo++) SCENE_SOUNDS.push({ b: 124 + photo * .5, type: 'shutter' });
-      function scheduleSceneSounds(at, voices) {
+      function scheduleBurstVoice(impact, t) {
+        var name = impact >= 8 && impact <= 16 ? 'welcome' :
+          impact >= 40 && impact <= 48 ? 'goodbye' :
+          impact >= 108 && impact < 110 ? 'nice-bulk' :
+          impact >= 110 && impact <= 112 ? 'looking-sharp' : null;
+        if (!name || voicePlayed[name] || muted || !ac) return;
+        var buffer = burstVoices[voiceFiles.indexOf(name)];
+        if (!buffer) return;
+        voicePlayed[name] = true;
+        t = Math.max(ac.currentTime, t);
+        var source = ac.createBufferSource(), gain = ac.createGain();
+        source.buffer = buffer;
+        gain.gain.value = .8; source.connect(gain); gain.connect(output); source.start(t);
+        musicBed.gain.setValueAtTime(1, Math.max(ac.currentTime, t - .03));
+        musicBed.gain.linearRampToValueAtTime(.45, t);
+        musicBed.gain.setValueAtTime(.45, t + buffer.duration);
+        musicBed.gain.linearRampToValueAtTime(1, t + buffer.duration + .12);
+      }
+      function scheduleSceneSounds(at) {
         SCENE_SOUNDS.forEach(function (event) {
-          if (event.b < at || (ver === 'edm' && !event.voice)) return; // EDMの効果音は既存トラックを使う
+          if (event.b < at || ver === 'edm') return; // EDMの効果音は既存トラックを使う
           var beat = ver === 'classic' ? swingB(event.b) : event.b;
           var t = t0 + beat * B;
-          if (event.voice) {
-            var source = ac.createBufferSource(), gain = ac.createGain();
-            source.buffer = voices[voiceFiles.indexOf(event.voice)];
-            gain.gain.value = .8; source.connect(gain); gain.connect(output); source.start(t);
-            musicBed.gain.setValueAtTime(1, t - .03);
-            musicBed.gain.linearRampToValueAtTime(.45, t);
-            musicBed.gain.setValueAtTime(.45, t + source.buffer.duration);
-            musicBed.gain.linearRampToValueAtTime(1, t + source.buffer.duration + .12);
-          } else if (event.type === 'knock') {
+          if (event.type === 'knock') {
             osc('sine', 185, t, .12, env(t, .65, .001, .11, master));
             noise(t, .035, env(t, .45, .001, .03, filt('bandpass', 750, 1.5, master)));
           } else if (event.type === 'footstep') {
@@ -1012,6 +1020,7 @@
       function ballSound(impact, n, note) {
         if (muted || !ac) return;
         var t = t0 + impact * B, lv = tier(n), pitch = Math.max.apply(null, note.m), v = Math.min(1.6, .9 + n * .04);
+        scheduleBurstVoice(impact, t);
         var pcs = chordTones(impact, note), tones = [];
         for (var o = 72; o < 100; o++) if (pcs.indexOf(o % 12) >= 0) tones.push(o);
         // 1個のとき：短い低音と、旋律の音のガラスの響き
@@ -1240,7 +1249,8 @@
           }
         } else { clock0 = performance.now(); pausedAt = -1; }
         playing = true;
-        if (sceneVoices) scheduleSceneSounds(at, sceneVoices);
+        burstVoices = sceneVoices || [];
+        scheduleSceneSounds(at);
         if (paused && ac) { changeAudioState(ac, false); pauseBtn.textContent = '▶'; pauseBtn.setAttribute('aria-label', '再生'); }
         raf = requestAnimationFrame(loop);
       }
@@ -1263,6 +1273,7 @@
       if (!saved) { try { saved = localStorage.getItem('tomochi-mv-v2'); } catch (e) {} }
       setVer(saved || 'classic');
       function stop() {
+        burstVoices = []; voicePlayed = {};
         balls = []; ballSounds = {}; bursts = []; burstShake = { at: -99, amp: 0 };
         playing = false;
         cancelAnimationFrame(raf); clearInterval(timer);

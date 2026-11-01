@@ -71,8 +71,6 @@
     .day.fun { background: var(--yellow); }
     .note { display: grid; place-items: center; width: 26vmin; height: 20vmin; color: var(--ink); font-family: var(--hand); font-weight: 700; font-size: 6vmin; box-shadow: 1.2vmin 1.6vmin 0 rgba(0, 0, 0, .25); }
     .v-classic .stamp { color: #e8c766 !important; }
-    /* ボールがまとめて弾けたときの「×n」。言葉より手前、左上のあたりに出す */
-    .blabel { position: absolute; left: 0; top: 0; z-index: 4; margin: 0; font-family: var(--display); line-height: 1; white-space: nowrap; color: #ffd23f; -webkit-text-stroke: .35vmin #14120f; paint-order: stroke fill; pointer-events: none; opacity: 0; will-change: transform, opacity; }
     .ring { display: grid; place-items: center; width: 46vmin; height: 46vmin; border-radius: 50%; background: conic-gradient(var(--c) calc(var(--p, 0) * 1turn), rgba(255, 255, 255, .16) 0); -webkit-mask: radial-gradient(closest-side, transparent 72%, #000 73%); mask: radial-gradient(closest-side, transparent 72%, #000 73%); }
 
     /* 上と下の小さな表示 */
@@ -159,7 +157,7 @@
     </div>
 
     <div class="stage" aria-hidden="true">
-      <div class="shake"><canvas></canvas><div class="items"></div><p class="blabel" data-blabel></p></div>
+      <div class="shake"><canvas></canvas><div class="items"></div></div>
       <p class="logo">tomochi.</p>
     </div>
     <div class="hud">
@@ -949,7 +947,8 @@
         balls.push(ball);
       });
       // ---------- 同じ拍に集まったボールの数で、弾け方と音を変える ----------
-      // 1個：ポン / 2〜3個：パーン / 4〜7個：×n のコンボ / 8〜15個：GREAT（画面が揺れる） / 16個〜：FEVER（紙吹雪）
+      // 数は文字で出さず、円の大きさ（面積が数に比例）と色で見せる。1個は小さな青、数が増えるほど大きく、紫→赤→金と熱い色になる
+      // 2〜3個：火花 / 4〜7個：衝撃波 / 8〜15個：画面が揺れて星が散る / 16個〜：虹色にきらめいて紙吹雪
       function tier(n) { return n >= 16 ? 5 : n >= 8 ? 4 : n >= 4 ? 3 : n >= 2 ? 2 : 1; }
       var BURST_COLORS = ['#2549d8', '#ffd23f', '#e2412b', '#5ce1ff', '#ff8fb1', '#7ee08a', '#b28dff'];
       // その拍で鳴っている和音の音（ぶつからないように、ボールの音はこの音だけで作る）
@@ -1000,27 +999,30 @@
           }
         });
       }
-      var blabel = document.querySelector('[data-blabel]');
-      function drawLabel(b) {
-        // いちばん新しい「×n」だけを出す（数が多いほど大きく、ことばも変わる）
-        var bu = null;
-        bursts.forEach(function (x) { if (x.lv >= 3) bu = x; });
-        if (!bu) { blabel.style.opacity = 0; return; }
-        var sec = (b - bu.at) * B, life = bu.lv >= 5 ? 2.2 : 1.2;
-        blabel.textContent = bu.lv >= 5 ? 'FEVER ×' + bu.n : bu.lv >= 4 ? 'GREAT ×' + bu.n : '×' + bu.n;
-        blabel.style.fontSize = (bu.lv >= 5 ? 11 : bu.lv >= 4 ? 8 : 6) + 'vmin';
-        blabel.style.color = bu.lv >= 5 ? BURST_COLORS[Math.floor(sec * 12) % BURST_COLORS.length] : '#ffd23f';
-        blabel.style.opacity = 1 - clamp((sec - life * .6) / (life * .4));
-        var pop = 1 + (1 - clamp(sec / .25)) * .5;
-        blabel.style.transform = 'translate(' + Math.max(16, bu.x - 2 * vmin).toFixed(0) + 'px,' + (bu.y + 6 * vmin - sec * 4 * vmin).toFixed(0) + 'px) scale(' + pop.toFixed(3) + ') rotate(-6deg)';
-        blabel.style.transformOrigin = '0 50%';
-      }
+      // 数に応じた色：1個は青、2個で紫、4個でマゼンタ、8個で赤、16個で金（数が倍になるごとに一段熱く）
+      function burstHue(n) { return 220 + 185 * clamp(Math.log(n) / Math.log(16)); }
+      function burstColor(n, l, a) { return 'hsla(' + (burstHue(n) % 360).toFixed(0) + ',' + Math.min(100, 72 + n * 2) + '%,' + l + '%,' + a + ')'; }
       function drawBursts(b) {
         bursts = bursts.filter(function (bu) { return (b - bu.at) * B < (bu.lv >= 5 ? 2.2 : 1.2); });
-        drawLabel(b);
         g.save();
         bursts.forEach(function (bu) {
           var sec = (b - bu.at) * B, life = bu.lv >= 5 ? 2.2 : 1.2, age = clamp(sec / life), sp = outCubic(clamp(sec / .5));
+          // 円：面積が数に比例する（半径は数の平方根）。ぽんと膨らんで、少し縮んで消える
+          var r = (2.4 + 2.6 * Math.sqrt(bu.n)) * vmin, grow = clamp(sec / .12), fade = 1 - clamp((sec - .15) / .55);
+          var rr = r * (grow < 1 ? outCubic(grow) * 1.18 : 1.18 - .18 * clamp((sec - .12) / .3));
+          if (fade > 0) {
+            var glow = g.createRadialGradient(bu.x, bu.y, 0, bu.x, bu.y, rr * 2.2);
+            glow.addColorStop(0, burstColor(bu.n, 70, .55 * fade)); glow.addColorStop(1, burstColor(bu.n, 50, 0));
+            g.globalAlpha = 1; g.fillStyle = glow; g.beginPath(); g.arc(bu.x, bu.y, rr * 2.2, 0, 7); g.fill();
+            g.fillStyle = burstColor(bu.n, 58, .92 * fade); g.beginPath(); g.arc(bu.x, bu.y, rr, 0, 7); g.fill();
+            g.fillStyle = burstColor(bu.n, 88, .9 * fade); g.beginPath(); g.arc(bu.x, bu.y, rr * .45, 0, 7); g.fill();
+          }
+          // 外へ広がる輪：数が多いほど遠くまで、太く。16個からは虹色に回る
+          var ring = 1 - age;
+          g.lineWidth = (1 + Math.sqrt(bu.n) * .9) * (vmin / 3) * ring;
+          g.globalAlpha = Math.pow(ring, 1.5);
+          g.strokeStyle = bu.lv >= 5 ? 'hsl(' + ((sec * 600) % 360).toFixed(0) + ',95%,62%)' : burstColor(bu.n, 62, 1);
+          g.beginPath(); g.arc(bu.x, bu.y, r + sp * r * (1.2 + Math.sqrt(bu.n) * .35), 0, 7); g.stroke();
           if (bu.lv >= 2) {   // 2色の火花
             for (var j = 0; j < 12 + bu.n * 4 && j < 70; j++) {
               var a = j * 2.399 + bu.seed, d = sp * (10 + hash(j + bu.seed) * (bu.lv >= 4 ? 40 : 22)) * vmin;
@@ -1029,10 +1031,10 @@
             }
           }
           if (bu.lv >= 3) {   // 二重の衝撃波と、色のついた一瞬の光
-            g.globalAlpha = Math.max(0, .35 - sec * 1.2); g.fillStyle = BURST_COLORS[(bu.n + 1) % BURST_COLORS.length];
+            g.globalAlpha = Math.max(0, .35 - sec * 1.2); g.fillStyle = burstColor(bu.n, 60, 1);
             g.fillRect(0, 0, W, H);
             g.lineWidth = 3; g.strokeStyle = '#fff';
-            [1, .6].forEach(function (k) { g.globalAlpha = Math.pow(1 - age, 2); g.beginPath(); g.arc(bu.x, bu.y, sp * k * (bu.lv >= 4 ? 70 : 38) * vmin, 0, 7); g.stroke(); });
+            [1, .6].forEach(function (k) { g.globalAlpha = Math.pow(1 - age, 2); g.beginPath(); g.arc(bu.x, bu.y, sp * k * (14 + 9 * Math.sqrt(bu.n)) * vmin, 0, 7); g.stroke(); });
           }
           if (bu.lv >= 4 && !reduce) {   // 画面じゅうに散らばる星
             for (var s2 = 0; s2 < 24; s2++) {
@@ -1200,7 +1202,6 @@
       setVer(saved || 'classic');
       function stop() {
         balls = []; ballSounds = {}; bursts = []; burstShake = { at: -99, amp: 0 };
-        if (blabel) blabel.style.opacity = 0;
         playing = false;
         cancelAnimationFrame(raf); clearInterval(timer);
         if (ac && ac.state !== 'closed') { try { ac.close(); } catch (e) {} }

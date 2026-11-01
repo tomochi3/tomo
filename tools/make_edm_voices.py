@@ -39,6 +39,9 @@ SR = 44100
 BEAT = json.loads((ROOT / 'mv' / 'edm.timing.json').read_text())['beat']
 LENGTH = 146
 
+# 掛け声を重ねるか（「おじゃましまーす」をもっと明るく録り直すまでは止めておく。True にすると下の VOICES を重ねる）
+USE_VOICES = False
+
 # 使う音声、Suno の言葉の時刻（秒）から切り出す部分と、置く拍、速さ（1 より大きいと速く、高さは変えない）、音量
 VOICES = [
     ('casual', 'おじゃましまーす', 4.20, 5.70, 11.5, 1.0, 1.0),
@@ -111,7 +114,7 @@ def main():
         sfx = decode(Path(tmp) / 'sfx.wav')
     n = min(len(sfx), len(out))
     out[:n] += sfx[:n] * .8
-    for take, text, a, b, beat, tempo, gain in VOICES:
+    for take, text, a, b, beat, tempo, gain in (VOICES if USE_VOICES else []):
         v = decode(TAKES[take], a, b, tempo)
         # 切り出しの頭の息や無音を落として、声が立ち上がる所を拍に合わせる
         level = np.abs(v).max(axis=1)
@@ -123,7 +126,7 @@ def main():
         v[-fade:] *= np.linspace(1, 0, fade)[:, None]
         at = int((beat * BEAT - .012) * SR)   # 声の立ち上がりの少し前（切り出しで残した分）から
         out[at:at + len(v)] += v[:len(out) - at] * gain
-    out /= max(1e-6, np.abs(out).max()) / .9
+    out *= .9 / max(1.0, np.abs(out).max())   # 割れないときは音量を変えない（掛け声の有無で効果音の大きさが変わらないように）
     raw = (out * 32767).astype('<i2').tobytes()
     subprocess.run(['ffmpeg', '-y', '-v', 'error', '-f', 's16le', '-ar', str(SR), '-ac', '2', '-i', '-', '-b:a', '128k', str(OUT)], input=raw, check=True)
     print(f'{OUT.relative_to(ROOT)}: {len(out) / SR:.1f} 秒')

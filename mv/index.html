@@ -42,6 +42,9 @@
     *, *::before, *::after { box-sizing: border-box; }
     html, body { margin: 0; height: 100%; }
     body { background: var(--ink); color: var(--paper); font-family: var(--font); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+    /* ドラッグで文字が選ばれたり、画像を引っぱり出したりしないようにする（画面を押すとボールが飛ぶため） */
+    body { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+    img { -webkit-user-drag: none; }
     .js body { overflow: hidden; }
     a { color: inherit; }
     button { font: inherit; color: inherit; cursor: pointer; }
@@ -946,6 +949,7 @@
         var ball = { at: b, hit: impact, base: target.strength, strength: target.strength, note: target.note, x: x, y: y, seed: Math.random() * 100 };
         balls.push(ball);
       });
+      document.addEventListener('dragstart', function (e) { e.preventDefault(); });   // 画像や文字を引っぱり出さない
       // ---------- 同じ拍に集まったボールの数で、弾け方と音を変える ----------
       // 数は文字で出さず、円の大きさ（面積が数に比例）と色で見せる。1個は小さな青、数が増えるほど大きく、紫→赤→金と熱い色になる
       // 2〜3個：火花 / 4〜7個：衝撃波 / 8〜15個：画面が揺れて星が散る / 16個〜：虹色にきらめいて紙吹雪

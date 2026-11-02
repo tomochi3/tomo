@@ -1023,10 +1023,41 @@
         note.m.forEach(function (m) { pcs[m % 12] = 1; });
         return Object.keys(pcs).map(Number);
       }
+      // ---------- ボールが弾けるときの重低音。数が多いほど深く、長く響く ----------
+      // 邪魔になるところでは鳴らさない・小さくする：
+      //   静かなブレイク（80〜92拍）と、最後に消えていくところ（140拍〜）は鳴らさない
+      //   曲そのものに大きな一撃がある拍は、重ねすぎないように小さくする
+      // 音の高さは、その拍で鳴っている和音のいちばん低い音（EDM はト短調の主音 G）にして、曲とぶつけない
+      function boomRoot(beat, note) {
+        var low = null;
+        if (ver !== 'edm') CNOTES.forEach(function (nt) {
+          if (nt.b <= beat + .02 && beat < nt.b + nt.d) nt.m.forEach(function (m) { if (low === null || m < low) low = m; });
+        });
+        if (low === null) low = ver === 'edm' ? 43 : Math.min.apply(null, note.m);
+        while (low > 39) low -= 12;
+        while (low < 28) low += 12;
+        return low;   // E1〜D#2（41〜78Hz）
+      }
+      function ballBoom(impact, t, n, note) {
+        if (muted || !ac || (impact >= 80 && impact < 92) || impact >= 140) return;
+        var depth = Math.min(1, Math.log(n) / Math.log(16));   // 1個で0、16個で1
+        var peak = (.32 + .38 * depth) * (near(HITS, impact) ? .55 : 1);
+        var len = .45 + 1.25 * depth;                           // 余韻：0.45秒 → 1.7秒
+        var f = hz(boomRoot(impact, note)), out = filt('lowpass', 180, .7, output);
+        // 808 のように、少し上から落ちてきて主音で伸びる
+        var o = osc('sine', f * 2.2, t, len, env(t, peak, .004, len, out));
+        o.frequency.exponentialRampToValueAtTime(f, t + .07);
+        // スマホのスピーカーでも感じられるよう、1オクターブ上をうっすら足す
+        osc('triangle', f * 2, t, len * .5, env(t, peak * .22, .004, len * .45, out));
+        if (n >= 4) {   // 4個から：さらに下にもう一枚。8個からは床が揺れるように長く伸ばす
+          osc('sine', f / 2 < 30 ? f : f / 2, t + .01, len * 1.2, env(t + .01, peak * .5 * depth, .03, len * 1.15, out));
+        }
+      }
       function ballSound(impact, n, note) {
         if (muted || !ac) return;
         var t = t0 + impact * B, lv = tier(n), pitch = Math.max.apply(null, note.m), v = Math.min(1.6, .9 + n * .04);
         scheduleBurstVoice(impact, t);
+        ballBoom(impact, t, n, note);
         var pcs = chordTones(impact, note), tones = [];
         for (var o = 72; o < 100; o++) if (pcs.indexOf(o % 12) >= 0) tones.push(o);
         // 1個のとき：短い低音と、旋律の音のガラスの響き

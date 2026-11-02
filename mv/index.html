@@ -216,7 +216,7 @@
           <a href="../rich/">リッチ版</a>
         </p>
         <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。EDM版の曲は <a href="https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5" target="_blank" rel="noopener">Suno</a> で作り、映像に合わせて小節の切れ目でつなぎ替えています。場面ごとの効果音は JingleScript（ノック・小銭・シャッターは CC0 の録音）。</p>
-        <p class="credit">「おじゃましましたー」「ナイスバルク」「キレてるよ」の声：VOICEVOX:ずんだもん</p>
+        <p class="credit">「おじゃましましたー」の声：VOICEVOX:ずんだもん</p>
       </div>
     </main>
   </div>
@@ -459,7 +459,7 @@
       }
 
       var ac = null, output, musicBed, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
-      var voiceFiles = ['knock', 'goodbye', 'nice-bulk', 'looking-sharp'], voiceData = null, burstVoices = [], voicePlayed = {};
+      var voiceFiles = ['knock', 'goodbye'], voiceData = null, burstVoices = [], voicePlayed = {};
       function loadSceneVoices() {
         if (!voiceData) voiceData = Promise.all(voiceFiles.map(function (name) {
           return fetch('audio/' + name + '.mp3').then(function (r) {
@@ -477,9 +477,7 @@
       function scheduleBurstVoice(impact, t) {
         // 友人の家に着く場面は声を出さず、ドアを「コンコン」とノックする（半拍あけて2回）
         var name = impact >= 8 && impact <= 16 ? 'knock' :
-          impact >= 40 && impact <= 48 ? 'goodbye' :
-          impact >= 108 && impact < 110 ? 'nice-bulk' :
-          impact >= 110 && impact <= 112 ? 'looking-sharp' : null;
+          impact >= 40 && impact <= 48 ? 'goodbye' : null;
         if (!name || voicePlayed[name] || muted || !ac) return;
         var buffer = burstVoices[voiceFiles.indexOf(name)];
         if (!buffer) return;

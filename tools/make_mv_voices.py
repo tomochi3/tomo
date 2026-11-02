@@ -17,8 +17,6 @@ BASE = 'http://127.0.0.1:50021'
 OUT = Path(__file__).resolve().parent.parent / 'mv' / 'audio'
 LINES = [
     ('goodbye', 'おじゃましましたー！', 1.6),
-    ('nice-bulk', 'ナイスバルク！', .85),
-    ('looking-sharp', 'キレてるよ！', .85),
 ]
 
 

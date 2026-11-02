@@ -490,6 +490,10 @@
     .encore__note { margin-top: 14px; font-size: 13px; color: var(--ink-soft); }
     .encore + .foot { margin-top: 56px; }
     .foot { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 18px 24px; margin-top: clamp(110px, 14vw, 180px); padding-top: 36px; padding-bottom: 104px; border-top: 2px solid var(--ink); }  /* 右下の「片付ける」と重ならないよう、下を空ける */
+    /* 見かたの案内（通常版・MV版へ）。ボタンより弱く、文字のリンクで出す */
+    .views { margin-top: 22px; color: var(--ink-soft); font-size: 13px; line-height: 1.6; }
+    .views a { display: inline-flex; align-items: center; min-height: 44px; margin-right: 14px; font-weight: 700; color: var(--ink); text-decoration: underline; text-underline-offset: 4px; }
+    .views a:first-of-type { margin-left: 6px; }
     .foot__bye { font-family: var(--hand); font-size: clamp(22px, 3vw, 30px); }
     .foot__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; font-size: 13px; color: var(--ink-soft); }
     .foot__credit { padding: 0 10px; font-weight: 700; color: var(--ink); }
@@ -637,6 +641,7 @@
           <a class="link" href="#community">運動×勉強会</a>
           <a class="link" href="#works">作品を見る</a>
         </div>
+        <p class="views">ここは、遊びながら知る「リッチ版」です。<a href="../">作品をさっと探すなら通常版</a><a href="../mv/">音楽で見るならMV版</a></p>
       </div>
       <div class="desk" aria-hidden="true">
         <div class="st s1 tape"><img src="img/book-cover.webp" width="560" height="801" alt="" draggable="false"></div>
@@ -692,7 +697,7 @@
             </ul>
           </div>
           <div class="actions rv">
-            <a class="btn" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">Amazonで見る</a>
+            <a class="btn" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">本の詳細を見る</a>
           </div>
         </div>
       </div>
@@ -723,7 +728,7 @@
               <li>人間関係</li><li>健康</li><li>仕事</li><li>習慣</li>
             </ul>
             <div class="actions">
-              <a class="btn" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">Amazonで見る</a>
+              <a class="btn" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">本の詳細を見る</a>
             </div>
           </div>
         </div>
@@ -745,7 +750,7 @@
           <figcaption>運動不足解消もくもく会</figcaption>
         </figure>
         <div class="rv">
-          <h3 class="big"><span class="phrase">勉強の合間に、</span><span class="phrase">運動を。</span></h3>
+          <h3 class="big"><span class="phrase">50分集中したら、</span><span class="phrase">約15分動く。</span></h3>
           <p class="lead">運動を挟むことによって、健康的かつ効率的に勉強を進めています。</p>
           <div class="loop">
             <svg viewBox="0 0 200 200" aria-hidden="true">
@@ -756,10 +761,10 @@
               <text class="t-b" x="100" y="126">運動 約15分</text>
               <g class="orbit"><circle cx="100" cy="20" r="11"/></g>
             </svg>
-            <p>50分勉強して、<br>約15分体を動かす。<span><span class="phrase">それを、</span><span class="phrase">みんなでくり返す。</span></span></p>
+            <p>勉強と運動を、<br>交互にくり返す。<span><span class="phrase">ひとりより、</span><span class="phrase">みんなで。</span></span></p>
           </div>
           <div class="actions">
-            <a class="btn" href="https://kintech.connpass.com" target="_blank" rel="noopener">connpassで見る</a>
+            <a class="btn" href="https://kintech.connpass.com" target="_blank" rel="noopener">次回の日程を見る</a>
           </div>
         </div>
       </div>
@@ -789,7 +794,7 @@
               <li><b>DBなし</b><span>自前のデータベースを持たず、記録はそれぞれの端末に保存します。</span></li>
             </ul>
             <div class="actions">
-              <a class="btn" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">サイトを開く</a>
+              <a class="btn" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">使ってみる</a>
             </div>
           </div>
         </article>
@@ -802,8 +807,8 @@
           </div>
           <div>
             <p class="kicker">Webアプリ・ワリカン</p>
-            <h3 id="wk-title"><span class="phrase">立て替え、</span><span class="phrase">すっきり。</span></h3>
-            <p class="lead"><span class="phrase">誰が誰にいくら払えばいいかを、</span><span class="phrase">自動で計算します。</span></p>
+            <h3 id="wk-title"><span class="phrase">誰が誰に払うか、</span><span class="phrase">すぐ分かる。</span></h3>
+            <p class="lead"><span class="phrase">立て替えを記録するだけで、</span><span class="phrase">精算のしかたを自動で計算します。</span></p>
             <div class="receipt">
               <p class="receipt__head">WARIKAN</p>
               <ul>
@@ -815,7 +820,7 @@
               <div class="receipt__bar" aria-hidden="true"></div>
             </div>
             <div class="actions">
-              <a class="btn" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">サイトを開く</a>
+              <a class="btn" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">使ってみる</a>
             </div>
           </div>
         </article>
@@ -828,7 +833,7 @@
           </div>
           <div>
             <p class="kicker">スマホアプリ・Pumpkin</p>
-            <h3 id="pk-title"><span class="phrase">筋トレを、</span><span class="phrase">SNSで。</span></h3>
+            <h3 id="pk-title"><span class="phrase">筋トレを、</span><span class="phrase">SNSで続ける。</span></h3>
             <p class="lead"><span class="phrase">筋トレSNS「Pumpkin」の</span><span class="phrase">モバイルアプリの開発メンバーです。</span></p>
             <ul class="chips">
               <li>iOS <span>App Storeで公開中</span></li>
@@ -846,7 +851,7 @@
         <ul class="minis">
           <li><a class="mini" href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">
             <img src="img/benri-sm.webp" width="800" height="500" alt="べんりツールズのRM換算表" loading="lazy">
-            <span class="mini__title">べんりツールズ</span><span class="mini__desc">RM換算表や日程調整の時短ツールです。</span><span class="mini__go">サイトを開く</span>
+            <span class="mini__title">べんりツールズ</span><span class="mini__desc">RM換算や日程調整を、すぐ済ませる時短ツールです。</span><span class="mini__go">使ってみる</span>
           </a></li>
           <li><a class="mini" href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">
             <img src="img/5grip-sm.webp" width="800" height="500" alt="チーム制ボルダリング交流会の告知ページ" loading="lazy">
@@ -901,8 +906,8 @@
     <p class="foot__bye">読んでくれて、ありがとう。</p>
     <p class="foot__meta">
       <span>© <span data-year>2026</span> tomochi</span>
-      <a href="../">シンプル版</a>
-      <a href="../mv/">MV版</a>
+      <a href="../">通常版（作品を探す）</a>
+      <a href="../mv/">MV版（音楽で見る）</a>
       <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
       <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
       <a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">ラジオ</a>

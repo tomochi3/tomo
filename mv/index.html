@@ -122,8 +122,16 @@
     .end h3 { margin: 0 0 8px; font-family: var(--display); font-weight: 400; font-size: 20px; }
     .end h3 small { display: block; font-family: var(--font); font-size: 12px; font-weight: 700; letter-spacing: .1em; color: var(--yellow); }
     .end ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
-    .end li a { display: inline-flex; align-items: center; min-height: 40px; font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--yellow); line-height: 1.3; }
+    .end ul { gap: 14px; }
+    .end li b { display: block; font-weight: 700; line-height: 1.4; }
     .end li span { display: block; font-size: 13px; color: #c9c0b0; }
+    /* 次の行動はボタンにする（ラジオ・SNS などの補助リンクより強く） */
+    .end li .go { display: inline-flex; align-items: center; min-height: 40px; margin-top: 6px; padding: 0 14px; border-radius: 999px; background: var(--yellow); color: var(--ink); font-size: 14px; font-weight: 800; text-decoration: none; }
+    .end li .go::after { content: "↗"; margin-left: 6px; }
+    .end li.minis a { display: inline-flex; align-items: center; min-height: 40px; font-weight: 700; text-decoration: none; border-bottom: 2px solid var(--yellow); line-height: 1.3; }
+    .end li.minis span { display: inline; }
+    .intro .views { margin-top: 10px; font-size: 13px; }
+    .intro .views a { display: inline-flex; align-items: center; min-height: 44px; margin: 0 8px; color: var(--paper); font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
     .end__foot { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 18px; margin-top: 22px; font-size: 14px; }
     .end__foot a { display: inline-flex; align-items: center; min-height: 44px; font-weight: 700; }
     .again { min-height: 48px; padding: 0 22px; border: 0; border-radius: 999px; background: var(--yellow); color: var(--ink); font-family: var(--display); font-size: 17px; }
@@ -155,6 +163,7 @@
         <button class="play" type="button" data-play>▶ 再生 <small>音が出ます</small></button>
         <button class="mute" type="button" data-play-muted>音なしで見る</button>
         <button class="mute" type="button" data-list>映像を見ずに、内容の一覧を見る</button>
+        <p class="views">ここは、音楽で見る「MV版」です。<a href="../">作品をさっと探すなら通常版</a><a href="../rich/">遊びながら知るならリッチ版</a></p>
         <p class="warn">画面をクリック・タップすると、上の音符にボールが飛び込みます。盛り上がる区切りが近いときは、ためてまとめて弾けます。同じ区切りにたくさん投げるほど、派手に弾けます。<br>画面の色が拍に合わせて大きく切り替わります。</p>
       </div>
     </div>
@@ -183,23 +192,23 @@
           <section aria-labelledby="e-book">
             <h3 id="e-book"><small>01</small>家なし生活と、日々の工夫</h3>
             <ul>
-              <li><a href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">ホームレス大学院生</a><span>398日間、家がなかった。32人の友人宅、11都府県を渡り歩いた体験記。</span></li>
-              <li><a href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">中の上の人生戦略</a><span>名もなき人は、名もなき人を参考にせよ。人間関係・健康・仕事・習慣。</span></li>
+              <li><b>ホームレス大学院生</b><span>398日間、家がなかった。32人の友人宅、11都府県を渡り歩いた体験記。</span><a class="go" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">本の詳細を見る</a></li>
+              <li><b>中の上の人生戦略</b><span>毎日が最高じゃなくていい。「どこにでもいる人」が、だいたい楽しく生きるための人生戦略。</span><a class="go" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">本の詳細を見る</a></li>
             </ul>
           </section>
           <section aria-labelledby="e-cm">
             <h3 id="e-cm"><small>02</small>運動×勉強会をひらく</h3>
             <ul>
-              <li><a href="https://kintech.connpass.com" target="_blank" rel="noopener">運動不足解消もくもく会</a><span>50分勉強して、約15分体を動かす。それを、みんなでくり返す。</span></li>
+              <li><b>運動不足解消もくもく会</b><span>50分集中したら、約15分動く。それを、みんなでくり返す。</span><a class="go" href="https://kintech.connpass.com" target="_blank" rel="noopener">次回の日程を見る</a></li>
             </ul>
           </section>
           <section aria-labelledby="e-works">
             <h3 id="e-works"><small>03</small>アプリをつくる</h3>
             <ul>
-              <li><a href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">卓球戦績メモ</a><span>試合結果を数タップで記録。</span></li>
-              <li><a href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">ワリカン</a><span>誰が誰にいくら払えばいいかを自動で計算。</span></li>
-              <li><a href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">Pumpkin</a><span>筋トレSNS「Pumpkin」のモバイルアプリの開発メンバー。</span></li>
-              <li><a href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">べんりツールズ</a> ・ <a href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">ボルダリング交流会</a> ・ <a href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener">Classic Ping Pong</a> ・ <a href="https://store.line.me/stickershop/product/23396313/ja" target="_blank" rel="noopener">ニコニコ笑顔</a></li>
+              <li><b>卓球戦績メモ</b><span>卓球の試合結果を、数タップで記録できる。</span><a class="go" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">使ってみる</a></li>
+              <li><b>ワリカン</b><span>誰が誰にいくら払うか、すぐ分かる。</span><a class="go" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">使ってみる</a></li>
+              <li><b>Pumpkin</b><span>筋トレを、SNSで続ける。筋トレSNS「Pumpkin」のモバイルアプリの開発メンバー。</span><a class="go" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">App Storeで見る</a></li>
+              <li class="minis"><span>ほかにも：</span><a href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">べんりツールズ</a> ・ <a href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">ボルダリング交流会</a> ・ <a href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener">Classic Ping Pong</a> ・ <a href="https://store.line.me/stickershop/product/23396313/ja" target="_blank" rel="noopener">ニコニコ笑顔</a></li>
             </ul>
           </section>
         </div>
@@ -212,8 +221,8 @@
           <a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">ラジオ（stand.fm）</a>
           <a href="https://x.com/tamachika11" target="_blank" rel="noopener">X</a>
           <a href="https://github.com/tomochi3" target="_blank" rel="noopener">GitHub</a>
-          <a href="../">シンプル版</a>
-          <a href="../rich/">リッチ版</a>
+          <a href="../">通常版（作品を探す）</a>
+          <a href="../rich/">リッチ版（遊びながら知る）</a>
         </p>
         <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。EDM版の曲は <a href="https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5" target="_blank" rel="noopener">Suno</a> で作り、映像に合わせて小節の切れ目でつなぎ替えています。場面ごとの効果音は JingleScript（ノック・小銭・シャッターは CC0 の録音）。</p>
       </div>

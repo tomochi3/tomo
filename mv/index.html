@@ -458,7 +458,7 @@
         });
       }
 
-      var ac = null, output, musicBed, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
+      var ac = null, output, ballDuck, boomBus, ballOut, musicBed, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
       var voiceFiles = ['knock', 'goodbye'], voiceData = null, burstVoices = [], voicePlayed = {};
       function loadSceneVoices() {
         if (!voiceData) voiceData = Promise.all(voiceFiles.map(function (name) {
@@ -524,7 +524,17 @@
         var limiter = ac.createDynamicsCompressor();
         limiter.threshold.value = -3; limiter.knee.value = 0; limiter.ratio.value = 20; limiter.attack.value = .002; limiter.release.value = .15;
         output = ac.createGain(); output.gain.value = muted ? 0 : 1; output.connect(limiter); limiter.connect(ac.destination);
-        musicBed = ac.createGain(); musicBed.connect(output);
+        // ボールの重低音のときだけ、曲を一瞬下げて低音を目立たせる（セリフで下げる musicBed とは別に持つ）
+        ballDuck = ac.createGain(); ballDuck.connect(output);
+        musicBed = ac.createGain(); musicBed.connect(ballDuck);
+        // 重低音を少し歪ませて倍音を足し、小さなスピーカーでも聞こえるようにする
+        boomBus = ac.createWaveShaper();
+        var curve = new Float32Array(1024);
+        for (var ci = 0; ci < 1024; ci++) { var cx = ci / 511.5 - 1; curve[ci] = Math.tanh(cx * 2.2) / Math.tanh(2.2); }
+        boomBus.curve = curve; boomBus.oversample = '2x';
+        var boomLp = filt('lowpass', 420, .7, output); boomBus.connect(boomLp);
+        // ボールの音（ガラスの響きなど）も、曲を下げる仕組みの外に置く（曲と同じ大きさになるよう .36）
+        ballOut = ac.createGain(); ballOut.gain.value = .36; ballOut.connect(output);
         try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
         var comp = ac.createDynamicsCompressor();
         comp.threshold.value = -10; comp.ratio.value = 4; comp.attack.value = .003; comp.release.value = .12;
@@ -1041,9 +1051,17 @@
       function ballBoom(impact, t, n, note) {
         if (muted || !ac || (impact >= 80 && impact < 92) || impact >= 140) return;
         var depth = Math.min(1, Math.log(n) / Math.log(16));   // 1個で0、16個で1
-        var peak = (.32 + .38 * depth) * (near(HITS, impact) ? .55 : 1);
-        var len = .45 + 1.25 * depth;                           // 余韻：0.45秒 → 1.7秒
-        var f = hz(boomRoot(impact, note)), out = filt('lowpass', 180, .7, output);
+        var peak = (.6 + .4 * depth) * (near(HITS, impact) ? .75 : 1);
+        var len = .5 + 1.3 * depth;                             // 余韻：0.5秒 → 1.8秒
+        var f = hz(boomRoot(impact, note)), out = boomBus;
+        // 自分のボールで鳴ったと分かるように、その瞬間だけ曲を下げる（数が多いほど深く、長く）
+        var dip = .5 - .2 * depth, back = .18 + .35 * depth;
+        ballDuck.gain.cancelScheduledValues(t - .02);
+        ballDuck.gain.setValueAtTime(1, Math.max(ac.currentTime, t - .02));
+        ballDuck.gain.linearRampToValueAtTime(dip, t + .01);
+        ballDuck.gain.setTargetAtTime(1, t + .06, back / 3);
+        // 頭の「ドッ」：短いアタック
+        noise(t, .02, env(t, .25 + .2 * depth, .001, .018, filt('bandpass', 1800, 1, output)));
         // 808 のように、少し上から落ちてきて主音で伸びる
         var o = osc('sine', f * 2.2, t, len, env(t, peak, .004, len, out));
         o.frequency.exponentialRampToValueAtTime(f, t + .07);
@@ -1061,22 +1079,22 @@
         var pcs = chordTones(impact, note), tones = [];
         for (var o = 72; o < 100; o++) if (pcs.indexOf(o % 12) >= 0) tones.push(o);
         // 1個のとき：短い低音と、旋律の音のガラスの響き
-        osc('sine', hz(pitch - 24), t, .16, env(t, .24 * v, .002, .14, master));
-        [0, 12].forEach(function (octave) { osc('sine', hz(pitch + octave), t, .25, env(t, .15 * v, .002, .22, master)); });
-        noise(t, .06, env(t, .09 * v, .001, .05, filt('highpass', 3500, .7, master)));
-        if (lv >= 2) tones.slice(0, 3).forEach(function (m) { osc('triangle', hz(m), t, .4, env(t, .06, .003, .36, master)); });
+        osc('sine', hz(pitch - 24), t, .16, env(t, .24 * v, .002, .14, ballOut));
+        [0, 12].forEach(function (octave) { osc('sine', hz(pitch + octave), t, .25, env(t, .15 * v, .002, .22, ballOut)); });
+        noise(t, .06, env(t, .09 * v, .001, .05, filt('highpass', 3500, .7, ballOut)));
+        if (lv >= 2) tones.slice(0, 3).forEach(function (m) { osc('triangle', hz(m), t, .4, env(t, .06, .003, .36, ballOut)); });
         if (lv >= 3) tones.slice(0, lv >= 4 ? 8 : 5).forEach(function (m, i) {   // 和音の音で駆け上がる
           var at = t + i * B / 6;
-          osc('sine', hz(m), at, .3, env(at, .09, .002, .26, master));
+          osc('sine', hz(m), at, .3, env(at, .09, .002, .26, ballOut));
         });
         if (lv >= 4) {   // シンバルと、和音を少し伸ばす
-          noise(t, 1.4, env(t, .16, .002, 1.3, filt('highpass', 5000, .7, master)));
-          tones.slice(0, 4).forEach(function (m) { osc('triangle', hz(m - 12), t, 1.1, env(t, .05, .02, 1, master)); });
+          noise(t, 1.4, env(t, .16, .002, 1.3, filt('highpass', 5000, .7, ballOut)));
+          tones.slice(0, 4).forEach(function (m) { osc('triangle', hz(m - 12), t, 1.1, env(t, .05, .02, 1, ballOut)); });
         }
         if (lv >= 5) {   // 下から上へ一気にのぼる音と、いちばん大きな和音
-          var sweep = osc('sawtooth', 110, t - B, B, env(t - B, .05, B * .9, .05, filt('lowpass', 2400, 1, master)));
+          var sweep = osc('sawtooth', 110, t - B, B, env(t - B, .05, B * .9, .05, filt('lowpass', 2400, 1, ballOut)));
           sweep.frequency.exponentialRampToValueAtTime(880, t);
-          tones.slice(0, 6).forEach(function (m, i) { osc('sine', hz(m + 12), t + i * .02, 1.4, env(t + i * .02, .07, .004, 1.3, master)); });
+          tones.slice(0, 6).forEach(function (m, i) { osc('sine', hz(m + 12), t + i * .02, 1.4, env(t + i * .02, .07, .004, 1.3, ballOut)); });
         }
       }
       // 弾ける少し前（0.1秒前）に、集まった数で音を決めて予約する。弾けた瞬間に、数に応じた演出を始める

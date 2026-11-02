@@ -3,19 +3,17 @@
 ファイルの先頭が映像の0拍目。拍の長さは mv/edm.timing.json の beat（Suno の曲の拍）に合わせる。
 ページは地図の fx の ['sample', 0, 'edm-voices.mp3', …] で、曲の上にそのまま重ねる。
 
-掛け声：Suno の音声2本を、Suno の言葉の時刻（lyrics alignment）と音の大きさで切り分けて、拍に置く。
+掛け声：Suno の音声を、Suno の言葉の時刻（lyrics alignment）と音の大きさで切り分けて、拍に置く。
         熱くなりすぎないように、どれも落ち着いた声にしている。
           light  … 明るく軽め、落ち着いた言い方（https://suno.com/song/439cf612-6f5d-4614-aab8-fa99c384d6e2、tools/edm/calls-light.mp3）
                    運動部の「ファイトー」「オー」「いっち、にー、さん、しー」
-          casual … リラックスした普通の話し方（https://suno.com/song/63e28949-e76c-4d33-abc3-289642840ce2、tools/edm/calls-casual.mp3）
-                   「おじゃましましたー」
 効果音：JingleScript で、拍の位置に書いて鳴らす（ノックとシャッターと小銭は JingleScript に入っている録音、ほかは部品で作った音）。
 
   拍      映像                         合いの手
   10.5〜11 泊まる先は、友人の家。       ドアをコンコン（声は入れない）
   28・30   家が32軒建つ                インターホン「ピンポーン」
   32〜37   11都府県のはんこ            はんこの「ポン！」を8分音符で
-  40〜44   友人の家を、渡り歩いた。      足音 →「おじゃましましたー！」
+  40〜44   友人の家を、渡り歩いた。      足音
   88〜95   15分 運動                   「ファイトー！」「オー！」×2、「いっち！にー！さん！しー！」
   100〜104 卓球戦績メモ                ピンポン玉の「カコン、カコン」
   104〜107 ワリカン                    小銭の「チャリン」
@@ -33,7 +31,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / 'mv' / 'edm-voices.mp3'
-TAKES = {name: ROOT / 'tools' / 'edm' / f'calls-{name}.mp3' for name in ('light', 'casual')}
+TAKES = {name: ROOT / 'tools' / 'edm' / f'calls-{name}.mp3' for name in ('light',)}
 SR = 44100
 BEAT = json.loads((ROOT / 'mv' / 'edm.timing.json').read_text())['beat']
 LENGTH = 146
@@ -43,7 +41,6 @@ USE_VOICES = False
 
 # 使う音声、Suno の言葉の時刻（秒）から切り出す部分と、置く拍、速さ（1 より大きいと速く、高さは変えない）、音量
 VOICES = [
-    ('casual', 'おじゃましましたー', 7.95, 9.80, 44.6, 1.0, 1.0),
     ('light', 'ファイトー', 0.15, 1.00, 88.0, 1.0, 1.0),
     ('light', 'オー', 1.95, 2.65, 89.0, 1.0, 1.0),
     ('light', 'ファイトー', 3.95, 4.90, 90.0, 1.0, 1.0),

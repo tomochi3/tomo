@@ -1,8 +1,8 @@
-"""MVの短いセリフをVOICEVOX:ずんだもんで生成する。あわせて、友人の家に着く場面のノックの音も書き出す。
+"""MVでボールが弾けたときに鳴らす音を書き出す（mv/audio/）。
 
-VOICEVOXエンジンを http://127.0.0.1:50021 で起動し、
+今はセリフは入れず、友人の家に着く場面のドアのノック（knock.mp3。ページが2回、半拍あけて鳴らす）だけ。
+セリフを足すときは LINES に書き、VOICEVOXエンジン（VOICEVOX:ずんだもん、speaker 3）を http://127.0.0.1:50021 で起動しておく。
 python3 tools/make_mv_voices.py を実行する。Python標準ライブラリとffmpegが必要（ノックは npx で JingleScript 1.1.0 を使う）。
-「おじゃましまーす」は声にせず、ドアのノック（knock.mp3。ページが2回、半拍あけて鳴らす）にしている。
 """
 import io
 import json
@@ -15,9 +15,7 @@ import wave
 
 BASE = 'http://127.0.0.1:50021'
 OUT = Path(__file__).resolve().parent.parent / 'mv' / 'audio'
-LINES = [
-    ('goodbye', 'おじゃましましたー！', 1.6),
-]
+LINES = []   # (ファイル名, セリフ, 最長の秒数)
 
 
 def post(path, params, body=None):

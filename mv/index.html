@@ -216,7 +216,7 @@
           <a href="../rich/">リッチ版</a>
         </p>
         <p class="credit">クラシック版（ジャズ風アレンジ）の曲は <a href="https://github.com/receptron/jinglescript" target="_blank" rel="noopener">JingleScript</a> の楽譜（<a href="classic.json">classic.json</a>）から書き出しています。ピアノの音は Versilian Community Sample Library（CC0）。EDM版の曲は <a href="https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5" target="_blank" rel="noopener">Suno</a> で作り、映像に合わせて小節の切れ目でつなぎ替えています。場面ごとの効果音は JingleScript（ノック・小銭・シャッターは CC0 の録音）。</p>
-        <p class="credit">「おじゃましまーす」「おじゃましましたー」「ナイスバルク」「キレてるよ」の声：VOICEVOX:ずんだもん</p>
+        <p class="credit">「おじゃましましたー」「ナイスバルク」「キレてるよ」の声：VOICEVOX:ずんだもん</p>
       </div>
     </main>
   </div>
@@ -459,7 +459,7 @@
       }
 
       var ac = null, output, musicBed, master, music, drums, verb, noiseBuf, t0 = 0, next = 0, timer = 0, muted = false, clock0 = 0, pausedAt = -1;
-      var voiceFiles = ['welcome', 'goodbye', 'nice-bulk', 'looking-sharp'], voiceData = null, burstVoices = [], voicePlayed = {};
+      var voiceFiles = ['knock', 'goodbye', 'nice-bulk', 'looking-sharp'], voiceData = null, burstVoices = [], voicePlayed = {};
       function loadSceneVoices() {
         if (!voiceData) voiceData = Promise.all(voiceFiles.map(function (name) {
           return fetch('audio/' + name + '.mp3').then(function (r) {
@@ -475,7 +475,8 @@
       for (var step = 40; step < 44; step += .5) SCENE_SOUNDS.push({ b: step, type: 'footstep' });
       for (var photo = 0; photo < 8; photo++) SCENE_SOUNDS.push({ b: 124 + photo * .5, type: 'shutter' });
       function scheduleBurstVoice(impact, t) {
-        var name = impact >= 8 && impact <= 16 ? 'welcome' :
+        // 友人の家に着く場面は声を出さず、ドアを「コンコン」とノックする（半拍あけて2回）
+        var name = impact >= 8 && impact <= 16 ? 'knock' :
           impact >= 40 && impact <= 48 ? 'goodbye' :
           impact >= 108 && impact < 110 ? 'nice-bulk' :
           impact >= 110 && impact <= 112 ? 'looking-sharp' : null;
@@ -484,6 +485,13 @@
         if (!buffer) return;
         voicePlayed[name] = true;
         t = Math.max(ac.currentTime, t);
+        if (name === 'knock') {
+          [0, B / 2].forEach(function (d) {
+            var ks = ac.createBufferSource(), kg = ac.createGain();
+            ks.buffer = buffer; kg.gain.value = 1; ks.connect(kg); kg.connect(output); ks.start(t + d);
+          });
+          return;
+        }
         var source = ac.createBufferSource(), gain = ac.createGain();
         source.buffer = buffer;
         gain.gain.value = .8; source.connect(gain); gain.connect(output); source.start(t);

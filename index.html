@@ -29,6 +29,15 @@
   <header class="header">
     <div class="container header__inner">
       <a class="logo" href="./">tomochi</a>
+      <!-- スマホでは、見かたの切り替えはヘッダーのこのメニューだけにする（ヒーロー下の一覧は出さない） -->
+      <details class="vmenu">
+        <summary>見かた</summary>
+        <ul>
+          <li><a href="./" aria-current="page"><b>通常版</b><span>作品をさっと探す（このページ）</span></a></li>
+          <li><a href="rich/"><b>リッチ版</b><span>遊びながら知る。ドラッグや効果音つき</span></a></li>
+          <li><a href="mv/"><b>MV版</b><span>音楽で見る。約70秒、音が出ます</span></a></li>
+        </ul>
+      </details>
       <nav class="social" aria-label="SNS">
         <a href="https://x.com/tamachika11" target="_blank" rel="noopener" aria-label="X（@tamachika11）">
           <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path fill="currentColor" d="M18.24 2.25h3.31l-7.23 8.26 8.5 11.24h-6.66l-5.21-6.82-5.97 6.82H1.67l7.73-8.84L1.25 2.25h6.83l4.71 6.23 5.45-6.23Zm-1.16 17.52h1.83L7.08 4.13H5.12l11.96 15.64Z"/></svg>
@@ -188,6 +197,11 @@
   </footer>
   <script>
     document.querySelector('[data-year]').textContent = new Date().getFullYear();
+    // 見かたのメニューは、外を押したら閉じる
+    document.addEventListener('click', function (e) {
+      var m = document.querySelector('.vmenu');
+      if (m && m.open && !m.contains(e.target)) m.open = false;
+    });
     // タッチしている間だけカードに is-pressed を付ける（:active はスマホで効かないことがあるため）
     (function () {
       var pressed = null;

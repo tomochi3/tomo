@@ -139,7 +139,8 @@ main:focus { outline: none; }
 }
 
 /* ---------- works ---------- */
-/* PCでは12列の格子に、通常カードは半分・3枚並びは3分の1・小カードは4分の1・注目作品は全幅で置く */
+/* PCでは60列の格子に、通常カードは半分・3枚並びは3分の1・小カードは5分の1・注目作品は全幅で置く
+   （タブレット幅では小カードが細くなりすぎるので2枚で1段） */
 .works {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -147,12 +148,18 @@ main:focus { outline: none; }
 }
 .works > li { grid-column: span 2; }
 .works > li.is-small { grid-column: span 1; }
+/* 60列だと列のすき間が積み重なってはみ出すので、すき間は0にしてカードの左右の余白で空ける */
 @media (min-width: 720px) {
-  .works { grid-template-columns: repeat(12, 1fr); gap: 56px 24px; }
-  .works > li { grid-column: span 6; }
-  .works > li.is-third { grid-column: span 4; }
-  .works > li.is-small { grid-column: span 3; }
+  .works { grid-template-columns: repeat(60, 1fr); gap: 56px 0; margin: 0 -12px; }
+  .works > li { grid-column: span 30; min-width: 0; padding: 0 12px; }
+  .works > li.is-third { grid-column: span 20; }
+  .works > li.is-small { grid-column: span 30; }
   .works > li.is-featured { grid-column: 1 / -1; }
+}
+@media (min-width: 960px) {
+  .works { margin: 0 -10px; }
+  .works > li { padding: 0 10px; }
+  .works > li.is-small { grid-column: span 12; }
 }
 
 /* 同じ段のカードはリンクの位置を下端で揃える */
@@ -224,6 +231,8 @@ main:focus { outline: none; }
 }
 .card__meta {
   display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
   justify-content: space-between;
   align-items: center;
   font-size: 13px;
@@ -240,6 +249,7 @@ main:focus { outline: none; }
   color: #fff;
   font-size: 14px;
   font-weight: 700;
+  white-space: nowrap;
 }
 @media (prefers-color-scheme: dark) { .card__go { color: #0b0b0d; } }
 .card__go::after {

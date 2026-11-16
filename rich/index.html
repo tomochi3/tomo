@@ -448,7 +448,7 @@
     .radio__go { font-family: var(--font); font-size: 14px; font-weight: 700; color: var(--red-ink); -webkit-text-stroke: 0; }
     .more__title span { display: inline-block; font-family: var(--hand); font-size: .7em; color: var(--red-ink); margin-left: 10px; }
     .minis { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px 16px; margin-top: 32px; }
-    @media (min-width: 900px) { .minis { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; } }
+    @media (min-width: 900px) { .minis { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 24px; } }
     .mini { display: flex; flex-direction: column; height: 100%; padding: 8px 8px 14px; background: var(--photo); color: var(--fixed-ink); box-shadow: 0 16px 26px -16px rgba(40, 25, 10, .5); transform: rotate(var(--r, -2deg)); transition: transform .35s var(--bounce); -webkit-tap-highlight-color: transparent; }
     .minis li:nth-child(even) .mini { --r: 2deg; }
     .mini:hover, .mini.is-pressed { transform: rotate(0) translateY(-6px); }
@@ -852,6 +852,10 @@
           <li><a class="mini" href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">
             <img src="img/benri-sm.webp" width="800" height="500" alt="べんりツールズのRM換算表" loading="lazy">
             <span class="mini__title">べんりツールズ</span><span class="mini__desc">RM換算や日程調整を、すぐ済ませる時短ツールです。</span><span class="mini__go">使ってみる</span>
+          </a></li>
+          <li><a class="mini" href="https://github.com/tomochi3/cancel_noise" target="_blank" rel="noopener">
+            <img src="img/cancel_noise-sm.webp" width="800" height="500" alt="ノイズクリーナー for YouTube の設定画面。「唾・口の音を目立たなくする」のスイッチと効き具合のスライダー" loading="lazy">
+            <span class="mini__title">ノイズクリーナー for YouTube</span><span class="mini__desc">YouTubeの唾の音や「えー」を抑えるChrome拡張です。</span><span class="mini__go">GitHubで見る</span>
           </a></li>
           <li><a class="mini" href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">
             <img src="img/5grip-sm.webp" width="800" height="500" alt="チーム制ボルダリング交流会の告知ページ" loading="lazy">
@@ -1537,9 +1541,10 @@
         dumbbell: '<path d="M3 -23H13" stroke-width="1.8"/><rect x="1.5" y="-25.5" width="2.6" height="5" fill="#1c1915" stroke="none"/><rect x="11.9" y="-25.5" width="2.6" height="5" fill="#1c1915" stroke="none"/>',
         climber: '<path d="M-5.2 -22.5a5.2 5.2 0 0 1 10.4 0Z" fill="#ffd23f" stroke-width="1.2"/><circle cx="-8" cy="-11" r="3" stroke="#e2412b" stroke-width="1.4"/>',
         tools: '<path d="M6 -14l5.5-5.5" stroke="#7d8591" stroke-width="2.2"/><path d="M10.5 -21.5a2.6 2.6 0 1 0 2.6 2.6l-1.6.2-1.2-1.2Z" fill="#7d8591" stroke="none"/>',
+        quiet: '<path d="M-5.5 -27a5.5 5.5 0 0 1 11 0" stroke-width="1.6"/><rect x="-7.2" y="-28.5" width="3" height="5" rx="1.2" fill="#1f8f7a" stroke-width="1"/><rect x="4.2" y="-28.5" width="3" height="5" rx="1.2" fill="#1f8f7a" stroke-width="1"/>',
         smile: '<circle cx="0" cy="-22" r="7" fill="#ffc4d3" stroke-width="1.4"/><path d="M-4.4 -22.4l1.7-2.2 1.7 2.2M1 -22.4l1.7-2.2 1.7 2.2" stroke-width="1.1"/><path d="M-1.8 -20.4h3.6l-1.8 2.4z" fill="#1c1915" stroke="none"/>'
       };
-      var CROWD_SAY = { reader: '読ませて〜', macho: 'ナイスバルク！', pingpong: 'ラリーしよ！', money: 'ワリカンで！', study: 'もくもく…', climber: 'ガンバ！', tools: 'べんり〜！', smile: 'にこにこ〜' };
+      var CROWD_SAY = { reader: '読ませて〜', macho: 'ナイスバルク！', pingpong: 'ラリーしよ！', money: 'ワリカンで！', study: 'もくもく…', climber: 'ガンバ！', tools: 'べんり〜！', quiet: 'しーっ…', smile: 'にこにこ〜' };
       function crowdType(el) {
         if (el.matches('.s1, .s2, .cover')) return 'reader';
         if (el.matches('.s5, .pumpkin')) return 'macho';
@@ -1549,7 +1554,7 @@
         if (el.matches('.phone')) { var art = el.closest('article'); return art && art.getAttribute('aria-labelledby') === 'wk-title' ? 'money' : 'pingpong'; }
         if (el.matches('.mini')) {
           var h = el.getAttribute('href');
-          return /benri/.test(h) ? 'tools' : /5Grip/.test(h) ? 'climber' : /pingpong2/.test(h) ? 'pingpong' : /line\.me/.test(h) ? 'smile' : '';
+          return /benri/.test(h) ? 'tools' : /cancel_noise/.test(h) ? 'quiet' : /5Grip/.test(h) ? 'climber' : /pingpong2/.test(h) ? 'pingpong' : /line\.me/.test(h) ? 'smile' : '';
         }
         return '';
       }

@@ -139,7 +139,7 @@ main:focus { outline: none; }
 }
 
 /* ---------- works ---------- */
-/* 4列の格子に、通常カードは2列ぶん・小カードは1列ぶん・先頭の注目作品は全幅で置く */
+/* PCでは12列の格子に、通常カードは半分・3枚並びは3分の1・小カードは4分の1・注目作品は全幅で置く */
 .works {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -148,7 +148,10 @@ main:focus { outline: none; }
 .works > li { grid-column: span 2; }
 .works > li.is-small { grid-column: span 1; }
 @media (min-width: 720px) {
-  .works { grid-template-columns: repeat(4, 1fr); gap: 56px 24px; }
+  .works { grid-template-columns: repeat(12, 1fr); gap: 56px 24px; }
+  .works > li { grid-column: span 6; }
+  .works > li.is-third { grid-column: span 4; }
+  .works > li.is-small { grid-column: span 3; }
   .works > li.is-featured { grid-column: 1 / -1; }
 }
 

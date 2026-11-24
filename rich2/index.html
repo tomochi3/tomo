@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tomochi — リッチ版2（3案）</title>
+  <meta name="description" content="tomochi のポートフォリオ、リッチ版2の意匠案3つ。同じ内容を、路線図・タイマー・一冊の本として組み分けた。">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../favicon.ico?v=2" sizes="48x48">
+  <link rel="icon" href="../icon.svg?v=2" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../apple-touch-icon.png?v=2">
+  <style>
+    @font-face { font-family: "Inter"; src: url("../fonts/inter-latin-var.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+    :root {
+      --bg: #f6f5f1; --card: #ffffff; --ink: #18181a; --soft: #5e5e66; --rule: rgba(24, 24, 26, .12); --accent: #2549d8;
+      --font: "Inter", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic UI", Meiryo, sans-serif;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #121214; --card: #1c1c20; --ink: #ededf0; --soft: #a3a3ad; --rule: rgba(237, 237, 240, .14); --accent: #8aa4ff; color-scheme: dark; }
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body { margin: 0; background: var(--bg); color: var(--ink); font-family: var(--font); line-height: 1.75; font-feature-settings: "palt" 1; }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
+    .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+    header { padding: 40px 0 8px; }
+    .crumb { font-size: 13px; color: var(--soft); margin: 0; }
+    h1 { margin: 6px 0 0; font-size: clamp(28px, 6vw, 44px); line-height: 1.25; font-weight: 900; letter-spacing: -.01em; }
+    .lead { color: var(--soft); max-width: 44em; font-size: 15px; }
+    .plans { list-style: none; margin: 28px 0 0; padding: 0; display: grid; gap: 22px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); }
+    .plan { background: var(--card); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 0 var(--rule); display: flex; flex-direction: column; }
+    .plan > a { text-decoration: none; display: block; }
+    .plan img { aspect-ratio: 16 / 10; width: 100%; object-fit: cover; border-bottom: 1px solid var(--rule); transition: transform .4s; }
+    .plan > a:hover img { transform: scale(1.02); }
+    .plan__body { padding: 18px 20px 20px; display: flex; flex-direction: column; flex: 1; }
+    .plan__no { font-size: 12px; font-weight: 800; letter-spacing: .08em; color: var(--soft); }
+    .plan h2 { margin: 2px 0 0; font-size: 24px; line-height: 1.3; font-weight: 900; }
+    .plan h2 a { text-decoration: none; }
+    .plan h2 a:hover { text-decoration: underline; text-underline-offset: 5px; }
+    .plan p { margin: 8px 0 0; font-size: 14.5px; color: var(--soft); }
+    .plan dl { margin: 14px 0 0; display: grid; grid-template-columns: 4.5em 1fr; gap: 6px 10px; font-size: 13.5px; border-top: 1px solid var(--rule); padding-top: 12px; }
+    .plan dt { font-weight: 800; }
+    .plan dd { margin: 0; color: var(--soft); }
+    .open { margin-top: auto; padding-top: 16px; }
+    .open a { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 99px; background: var(--ink); color: var(--bg); text-decoration: none; font-weight: 800; font-size: 14px; }
+    .open a::after { content: "→"; }
+    section { margin-top: 48px; }
+    h2.sec { font-size: 20px; font-weight: 900; margin: 0 0 10px; }
+    .table-wrap { overflow-x: auto; background: var(--card); border-radius: 12px; box-shadow: 0 1px 0 var(--rule); }
+    table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 14px; }
+    th, td { text-align: left; vertical-align: top; padding: 12px 14px; border-bottom: 1px solid var(--rule); }
+    thead th { font-size: 12px; letter-spacing: .06em; color: var(--soft); }
+    tbody th { white-space: nowrap; }
+    tr:last-child > * { border-bottom: 0; }
+    .notes { font-size: 14px; color: var(--soft); padding-left: 1.2em; }
+    .notes li + li { margin-top: 6px; }
+    footer { margin: 48px auto 0; padding: 20px 0 36px; border-top: 1px solid var(--rule); font-size: 13px; color: var(--soft); display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <p class="crumb"><a href="../">tomochi</a> ／ リッチ版2（作りかけ）</p>
+    <h1>リッチ版2：同じ内容で、3つの組み方</h1>
+    <p class="lead">3案とも、載せている文言・作品・リンクは同じです（本2冊、もくもく会、作品8つ、SNS）。違うのは、tomochi の活動のどこを画面の骨組みにしたかと、それに合わせた字・地・線・画像・操作の関係だけです。見る人が「どんな人か分かって、本・会・アプリのどれを開くか決められる」かどうかで比べてください。</p>
+  </header>
+
+  <main class="wrap">
+    <ul class="plans">
+      <li class="plan">
+        <a href="a/" tabindex="-1" aria-hidden="true"><img src="img/a.webp" width="800" height="500" alt=""></a>
+        <div class="plan__body">
+          <span class="plan__no">案A</span>
+          <h2><a href="a/">398日線</a></h2>
+          <p>友人宅を渡り歩いた398日を、駅から駅への乗り継ぎとして読む。本・会・作品を3本の路線にし、11の駅を順に巡る。</p>
+          <dl>
+            <dt>字</dt><dd>駅名標のように、太い和文の下に小さな英字。駅番号（B01・M01・W01）。発車標はドット文字。</dd>
+            <dt>地・線</dt><dd>白い標識板と黒い吊り案内。路線色（朱・緑・青）の太い1本の線。</dd>
+            <dt>動き</dt><dd>398 がパタパタと数え上がる。発車標の行き先が入れ替わる。スクロールで車両が進み、ヘッダーに「現在地」。</dd>
+          </dl>
+          <p class="open"><a href="a/">案Aを開く</a></p>
+        </div>
+      </li>
+      <li class="plan">
+        <a href="b/" tabindex="-1" aria-hidden="true"><img src="img/b.webp" width="800" height="500" alt=""></a>
+        <div class="plan__body">
+          <span class="plan__no">案B</span>
+          <h2><a href="b/">50｜15</a></h2>
+          <p>もくもく会の「50分集中して、約15分動く」を、ページ全体のリズムにする。読むもの（本・アプリ）は集中、体を使うもの（会・ボルダリング・卓球）はうごく。</p>
+          <dl>
+            <dt>字</dt><dd>等幅の大きな数字（経過分）と太い和文。</dd>
+            <dt>地・線</dt><dd>集中は静かな紙色、うごくは橙の面。ストップウォッチの目盛り。</dd>
+            <dt>動き</dt><dd>スクロールで時計が00:00→65:00へ進む。「1セットを65秒で体験」で、50秒集中＋15秒うごくを画面いっぱいで体験（音つき）。</dd>
+          </dl>
+          <p class="open"><a href="b/">案Bを開く</a></p>
+        </div>
+      </li>
+      <li class="plan">
+        <a href="c/" tabindex="-1" aria-hidden="true"><img src="img/c.webp" width="800" height="500" alt=""></a>
+        <div class="plan__body">
+          <span class="plan__no">案C</span>
+          <h2><a href="c/">一冊の本として</a></h2>
+          <p>二冊の著書をもつ書き手として、サイトを一冊の本の部品で組む。扉・目次・章・柱・ノンブル・索引・奥付。</p>
+          <dl>
+            <dt>字</dt><dd>しっぽり明朝の縦組み。作品は辞書の見出し語（読みがな付き）。</dd>
+            <dt>地・線</dt><dd>生成りの紙と罫、目次の点線。朱はしおり紐の一本だけ。</dd>
+            <dt>動き</dt><dd>しおり紐が読み進めるほど垂れ、いまの章を縦書きで出す。押すと目次。章の中身は右から左へ、頁をめくるように現れる。</dd>
+          </dl>
+          <p class="open"><a href="c/">案Cを開く</a></p>
+        </div>
+      </li>
+    </ul>
+
+    <section aria-labelledby="cmp-title">
+      <h2 class="sec" id="cmp-title">比べるところ</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th scope="col">見るところ</th><th scope="col">案A 398日線</th><th scope="col">案B 50｜15</th><th scope="col">案C 一冊の本</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">最初の画面で分かること</th><td>キャッチコピーと「398日」、右の発車標でいま開ける本・会・アプリの名前</td><td>キャッチコピーと、50分＋15分のダイヤル（もくもく会の人だと分かる）</td><td>縦組みのキャッチコピーと「ともち 著」。作品名はまだ見えない</td></tr>
+            <tr><th scope="row">作品の探しやすさ</th><td>高い。駅番号と路線色で分類が一目で、全11件が同じ形で並ぶ</td><td>中。時間の区切りで分けたので、分類名より「読む／動く」で探すことになる</td><td>中。目次としおりで章へ飛べるが、作品は第四章の索引にまとまる</td></tr>
+            <tr><th scope="row">題材が出ているところ</th><td>398日の移動 → 路線・乗換・終点</td><td>もくもく会のリズム → 時計・目盛り・橙の運動区間</td><td>著書 → 縦組み・目次・奥付・しおり紐</td></tr>
+            <tr><th scope="row">気になるところ</th><td>情報が多く、標識らしさの分だけ硬い。リッチ版（手書き・付箋）とは逆の印象</td><td>作品を時間に割り当てる理由づけが少し強引（例：ツールを「ととのえる」に）</td><td>アプリやゲームの軽さと、明朝の静けさの相性。書体ファイルが重め（約140KB）</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section aria-labelledby="note-title">
+      <h2 class="sec" id="note-title">作り方のメモ</h2>
+      <ul class="notes">
+        <li>案出しの手順は <a href="https://github.com/RNA4219/anything-frontend-art-direction">anything-frontend-art-direction</a> に沿いました。題材の固有のもの（398日・50分と15分・著書）から骨組みを選び、同じ内容・同じ幅で、字・地・線・画像と操作の関係が違う案にしています（色だけの差にはしていません）。</li>
+        <li>参考にした見本は同リポジトリの作品案内（駅の案内サイン、編集的な組版など）の記述までで、元の制作記録や画像はこの作業では開いていません（未確認）。</li>
+        <li>3案とも、ライト／ダーク、動きを減らす設定、スマホ幅（390px）とPC幅（1280px）で表示を確認しています。画像は rich/img/ を使っています。</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer class="wrap"><span>© <span data-year>2026</span> tomochi</span><a href="../">通常版</a><a href="../rich/">リッチ版</a><a href="../mv/">MV版</a></footer>
+  <script>document.querySelector('[data-year]').textContent = new Date().getFullYear();</script>
+</body>
+</html>

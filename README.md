@@ -14,6 +14,11 @@ rich/audio/     リッチ版で生き物たちが歌う1節（歌声：VOICEVOX:
 rich/fonts/     リッチ版の見出し（Dela Gothic One）と手書き（Yomogi）。ページで使う文字だけに絞ったもの。ライセンスは OFL-*.txt（SIL OFL 1.1）
 gpu/            GPU版（作りかけ。ほかのページからはリンクしていない。https://tomochi3.github.io/tomo/gpu/）。縦に長い1ページではなく、ステージを左右に切り替えるゲーム画面。スコア・レベル・ミッション（記録は localStorage）、壊せる見出しのブロック、各ステージに隠したデータの欠片がある。背景のマス目と見出しの 3D ブロックは WebGPU で描き、見出しは HTML-in-Canvas が使えればそれでテクスチャにし、無ければ文字の位置を測って描き写す。WebGPU が使えないブラウザでは CSS で表示する。画像は rich/img/ を使う
 mv/             MV版（「音楽で見る」版。通常版・リッチ版から行ける。https://tomochi3.github.io/tomo/mv/）。約70秒の曲に合わせたモーショングラフィックスで、スクロールせずに全部の内容を紹介する。曲は Web Audio でその場で鳴らすオリジナル（128 BPM、イ短調）で、映像は同じ拍の表を見て動くので音とずれない。最後に、内容とリンクの一覧（JavaScript が無いときはこれだけ）を出す。フォントは rich/fonts/、画像は rich/img/ を使う。曲は「クラシック」（既定）と「EDM」を切り替えられる（選んだほうを覚える。?v=edm / ?v=classic でも指定できる）。クラシック版の映像は、楽器そのものは描かず、演奏会を思わせる光と細い金の線だけで出す（弦のようにふるえる線、指揮のひと振りの弧、ファンファーレの光の筋、振り子の点、ティンパニの波紋、旋律が光の点で流れる5本線、鳴っている高さで光る縦線）。どれも曲の音の時刻で動く。クラシック版（名曲のジャズ風アレンジ。裏拍の8分音符は拍の2/3まで跳ねさせ、映像も同じだけ遅らせる）は JingleScript の楽譜 mv/classic.json を tools/make_classic.py で書き、`npx -y jinglescript@1.1.0 render mv/classic.json -o mv/classic.mp3` で mv/classic.mp3 と mv/classic.timing.json に書き出したもの。映像は timing.json の音の時刻で揺れる。映像を見ずに内容の一覧だけを見ることもでき、動きを減らす設定の人には最初から一覧を見せる。EDM版の曲は Suno で作ったクラブトラック（mv/edm.mp3、https://suno.com/song/42d3ab13-9956-4ca3-9793-486df35198c5）で、tools/make_edm_map.py が映像の拍に合わせて小節の切れ目でつなぎ替える地図と、映像を揺らすきっかけ（mv/edm.timing.json）を書き出す。読み込めないときは、その場で鳴らす前の曲で流す。画面を押すとボールが音符へ飛び、同じ拍に集まった数で弾け方と音が変わる（弾けるたびに、その拍の和音のいちばん低い音で重低音が鳴り、数が多いほど深く長く響く。自分のボールで鳴ったと分かるよう、その瞬間だけ曲を下げ、低音を少し歪ませて小さなスピーカーでも聞こえるようにしている。静かなブレイクと最後の消えていくところでは鳴らさず、曲に大きな一撃がある拍では小さくする。数は文字で出さず、弾ける円の面積を数に比例させ、色も青→紫→赤→金と熱くしていく。2個から火花、4個から衝撃波、8個から画面が揺れて星、16個から虹色の輪と紙吹雪）。単調にならないよう、地図の fx に書いた DJ 風の手（フィルター・ドロップ前の無音・スタッター・テープストップ・ストップタイム・刻み・ライザー）をページがその場で曲にかける。場面ごとの合いの手の効果音を JingleScript で鳴らし、1本の音 mv/edm-voices.mp3 にして重ねる（tools/make_edm_voices.py）。Suno の音声の運動部の掛け声（tools/edm/calls-light.mp3）も重ねられるが、今は止めている
+rich2/          リッチ版2（作りかけ・意匠案3つ。ほかのページからはリンクしていない。https://tomochi3.github.io/tomo/rich2/）。rich2/index.html が案の一覧と比較表。内容（文言・作品・リンク）は3案で同じで、字・地・線・画像と操作の関係だけを変えている。案の出し方は https://github.com/RNA4219/anything-frontend-art-direction に沿った。画像は rich/img/ を使う
+rich2/a/        案A「398日線」。398日の移動を路線図にし、本・会・作品を3本の路線の駅として巡る。発車標（DotGothic16）、398の反転フラップ、スクロールで進む車両と「現在地」
+rich2/b/        案B「50｜15」。もくもく会の「50分集中して、約15分動く」をページのリズムにする。スクロールで進む65分の時計と、1セットを65秒で体験するタイマー
+rich2/c/        案C「一冊の本として」。扉・目次・章・柱・ノンブル・索引・奥付で組む縦組みの明朝（しっぽり明朝）。読み進めると垂れるしおり紐と目次
+rich2/fonts/    リッチ版2で使う文字だけに絞った DotGothic16 としっぽり明朝。作り方は tools/subset_rich2_fonts.py、ライセンスは OFL-*.txt（SIL OFL 1.1）
 css/style.css   スタイル（ライト / ダークはOSの設定に追従）
 img/            作品のサムネイル（WebP。小カード用は 800×500 で名前が -sm）
 fonts/          Inter（英字用、可変ウェイト）。Google Fonts は使わず、ここから読み込む。ライセンスは LICENSE-Inter.txt（SIL OFL 1.1）
@@ -34,7 +39,7 @@ push すると GitHub Actions（`.github/workflows/check.yml`）で次を確認�
 
 ```sh
 python3 tools/check_links.py
-npx html-validate@8.29.0 index.html rich/index.html gpu/index.html mv/index.html 404.html
+npx html-validate@8.29.0 index.html rich/index.html gpu/index.html mv/index.html rich2/index.html rich2/a/index.html rich2/b/index.html rich2/c/index.html 404.html
 ```
 
 ## ローカルで見る

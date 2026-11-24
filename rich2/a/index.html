@@ -175,6 +175,7 @@
     .st__go { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; font-weight: 800; font-size: 14px; color: var(--c); }
     .st__go::after { content: "→"; transition: transform .2s; }
     .st__card:hover .st__go::after { transform: translateX(4px); }
+    .appicon { display: inline-block; width: 1.15em; height: 1.15em; border-radius: 22%; vertical-align: -.18em; margin-right: .35em; box-shadow: 0 0 0 1px rgba(127,127,127,.25); }
     .st__img { border-radius: 4px; overflow: hidden; background: var(--ground); justify-self: start; }
     @media (min-width: 640px) { .st__img { justify-self: end; } }
     .st__img img { width: 100%; }
@@ -331,11 +332,11 @@
               <a class="st__card" href="https://apps.apple.com/jp/app/cutplay/id6836113662" target="_blank" rel="noopener">
                 <div>
                   <div class="st__meta"><span class="badge"><span>W<small>01</small></span></span><span class="st__kind">iOS</span></div>
-                  <h3 class="st__name">CutPlay</h3>
+                  <h3 class="st__name"><img class="appicon" src="../img/cutplay-icon.webp" width="240" height="240" alt="" loading="lazy">CutPlay</h3>
                   <p class="st__desc">縦動画を、さくっと編集。スマホで撮った縦長の動画を、縦のまま手軽に編集できるiPhoneアプリ。</p>
                   <span class="st__go">App Storeで見る</span>
                 </div>
-                <div class="st__img is-phone"><img src="../../rich/img/cutplay-phone.webp" width="780" height="1688" alt="CutPlay のタイトル画像。縦長の動画とカット編集のタイムライン" loading="lazy"></div>
+                <div class="st__img is-phone"><img src="../img/cutplay-screen.webp" width="600" height="1300" alt="CutPlay の画面。「試合を、プレイだけに。」の見出しと、動画を選ぶボタン、編集した動画の一覧" loading="lazy"></div>
               </a>
             </li>
             <li class="st" data-no="W02" data-name="ワリカン">

@@ -263,6 +263,8 @@
     @media (max-width: 559px) { .chap-head { grid-template-columns: 1fr; } .chap-no { grid-row: auto; margin-bottom: 10px; font-size: 72px; } }
     .chap-title { font-family: var(--display); font-weight: 400; font-size: clamp(32px, 5.6vw, 68px); line-height: 1.1; }
     .chap-sub { font-family: var(--hand); font-size: clamp(18px, 2.3vw, 24px); color: var(--red-ink); line-height: 1.45; }
+    .kicker--with-icon { gap: 8px; }
+    .kicker--with-icon img { border-radius: 6px; }
     .kicker { display: inline-flex; align-items: center; min-height: 36px; padding: 0 14px; border: 2px solid var(--ink); border-radius: 999px; background: var(--card); font-size: 14px; font-weight: 700; }
     .big { margin-top: 18px; font-family: var(--display); font-weight: 400; font-size: clamp(32px, 5vw, 58px); line-height: 1.25; }
     .lead { margin-top: 18px; color: var(--ink-soft); font-size: clamp(16px, 1.8vw, 18px); line-height: 1.95; }
@@ -782,10 +784,10 @@
         <article class="app" data-tilt aria-labelledby="cp-title">
           <div class="pong" aria-hidden="true"><i></i></div>
           <div class="app__media">
-            <div class="phone"><img src="img/cutplay-phone.webp" width="780" height="1688" alt="CutPlay のタイトル画像。縦長の動画とカット編集のタイムライン" loading="lazy"></div>
+            <div class="phone"><img src="img/cutplay-phone.webp" width="780" height="1688" alt="" loading="lazy"></div>
           </div>
           <div>
-            <p class="kicker">iPhoneアプリ・CutPlay</p>
+            <p class="kicker kicker--with-icon"><img src="../rich2/img/cutplay-icon.webp" width="24" height="24" alt="" loading="lazy">iPhoneアプリ・CutPlay</p>
             <h3 id="cp-title"><span class="phrase">縦動画を、</span><span class="phrase">さくっと編集。</span></h3>
             <p class="lead"><span class="phrase">スマホで撮った縦長の動画を、</span><span class="phrase">縦のまま手軽に編集できる</span><span class="phrase">iPhoneアプリです。</span></p>
             <ul class="chips">

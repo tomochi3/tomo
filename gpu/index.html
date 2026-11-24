@@ -146,6 +146,8 @@
     .apps { display: grid; gap: 20px; }
     @media (min-width: 860px) { .apps { grid-template-columns: repeat(3, 1fr); } }
     .app { display: flex; flex-direction: column; padding: 20px 20px 22px; }
+    .app__name { display: flex; align-items: center; gap: 8px; }
+    .app__name img { border-radius: 7px; }
     .app__shot { display: grid; place-items: center; height: 280px; margin: -4px -4px 16px; border-radius: 12px; background: radial-gradient(circle at 50% 30%, rgba(154, 123, 255, .3), transparent 70%); overflow: hidden; }
     .app__shot img { width: auto; max-height: 260px; border-radius: 22px; box-shadow: 0 20px 40px -16px rgba(0, 0, 0, .9); }
     .app__shot--icon img { max-height: 150px; border-radius: 26%; }
@@ -383,9 +385,9 @@
           <div class="sec-head"><p class="sec-no" aria-hidden="true"><small>STAGE</small>03</p><div><h2 class="sec-title" id="works-title"><span class="phrase">アプリを</span><span class="phrase">つくる</span></h2><p class="sec-sub"><span class="phrase">身近な不便を、</span><span class="phrase">小さなアプリで。</span></p></div></div>
           <div class="apps">
             <article class="glass app rv" data-tilt>
-              <div class="app__shot"><img src="../rich/img/cutplay-phone.webp" width="780" height="1688" alt="CutPlay のタイトル画像。縦長の動画とカット編集のタイムライン" loading="lazy"></div>
+              <div class="app__shot"><img src="../rich/img/cutplay-phone.webp" width="780" height="1688" alt="" loading="lazy"></div>
               <p class="kind">iPhoneアプリ</p>
-              <h3>CutPlay</h3>
+              <h3 class="app__name"><img src="../rich2/img/cutplay-icon.webp" width="28" height="28" alt="" loading="lazy">CutPlay</h3>
               <p>縦動画を、さくっと編集。スマホで撮った縦長の動画を、縦のまま手軽に編集できます。</p>
               <div class="actions"><a class="btn" href="https://apps.apple.com/jp/app/cutplay/id6836113662" target="_blank" rel="noopener">App Storeで見る</a></div>
             </article>

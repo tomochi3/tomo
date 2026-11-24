@@ -223,6 +223,12 @@ main:focus { outline: none; }
   font-weight: 700;
   letter-spacing: -.01em;
 }
+.card__title--with-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.card__title--with-icon img { border-radius: 8px; }
 .card__desc {
   margin-top: 4px;
   text-wrap: pretty;

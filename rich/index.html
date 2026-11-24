@@ -779,22 +779,20 @@
       </div>
 
       <div class="rv">
-        <article class="app" data-tilt aria-labelledby="tt-title">
+        <article class="app" data-tilt aria-labelledby="cp-title">
           <div class="pong" aria-hidden="true"><i></i></div>
           <div class="app__media">
-            <div class="phone"><img src="img/tt_record-phone.webp" width="780" height="1688" alt="卓球戦績メモの戦績画面。勝敗、勝率、対戦相手別の成績が並ぶ" loading="lazy"></div>
+            <div class="phone"><img src="img/cutplay-phone.webp" width="780" height="1688" alt="CutPlay のタイトル画像。縦長の動画とカット編集のタイムライン" loading="lazy"></div>
           </div>
           <div>
-            <p class="kicker">Webアプリ・卓球戦績メモ</p>
-            <h3 id="tt-title"><span class="phrase">試合のすべてを、</span><span class="phrase">数タップで。</span></h3>
-            <p class="lead"><span class="phrase">結果を記録して、</span><span class="phrase">相手ごとの成績を</span><span class="phrase">振り返れる卓球アプリです。</span></p>
-            <ul class="checks">
-              <li><b>1点ごと</b><span>11点先取・ジュース・サーブ権の交代を自動で判定します。</span></li>
-              <li><b>暗号化</b><span>友だちとの結果共有を端末ごとの鍵で暗号化し、改ざんも検知します。</span></li>
-              <li><b>DBなし</b><span>自前のデータベースを持たず、記録はそれぞれの端末に保存します。</span></li>
+            <p class="kicker">iPhoneアプリ・CutPlay</p>
+            <h3 id="cp-title"><span class="phrase">縦動画を、</span><span class="phrase">さくっと編集。</span></h3>
+            <p class="lead"><span class="phrase">スマホで撮った縦長の動画を、</span><span class="phrase">縦のまま手軽に編集できる</span><span class="phrase">iPhoneアプリです。</span></p>
+            <ul class="chips">
+              <li>iOS <span>App Storeで公開中</span></li>
             </ul>
             <div class="actions">
-              <a class="btn" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">使ってみる</a>
+              <a class="btn" href="https://apps.apple.com/jp/app/cutplay/id6836113662" target="_blank" rel="noopener">App Storeで見る</a>
             </div>
           </div>
         </article>
@@ -865,9 +863,9 @@
             <img src="img/pingpong2-sm.webp" width="800" height="500" alt="Classic Ping Pong のタイトル画面" loading="lazy">
             <span class="mini__title">Classic Ping Pong</span><span class="mini__desc">スピンや溜めショットで遊ぶピンポンです。</span><span class="mini__go">遊ぶ</span>
           </a></li>
-          <li><a class="mini" href="https://store.line.me/stickershop/product/23396313/ja" target="_blank" rel="noopener">
-            <img src="img/line-sm.webp" width="800" height="500" alt="LINEスタンプ「ニコニコ笑顔」。手描きの棒人間や、^^ の顔のスタンプが並んでいる" loading="lazy">
-            <span class="mini__title">ニコニコ笑顔</span><span class="mini__desc">手描きのゆるいLINEスタンプです。</span><span class="mini__go">ストアで見る</span>
+          <li><a class="mini" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">
+            <img src="img/tt_record-sm.webp" width="800" height="500" alt="卓球戦績メモの戦績画面。勝敗、勝率、対戦相手別の成績が並ぶ" loading="lazy">
+            <span class="mini__title">卓球戦績メモ</span><span class="mini__desc">試合結果を数タップで記録する卓球アプリです。</span><span class="mini__go">使ってみる</span>
           </a></li>
         </ul>
         <a class="radio" href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener"><span aria-hidden="true">🎙</span> ラジオもやってます <span class="radio__go">stand.fm で聴く →</span></a>
@@ -1554,7 +1552,7 @@
         if (el.matches('.phone')) { var art = el.closest('article'); return art && art.getAttribute('aria-labelledby') === 'wk-title' ? 'money' : 'pingpong'; }
         if (el.matches('.mini')) {
           var h = el.getAttribute('href');
-          return /benri/.test(h) ? 'tools' : /cancel_noise/.test(h) ? 'quiet' : /5Grip/.test(h) ? 'climber' : /pingpong2/.test(h) ? 'pingpong' : /line\.me/.test(h) ? 'smile' : '';
+          return /benri/.test(h) ? 'tools' : /cancel_noise/.test(h) ? 'quiet' : /5Grip/.test(h) ? 'climber' : /pingpong2|tt_record/.test(h) ? 'pingpong' : /line\.me/.test(h) ? 'smile' : '';
         }
         return '';
       }

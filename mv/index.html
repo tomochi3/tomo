@@ -206,10 +206,10 @@
           <section aria-labelledby="e-works">
             <h3 id="e-works"><small>03</small>アプリをつくる</h3>
             <ul>
-              <li><b>卓球戦績メモ</b><span>卓球の試合結果を、数タップで記録できる。</span><a class="go" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">使ってみる</a></li>
+              <li><b>CutPlay</b><span>縦動画を、さくっと編集できるiPhoneアプリ。</span><a class="go" href="https://apps.apple.com/jp/app/cutplay/id6836113662" target="_blank" rel="noopener">App Storeで見る</a></li>
               <li><b>ワリカン</b><span>誰が誰にいくら払うか、すぐ分かる。</span><a class="go" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">使ってみる</a></li>
               <li><b>Pumpkin</b><span>筋トレを、SNSで続ける。筋トレSNS「Pumpkin」のモバイルアプリの開発メンバー。</span><a class="go" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">App Storeで見る</a></li>
-              <li class="minis"><span>ほかにも：</span><a href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">べんりツールズ</a> ・ <a href="https://github.com/tomochi3/cancel_noise" target="_blank" rel="noopener">ノイズクリーナー for YouTube</a> ・ <a href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">ボルダリング交流会</a> ・ <a href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener">Classic Ping Pong</a> ・ <a href="https://store.line.me/stickershop/product/23396313/ja" target="_blank" rel="noopener">ニコニコ笑顔</a></li>
+              <li class="minis"><span>ほかにも：</span><a href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">べんりツールズ</a> ・ <a href="https://github.com/tomochi3/cancel_noise" target="_blank" rel="noopener">ノイズクリーナー for YouTube</a> ・ <a href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">ボルダリング交流会</a> ・ <a href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener">Classic Ping Pong</a> ・ <a href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">卓球戦績メモ</a></li>
             </ul>
           </section>
         </div>
@@ -678,7 +678,7 @@
       it(96, 100, '03', { cls: 'out', size: 46, y: -8, fx: 'pop' });
       it(96.5, 100, 'アプリを', { size: 10, y: 4 });
       it(97.5, 100, 'つくる', { size: 13, y: 18 });
-      [[100, 'tt_record-phone.webp', '卓球戦績メモ', '試合結果を、数タップで記録。', -1], [104, 'warikan-phone.webp', 'ワリカン', '誰が誰にいくら払うか、自動で計算。', 1]].forEach(function (a) {
+      [[100, 'cutplay-phone.webp', 'CutPlay', '縦動画を、さくっと編集。', -1], [104, 'warikan-phone.webp', 'ワリカン', '誰が誰にいくら払うか、自動で計算。', 1]].forEach(function (a) {
         it(a[0], a[0] + 4, '', { img: a[1], cls: 'phone', w: 26, x: a[4] * -25, y: 0, fx: a[4] < 0 ? 'left' : 'right', rot: a[4] * -4, p: { x: 0, y: -20, w: 36 } });
         it(a[0], a[0] + 4, a[2], { size: 7.5, x: a[4] * 20, y: -8, p: { x: 0, y: 30, size: 10 } });
         it(a[0] + 1, a[0] + 4, a[3], { cls: 'hand', size: 3.8, x: a[4] * 20, y: 8, fx: 'up', p: { x: 0, y: 44, size: 5.4 } });
@@ -687,13 +687,13 @@
       it(108, 112, 'Pumpkin', { size: 10, y: 14 });
       it(109, 112, '筋トレSNS「Pumpkin」の<br>モバイルアプリの開発メンバー', { cls: 'hand', size: 4.6, y: 30, fx: 'up' });
       // 上に3枚、下に2枚。x と y は画面の中心からの位置
-      [['benri-sm.webp', 'べんりツールズ', -25, -21], ['cancel_noise-sm.webp', 'ノイズクリーナー', 0, -21], ['5grip-sm.webp', 'ボルダリング交流会', 25, -21], ['pingpong2-sm.webp', 'Classic Ping Pong', -12.5, 6], ['line-sm.webp', 'ニコニコ笑顔', 12.5, 6]].forEach(function (m, i) {
+      [['benri-sm.webp', 'べんりツールズ', -25, -21], ['cancel_noise-sm.webp', 'ノイズクリーナー', 0, -21], ['5grip-sm.webp', 'ボルダリング交流会', 25, -21], ['pingpong2-sm.webp', 'Classic Ping Pong', -12.5, 6], ['tt_record-sm.webp', '卓球戦績メモ', 12.5, 6]].forEach(function (m, i) {
         it(112 + i * .8, 120, '<b>' + m[1] + '</b>', { img: m[0], cls: 'card card--s', w: 24, size: 3, x: m[2], y: m[3], fx: 'slam', rot: (i % 2 ? 2 : -2) });
       });
       it(116, 120, 'ほかにも、いろいろ。', { size: 6, y: 34, fx: 'up' });
       it(120, 124, '身近な不便を、', { size: 9, y: -9, fx: 'left' });
       it(122, 124, '小さなアプリで。', { size: 10, y: 9, fx: 'right' });
-      ['book-cover.webp', 'tt_record-phone.webp', 'book2-cover.webp', 'warikan-phone.webp', 'mokumoku-wide.webp', 'pumpkin-icon.webp', 'pingpong2-sm.webp', 'benri-sm.webp'].forEach(function (f, i) {
+      ['book-cover.webp', 'cutplay-phone.webp', 'book2-cover.webp', 'warikan-phone.webp', 'mokumoku-wide.webp', 'pumpkin-icon.webp', 'pingpong2-sm.webp', 'benri-sm.webp'].forEach(function (f, i) {
         it(124 + i * .5, 124 + i * .5 + .5, '', { img: f, cls: 'shadow', w: /wide|sm/.test(f) ? 60 : 30, x: (i % 2 ? 1 : -1) * 8, y: 0, fx: 'slam', d: .15, rot: (i % 2 ? 6 : -6), pulse: false });
       });
       // --- ラジオと、おしまい ---

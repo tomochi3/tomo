@@ -6,7 +6,7 @@ import os
 import re
 import sys
 
-PAGES = ['index.html', 'rich/index.html', 'gpu/index.html', 'mv/index.html', '404.html']
+PAGES = ['index.html', 'rich/index.html', 'gpu/index.html', 'mv/index.html', 'rich2/index.html', 'rich2/a/index.html', 'rich2/b/index.html', 'rich2/c/index.html', '404.html']
 SITE_ROOT = '/tomo/'
 
 

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tomochi — 一冊の本として（リッチ版2・案C）</title>
+  <meta name="description" content="tomochi のポートフォリオ、リッチ版2の案C。扉・目次・章・索引・奥付をもつ一冊の本として、本と会とアプリを読む。">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../favicon.ico?v=2" sizes="48x48">
+  <link rel="icon" href="../../icon.svg?v=2" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=2">
+  <link rel="preload" href="../fonts/shippori-mincho-bold.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    /* 案C「一冊の本として」
+       題材：二冊の著書をもつ書き手であること。サイト全体を一冊の本の部品（扉・目次・章・柱・ノンブル・索引・奥付）で組む。
+       字＝しっぽり明朝の縦組み、地＝生成りの紙、線＝罫と目次のリーダー、朱はしおり紐の一本だけに使う。 */
+    @font-face { font-family: "Shippori"; src: url("../fonts/shippori-mincho.woff2") format("woff2"); font-weight: 400; font-display: swap; }
+    @font-face { font-family: "Shippori"; src: url("../fonts/shippori-mincho-bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
+
+    :root {
+      --paper: #f4efe4;
+      --paper-2: #ebe4d4;
+      --ink: #22201c;
+      --ink-soft: #625b4f;
+      --rule: rgba(34, 32, 28, .22);
+      --shu: #c2412c;
+      --mincho: "Shippori", "Hiragino Mincho ProN", "Yu Mincho", "YuMincho", "Noto Serif JP", "Noto Serif CJK JP", serif;
+      --gothic: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", "Yu Gothic UI", Meiryo, sans-serif;
+      --ease: cubic-bezier(.2, .8, .2, 1);
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #1c1a17;
+        --paper-2: #26231e;
+        --ink: #ece5d6;
+        --ink-soft: #ada492;
+        --rule: rgba(236, 229, 214, .2);
+        --shu: #e8664f;
+        color-scheme: dark;
+      }
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--mincho); line-height: 1.95; letter-spacing: .02em; overflow-x: clip;
+      background-image: radial-gradient(rgba(120, 100, 60, .05) 1px, transparent 1px); background-size: 5px 5px; }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    [hidden] { display: none !important; }
+    :focus-visible { outline: 2px solid var(--shu); outline-offset: 4px; }
+    .skip { position: absolute; left: 8px; top: -60px; z-index: 50; padding: 8px 14px; background: var(--ink); color: var(--paper); font-family: var(--gothic); }
+    .skip:focus { top: 8px; }
+    .sheet { width: min(980px, 100% - 32px); margin-inline: auto; }
+    .tate { writing-mode: vertical-rl; text-orientation: mixed; }
+    .tcy { text-combine-upright: all; }
+
+    /* ── しおり紐：いまどの章かを縦書きで出し、押すと目次を開く ── */
+    .ribbon { position: fixed; top: 0; right: clamp(14px, 4vw, 44px); z-index: 30; width: 34px; padding: 14px 0 26px; background: var(--shu); color: #fff8ee; border: 0; cursor: pointer; font: 700 13px/1.3 var(--mincho); letter-spacing: .12em;
+      clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 12px), 0 100%); height: var(--h, 120px); transition: height .5s var(--ease); display: none; justify-content: center; }
+    .js .ribbon { display: flex; }
+    .ribbon span { writing-mode: vertical-rl; white-space: nowrap; }
+    .ribbon:hover { filter: brightness(1.08); }
+
+    .toc-pop { position: fixed; top: 0; right: 0; bottom: 0; width: min(380px, 100%); z-index: 40; background: var(--paper); border-left: 1px solid var(--rule); padding: 28px 26px; transform: translateX(100%); transition: transform .45s var(--ease); overflow-y: auto; visibility: hidden; }
+    .toc-pop.is-open { transform: none; visibility: visible; }
+    .toc-pop h2 { margin: 0 0 12px; font-size: 18px; letter-spacing: .3em; }
+    .toc-pop .close { position: absolute; top: 16px; right: 16px; font: 700 13px var(--gothic); background: none; border: 1px solid var(--rule); color: inherit; padding: 6px 12px; cursor: pointer; }
+    .scrim { position: fixed; inset: 0; z-index: 35; background: rgba(20, 16, 10, .35); opacity: 0; pointer-events: none; transition: opacity .3s; }
+    .scrim.is-open { opacity: 1; pointer-events: auto; }
+
+    /* ── 扉 ── */
+    .title-page { min-height: min(100svh, 920px); display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 24px; padding: 56px 0 40px; position: relative; }
+    .title-page__main { justify-self: end; display: flex; flex-direction: row-reverse; gap: clamp(20px, 5vw, 56px); align-items: flex-start; }
+    .title-page h1 { margin: 0; font-weight: 700; font-size: clamp(32px, 8.4vw, 66px); line-height: 1.45; letter-spacing: .08em; max-height: 82svh; }
+    .title-page h1 span { display: block; }
+    .title-page h1 .ind1 { padding-top: 1em; }
+    .title-page h1 .ind2 { padding-top: 2em; }
+    .title-page h1 .em { color: var(--shu); }
+    .title-page__lead { margin: 0; font-size: clamp(14px, 3.4vw, 16px); line-height: 2.1; color: var(--ink-soft); max-height: 26em; padding-top: 3.4em; }
+    .title-page__by { position: absolute; left: 0; bottom: 44px; font-size: 14px; line-height: 1.9; letter-spacing: .14em; }
+    .title-page__by b { display: block; font-size: 26px; letter-spacing: .2em; font-weight: 700; }
+    .title-page__by small { font-family: var(--gothic); font-size: 11px; letter-spacing: .1em; color: var(--ink-soft); }
+    .scroll-cue { position: absolute; left: 50%; bottom: 14px; font-size: 12px; letter-spacing: .3em; color: var(--ink-soft); transform: translateX(-50%); }
+    @media (max-width: 640px) {
+      .title-page { grid-template-columns: 1fr; padding-top: 74px; padding-bottom: 150px; }
+      .title-page__main { justify-self: center; }
+      .title-page__lead { display: none; }
+    }
+
+    /* ── 目次 ── */
+    .toc { padding: 60px 0 40px; border-top: 1px solid var(--rule); }
+    .toc--pop { border: 0; padding: 0; }
+    .toc__label { margin: 0 0 18px; font-size: 15px; letter-spacing: .5em; text-align: center; font-weight: 700; }
+    .toc ol { list-style: none; margin: 0 auto; padding: 0; max-width: 560px; }
+    .toc li a { display: flex; align-items: baseline; gap: 10px; padding: 10px 0; text-decoration: none; font-size: clamp(16px, 4vw, 19px); }
+    .toc li a .ch { flex: none; font-size: .78em; color: var(--ink-soft); width: 4.2em; }
+    .toc li a .lead { flex: 1; border-bottom: 2px dotted var(--rule); transform: translateY(-.35em); min-width: 1.5em; }
+    .toc li a .pg { flex: none; font-size: .86em; color: var(--ink-soft); }
+    .toc li a:hover .t { color: var(--shu); }
+    .toc li a .t { transition: color .2s; }
+
+    /* ── 章 ── */
+    .chapter { position: relative; padding: 70px 0 64px; border-top: 1px solid var(--rule); }
+    .hashira { position: absolute; top: 18px; left: 0; right: 0; display: flex; justify-content: space-between; font-size: 12px; letter-spacing: .2em; color: var(--ink-soft); }
+    .nombre { position: absolute; bottom: 18px; left: 50%; transform: translateX(-50%); font-size: 13px; color: var(--ink-soft); letter-spacing: .1em; }
+    .ch-head { display: flex; flex-direction: row-reverse; gap: 22px; align-items: flex-start; margin-bottom: 30px; }
+    .ch-head .no { font-size: 15px; letter-spacing: .3em; color: var(--ink-soft); padding-top: .2em; }
+    .ch-head h2 { margin: 0; font-size: clamp(26px, 6vw, 40px); font-weight: 700; letter-spacing: .14em; line-height: 1.4; max-height: 11em; }
+    @media (min-width: 760px) { .ch-head { float: right; margin: 0 0 20px 36px; } .chapter::after { content: ""; display: block; clear: both; } }
+    @media (max-width: 759px) { .ch-head { justify-content: flex-start; } }
+
+    /* 本の見開き */
+    .spread { display: grid; gap: 34px; }
+    .volume { display: grid; grid-template-columns: minmax(110px, 160px) 1fr; gap: 22px; align-items: start; text-decoration: none; }
+    .volume__cover { position: relative; transition: transform .5s var(--ease); transform-origin: left center; }
+    .volume__cover img { box-shadow: 1px 0 0 rgba(0,0,0,.2), 10px 16px 24px -14px rgba(0,0,0,.6); }
+    .volume__cover::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 7px; background: linear-gradient(90deg, rgba(0,0,0,.25), transparent); z-index: 1; }
+    .volume:hover .volume__cover { transform: perspective(700px) rotateY(-14deg); }
+    .volume--text { grid-template-columns: 1fr; }
+    .volume h3 { margin: 0; font-size: clamp(21px, 4.6vw, 27px); font-weight: 700; letter-spacing: .06em; line-height: 1.4; }
+    .volume p { margin: 10px 0 0; font-size: 15px; color: var(--ink-soft); }
+    .volume .kind, .entry .kind { font-family: var(--gothic); font-size: 11px; letter-spacing: .12em; color: var(--ink-soft); border: 1px solid var(--rule); padding: 1px 7px; }
+    .more { display: inline-block; margin-top: 12px; font-size: 14px; font-weight: 700; border-bottom: 1px solid currentColor; padding-bottom: 1px; }
+    .more::after { content: " →"; }
+    a:hover .more { color: var(--shu); }
+
+    /* 抜き書き（縦組みの引用） */
+    .quote { display: flex; justify-content: center; margin: 40px 0 6px; }
+    .quote p { margin: 0; font-size: clamp(22px, 5.4vw, 34px); font-weight: 700; letter-spacing: .18em; line-height: 1.7; border-right: 3px solid var(--shu); padding-right: .6em; }
+    .quote small { display: block; font-size: .42em; font-weight: 400; letter-spacing: .2em; color: var(--ink-soft); margin-top: 1em; }
+
+    /* 第三章：もくもく会の時間割（縦の時刻表） */
+    .timetable { display: grid; gap: 24px; align-items: center; }
+    @media (min-width: 760px) { .timetable { grid-template-columns: 1fr 1fr; } }
+    .timetable figure { margin: 0; }
+    .timetable .venue { margin-top: 22px; }
+    .timetable figure img { filter: sepia(.25) contrast(.95); }
+    .timetable figcaption { font-size: 12.5px; color: var(--ink-soft); margin-top: 8px; }
+    .rhythm { display: flex; flex-direction: row-reverse; justify-content: center; gap: 18px; }
+    .rhythm div { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+    .rhythm .bar { width: 22px; border: 1.5px solid var(--ink); }
+    .rhythm .bar.focus { height: 200px; background: repeating-linear-gradient(0deg, transparent 0 9px, var(--rule) 9px 10px); }
+    .rhythm .bar.move { height: 60px; background: var(--shu); border-color: var(--shu); }
+    .rhythm .lbl { font-size: 15px; letter-spacing: .2em; font-weight: 700; }
+
+    /* 第四章：索引（辞書の見出し語のように） */
+    .index { columns: 1; column-gap: 40px; column-rule: 1px solid var(--rule); }
+    @media (min-width: 760px) { .index { columns: 2; } }
+    .entry { break-inside: avoid; display: block; text-decoration: none; padding: 16px 0 18px; border-bottom: 1px solid var(--rule); }
+    .entry__head { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 10px; }
+    .entry h3 { margin: 0; font-size: 21px; font-weight: 700; letter-spacing: .04em; line-height: 1.4; }
+    .entry .yomi { font-size: 13px; color: var(--ink-soft); }
+    .entry p { margin: 6px 0 0; font-size: 14.5px; line-height: 1.85; }
+    .entry p::before { content: "▶ "; color: var(--shu); font-size: .8em; }
+    .entry__fig { float: right; width: 96px; margin: 4px 0 6px 14px; border: 1px solid var(--rule); background: var(--paper-2); }
+    .entry__fig.is-phone { width: 64px; height: 110px; overflow: hidden; border-radius: 8px; }
+    .entry__fig.is-phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+    .entry__fig.is-icon { width: 64px; border-radius: 14px; overflow: hidden; border: 0; }
+    .entry .more { font-size: 13px; }
+    .entry::after { content: ""; display: block; clear: both; }
+    .entry:hover h3 { color: var(--shu); }
+
+    /* ── 奥付 ── */
+    .colophon { padding: 70px 0 60px; border-top: 1px solid var(--rule); }
+    .colophon__box { max-width: 440px; margin-left: auto; border-top: 2px solid var(--ink); border-bottom: 2px solid var(--ink); padding: 18px 4px; }
+    .colophon h2 { margin: 0 0 4px; font-size: 22px; letter-spacing: .2em; font-weight: 700; }
+    .colophon__sub { margin: 0 0 14px; font-size: 13px; color: var(--ink-soft); }
+    .colophon dl { margin: 0; display: grid; grid-template-columns: 5.5em 1fr; gap: 6px 10px; font-size: 14.5px; border-top: 1px solid var(--rule); padding-top: 12px; }
+    .colophon dt { color: var(--ink-soft); letter-spacing: .3em; }
+    .colophon dd { margin: 0; }
+    .colophon dd a { text-underline-offset: 4px; }
+    .colophon__note { margin-top: 26px; font-size: 13px; color: var(--ink-soft); display: flex; flex-wrap: wrap; gap: 6px 18px; justify-content: flex-end; }
+
+    /* ページをめくるように現れる（右から左へ） */
+    .reveal { clip-path: inset(0 0 0 0); }
+    .js .reveal { clip-path: inset(0 0 0 100%); transition: clip-path 1s var(--ease); }
+    .js .reveal.is-in { clip-path: inset(0 0 0 0); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .js .reveal { clip-path: none; }
+    }
+  </style>
+</head>
+<body>
+  <script>document.documentElement.classList.add('js'); document.body.classList.add('js');</script>
+  <a class="skip" href="#main">本文へスキップ</a>
+  <button class="ribbon" type="button" id="ribbon" aria-controls="toc-pop" aria-expanded="false"><span id="ribbon-text">扉</span></button>
+  <div class="scrim" id="scrim"></div>
+  <nav class="toc-pop" id="toc-pop" aria-labelledby="pop-title">
+    <button class="close" type="button" id="pop-close">閉じる</button>
+    <h2 id="pop-title">目次</h2>
+    <div class="toc toc--pop">
+      <ol>
+        <li><a href="#ch1"><span class="ch">第一章</span><span class="t">家のない三百九十八日</span><span class="lead"></span><span class="pg">三</span></a></li>
+        <li><a href="#ch2"><span class="ch">第二章</span><span class="t">中の上で生きる</span><span class="lead"></span><span class="pg">七</span></a></li>
+        <li><a href="#ch3"><span class="ch">第三章</span><span class="t">五十分と十五分</span><span class="lead"></span><span class="pg">十一</span></a></li>
+        <li><a href="#ch4"><span class="ch">第四章</span><span class="t">小さな不便の索引</span><span class="lead"></span><span class="pg">十五</span></a></li>
+        <li><a href="#colophon"><span class="ch">　</span><span class="t">奥付</span><span class="lead"></span><span class="pg">二十</span></a></li>
+      </ol>
+    </div>
+  </nav>
+
+  <main id="main" tabindex="-1">
+    <section class="sheet title-page" aria-labelledby="hero-title" data-ch="扉">
+      <div class="title-page__main">
+        <h1 class="tate" id="hero-title"><span>面白くて、</span><span class="ind1">できれば</span><span>ためになることを、</span><span class="ind2"><span class="em">みんなで</span>やる。</span></h1>
+        <p class="title-page__lead tate">三百九十八日の家なし生活を本にし、<br>運動不足解消もくもく会を主催。<br>身近な不便を、小さなアプリで<br>解決しています。</p>
+      </div>
+      <p class="title-page__by">tomochi<b>ともち 著</b><small>本・会・アプリ</small></p>
+      <span class="scroll-cue" aria-hidden="true">頁をめくる ↓</span>
+    </section>
+
+    <section class="sheet toc" aria-labelledby="toc-title">
+      <h2 class="toc__label" id="toc-title">目次</h2>
+      <ol>
+        <li><a href="#ch1"><span class="ch">第一章</span><span class="t">家のない三百九十八日</span><span class="lead"></span><span class="pg">三</span></a></li>
+        <li><a href="#ch2"><span class="ch">第二章</span><span class="t">中の上で生きる</span><span class="lead"></span><span class="pg">七</span></a></li>
+        <li><a href="#ch3"><span class="ch">第三章</span><span class="t">五十分と十五分</span><span class="lead"></span><span class="pg">十一</span></a></li>
+        <li><a href="#ch4"><span class="ch">第四章</span><span class="t">小さな不便の索引</span><span class="lead"></span><span class="pg">十五</span></a></li>
+        <li><a href="#colophon"><span class="ch">　</span><span class="t">奥付</span><span class="lead"></span><span class="pg">二十</span></a></li>
+      </ol>
+    </section>
+
+    <section class="sheet chapter" id="ch1" aria-labelledby="ch1-title" data-ch="第一章">
+      <div class="hashira" aria-hidden="true"><span>tomochi</span><span>家のない三百九十八日</span></div>
+      <div class="ch-head"><span class="no tate">第一章</span><h2 class="tate" id="ch1-title">家のない<br>三百九十八日</h2></div>
+      <div class="spread reveal">
+        <a class="volume" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">
+          <div class="volume__cover"><img src="../../rich/img/book-cover.webp" width="560" height="801" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy"></div>
+          <div><span class="kind">著書</span><h3>ホームレス大学院生</h3><p>398日間、家がなかった。友人宅を渡り歩いた、大学院生時代の体験記。</p><span class="more">本の詳細を見る</span></div>
+        </a>
+      </div>
+      <div class="quote"><p class="tate"><span class="tcy">398</span>日間、<br>家がなかった。<small>――『ホームレス大学院生』より</small></p></div>
+      <span class="nombre" aria-hidden="true">三</span>
+    </section>
+
+    <section class="sheet chapter" id="ch2" aria-labelledby="ch2-title" data-ch="第二章">
+      <div class="hashira" aria-hidden="true"><span>tomochi</span><span>中の上で生きる</span></div>
+      <div class="ch-head"><span class="no tate">第二章</span><h2 class="tate" id="ch2-title">中の上で<br>生きる</h2></div>
+      <div class="spread reveal">
+        <a class="volume" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">
+          <div class="volume__cover"><img src="../../rich/img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy"></div>
+          <div><span class="kind">著書</span><h3>中の上の人生戦略</h3><p>毎日が最高じゃなくていい。「どこにでもいる人」が、だいたい楽しく生きるための人生戦略。</p><span class="more">本の詳細を見る</span></div>
+        </a>
+      </div>
+      <div class="quote"><p class="tate">毎日が<br>最高じゃなくていい。<small>――『中の上の人生戦略』より</small></p></div>
+      <span class="nombre" aria-hidden="true">七</span>
+    </section>
+
+    <section class="sheet chapter" id="ch3" aria-labelledby="ch3-title" data-ch="第三章">
+      <div class="hashira" aria-hidden="true"><span>tomochi</span><span>五十分と十五分</span></div>
+      <div class="ch-head"><span class="no tate">第三章</span><h2 class="tate" id="ch3-title">五十分と<br>十五分</h2></div>
+      <div class="timetable reveal">
+        <div>
+          <a class="volume volume--text" href="https://kintech.connpass.com" target="_blank" rel="noopener">
+            <div><span class="kind">運動×勉強会</span><h3>運動不足解消もくもく会</h3><p>50分集中したら、約15分動く。運動を挟んで、健康的かつ効率的に勉強する会です。</p><span class="more">次回の日程を見る</span></div>
+          </a>
+          <figure class="venue"><img src="../../rich/img/mokumoku-wide.webp" width="1400" height="733" alt="もくもく会の会場。テーブルや椅子、ソファが並ぶラウンジ" loading="lazy"><figcaption>図　会場のようす</figcaption></figure>
+        </div>
+        <div class="rhythm" role="img" aria-label="1セットの時間配分：集中50分、運動約15分">
+          <div><span class="bar focus"></span><span class="lbl tate">集中　<span class="tcy">50</span>分</span></div>
+          <div><span class="bar move"></span><span class="lbl tate">動く　約<span class="tcy">15</span>分</span></div>
+        </div>
+      </div>
+      <span class="nombre" aria-hidden="true">十一</span>
+    </section>
+
+    <section class="sheet chapter" id="ch4" aria-labelledby="ch4-title" data-ch="第四章">
+      <div class="hashira" aria-hidden="true"><span>tomochi</span><span>小さな不便の索引</span></div>
+      <div class="ch-head"><span class="no tate">第四章</span><h2 class="tate" id="ch4-title">小さな<br>不便の索引</h2></div>
+      <div class="index reveal">
+        <a class="entry" href="https://apps.apple.com/jp/app/cutplay/id6836113662" target="_blank" rel="noopener">
+          <span class="entry__fig is-phone"><img src="../../rich/img/cutplay-phone.webp" width="780" height="1688" alt="CutPlay のタイトル画像。縦長の動画とカット編集のタイムライン" loading="lazy"></span>
+          <div class="entry__head"><h3>CutPlay</h3><span class="yomi">【かっとぷれい】</span><span class="kind">iOS</span></div>
+          <p>縦動画を、さくっと編集。スマホで撮った縦長の動画を、縦のまま手軽に編集できるiPhoneアプリ。</p><span class="more">App Storeで見る</span>
+        </a>
+        <a class="entry" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">
+          <span class="entry__fig is-phone"><img src="../../rich/img/warikan-phone.webp" width="780" height="1688" alt="ワリカンのトップ画面。「みんなの立て替え、すっきりさせよう。」" loading="lazy"></span>
+          <div class="entry__head"><h3>ワリカン</h3><span class="yomi">【わりかん】</span><span class="kind">Webアプリ</span></div>
+          <p>誰が誰にいくら払うか、すぐ分かる。立て替えを記録するだけで自動で計算。</p><span class="more">使ってみる</span>
+        </a>
+        <a class="entry" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">
+          <span class="entry__fig is-icon"><img src="../../rich/img/pumpkin-icon.webp" width="480" height="480" alt="Pumpkin のアプリアイコン" loading="lazy"></span>
+          <div class="entry__head"><h3>Pumpkin</h3><span class="yomi">【ぱんぷきん】</span><span class="kind">iOS / Android</span></div>
+          <p>筋トレを、SNSで続ける。筋トレSNS「Pumpkin」のモバイルアプリの開発メンバー。</p><span class="more">App Storeで見る</span>
+        </a>
+        <a class="entry" href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">
+          <span class="entry__fig"><img src="../../rich/img/benri-sm.webp" width="800" height="500" alt="べんりツールズのRM換算表" loading="lazy"></span>
+          <div class="entry__head"><h3>べんりツールズ</h3><span class="yomi">【べんりつーるず】</span><span class="kind">Webツール</span></div>
+          <p>RM換算や日程調整を、すぐ済ませる。</p><span class="more">使ってみる</span>
+        </a>
+        <a class="entry" href="https://github.com/tomochi3/cancel_noise" target="_blank" rel="noopener">
+          <span class="entry__fig"><img src="../../rich/img/cancel_noise-sm.webp" width="800" height="500" alt="ノイズクリーナー for YouTube の設定画面。「唾・口の音を目立たなくする」のスイッチと効き具合のスライダー" loading="lazy"></span>
+          <div class="entry__head"><h3>ノイズクリーナー for YouTube</h3><span class="yomi">【のいずくりーなー】</span><span class="kind">Chrome拡張</span></div>
+          <p>YouTubeの唾の音や「えー」を抑える。</p><span class="more">GitHubで見る</span>
+        </a>
+        <a class="entry" href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">
+          <span class="entry__fig"><img src="../../rich/img/5grip-sm.webp" width="800" height="500" alt="チーム制ボルダリング交流会の告知ページ" loading="lazy"></span>
+          <div class="entry__head"><h3>ボルダリング交流会</h3><span class="yomi">【ぼるだりんぐこうりゅうかい】</span><span class="kind">Webサイト</span></div>
+          <p>チームで登って、仲良くなる交流会の告知サイト。</p><span class="more">サイトを開く</span>
+        </a>
+        <a class="entry" href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener">
+          <span class="entry__fig"><img src="../../rich/img/pingpong2-sm.webp" width="800" height="500" alt="Classic Ping Pong のタイトル画面" loading="lazy"></span>
+          <div class="entry__head"><h3>Classic Ping Pong</h3><span class="yomi">【くらしっくぴんぽん】</span><span class="kind">ゲーム</span></div>
+          <p>スピンや溜めショットで打ち合えるピンポン。</p><span class="more">遊ぶ</span>
+        </a>
+        <a class="entry" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">
+          <span class="entry__fig"><img src="../../rich/img/tt_record-sm.webp" width="800" height="500" alt="卓球戦績メモの戦績画面。勝敗、勝率、対戦相手別の成績が並ぶ" loading="lazy"></span>
+          <div class="entry__head"><h3>卓球戦績メモ</h3><span class="yomi">【たっきゅうせんせきめも】</span><span class="kind">Webアプリ</span></div>
+          <p>試合結果を数タップで記録して、相手ごとに振り返る。</p><span class="more">使ってみる</span>
+        </a>
+      </div>
+      <span class="nombre" aria-hidden="true">十五</span>
+    </section>
+  </main>
+
+  <footer class="sheet colophon" id="colophon" data-ch="奥付">
+    <div class="colophon__box">
+      <h2>面白くて、できれば<br>ためになることを、みんなでやる。</h2>
+      <p class="colophon__sub">リッチ版2　案C</p>
+      <dl>
+        <dt>著者</dt><dd>tomochi（ともち）</dd>
+        <dt>発行</dt><dd><span data-year>2026</span>年</dd>
+        <dt>X</dt><dd><a href="https://x.com/tamachika11" target="_blank" rel="noopener">@tamachika11</a></dd>
+        <dt>GitHub</dt><dd><a href="https://github.com/tomochi3" target="_blank" rel="noopener">tomochi3</a></dd>
+        <dt>ラジオ</dt><dd><a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener">stand.fm</a></dd>
+        <dt>書体</dt><dd>しっぽり明朝（SIL OFL 1.1）</dd>
+      </dl>
+    </div>
+    <p class="colophon__note"><a href="../">リッチ版2の案一覧へ</a><a href="../../">通常版</a><a href="../../rich/">リッチ版</a></p>
+  </footer>
+
+  <script>
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelector('[data-year]').textContent = new Date().getFullYear();
+
+      // しおり紐：読み進めるほど長く垂れ、いまの章の名前を出す
+      var ribbon = document.getElementById('ribbon'), rtext = document.getElementById('ribbon-text');
+      var parts = Array.prototype.slice.call(document.querySelectorAll('[data-ch]'));
+      var cur = '';
+      function onScroll() {
+        var max = document.documentElement.scrollHeight - window.innerHeight;
+        var p = max > 0 ? window.scrollY / max : 0;
+        ribbon.style.setProperty('--h', Math.round(96 + p * Math.min(260, window.innerHeight * 0.4)) + 'px');
+        var mid = window.innerHeight * 0.4, name = parts[0].dataset.ch;
+        parts.forEach(function (s) { if (s.getBoundingClientRect().top < mid) name = s.dataset.ch; });
+        if (name !== cur) { cur = name; rtext.textContent = name; }
+      }
+      var ticking = false;
+      window.addEventListener('scroll', function () { if (ticking) return; ticking = true; requestAnimationFrame(function () { ticking = false; onScroll(); }); }, { passive: true });
+      window.addEventListener('resize', onScroll);
+      onScroll();
+
+      // しおり紐を押すと目次が開く
+      var pop = document.getElementById('toc-pop'), scrim = document.getElementById('scrim'), closeBtn = document.getElementById('pop-close');
+      ribbon.setAttribute('aria-label', '目次を開く（いまは' + cur + '）');
+      function setOpen(open) {
+        pop.classList.toggle('is-open', open); scrim.classList.toggle('is-open', open);
+        ribbon.setAttribute('aria-expanded', String(open));
+        if (open) closeBtn.focus(); else ribbon.focus();
+      }
+      ribbon.addEventListener('click', function () { setOpen(!pop.classList.contains('is-open')); });
+      closeBtn.addEventListener('click', function () { setOpen(false); });
+      scrim.addEventListener('click', function () { setOpen(false); });
+      pop.addEventListener('click', function (e) { if (e.target.closest('a')) { pop.classList.remove('is-open'); scrim.classList.remove('is-open'); ribbon.setAttribute('aria-expanded', 'false'); } });
+      document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && pop.classList.contains('is-open')) setOpen(false); });
+
+      // 章の中身は、ページをめくるように右から現れる
+      var items = document.querySelectorAll('.reveal');
+      if (reduce || !('IntersectionObserver' in window)) {
+        items.forEach(function (el) { el.classList.add('is-in'); });
+      } else {
+        var io = new IntersectionObserver(function (es) {
+          es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); } });
+        }, { rootMargin: '0px 0px -12% 0px' });
+        items.forEach(function (el) { io.observe(el); });
+      }
+    })();
+  </script>
+</body>
+</html>

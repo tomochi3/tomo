@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>tomochi — 398日線（リッチ版2・案A）</title>
+  <meta name="description" content="tomochi のポートフォリオ、リッチ版2の案A。本・もくもく会・アプリを、1本の路線の駅として巡る。">
+  <meta name="robots" content="noindex">
+  <link rel="icon" href="../../favicon.ico?v=2" sizes="48x48">
+  <link rel="icon" href="../../icon.svg?v=2" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=2">
+  <link rel="preload" href="../../fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    /* 案A「398日線」
+       題材：友人宅を渡り歩いた398日。家から家への移動を、駅から駅への乗り継ぎとして読む。
+       字＝駅名標（大きな和文の下に小さな英字）、地＝白い標識板、線＝路線色の太い1本、
+       動き＝発車標（LEDのドット文字）と、スクロールで進む車両。 */
+    @font-face { font-family: "Inter"; src: url("../../fonts/inter-latin-var.woff2") format("woff2"); font-weight: 100 900; font-display: swap; }
+    @font-face { font-family: "Dot"; src: url("../fonts/dotgothic16.woff2") format("woff2"); font-display: swap; }
+
+    :root {
+      --ground: #eef0f2;
+      --sign: #ffffff;
+      --ink: #121417;
+      --ink-soft: #545b66;
+      --rule: rgba(18, 20, 23, .14);
+      /* 路線色。本＝朱、会＝緑、作品＝青。色だけに頼らず、駅番号の頭文字（B・M・W）でも分ける */
+      --book: #e0452b;
+      --meet: #108a52;
+      --work: #1f56d6;
+      --board: #15171a;
+      --led: #ffb21e;
+      --led-dim: rgba(255, 178, 30, .16);
+      --led-green: #5cf08f;
+      --line-w: 14px;
+      --font: "Inter", -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans CJK JP", "Yu Gothic UI", Meiryo, sans-serif;
+      --dot: "Dot", ui-monospace, monospace;
+      color-scheme: light;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --ground: #0d0f12;
+        --sign: #181b20;
+        --ink: #eef1f5;
+        --ink-soft: #9aa3b0;
+        --rule: rgba(238, 241, 245, .14);
+        --book: #ff6a4f;
+        --meet: #2fc27b;
+        --work: #5b8bff;
+        --board: #050607;
+        color-scheme: dark;
+      }
+    }
+
+    [data-c="book"] { --c: var(--book); } [data-c="meet"] { --c: var(--meet); } [data-c="work"] { --c: var(--work); } [data-c="ink"] { --c: var(--ink); }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+    body { margin: 0; background: var(--ground); color: var(--ink); font-family: var(--font); line-height: 1.7; font-feature-settings: "palt" 1; overflow-x: clip; }
+    [hidden] { display: none !important; }
+    img { display: block; max-width: 100%; height: auto; }
+    a { color: inherit; }
+    :focus-visible { outline: 3px solid var(--work); outline-offset: 3px; border-radius: 4px; }
+    .skip { position: absolute; left: 8px; top: -60px; z-index: 50; padding: 8px 14px; background: var(--ink); color: var(--ground); border-radius: 6px; }
+    .skip:focus { top: 8px; }
+    .wrap { width: min(1160px, 100% - 32px); margin-inline: auto; }
+    .en { display: block; font-size: .42em; font-weight: 600; letter-spacing: .02em; color: var(--ink-soft); line-height: 1.3; margin-top: .3em; }
+
+    /* ── ヘッダー：駅の吊り案内のように、黒地に白文字で現在地を出す ── */
+    .top { position: sticky; top: 0; z-index: 20; background: var(--board); color: #fff; }
+    .top__in { display: flex; align-items: center; gap: 14px; height: 52px; }
+    .logo { display: flex; align-items: center; gap: 8px; text-decoration: none; font-weight: 800; letter-spacing: .01em; font-size: 17px; }
+    .logo i { display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; border: 4px solid var(--work); font-style: normal; font-size: 11px; font-weight: 900; background: #fff; color: #000; }
+    .here { margin-left: auto; display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 13px; }
+    .here b { font-family: var(--dot); font-weight: 400; color: var(--led); font-size: 15px; letter-spacing: .04em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .here span { color: #9aa3b0; white-space: nowrap; }
+    .top nav { display: flex; gap: 2px; }
+    .top nav a { text-decoration: none; font-size: 13px; font-weight: 700; padding: 6px 10px; border-radius: 4px; display: flex; align-items: center; gap: 6px; }
+    .top nav a:hover { background: rgba(255,255,255,.1); }
+    .top nav a::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+    @media (max-width: 720px) { .top nav { display: none; } }
+
+    /* ── ヒーロー：駅名標 ── */
+    .hero { padding: 40px 0 28px; }
+    .hero__grid { display: grid; gap: 28px; grid-template-columns: 1fr; }
+    @media (min-width: 960px) { .hero__grid { grid-template-columns: 1.25fr .9fr; align-items: stretch; gap: 36px; } }
+    .signboard { background: var(--sign); border-radius: 6px; overflow: hidden; box-shadow: 0 1px 0 var(--rule), 0 18px 40px -28px rgba(0,0,0,.4); display: flex; flex-direction: column; }
+    .signboard__band { display: flex; height: 14px; }
+    .signboard__band span { flex: 1; background: var(--c); }
+    .signboard__body { padding: 26px 22px 22px; flex: 1; display: flex; flex-direction: column; }
+    .signboard__no { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; font-size: 13px; color: var(--ink-soft); }
+    .badge { display: inline-grid; place-items: center; min-width: 44px; height: 44px; padding: 0 6px; border: 5px solid var(--c, var(--work)); border-radius: 10px; font-weight: 900; font-size: 13px; line-height: 1; color: var(--ink); background: var(--sign); text-align: center; }
+    .badge small { display: block; font-size: 15px; letter-spacing: -.02em; }
+    .hero h1 { margin: 18px 0 0; font-size: clamp(32px, 8.4vw, 56px); line-height: 1.22; font-weight: 900; letter-spacing: -.01em; }
+    .hero h1 .line { display: block; }
+    .hero h1 .en { font-size: max(13px, .24em); margin-top: 14px; letter-spacing: .01em; }
+    .hero__lead { margin: 22px 0 0; font-size: 15px; color: var(--ink-soft); max-width: 34em; }
+    .arrows { margin-top: auto; padding-top: 24px; display: flex; flex-wrap: wrap; gap: 8px; }
+    .arrows a { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 800; font-size: 14px; padding: 10px 14px 10px 10px; border-radius: 6px; background: var(--c); color: #fff; }
+    .arrows a span { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #fff; color: #000; font-size: 13px; }
+    .arrows a:hover { filter: brightness(1.08); }
+
+    /* 398 の反転フラップ */
+    .count { display: flex; align-items: flex-end; gap: 12px; margin-top: 26px; padding-top: 20px; border-top: 2px solid var(--ink); }
+    .flaps { display: flex; gap: 4px; }
+    .flap { position: relative; width: clamp(42px, 11vw, 58px); height: clamp(58px, 15vw, 80px); border-radius: 6px; background: var(--board); color: #fff; font-weight: 800; font-size: clamp(40px, 10.5vw, 58px); font-variant-numeric: tabular-nums; display: grid; place-items: center; overflow: hidden; perspective: 300px; }
+    .flap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 2px; background: rgba(0,0,0,.7); }
+    .flap.is-flip span { animation: flip .09s linear; }
+    @keyframes flip { 0% { transform: rotateX(0); } 50% { transform: rotateX(80deg); opacity: .4; } 100% { transform: rotateX(0); } }
+    .count p { margin: 0; font-weight: 800; font-size: 17px; line-height: 1.4; }
+    .nw { white-space: nowrap; }
+    .count p .en { font-size: 12px; }
+
+    /* ── 発車標：LEDのドット文字 ── */
+    .board { background: var(--board); color: var(--led); border-radius: 6px; padding: 16px 16px 14px; font-family: var(--dot); box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); display: flex; flex-direction: column; min-width: 0; }
+    .board__head { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font); color: #fff; font-weight: 800; font-size: 14px; padding-bottom: 10px; border-bottom: 1px solid rgba(255,255,255,.14); }
+    .board__head h2 { margin: 0; font-size: 14px; }
+    .board__head small { color: #9aa3b0; font-weight: 600; font-size: 11px; }
+    .board__clock { font-family: var(--dot); color: var(--led-green); font-weight: 400; font-size: 18px; letter-spacing: .06em; }
+    .board__cols { display: grid; grid-template-columns: 3.6em 1fr; gap: 0 10px; font-family: var(--font); color: #9aa3b0; font-size: 11px; padding: 8px 0 2px; }
+    .rows { list-style: none; margin: 0 0 12px; padding: 0; }
+    .row { display: grid; grid-template-columns: 3.6em 1fr; gap: 0 10px; align-items: center; padding: 9px 0; border-bottom: 1px dashed rgba(255,255,255,.1); min-width: 0; }
+    .row a { text-decoration: none; min-width: 0; }
+    .row a:hover .dest { text-decoration: underline; text-underline-offset: 4px; }
+    .kind { font-size: 14px; padding: 2px 0; text-align: center; color: #fff; border-radius: 3px; background: var(--c); }
+    .dest { display: block; font-size: 19px; line-height: 1.3; letter-spacing: .03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-shadow: 0 0 8px rgba(255,178,30,.35); }
+    .note { display: block; font-size: 13px; color: #d9d9d9; opacity: .8; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .row.is-in .dest, .row.is-in .note { animation: ledIn .5s steps(6) both; }
+    @keyframes ledIn { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+    .ticker { margin-top: auto; overflow: hidden; white-space: nowrap; color: var(--led-green); font-size: 15px; border-top: 1px solid rgba(255,255,255,.14); padding-top: 10px; }
+    .ticker span { display: inline-block; padding-left: 100%; animation: tick 26s linear infinite; }
+    @keyframes tick { to { transform: translateX(-100%); } }
+
+    /* ── 路線図 ── */
+    .route { position: relative; padding: 36px 0 20px; }
+    .route__title { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 14px; margin: 0 0 8px; font-size: clamp(24px, 5vw, 34px); font-weight: 900; }
+    .route__title small { font-size: 13px; font-weight: 600; color: var(--ink-soft); }
+    .track { position: relative; --x: 30px; }
+    @media (min-width: 960px) { .track { --x: 260px; } }
+    .track__line { position: absolute; left: calc(var(--x) - var(--line-w) / 2); top: 0; bottom: 0; width: var(--line-w); border-radius: 8px; background: linear-gradient(var(--book) 0 var(--b1, 20%), var(--meet) var(--b1, 20%) var(--b2, 34%), var(--work) var(--b2, 34%)); }
+    .train { position: absolute; left: calc(var(--x) - 15px); top: 0; width: 30px; height: 54px; border-radius: 14px 14px 8px 8px; background: var(--sign); border: 3px solid var(--ink); z-index: 3; transform: translateY(var(--ty, 0px)); transition: transform .18s linear; box-shadow: 0 6px 14px -6px rgba(0,0,0,.5); }
+    .train::before { content: ""; position: absolute; left: 4px; right: 4px; top: 6px; height: 14px; border-radius: 6px 6px 2px 2px; background: var(--ink); }
+    .train::after { content: ""; position: absolute; left: 50%; bottom: 6px; width: 6px; height: 6px; margin-left: -3px; border-radius: 50%; background: var(--led); box-shadow: 0 0 8px var(--led); }
+
+    .seg { position: relative; padding: 18px 0 8px; }
+    .seg__head { position: relative; padding-left: calc(var(--x) + 26px); margin: 22px 0 6px; }
+    .seg__head h2 { margin: 0; font-size: clamp(20px, 4.4vw, 26px); font-weight: 900; line-height: 1.3; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .seg__head h2::before { content: ""; width: 22px; height: 8px; border-radius: 4px; background: var(--c); }
+    .seg__head p { margin: 4px 0 0; color: var(--ink-soft); font-size: 14px; }
+    @media (min-width: 960px) {
+      .seg__head { padding-left: 0; width: calc(var(--x) - 40px); position: sticky; top: 76px; margin: 0; float: left; text-align: right; }
+      .seg__head h2 { justify-content: flex-end; }
+      .seg__head h2::before { order: 2; }
+      .seg::after { content: ""; display: block; clear: both; }
+    }
+    .transfer { position: relative; margin: 6px 0; padding: 10px 0 10px calc(var(--x) + 26px); font-size: 13px; font-weight: 800; color: var(--ink-soft); }
+    .transfer::before { content: ""; position: absolute; left: calc(var(--x) - 13px); top: 50%; width: 26px; height: 26px; margin-top: -13px; border-radius: 50%; background: var(--sign); border: 4px solid var(--ink); }
+    .transfer b { color: var(--c); }
+
+    .stations { list-style: none; margin: 0; padding: 0; }
+    @media (min-width: 960px) { .stations { margin-left: var(--x); } }
+    .st { position: relative; padding: 16px 0 26px calc(var(--x) + 26px); }
+    @media (min-width: 960px) { .st { padding-left: 40px; } }
+    .st__dot { position: absolute; left: calc(var(--x) - 13px); top: 20px; width: 26px; height: 26px; border-radius: 50%; background: var(--sign); border: 5px solid var(--c); z-index: 2; transition: transform .3s cubic-bezier(.34,1.56,.64,1), background .3s; }
+    @media (min-width: 960px) { .st__dot { left: -13px; } }
+    .st.is-here .st__dot { transform: scale(1.35); background: var(--c); }
+    .st__card { display: grid; gap: 14px 20px; grid-template-columns: 1fr; background: var(--sign); border-radius: 6px; padding: 16px; text-decoration: none; box-shadow: 0 1px 0 var(--rule); transition: transform .25s, box-shadow .25s; border-left: 6px solid var(--c); }
+    .st__card:hover { transform: translateX(4px); box-shadow: 0 1px 0 var(--rule), 0 14px 30px -20px rgba(0,0,0,.45); }
+    @media (min-width: 640px) { .st__card { grid-template-columns: 1fr 200px; align-items: center; } .st--small .st__card { grid-template-columns: 1fr 150px; } }
+    .st__meta { display: flex; align-items: center; gap: 12px; }
+    .st__meta .badge { width: 52px; height: 52px; }
+    .st__kind { font-size: 12px; font-weight: 800; color: var(--ink-soft); letter-spacing: .04em; }
+    .st__name { margin: 10px 0 0; font-size: clamp(24px, 5.6vw, 36px); line-height: 1.2; font-weight: 900; letter-spacing: -.01em; }
+    .st--small .st__name { font-size: clamp(20px, 4.4vw, 24px); }
+    .st__desc { margin: 10px 0 0; font-size: 14.5px; color: var(--ink-soft); }
+    .st__go { display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; font-weight: 800; font-size: 14px; color: var(--c); }
+    .st__go::after { content: "→"; transition: transform .2s; }
+    .st__card:hover .st__go::after { transform: translateX(4px); }
+    .st__img { border-radius: 4px; overflow: hidden; background: var(--ground); justify-self: start; }
+    @media (min-width: 640px) { .st__img { justify-self: end; } }
+    .st__img img { width: 100%; }
+    .st__img.is-cover { width: 120px; box-shadow: 0 10px 20px -12px rgba(0,0,0,.6); }
+    .st__img.is-phone { width: 104px; height: 168px; border-radius: 16px; border: 4px solid var(--ink); }
+    .st__img.is-phone img { height: 100%; object-fit: cover; object-position: top; }
+    .st__img.is-icon { width: 96px; border-radius: 22px; }
+    .st__img.is-wide { width: 100%; max-width: 280px; }
+    @media (max-width: 639px) { .st__img.is-wide { max-width: none; } }
+
+    /* ── 終点 ── */
+    .terminal { margin: 30px 0 0; background: var(--board); color: #fff; padding: 36px 0 30px; }
+    .terminal h2 { margin: 0; font-size: clamp(28px, 6vw, 44px); font-weight: 900; line-height: 1.2; }
+    .terminal h2 .en { color: #9aa3b0; }
+    .terminal p { color: #c3c9d2; max-width: 36em; font-size: 14.5px; }
+    .exits { display: grid; gap: 10px; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin: 22px 0 0; padding: 0; list-style: none; }
+    .exits a { display: flex; align-items: center; gap: 10px; padding: 12px 14px; border-radius: 6px; background: #fff; color: #111; text-decoration: none; font-weight: 800; font-size: 14px; }
+    .exits a span { display: grid; place-items: center; width: 28px; height: 28px; border-radius: 4px; background: #ffd400; color: #111; font-size: 13px; font-weight: 900; flex: none; }
+    .exits a:hover { background: #ffd400; }
+    .foot { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,.14); display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 13px; color: #9aa3b0; }
+    .foot a { color: #fff; }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation: none !important; transition: none !important; }
+      .ticker span { padding-left: 0; white-space: normal; }
+      .ticker { white-space: normal; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip" href="#main">本文へスキップ</a>
+  <header class="top">
+    <div class="wrap top__in">
+      <a class="logo" href="../"><i>T</i>tomochi</a>
+      <nav aria-label="路線">
+        <a href="#line-book" data-c="book">本</a>
+        <a href="#line-meet" data-c="meet">運動×勉強会</a>
+        <a href="#line-work" data-c="work">作品</a>
+      </nav>
+      <p class="here" aria-live="polite"><span>現在地</span><b id="here">T00 はじめまして</b></p>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero wrap" aria-labelledby="hero-title">
+      <div class="hero__grid">
+        <div class="signboard">
+          <div class="signboard__band" aria-hidden="true"><span data-c="book"></span><span data-c="meet"></span><span data-c="work"></span></div>
+          <div class="signboard__body">
+            <p class="signboard__no"><span class="badge" data-c="ink"><span>T<small>00</small></span></span>始発 tomochi</p>
+            <h1 id="hero-title">
+              <span class="line">面白くて、</span>
+              <span class="line">できれば</span>
+              <span class="line">ためになることを、</span>
+              <span class="line">みんなでやる。</span>
+              <span class="en" lang="en">Fun, and if possible useful — doing it together.</span>
+            </h1>
+            <div class="count">
+              <div class="flaps" aria-hidden="true"><span class="flap"><span>3</span></span><span class="flap"><span>9</span></span><span class="flap"><span>8</span></span></div>
+              <p>398日、<span class="nw">家がなかった。</span><span class="en" lang="en">398 days without a home.</span></p>
+            </div>
+            <p class="hero__lead">398日の家なし生活を本にし、運動不足解消もくもく会を主催。身近な不便を、小さなアプリで解決しています。駅をたどるように、順に見ていけます。</p>
+            <div class="arrows">
+              <a href="#line-book" data-c="book"><span aria-hidden="true">B</span>本を書く</a>
+              <a href="#line-meet" data-c="meet"><span aria-hidden="true">M</span>会をひらく</a>
+              <a href="#line-work" data-c="work"><span aria-hidden="true">W</span>作品をつくる</a>
+            </div>
+          </div>
+        </div>
+
+        <section class="board" aria-labelledby="board-title">
+          <div class="board__head">
+            <h2 id="board-title">発車標 <small>いま開けるもの</small></h2>
+            <span class="board__clock" id="clock" aria-hidden="true">--:--</span>
+          </div>
+          <div class="board__cols" aria-hidden="true"><span>種別</span><span>行き先</span></div>
+          <ul class="rows" id="rows">
+            <li class="row"><span class="kind" data-c="book">本</span><a href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener"><span class="dest">ホームレス大学院生</span><span class="note">398日間、家がなかった。</span></a></li>
+            <li class="row"><span class="kind" data-c="book">本</span><a href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener"><span class="dest">中の上の人生戦略</span><span class="note">毎日が最高じゃなくていい。</span></a></li>
+            <li class="row"><span class="kind" data-c="meet">会</span><a href="https://kintech.connpass.com" target="_blank" rel="noopener"><span class="dest">運動不足解消もくもく会</span><span class="note">50分集中、約15分動く。</span></a></li>
+            <li class="row"><span class="kind" data-c="work">iOS</span><a href="https://apps.apple.com/jp/app/cutplay/id6836113662" target="_blank" rel="noopener"><span class="dest">CutPlay</span><span class="note">縦動画を、さくっと編集。</span></a></li>
+            <li class="row"><span class="kind" data-c="work">Web</span><a href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener"><span class="dest">ワリカン</span><span class="note">誰が誰にいくら払うか、すぐ分かる。</span></a></li>
+            <li class="row"><span class="kind" data-c="work">iOS</span><a href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener"><span class="dest">Pumpkin</span><span class="note">筋トレを、SNSで続ける。</span></a></li>
+          </ul>
+          <p class="ticker" aria-hidden="true"><span>この先、べんりツールズ・ノイズクリーナー・ボルダリング交流会・Classic Ping Pong・卓球戦績メモ の各駅に停まります。</span></p>
+        </section>
+      </div>
+    </section>
+
+    <section class="route wrap" aria-labelledby="route-title">
+      <h2 class="route__title" id="route-title">398日線 路線図 <small>全11駅・乗換2回</small></h2>
+      <div class="track" id="track">
+        <div class="track__line" id="line" aria-hidden="true"></div>
+        <div class="train" id="train" aria-hidden="true"></div>
+
+        <div class="seg" id="line-book" data-c="book">
+          <div class="seg__head"><h2>本を書く</h2><p>Book Line ・ B01–B02</p></div>
+          <ol class="stations">
+            <li class="st" data-no="B01" data-name="ホームレス大学院生">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://amzn.asia/d/0fdwCbJb" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>B<small>01</small></span></span><span class="st__kind">著書</span></div>
+                  <h3 class="st__name">ホームレス大学院生</h3>
+                  <p class="st__desc">398日間、家がなかった。友人宅を渡り歩いた、大学院生時代の体験記。</p>
+                  <span class="st__go">本の詳細を見る</span>
+                </div>
+                <div class="st__img is-cover"><img src="../../rich/img/book-cover.webp" width="560" height="801" alt="『ホームレス大学院生』の表紙。大きなリュックを背負った人物を段ボールの枠が囲んでいる" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st" data-no="B02" data-name="中の上の人生戦略">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>B<small>02</small></span></span><span class="st__kind">著書</span></div>
+                  <h3 class="st__name">中の上の人生戦略</h3>
+                  <p class="st__desc">毎日が最高じゃなくていい。「どこにでもいる人」が、だいたい楽しく生きるための人生戦略。</p>
+                  <span class="st__go">本の詳細を見る</span>
+                </div>
+                <div class="st__img is-cover"><img src="../../rich/img/book2-cover.webp" width="560" height="840" alt="『中の上の人生戦略』の表紙。街を見下ろして座る、リュックを背負った人物のイラスト" loading="lazy"></div>
+              </a>
+            </li>
+          </ol>
+        </div>
+
+        <p class="transfer" data-c="meet">乗換 ─ <b>もくもく線</b>へ</p>
+
+        <div class="seg" id="line-meet" data-c="meet">
+          <div class="seg__head"><h2>会をひらく</h2><p>Meetup Line ・ M01</p></div>
+          <ol class="stations">
+            <li class="st" data-no="M01" data-name="運動不足解消もくもく会">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://kintech.connpass.com" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>M<small>01</small></span></span><span class="st__kind">運動×勉強会</span></div>
+                  <h3 class="st__name">運動不足解消もくもく会</h3>
+                  <p class="st__desc">50分集中したら、約15分動く。運動を挟んで、健康的かつ効率的に勉強する会です。</p>
+                  <span class="st__go">次回の日程を見る</span>
+                </div>
+                <div class="st__img is-wide"><img src="../../rich/img/mokumoku-wide.webp" width="1400" height="733" alt="もくもく会の会場。テーブルや椅子、ソファが並ぶラウンジ" loading="lazy"></div>
+              </a>
+            </li>
+          </ol>
+        </div>
+
+        <p class="transfer" data-c="work">乗換 ─ <b>作品線</b>へ</p>
+
+        <div class="seg" id="line-work" data-c="work">
+          <div class="seg__head"><h2>作品をつくる</h2><p>Works Line ・ W01–W08</p></div>
+          <ol class="stations">
+            <li class="st" data-no="W01" data-name="CutPlay">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://apps.apple.com/jp/app/cutplay/id6836113662" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>01</small></span></span><span class="st__kind">iOS</span></div>
+                  <h3 class="st__name">CutPlay</h3>
+                  <p class="st__desc">縦動画を、さくっと編集。スマホで撮った縦長の動画を、縦のまま手軽に編集できるiPhoneアプリ。</p>
+                  <span class="st__go">App Storeで見る</span>
+                </div>
+                <div class="st__img is-phone"><img src="../../rich/img/cutplay-phone.webp" width="780" height="1688" alt="CutPlay のタイトル画像。縦長の動画とカット編集のタイムライン" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st" data-no="W02" data-name="ワリカン">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://warikan.tomochi.workers.dev" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>02</small></span></span><span class="st__kind">Webアプリ</span></div>
+                  <h3 class="st__name">ワリカン</h3>
+                  <p class="st__desc">誰が誰にいくら払うか、すぐ分かる。立て替えを記録するだけで自動で計算。</p>
+                  <span class="st__go">使ってみる</span>
+                </div>
+                <div class="st__img is-phone"><img src="../../rich/img/warikan-phone.webp" width="780" height="1688" alt="ワリカンのトップ画面。「みんなの立て替え、すっきりさせよう。」" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st" data-no="W03" data-name="Pumpkin">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://apps.apple.com/jp/app/pumpkin/id6504126864" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>03</small></span></span><span class="st__kind">iOS / Android</span></div>
+                  <h3 class="st__name">Pumpkin</h3>
+                  <p class="st__desc">筋トレを、SNSで続ける。筋トレSNS「Pumpkin」のモバイルアプリの開発メンバー。</p>
+                  <span class="st__go">App Storeで見る</span>
+                </div>
+                <div class="st__img is-icon"><img src="../../rich/img/pumpkin-icon.webp" width="480" height="480" alt="Pumpkin のアプリアイコン" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st st--small" data-no="W04" data-name="べんりツールズ">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://tomochi3.github.io/benri/" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>04</small></span></span><span class="st__kind">Webツール</span></div>
+                  <h3 class="st__name">べんりツールズ</h3>
+                  <p class="st__desc">RM換算や日程調整を、すぐ済ませる。</p>
+                  <span class="st__go">使ってみる</span>
+                </div>
+                <div class="st__img is-wide"><img src="../../rich/img/benri-sm.webp" width="800" height="500" alt="べんりツールズのRM換算表" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st st--small" data-no="W05" data-name="ノイズクリーナー">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://github.com/tomochi3/cancel_noise" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>05</small></span></span><span class="st__kind">Chrome拡張</span></div>
+                  <h3 class="st__name">ノイズクリーナー for YouTube</h3>
+                  <p class="st__desc">YouTubeの唾の音や「えー」を抑える。</p>
+                  <span class="st__go">GitHubで見る</span>
+                </div>
+                <div class="st__img is-wide"><img src="../../rich/img/cancel_noise-sm.webp" width="800" height="500" alt="ノイズクリーナー for YouTube の設定画面。「唾・口の音を目立たなくする」のスイッチと効き具合のスライダー" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st st--small" data-no="W06" data-name="ボルダリング交流会">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://tomochi3.github.io/5Grip/" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>06</small></span></span><span class="st__kind">Webサイト</span></div>
+                  <h3 class="st__name">ボルダリング交流会</h3>
+                  <p class="st__desc">チームで登って、仲良くなる交流会の告知サイト。</p>
+                  <span class="st__go">サイトを開く</span>
+                </div>
+                <div class="st__img is-wide"><img src="../../rich/img/5grip-sm.webp" width="800" height="500" alt="チーム制ボルダリング交流会の告知ページ" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st st--small" data-no="W07" data-name="Classic Ping Pong">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://tomochi3.github.io/pingpong2/" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>07</small></span></span><span class="st__kind">ゲーム</span></div>
+                  <h3 class="st__name">Classic Ping Pong</h3>
+                  <p class="st__desc">スピンや溜めショットで打ち合えるピンポン。</p>
+                  <span class="st__go">遊ぶ</span>
+                </div>
+                <div class="st__img is-wide"><img src="../../rich/img/pingpong2-sm.webp" width="800" height="500" alt="Classic Ping Pong のタイトル画面" loading="lazy"></div>
+              </a>
+            </li>
+            <li class="st st--small" data-no="W08" data-name="卓球戦績メモ">
+              <span class="st__dot" aria-hidden="true"></span>
+              <a class="st__card" href="https://tomochi3.github.io/tt_record/" target="_blank" rel="noopener">
+                <div>
+                  <div class="st__meta"><span class="badge"><span>W<small>08</small></span></span><span class="st__kind">Webアプリ</span></div>
+                  <h3 class="st__name">卓球戦績メモ</h3>
+                  <p class="st__desc">試合結果を数タップで記録して、相手ごとに振り返る。</p>
+                  <span class="st__go">使ってみる</span>
+                </div>
+                <div class="st__img is-wide"><img src="../../rich/img/tt_record-sm.webp" width="800" height="500" alt="卓球戦績メモの戦績画面。勝敗、勝率、対戦相手別の成績が並ぶ" loading="lazy"></div>
+              </a>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="terminal">
+    <div class="wrap">
+      <h2>終点、tomochi です。<span class="en" lang="en">This is the last stop.</span></h2>
+      <p>お忘れ物のないよう…ではなく、気になった駅があれば、いつでも戻ってきてください。続きは各SNSで。</p>
+      <ul class="exits">
+        <li><a href="https://x.com/tamachika11" target="_blank" rel="noopener"><span aria-hidden="true">A</span>X（@tamachika11）</a></li>
+        <li><a href="https://github.com/tomochi3" target="_blank" rel="noopener"><span aria-hidden="true">B</span>GitHub</a></li>
+        <li><a href="https://stand.fm/channels/6abde58ab58540624b2d5782" target="_blank" rel="noopener"><span aria-hidden="true">C</span>ラジオ（stand.fm）</a></li>
+      </ul>
+      <p class="foot"><span>© <span data-year>2026</span> tomochi</span><a href="../">リッチ版2の案一覧へ</a><a href="../../">通常版</a><a href="../../rich/">リッチ版</a></p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      document.querySelector('[data-year]').textContent = new Date().getFullYear();
+
+      // 時計（発車標の右上）
+      var clock = document.getElementById('clock');
+      function tickClock() {
+        var d = new Date();
+        clock.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0');
+      }
+      tickClock();
+      setInterval(tickClock, 15000);
+
+      // 398 をパタパタと数え上げる（反転フラップ）
+      var flaps = Array.prototype.slice.call(document.querySelectorAll('.flap'));
+      var target = '398';
+      if (!reduce) {
+        var step = 0;
+        var timer = setInterval(function () {
+          step++;
+          var done = 0;
+          flaps.forEach(function (f, i) {
+            var s = f.querySelector('span');
+            var stopAt = 8 + i * 6;
+            if (step < stopAt) {
+              s.textContent = String((Number(s.textContent) + 1) % 10);
+              f.classList.remove('is-flip'); void f.offsetWidth; f.classList.add('is-flip');
+            } else { s.textContent = target[i]; done++; }
+          });
+          if (done === flaps.length) clearInterval(timer);
+        }, 80);
+        flaps.forEach(function (f) { f.querySelector('span').textContent = '0'; });
+      }
+
+      // 発車標：行き先を順に入れ替える（JavaScript が無いときは最初の4本のまま）
+      var all = [
+        ['本', 'book', 'ホームレス大学院生', '398日間、家がなかった。', 'https://amzn.asia/d/0fdwCbJb'],
+        ['本', 'book', '中の上の人生戦略', '毎日が最高じゃなくていい。', 'https://www.amazon.co.jp/dp/B0HNKJ1YPG?tag=yabo0e-22'],
+        ['会', 'meet', '運動不足解消もくもく会', '50分集中、約15分動く。', 'https://kintech.connpass.com'],
+        ['iOS', 'work', 'CutPlay', '縦動画を、さくっと編集。', 'https://apps.apple.com/jp/app/cutplay/id6836113662'],
+        ['Web', 'work', 'ワリカン', '誰が誰にいくら払うか、すぐ分かる。', 'https://warikan.tomochi.workers.dev'],
+        ['iOS', 'work', 'Pumpkin', '筋トレを、SNSで続ける。', 'https://apps.apple.com/jp/app/pumpkin/id6504126864'],
+        ['Web', 'work', 'べんりツールズ', 'RM換算や日程調整を、すぐ済ませる。', 'https://tomochi3.github.io/benri/'],
+        ['拡張', 'work', 'ノイズクリーナー', 'YouTubeの「えー」を抑える。', 'https://github.com/tomochi3/cancel_noise'],
+        ['Web', 'work', 'ボルダリング交流会', 'チームで登って、仲良くなる。', 'https://tomochi3.github.io/5Grip/'],
+        ['ゲーム', 'work', 'Classic Ping Pong', 'スピンや溜めショットで打ち合う。', 'https://tomochi3.github.io/pingpong2/'],
+        ['Web', 'work', '卓球戦績メモ', '相手ごとに振り返る。', 'https://tomochi3.github.io/tt_record/']
+      ];
+      var rows = Array.prototype.slice.call(document.querySelectorAll('#rows .row'));
+      var head = 0;
+      var board = document.getElementById('rows');
+      var paused = false;
+      board.addEventListener('mouseenter', function () { paused = true; });
+      board.addEventListener('mouseleave', function () { paused = false; });
+      board.addEventListener('focusin', function () { paused = true; });
+      board.addEventListener('focusout', function () { paused = false; });
+      function fill() {
+        rows.forEach(function (r, i) {
+          var d = all[(head + i) % all.length];
+          var k = r.querySelector('.kind');
+          k.textContent = d[0];
+          k.dataset.c = d[1];
+          var a = r.querySelector('a');
+          a.href = d[4];
+          r.querySelector('.dest').textContent = d[2];
+          r.querySelector('.note').textContent = d[3];
+          if (!reduce) { r.classList.remove('is-in'); void r.offsetWidth; setTimeout(function () { r.classList.add('is-in'); }, i * 90); }
+        });
+      }
+      if (!reduce) setInterval(function () { if (paused || document.hidden) return; head = (head + 1) % all.length; fill(); }, 4200);
+
+      // 路線図：スクロールに合わせて車両が線路を進み、近い駅を「現在地」にする
+      var track = document.getElementById('track');
+      var line = document.getElementById('line');
+      var train = document.getElementById('train');
+      var here = document.getElementById('here');
+      var stations = Array.prototype.slice.call(document.querySelectorAll('.st'));
+      var segs = ['line-book', 'line-meet'].map(function (id) { return document.getElementById(id); });
+      function layoutColors() {
+        var h = track.offsetHeight;
+        var b1 = (segs[0].offsetTop + segs[0].offsetHeight) / h * 100;
+        var b2 = (segs[1].offsetTop + segs[1].offsetHeight) / h * 100;
+        line.style.setProperty('--b1', b1.toFixed(2) + '%');
+        line.style.setProperty('--b2', b2.toFixed(2) + '%');
+      }
+      var current = null;
+      function onScroll() {
+        var rect = track.getBoundingClientRect();
+        var mid = window.innerHeight * 0.45;
+        var y = Math.max(0, Math.min(rect.height - 54, mid - rect.top - 27));
+        train.style.setProperty('--ty', y + 'px');
+        var best = null, bestD = Infinity;
+        stations.forEach(function (s) {
+          var r = s.getBoundingClientRect();
+          var d = Math.abs(r.top + 30 - mid);
+          if (d < bestD) { bestD = d; best = s; }
+        });
+        if (rect.top > mid) best = null;
+        if (best !== current) {
+          if (current) current.classList.remove('is-here');
+          current = best;
+          if (best) { best.classList.add('is-here'); here.textContent = best.dataset.no + ' ' + best.dataset.name; }
+          else here.textContent = 'T00 はじめまして';
+        }
+      }
+      var ticking = false;
+      window.addEventListener('scroll', function () {
+        if (ticking) return; ticking = true;
+        requestAnimationFrame(function () { ticking = false; onScroll(); });
+      }, { passive: true });
+      window.addEventListener('resize', function () { layoutColors(); onScroll(); });
+      window.addEventListener('load', function () { layoutColors(); onScroll(); });
+      layoutColors(); onScroll();
+    })();
+  </script>
+</body>
+</html>
